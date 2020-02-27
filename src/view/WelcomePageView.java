@@ -12,7 +12,7 @@ public class WelcomePageView extends PageView {
         super(title, greeting);
         this.actions = actions;
 
-        addSubview(new NumberedActionListView(actions));
+        addSubview(new ListView(actions));
     }
 
 	@Override
