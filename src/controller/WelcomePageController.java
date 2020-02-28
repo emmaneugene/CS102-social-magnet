@@ -13,11 +13,7 @@ public class WelcomePageController extends Controller {
         new NumberedAction("Exit", '3')
     ));
 
-    private WelcomePageView view;
-
-    public WelcomePageController() {
-        view = new WelcomePageView(actions);
-    }
+    private WelcomePageView view = new WelcomePageView(actions);
 
     public void updateView() {
         view.render();
