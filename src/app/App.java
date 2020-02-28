@@ -8,7 +8,9 @@ import controller.Controller;
 public class App {
     private static App sharedInstance = null;
 
-    private String appName;
+    private String appName = null;
+
+    private String username = null;
 
     private List<Controller> navigationStack = new ArrayList<>();
 
@@ -31,6 +33,16 @@ public class App {
     public void setAppName(String appName) {
         if (this.appName == null)
             this.appName = appName;
+    }
+
+    public String getUsername() {
+        if (username == null)
+            return "anonymous";
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setFirstController(Controller first) {

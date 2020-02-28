@@ -16,7 +16,7 @@ public class WelcomePageController extends Controller {
     private WelcomePageView view;
 
     public WelcomePageController() {
-        view = new WelcomePageView("Good morning, anonymous!", actions);
+        view = new WelcomePageView(actions);
     }
 
     public void updateView() {
