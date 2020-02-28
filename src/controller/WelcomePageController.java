@@ -7,15 +7,15 @@ import model.NumberedAction;
 import view.WelcomePageView;
 
 public class WelcomePageController {
-    private List<NumberedAction> actions = new ArrayList<>();
+    private final List<NumberedAction> actions = new ArrayList<>(List.of(
+        new NumberedAction("Register", '1'),
+        new NumberedAction("Login", '2'),
+        new NumberedAction("Exit", '3')
+    ));
 
-    WelcomePageView view;
+    private WelcomePageView view;
 
     public WelcomePageController() {
-        actions.add(new NumberedAction("Register", '1'));
-        actions.add(new NumberedAction("Login", '2'));
-        actions.add(new NumberedAction("Exit", '3'));
-
         view = new WelcomePageView("Welcome", "Good morning, anonymous!", actions);
     }
 
