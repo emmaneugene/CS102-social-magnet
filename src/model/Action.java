@@ -3,9 +3,9 @@ package model;
 public abstract class Action {
     private String label;
 
-    private char trigger;
+    private String trigger;
 
-    public Action(String label, char trigger) {
+    public Action(String label, String trigger) {
         this.label = label;
         this.trigger = trigger;
     }
@@ -14,7 +14,7 @@ public abstract class Action {
         return label;
     }
 
-    public char getTrigger() {
+    public String getTrigger() {
         return trigger;
     }
 }

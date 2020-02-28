@@ -3,7 +3,7 @@ package model;
 import view.kit.ItemViewDataSource;
 
 public class NumberedAction extends Action implements ItemViewDataSource {
-    public NumberedAction(String label, char trigger) {
+    public NumberedAction(String label, String trigger) {
         super(label, trigger);
     }
 
@@ -11,6 +11,6 @@ public class NumberedAction extends Action implements ItemViewDataSource {
     // ItemViewDataSource methods
 	@Override
 	public void render() {
-        System.out.printf("%c. %s\n", getTrigger(), getLabel());
+        System.out.printf("%s. %s\n", getTrigger(), getLabel());
 	}
 }

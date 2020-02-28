@@ -7,10 +7,10 @@ public abstract class Controller {
 
     public void run() {
         updateView();
-        getInput();
+        handleInput();
     }
 
     public abstract void updateView();
 
-    public abstract void getInput();
+    public abstract void handleInput();
 }
