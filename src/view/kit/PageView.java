@@ -13,6 +13,14 @@ public class PageView extends View {
 
     @Override
     public void render() {
+        clearScreen();
+        renderPre();
+        renderMain();
+        renderPost();
+    }
+
+    @Override
+    public void renderMain() {
         System.out.println(String.format(headerTemplate, App.shared().getAppName(), pageTitle));
     }
 }

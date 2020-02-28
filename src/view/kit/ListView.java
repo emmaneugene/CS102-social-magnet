@@ -13,7 +13,7 @@ public class ListView extends View {
     }
 
     @Override
-    public void render() {
+    public void renderMain() {
         for (ItemViewDataSource ds : dataSource) {
             ds.render();
         }

@@ -8,8 +8,8 @@ public class RegisterPageView extends PageView {
 	}
 
 	@Override
-	public void render() {
-        super.render();
+	public void renderMain() {
+        super.renderMain();
 		System.out.println("Register?");
 	}
 }

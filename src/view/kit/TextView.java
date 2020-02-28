@@ -23,7 +23,7 @@ public class TextView extends View {
     }
 
     @Override
-    public void render() {
+    public void renderMain() {
         if (newLine) {
             System.out.println(text);
         } else {

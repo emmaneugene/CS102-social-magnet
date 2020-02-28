@@ -12,7 +12,7 @@ public class PromptView extends View {
     }
 
 	@Override
-	public void render() {
+	public void renderMain() {
 		System.out.printf("%s > ", promptMessage);
 	}
 }

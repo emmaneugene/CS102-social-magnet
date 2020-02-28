@@ -8,25 +8,29 @@ import model.NumberedAction;
 import view.kit.*;
 
 public class WelcomePageView extends PageView {
+    TextView greetingView;
+    ListView actionsView;
+    PromptView promptView;
+
     public WelcomePageView(List<NumberedAction> actions) {
         super("Welcome");
-        addSubview(new TextView("Good morning, anonymous!"));
-        addSubview(new ListView(actions));
-        addSubview(new PromptView());
+        greetingView = new TextView("Good morning, anonymous!");
+        actionsView  = new ListView(actions);
+        promptView   = new PromptView();
     }
 
 	@Override
-	public void render() {
-        super.render();
+	public void renderMain() {
+        super.renderMain();
         updateGreeting();
-        for (View subview : subviews) {
-            subview.render();
-        }
+        greetingView.render();
+        actionsView.render();
+        promptView.render();
 	}
 
     private void updateGreeting() {
-        String greeting = String.format("Good %s, %s", getTimeOfDay(), App.shared().getUsername());
-        ((TextView) subviews.get(0)).setText(greeting);
+        String greeting = String.format("Good %s, %s!", getTimeOfDay(), App.shared().getUsername());
+        greetingView.setText(greeting);
     }
 
     private String getTimeOfDay() {
