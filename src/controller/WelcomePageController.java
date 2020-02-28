@@ -28,6 +28,8 @@ public class WelcomePageController extends Controller {
         String input = ConsoleScanner.shared().getInput();
         if (input.equals("1")) {
             App.shared().prepareForNavigation(new RegisterPageController());
+        } else if (input.equals("3")) {
+            App.shared().exit();
         } else {
             view.addPreView(new TextView("Please enter a choice between 1 & 3!"));
         }

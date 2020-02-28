@@ -74,9 +74,15 @@ public class App {
         navigationStack.add(next);
     }
 
+    public void exit() {
+        isRunning = false;
+    }
+
     public void run() {
         while (isRunning) {
             getCurrentController().run();
         }
+        System.out.println("Goodbye!");
+        System.exit(1);
     }
 }
