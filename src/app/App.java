@@ -14,6 +14,8 @@ public class App {
 
     private List<Controller> navigationStack = new ArrayList<>();
 
+    private boolean isRunning = true;
+
     private App() {}
 
     public static App shared() {
@@ -55,28 +57,26 @@ public class App {
         return navigationStack.get(size - 1);
     }
 
-    public void run() {
-        getCurrentController().run();
-    }
-
     /**
       * Removes the current Controller from the navigation stack and returns 
       * the previous Controller
       *
       * @return Instance of the previous Controller on the navigation stack
       */
-    public void navigateBack() {
+    public void popNavigation() {
         int size = navigationStack.size();
         if (size <= 1) return;
 
         navigationStack.remove(size - 1);
-
-        getCurrentController().run();
     }
 
-    public void navigateTo(Controller next) {
+    public void prepareForNavigation(Controller next) {
         navigationStack.add(next);
+    }
 
-        getCurrentController().run();
+    public void run() {
+        while (isRunning) {
+            getCurrentController().run();
+        }
     }
 }
