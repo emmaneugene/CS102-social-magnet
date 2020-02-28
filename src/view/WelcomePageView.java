@@ -9,7 +9,9 @@ import view.kit.*;
 
 public class WelcomePageView extends PageView {
     TextView greetingView;
+
     ListView actionsView;
+
     PromptView promptView;
 
     public WelcomePageView(List<NumberedAction> actions) {

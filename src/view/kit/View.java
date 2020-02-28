@@ -5,6 +5,7 @@ import java.util.List;
 
 public abstract class View {
     public List<View> preViews = new ArrayList<>();
+
     public List<View> postViews = new ArrayList<>();
 
     public void render() {

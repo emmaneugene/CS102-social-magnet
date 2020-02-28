@@ -7,6 +7,7 @@ import app.App;
 import model.NumberedAction;
 import util.ConsoleScanner;
 import view.WelcomePageView;
+import view.kit.TextView;
 
 public class WelcomePageController extends Controller {
     private final List<NumberedAction> actions = new ArrayList<>(List.of(
@@ -26,9 +27,9 @@ public class WelcomePageController extends Controller {
     public void handleInput() {
         String input = ConsoleScanner.shared().getInput();
         if (input.equals("1")) {
-            App.shared().navigateTo(new RegisterPageController());
+            App.shared().prepareForNavigation(new RegisterPageController());
         } else {
-            System.out.println("Please enter a choice between 1 & 3!");
+            view.addPreView(new TextView("Please enter a choice between 1 & 3!"));
         }
     }
 }

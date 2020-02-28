@@ -1,5 +1,7 @@
 package controller;
 
+import app.App;
+import util.ConsoleScanner;
 import view.RegisterPageView;
 
 public class RegisterPageController extends Controller {
@@ -13,5 +15,8 @@ public class RegisterPageController extends Controller {
 
 	@Override
 	public void handleInput() {
+        if (ConsoleScanner.shared().getInput().equals("y")) {
+            App.shared().popNavigation();
+        }
 	}
 }
