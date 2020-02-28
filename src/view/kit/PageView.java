@@ -2,6 +2,13 @@ package view.kit;
 
 import app.App;
 
+/**
+  * {@link PageView} is the base of all screens and menus.
+  * <code>PageView</code> clears the entire console before rendering any
+  * content, giving the effect of an in-place view that can be used to render
+  * static views.
+  * @see View
+  */
 public class PageView extends View {
     public String pageTitle;
 

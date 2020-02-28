@@ -7,6 +7,18 @@ import app.App;
 import model.NumberedAction;
 import view.kit.*;
 
+/* SAMPLE
+
+== Social Magnet :: Welcome ==
+Good morning, anonymous!
+1. Register
+2. Login 
+3. Exit
+Enter your choice > 4
+Please enter a choice between 1 & 3! 
+
+*/
+
 public class WelcomePageView extends PageView {
     TextView greetingView;
 
@@ -30,6 +42,9 @@ public class WelcomePageView extends PageView {
         promptView.render();
 	}
 
+    /**
+     * Update {@link #greetingView} based on the time of day. 
+     */
     private void updateGreeting() {
         String greeting = String.format("Good %s, %s!", getTimeOfDay(), App.shared().getUsername());
         greetingView.setText(greeting);

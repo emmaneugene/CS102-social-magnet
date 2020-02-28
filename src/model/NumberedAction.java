@@ -1,14 +1,16 @@
 package model;
 
-import view.kit.ItemViewDataSource;
+import view.kit.ListItemDataSource;;
 
-public class NumberedAction extends Action implements ItemViewDataSource {
+public class NumberedAction extends Action implements ListItemDataSource {
     public NumberedAction(String label, String trigger) {
         super(label, trigger);
     }
 
 
-    // ItemViewDataSource methods
+    //============================//
+    // ItemViewDataSource methods //
+    //============================//
 	@Override
 	public void render() {
         System.out.printf("%s. %s\n", getTrigger(), getLabel());
