@@ -1,22 +1,22 @@
-package data;
+package app;
 
 import java.util.List;
 import java.util.ArrayList;
 
 import controller.Controller;
 
-public class AppData {
-    private static AppData sharedInstance = null;
+public class App {
+    private static App sharedInstance = null;
 
     private String appName;
 
     private List<Controller> navigationStack = new ArrayList<>();
 
-    private AppData() {}
+    private App() {}
 
-    public static AppData shared() {
+    public static App shared() {
         if (sharedInstance == null)
-            sharedInstance = new AppData();
+            sharedInstance = new App();
         return sharedInstance;
     }
 

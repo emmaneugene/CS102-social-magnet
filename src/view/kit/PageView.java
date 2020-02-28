@@ -1,6 +1,6 @@
 package view.kit;
 
-import data.AppData;
+import app.App;
 
 public class PageView extends View {
     public String pageTitle;
@@ -16,7 +16,7 @@ public class PageView extends View {
 
     @Override
     public void render() {
-        System.out.println(String.format(headerTemplate, AppData.shared().getAppName(), pageTitle));
+        System.out.println(String.format(headerTemplate, App.shared().getAppName(), pageTitle));
         System.out.println(greeting);
     }
 }

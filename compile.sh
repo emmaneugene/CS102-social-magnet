@@ -1,1 +1,1 @@
-javac -cp lib/*:src -d classes src/App.java;
+javac -cp lib/*:src -d classes src/AppRunner.java;
