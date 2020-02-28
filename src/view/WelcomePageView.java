@@ -6,9 +6,10 @@ import model.NumberedAction;
 import view.kit.*;
 
 public class WelcomePageView extends PageView {
-    public WelcomePageView(String title, String greeting, List<NumberedAction> actions) {
-        super(title, greeting);
+    public WelcomePageView(String greeting, List<NumberedAction> actions) {
+        super("Welcome", greeting);
         addSubview(new ListView(actions));
+        addSubview(new PromptView());
     }
 
 	@Override

@@ -6,7 +6,7 @@ import java.util.List;
 import model.NumberedAction;
 import view.WelcomePageView;
 
-public class WelcomePageController {
+public class WelcomePageController extends Controller {
     private final List<NumberedAction> actions = new ArrayList<>(List.of(
         new NumberedAction("Register", '1'),
         new NumberedAction("Login", '2'),
@@ -16,10 +16,13 @@ public class WelcomePageController {
     private WelcomePageView view;
 
     public WelcomePageController() {
-        view = new WelcomePageView("Welcome", "Good morning, anonymous!", actions);
+        view = new WelcomePageView("Good morning, anonymous!", actions);
     }
 
     public void updateView() {
         view.render();
+    }
+
+    public void getInput() {
     }
 }
