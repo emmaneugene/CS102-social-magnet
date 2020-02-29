@@ -18,7 +18,7 @@ public class ListView extends View {
     }
 
     @Override
-    public void renderMain() {
+    public void render() {
         for (ListItemDataSource ds : dataSource) {
             ds.render();
         }

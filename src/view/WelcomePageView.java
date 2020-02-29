@@ -34,8 +34,8 @@ public class WelcomePageView extends PageView {
     }
 
 	@Override
-	public void renderMain() {
-        super.renderMain();
+	public void render() {
+        super.render();
         updateGreeting();
         greetingView.render();
         actionsView.render();

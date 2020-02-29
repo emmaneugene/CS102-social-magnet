@@ -37,7 +37,7 @@ public class WelcomePageController extends Controller {
                 App.shared().exit();
                 break;
             default:
-                view.addPreView(new TextView("Please enter a choice between 1 & 3!"));
+                view.setStatus(new TextView("Please enter a choice between 1 & 3!"));
                 break;
         }
     }

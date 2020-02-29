@@ -19,8 +19,8 @@ public class RegisterPageView extends PageView {
 	}
 
 	@Override
-	public void renderMain() {
-        super.renderMain();
+	public void render() {
+        super.render();
 		System.out.println("Register?");
 	}
 }
