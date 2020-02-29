@@ -26,12 +26,19 @@ public class WelcomePageController extends Controller {
     @Override
     public void handleInput() {
         String input = ConsoleScanner.shared().getInput();
-        if (input.equals("1")) {
-            App.shared().prepareForNavigation(new RegisterPageController());
-        } else if (input.equals("3")) {
-            App.shared().exit();
-        } else {
-            view.addPreView(new TextView("Please enter a choice between 1 & 3!"));
+        switch (input) {
+            case "1":
+                App.shared().prepareForNavigation(new RegisterPageController());
+                break;
+            case "2":
+                App.shared().prepareForNavigation(new LoginPageController());
+                break;
+            case "3":
+                App.shared().exit();
+                break;
+            default:
+                view.addPreView(new TextView("Please enter a choice between 1 & 3!"));
+                break;
         }
     }
 }
