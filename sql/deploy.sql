@@ -10,26 +10,26 @@ SET time_zone = '+00:00';
 CREATE TABLE user (
     username VARCHAR(255) NOT NULL,
     fullname VARCHAR(128) NOT NULL,
-    pwd VARCHAR(128) NOT NULL,
+    pwd      VARCHAR(128) NOT NULL,
     PRIMARY KEY (username)
 );
 
 CREATE TABLE post (
-    post_id INT NOT NULL AUTO_INCREMENT,
-    author VARCHAR(255) NOT NULL,
+    post_id   INT          NOT NULL AUTO_INCREMENT,
+    author    VARCHAR(255) NOT NULL,
     recipient VARCHAR(255) NOT NULL,
-    content TEXT(65535) NOT NULL,
-    posted_on DATETIME NOT NULL,
+    posted_on DATETIME     NOT NULL,
+    content   TEXT(65535)  NOT NULL,
     PRIMARY KEY (post_id),
-    FOREIGN KEY (author) REFERENCES user (username),
+    FOREIGN KEY (author)    REFERENCES user (username),
     FOREIGN KEY (recipient) REFERENCES user (username)
 );
 
 CREATE TABLE tag (
-    post_id INT NOT NULL,
+    post_id     INT          NOT NULL,
     tagged_user VARCHAR(255) NOT NULL,
-    PRIMARY KEY (post_id, tagged_user),
-    FOREIGN KEY (post_id) REFERENCES post (post_id),
+    PRIMARY KEY (post_id,     tagged_user),
+    FOREIGN KEY (post_id)     REFERENCES post (post_id),
     FOREIGN KEY (tagged_user) REFERENCES user (username)
 );
 
@@ -42,37 +42,37 @@ CREATE TABLE friend (
 );
 
 CREATE TABLE comment (
-    comment_id INT NOT NULL AUTO_INCREMENT,
-    content TEXT(65535) NOT NULL,
-    post_id INT NOT NULL,
-    commenter VARCHAR(255) NOT NULL,
-    commented_on DATETIME NOT NULL,
+    comment_id   INT          NOT NULL AUTO_INCREMENT,
+    post_id      INT          NOT NULL,
+    commenter    VARCHAR(255) NOT NULL,
+    commented_on DATETIME     NOT NULL,
+    content      TEXT(65535)  NOT NULL,
     PRIMARY KEY (comment_id),
-    FOREIGN KEY (post_id) REFERENCES post (post_id),
+    FOREIGN KEY (post_id)   REFERENCES post (post_id),
     FOREIGN KEY (commenter) REFERENCES user (username)
 );
 
 CREATE TABLE likes (
     username VARCHAR(128) NOT NULL,
-    post_id INT NOT NULL,
+    post_id  INT          NOT NULL,
     PRIMARY KEY (username, post_id),
     FOREIGN KEY (username) REFERENCES user (username),
-    FOREIGN KEY (post_id) REFERENCES post (post_id)
+    FOREIGN KEY (post_id)  REFERENCES post (post_id)
 );
 
 CREATE TABLE dislikes (
     username VARCHAR(128) NOT NULL,
-    post_id INT NOT NULL,
+    post_id  INT          NOT NULL,
     PRIMARY KEY (username, post_id),
     FOREIGN KEY (username) REFERENCES user (username),
-    FOREIGN KEY (post_id) REFERENCES post (post_id)
+    FOREIGN KEY (post_id)  REFERENCES post (post_id)
 );
 
 CREATE TABLE requests (
-    sender VARCHAR(255) NOT NULL,
+    sender    VARCHAR(255) NOT NULL,
     recipient VARCHAR(255) NOT NULL,
-    PRIMARY KEY (sender, recipient),
-    FOREIGN KEY (sender) REFERENCES user (username),
+    PRIMARY KEY (sender,    recipient),
+    FOREIGN KEY (sender)    REFERENCES user (username),
     FOREIGN KEY (recipient) REFERENCES user (username)
 );
 
