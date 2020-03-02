@@ -1,6 +1,6 @@
 .vscode
-socialmagnet/.env
-socialmagnet/.settings
-socialmagnet/.project
-socialmagnet/.classpath
-socialmagnet/target
+.env
+.settings
+.project
+.classpath
+target
