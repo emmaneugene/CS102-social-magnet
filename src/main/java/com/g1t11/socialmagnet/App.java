@@ -131,6 +131,6 @@ public class App {
       getCurrentController().run();
     }
     System.out.println("Goodbye!");
-    System.exit(1);
+    System.exit(0);
   }
 }
