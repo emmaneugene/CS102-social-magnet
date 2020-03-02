@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.g1t11.socialmagnet.App;
-import com.g1t11.socialmagnet.model.NumberedAction;
+import com.g1t11.socialmagnet.model.kit.NumberedAction;
 import com.g1t11.socialmagnet.util.ConsoleScanner;
 import com.g1t11.socialmagnet.view.WelcomePageView;
 import com.g1t11.socialmagnet.view.kit.TextView;

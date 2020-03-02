@@ -1,4 +1,4 @@
-package com.g1t11.socialmagnet.model;
+package com.g1t11.socialmagnet.model.kit;
 
 import com.g1t11.socialmagnet.view.kit.ListItemDataSource;
 
