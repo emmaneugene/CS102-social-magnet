@@ -14,13 +14,13 @@ kenny, your account is successfully created!
 */
 
 public class RegisterPageView extends PageView {
-  public RegisterPageView() {
-    super("Registration");
-  }
+    public RegisterPageView() {
+        super("Registration");
+    }
 
-  @Override
-  public void render() {
-    super.render();
-    System.out.println("Register?");
-  }
+    @Override
+    public void render() {
+        super.render();
+        System.out.println("Register?");
+    }
 }

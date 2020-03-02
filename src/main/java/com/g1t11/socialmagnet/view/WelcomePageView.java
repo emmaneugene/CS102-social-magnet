@@ -20,41 +20,41 @@ Please enter a choice between 1 & 3!
 */
 
 public class WelcomePageView extends PageView {
-  TextView greetingView;
+    TextView greetingView;
 
-  ListView actionsView;
+    ListView actionsView;
 
-  PromptView promptView;
+    PromptView promptView;
 
-  public WelcomePageView(List<NumberedAction> actions) {
-    super("Welcome");
-    greetingView = new TextView("Good morning, anonymous!");
-    actionsView  = new ListView(actions);
-    promptView   = new PromptView();
-  }
+    public WelcomePageView(List<NumberedAction> actions) {
+        super("Welcome");
+        greetingView = new TextView("Good morning, anonymous!");
+        actionsView  = new ListView(actions);
+        promptView   = new PromptView();
+    }
 
-  @Override
-  public void render() {
-    super.render();
-    updateGreeting();
-    greetingView.render();
-    actionsView.render();
-    promptView.render();
-  }
+    @Override
+    public void render() {
+        super.render();
+        updateGreeting();
+        greetingView.render();
+        actionsView.render();
+        promptView.render();
+    }
 
-  /**
-   * Update {@link #greetingView} based on the time of day. 
-   */
-  private void updateGreeting() {
-    String greeting = String.format("Good %s, %s!", getTimeOfDay(), App.shared().getSession().getUsername());
-    greetingView.setText(greeting);
-  }
+    /**
+     * Update {@link #greetingView} based on the time of day. 
+     */
+    private void updateGreeting() {
+        String greeting = String.format("Good %s, %s!", getTimeOfDay(), App.shared().getSession().getUsername());
+        greetingView.setText(greeting);
+    }
 
-  private String getTimeOfDay() {
-    Calendar now = Calendar.getInstance();
-    int hour = now.get(Calendar.HOUR_OF_DAY);
-    if (hour < 12) return "morning";
-    if (hour < 19) return "afternoon";
-    return "evening";
-  }
+    private String getTimeOfDay() {
+        Calendar now = Calendar.getInstance();
+        int hour = now.get(Calendar.HOUR_OF_DAY);
+        if (hour < 12) return "morning";
+        if (hour < 19) return "afternoon";
+        return "evening";
+    }
 }

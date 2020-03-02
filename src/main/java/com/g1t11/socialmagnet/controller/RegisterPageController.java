@@ -6,17 +6,17 @@ import com.g1t11.socialmagnet.view.RegisterPageView;
 
 public class RegisterPageController extends Controller {
 
-  private RegisterPageView view = new RegisterPageView();
+    private RegisterPageView view = new RegisterPageView();
 
-  @Override
-  public void updateView() {
-    view.render();
-  }
-
-  @Override
-  public void handleInput() {
-    if (ConsoleScanner.shared().getInput().equals("y")) {
-      App.shared().getNavigation().pop();
+    @Override
+    public void updateView() {
+        view.render();
     }
-  }
+
+    @Override
+    public void handleInput() {
+        if (ConsoleScanner.shared().getInput().equals("y")) {
+            App.shared().getNavigation().pop();
+        }
+    }
 }
