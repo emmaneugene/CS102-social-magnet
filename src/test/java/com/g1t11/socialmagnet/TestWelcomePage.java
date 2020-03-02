@@ -17,7 +17,7 @@ import java.io.PrintStream;
 import com.g1t11.socialmagnet.controller.WelcomePageController;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class TestLoginPageController {
+public class TestWelcomePage {
     private final InputStream stdin = System.in;
     private final PrintStream stdout = System.out;
 
