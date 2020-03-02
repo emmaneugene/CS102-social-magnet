@@ -4,6 +4,7 @@ CREATE DATABASE magnet;
 
 -- use this database to create and populate the tables
 USE magnet;
+SET time_zone = '+00:00';
 
 -- create commands (this is just an example)
 CREATE TABLE user (
@@ -18,6 +19,7 @@ CREATE TABLE post (
     author VARCHAR(255) NOT NULL,
     recipient VARCHAR(255) NOT NULL,
     content TEXT(65535) NOT NULL,
+	posted_on DATETIME NOT NULL,
     PRIMARY KEY (post_id),
     FOREIGN KEY (author) REFERENCES user (username),
     FOREIGN KEY (recipient) REFERENCES user (username)
@@ -44,6 +46,7 @@ CREATE TABLE comment (
     content TEXT(65535) NOT NULL,
     post_id INT NOT NULL,
     commenter VARCHAR(255) NOT NULL,
+    commented_on DATETIME NOT NULL,
     PRIMARY KEY (comment_id),
     FOREIGN KEY (post_id) REFERENCES post (post_id),
     FOREIGN KEY (commenter) REFERENCES user (username)
