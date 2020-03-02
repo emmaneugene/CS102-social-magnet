@@ -1,5 +1,7 @@
 package com.g1t11.socialmagnet.view.kit;
 
+import com.g1t11.socialmagnet.App;
+
 public abstract class View {
     /**
      * Render the main content of the {@link View}.
