@@ -7,12 +7,6 @@ import java.sql.SQLException;
 
 public class Database {
   /**
-   * Singleton instance of the application's associated database.
-   * Handles database connections and queries.
-   */
-  private static Database sharedInstance = null;
-
-  /**
    * Connection to the database.
    * Reconnecting and closing a connection is slow and expensive. Instead,
    * maintain a single connection during the application's runtime and
@@ -21,11 +15,19 @@ public class Database {
    */
   private static Connection conn;
 
-  private Database() {
+  public Database() {
+    /* JDBC Driver must be instantiated before we can use DriverManager. */
     try {
-      /* JDBC Driver must be instantiated before we can use DriverManager. */
       new Driver();
+    } catch (SQLException e) {
+      System.out.println("SQLException: " + e.getMessage());
+      System.out.println("SQLState: " + e.getSQLState());
+      System.out.println("VendorError: " + e.getErrorCode());
+    }
+  }
 
+  public void establishDefaultConnection() {
+    try {
       /*
        * Get credentials from environment variables that were loaded
        * through .env file.
@@ -34,23 +36,13 @@ public class Database {
       String dbUrl  = "jdbc:mysql://localhost/" + dbName;
       String dbUser = System.getenv("DB_USER");
       String dbPass = System.getenv("DB_PASS");
-      conn          = DriverManager.getConnection(dbUrl, dbUser, dbPass);
+
+      conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
     } catch (SQLException e) {
       System.out.println("SQLException: " + e.getMessage());
       System.out.println("SQLState: " + e.getSQLState());
       System.out.println("VendorError: " + e.getErrorCode());
     }
-  }
-
-  /**
-   * Singleton access point.
-   * Instantiate the database connection if not yet instantiated.
-   * @return Singleton {@link Database}.
-   */
-  public static Database shared() {
-    if (sharedInstance == null)
-      sharedInstance = new Database();
-    return sharedInstance;
   }
 
   /**

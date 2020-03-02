@@ -46,7 +46,7 @@ public class WelcomePageView extends PageView {
    * Update {@link #greetingView} based on the time of day. 
    */
   private void updateGreeting() {
-    String greeting = String.format("Good %s, %s!", getTimeOfDay(), App.shared().getUsername());
+    String greeting = String.format("Good %s, %s!", getTimeOfDay(), App.shared().getSession().getUsername());
     greetingView.setText(greeting);
   }
 

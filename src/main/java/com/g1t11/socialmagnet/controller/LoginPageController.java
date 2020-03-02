@@ -16,7 +16,7 @@ public class LoginPageController extends Controller {
   @Override
   public void handleInput() {
     if (ConsoleScanner.shared().getInput().equals("y")) {
-      App.shared().popNavigation();
+      App.shared().getNavigation().pop();
     }
   }
 }

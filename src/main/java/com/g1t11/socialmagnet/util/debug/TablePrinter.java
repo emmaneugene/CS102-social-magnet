@@ -7,7 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.g1t11.socialmagnet.data.Database;
+import com.g1t11.socialmagnet.App;
 
 public class TablePrinter {
   public static void printTable(String tableName, int maxRows) {
@@ -30,7 +30,7 @@ public class TablePrinter {
     ResultSet rs = null;
 
     try {
-      stmt = Database.shared().connection().createStatement();
+      stmt = App.shared().getDatabase().connection().createStatement();
       rs = stmt.executeQuery(query);
     } catch (SQLException e) {
       System.out.println("SQLException: " + e.getMessage());

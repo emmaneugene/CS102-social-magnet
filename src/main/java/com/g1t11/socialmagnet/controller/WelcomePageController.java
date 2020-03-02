@@ -28,10 +28,10 @@ public class WelcomePageController extends Controller {
     String input = ConsoleScanner.shared().getInput();
     switch (input) {
       case "1":
-        App.shared().prepareForNavigation(new RegisterPageController());
+        App.shared().getNavigation().prepareForNavigation(new RegisterPageController());
         break;
       case "2":
-        App.shared().prepareForNavigation(new LoginPageController());
+        App.shared().getNavigation().prepareForNavigation(new LoginPageController());
         break;
       case "3":
         App.shared().exit();
