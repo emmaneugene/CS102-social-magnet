@@ -10,41 +10,41 @@ import com.g1t11.socialmagnet.App;
   * @see View
   */
 public class PageView extends View {
-    private String pageTitle;
+  private String pageTitle;
 
-    /**
-      * A View injected from the previous {@link Controller} which allows us to
-      * render content after the screen is cleared by {@link PageView}.
-      */
-    private View status = null;
+  /**
+    * A View injected from the previous {@link Controller} which allows us to
+    * render content after the screen is cleared by {@link PageView}.
+    */
+  private View status = null;
 
-    private final String headerTemplate = "== %s :: %s ==";
+  private final String headerTemplate = "== %s :: %s ==";
 
-    public PageView(String pageTitle) {
-        this.pageTitle = pageTitle;
-    }
+  public PageView(String pageTitle) {
+    this.pageTitle = pageTitle;
+  }
 
-    public String getPageTitle() {
-        return pageTitle;
-    }
+  public String getPageTitle() {
+    return pageTitle;
+  }
 
-    public void setPageTitle(String pageTitle) {
-        this.pageTitle = pageTitle;
-    }
+  public void setPageTitle(String pageTitle) {
+    this.pageTitle = pageTitle;
+  }
 
-    public void setStatus(View status) {
-        this.status = status;
-    }
+  public void setStatus(View status) {
+    this.status = status;
+  }
 
-    public void clearStatus() {
-        this.status = null;
-    }
+  public void clearStatus() {
+    this.status = null;
+  }
 
-    @Override
-    public void render() {
-        clearScreen();
-        System.out.println(String.format(headerTemplate, App.shared().getAppName(), pageTitle));
-        if (status != null)
-            status.render();
-    }
+  @Override
+  public void render() {
+    clearScreen();
+    System.out.println(String.format(headerTemplate, App.shared().getAppName(), pageTitle));
+    if (status != null)
+      status.render();
+  }
 }
