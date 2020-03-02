@@ -1,2 +1,6 @@
-.env
-classes
+.vscode
+socialmagnet/.env
+socialmagnet/.settings
+socialmagnet/.project
+socialmagnet/.classpath
+socialmagnet/target
