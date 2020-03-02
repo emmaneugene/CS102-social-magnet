@@ -6,17 +6,17 @@ import com.g1t11.socialmagnet.view.LoginPageView;
 
 public class LoginPageController extends Controller {
 
-  private LoginPageView view = new LoginPageView();
+    private LoginPageView view = new LoginPageView();
 
-  @Override
-  public void updateView() {
-    view.render();
-  }
-
-  @Override
-  public void handleInput() {
-    if (ConsoleScanner.shared().getInput().equals("y")) {
-      App.shared().popNavigation();
+    @Override
+    public void updateView() {
+        view.render();
     }
-  }
+
+    @Override
+    public void handleInput() {
+        if (ConsoleScanner.shared().getInput().equals("y")) {
+            App.shared().getNavigation().pop();
+        }
+    }
 }

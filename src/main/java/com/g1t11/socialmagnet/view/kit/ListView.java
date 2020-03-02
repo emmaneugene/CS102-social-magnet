@@ -10,17 +10,17 @@ import com.g1t11.socialmagnet.view.kit.ListItemDataSource;
  * @see ListItemDataSource
  */
 public class ListView extends View {
-  List<? extends ListItemDataSource> dataSource;
+    List<? extends ListItemDataSource> dataSource;
 
-  public ListView(List<? extends ListItemDataSource> dataSource) {
-    super();
-    this.dataSource = dataSource;
-  }
-
-  @Override
-  public void render() {
-    for (ListItemDataSource ds : dataSource) {
-      ds.render();
+    public ListView(List<? extends ListItemDataSource> dataSource) {
+        super();
+        this.dataSource = dataSource;
     }
-  }
+
+    @Override
+    public void render() {
+        for (ListItemDataSource ds : dataSource) {
+            ds.render();
+        }
+    }
 }

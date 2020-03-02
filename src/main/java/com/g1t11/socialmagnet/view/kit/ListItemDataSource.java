@@ -8,5 +8,5 @@ package com.g1t11.socialmagnet.view.kit;
  * @see ListView
  */
 public interface ListItemDataSource {
-  public void render();
+    public void render();
 }

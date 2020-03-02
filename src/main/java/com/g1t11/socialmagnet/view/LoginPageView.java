@@ -11,13 +11,13 @@ Enter your password > secret
 */
 
 public class LoginPageView extends PageView {
-  public LoginPageView() {
-    super("Login");
-  }
+    public LoginPageView() {
+        super("Login");
+    }
 
-  @Override
-  public void render() {
-    super.render();
-    System.out.println("Login?");
-  }
+    @Override
+    public void render() {
+        super.render();
+        System.out.println("Login?");
+    }
 }
