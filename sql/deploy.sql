@@ -19,7 +19,7 @@ CREATE TABLE post (
     author VARCHAR(255) NOT NULL,
     recipient VARCHAR(255) NOT NULL,
     content TEXT(65535) NOT NULL,
-	posted_on DATETIME NOT NULL,
+    posted_on DATETIME NOT NULL,
     PRIMARY KEY (post_id),
     FOREIGN KEY (author) REFERENCES user (username),
     FOREIGN KEY (recipient) REFERENCES user (username)
