@@ -16,7 +16,7 @@ public class App {
 
     private Session session = new Session();
 
-    private Scanner appIn;
+    private Scanner appIn = new Scanner(System.in);
 
     /**
      * Condition for application event loop.
@@ -68,7 +68,6 @@ public class App {
     }
 
     public Scanner input() {
-        appIn = new Scanner(System.in);
         return appIn;
     }
 
