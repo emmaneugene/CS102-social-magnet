@@ -1,7 +1,6 @@
 package com.g1t11.socialmagnet.controller;
 
 import com.g1t11.socialmagnet.App;
-import com.g1t11.socialmagnet.util.ConsoleScanner;
 import com.g1t11.socialmagnet.view.RegisterPageView;
 
 public class RegisterPageController extends Controller {
@@ -15,7 +14,7 @@ public class RegisterPageController extends Controller {
 
     @Override
     public void handleInput() {
-        if (ConsoleScanner.shared().getInput().equals("y")) {
+        if (App.shared().input().next().equals("y")) {
             App.shared().getNavigation().pop();
         }
     }

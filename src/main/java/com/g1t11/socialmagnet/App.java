@@ -1,5 +1,7 @@
 package com.g1t11.socialmagnet;
 
+import java.util.Scanner;
+
 import com.g1t11.socialmagnet.controller.Navigation;
 import com.g1t11.socialmagnet.controller.WelcomePageController;
 import com.g1t11.socialmagnet.data.Database;
@@ -13,6 +15,8 @@ public class App {
     private Database database = new Database();
 
     private Session session = new Session();
+
+    private Scanner appIn;
 
     /**
      * Condition for application event loop.
@@ -61,6 +65,15 @@ public class App {
 
     public Session getSession() {
         return session;
+    }
+
+    public Scanner input() {
+        appIn = new Scanner(System.in);
+        return appIn;
+    }
+
+    public static void restart() {
+        sharedInstance = null;
     }
 
     /**

@@ -5,6 +5,7 @@ import java.util.Calendar;
 
 import com.g1t11.socialmagnet.App;
 import com.g1t11.socialmagnet.model.kit.NumberedAction;
+import com.g1t11.socialmagnet.util.Greeting;
 import com.g1t11.socialmagnet.view.kit.*;
 
 /* SAMPLE
@@ -26,11 +27,18 @@ public class WelcomePageView extends PageView {
 
     PromptView promptView;
 
+    Integer fixedHourOfDay = null;
+
     public WelcomePageView(List<NumberedAction> actions) {
         super("Welcome");
         greetingView = new TextView("Good morning, anonymous!");
         actionsView  = new ListView(actions);
         promptView   = new PromptView();
+    }
+
+    public WelcomePageView(List<NumberedAction> actions, int fixedHourOfDay) {
+        this(actions);
+        this.fixedHourOfDay = fixedHourOfDay;
     }
 
     @Override
@@ -46,15 +54,15 @@ public class WelcomePageView extends PageView {
      * Update {@link #greetingView} based on the time of day. 
      */
     private void updateGreeting() {
-        String greeting = String.format("Good %s, %s!", getTimeOfDay(), App.shared().getSession().getUsername());
+        int hour;
+        if (fixedHourOfDay == null) {
+            Calendar cal = Calendar.getInstance();
+            hour = cal.get(Calendar.HOUR_OF_DAY);
+        } else {
+            hour = fixedHourOfDay;
+        }
+        String time = Greeting.basedOnHour(hour);
+        String greeting = String.format("Good %s, %s!", time, App.shared().getSession().getUsername());
         greetingView.setText(greeting);
-    }
-
-    private String getTimeOfDay() {
-        Calendar now = Calendar.getInstance();
-        int hour = now.get(Calendar.HOUR_OF_DAY);
-        if (hour < 12) return "morning";
-        if (hour < 19) return "afternoon";
-        return "evening";
     }
 }
