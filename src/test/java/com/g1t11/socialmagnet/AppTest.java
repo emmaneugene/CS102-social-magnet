@@ -12,7 +12,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class TestApp {
+public class AppTest {
     @BeforeAll
     public static void initApplication() {
         App.shared().setAppName("Social Magnet");
