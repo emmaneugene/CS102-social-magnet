@@ -3,15 +3,12 @@ package com.g1t11.socialmagnet;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.TestMethodOrder;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestApp {
     @BeforeAll
     public static void initApplication() {
