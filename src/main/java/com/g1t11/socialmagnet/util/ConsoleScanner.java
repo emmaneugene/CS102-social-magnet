@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class ConsoleScanner {
     private static ConsoleScanner sharedInstance = null;
 
-    private Scanner console = new Scanner(System.in);
+    private static Scanner console;
 
     private ConsoleScanner() {}
 
@@ -16,6 +16,7 @@ public class ConsoleScanner {
     }
 
     public String getInput() {
+        console = new Scanner(System.in);
         return console.next();
     }
 }
