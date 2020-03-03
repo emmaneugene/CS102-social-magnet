@@ -29,7 +29,7 @@ public class UserDAO {
             rs.next();
 
             String fullname = rs.getString("fullname");
-            
+
             u.setUsername(username);
             u.setFullName(fullname);
             u.setFriends(getFriends(u));

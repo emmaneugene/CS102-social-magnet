@@ -1,8 +1,8 @@
 package com.g1t11.socialmagnet.view;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
-import java.util.Calendar;
 
 import com.g1t11.socialmagnet.App;
 import com.g1t11.socialmagnet.model.kit.NumberedAction;
