@@ -19,6 +19,7 @@ public class TestApp {
     @BeforeAll
     public static void initApplication() {
         App.shared().setAppName("Social Magnet");
+        App.shared().getDatabase().establishDefaultConnection();
     }
 
     @BeforeEach
