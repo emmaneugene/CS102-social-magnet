@@ -40,13 +40,13 @@ INSERT INTO likes (username, post_id) VALUES
 ("adam",    3),
 ("britney", 3),
 ("britney", 7),
-("charlie", 1);
+("charlie", 1),
 ("charlie", 5),
 ("danny",   4),
-("elijah",  2),
+("elijah",  2);
 
 INSERT INTO dislikes (username, post_id) VALUES
-("adam",   3),
+("adam",    3),
 ("adam",    4),
 ("britney", 4),
 ("elijah",  1);
