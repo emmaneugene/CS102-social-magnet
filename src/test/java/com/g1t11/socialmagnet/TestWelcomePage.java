@@ -36,7 +36,7 @@ public class TestWelcomePage extends TestSocialMagnet {
         App.shared().getNavigation().getCurrentController().handleInput();
         App.shared().getNavigation().getCurrentController().updateView();
         String expectedError = "Please enter a choice between 1 & 3!";
-        String errorMessage = getOutput().split("\\r?\\n")[1];
+        String errorMessage = getOutput().split(System.lineSeparator())[1];
         Assertions.assertEquals(expectedError, errorMessage);
     }
 }
