@@ -1,24 +1,49 @@
 package com.g1t11.socialmagnet.model;
 
-import java.util.ArrayList;
+import java.util.List;
 
-/**
- * User
- * - username : String
- * - fullName : String
- * - password : String
- * - friends : ArrayList<User>
- * - wall : ArrayList<Post>
- * - requests : ArrayList<Request>
- * - requested : ArrayList<Request> 
- */
 public class User {
     private String username;
+
     private String fullName;
-    private String password;
-    private ArrayList<User> friends;
-    private ArrayList<Post> feed;
-    private ArrayList<Gift> gifts;
-    private ArrayList<Request> requests;
-    private ArrayList<Request> requested;
+
+    private List<User> friends;
+
+    private List<Post> feed;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public List<User> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(List<User> friends) {
+        this.friends = friends;
+    }
+
+    public List<Post> getFeed() {
+        return feed;
+    }
+
+    public void setFeed(List<Post> feed) {
+        this.feed = feed;
+    }
+
+    public String toString() {
+        return String.format("%s: %s", username, fullName);
+    }
 }
