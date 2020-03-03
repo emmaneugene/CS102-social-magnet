@@ -68,6 +68,7 @@ public class App {
      */
     public void exit() {
         isRunning = false;
+        System.out.println("Goodbye!");
     }
 
     /**
@@ -77,8 +78,6 @@ public class App {
         while (isRunning) {
             getNavigation().runCurrentController();
         }
-        System.out.println("Goodbye!");
-        System.exit(0);
     }
 
     public static void main(String[] args) {
