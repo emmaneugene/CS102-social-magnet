@@ -1,5 +1,6 @@
 package com.g1t11.socialmagnet;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 import com.g1t11.socialmagnet.controller.Navigation;
@@ -94,7 +95,16 @@ public class App {
         }
     }
 
+    public static void sourceEnv() {
+        try {
+            new ProcessBuilder("/bin/bash", "-c", ". env.sh; source .env").start();
+        } catch (IOException e) {
+            System.out.println("IOException: " + e.getMessage());
+        }
+    }
+
     public static void main(String[] args) {
+        App.sourceEnv();
         App.shared().setAppName("Social Magnet");
         App.shared().navigation.setFirstController(new WelcomePageController());
         App.shared().database.establishDefaultConnection();
