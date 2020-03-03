@@ -71,6 +71,10 @@ public class App {
         return appIn;
     }
 
+    public static void restart() {
+        sharedInstance = null;
+    }
+
     /**
      * Prevent the next frame from running.
      */

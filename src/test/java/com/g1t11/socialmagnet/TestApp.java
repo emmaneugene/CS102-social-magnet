@@ -1,6 +1,7 @@
-package com.g1t11.socialmagnet.util;
+package com.g1t11.socialmagnet;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -11,7 +12,12 @@ import java.io.InputStream;
 import java.io.PrintStream;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class TestSocialMagnet {
+public class TestApp {
+    @BeforeAll
+    public static void initApplication() {
+        App.shared().setAppName("Social Magnet");
+    }
+
     private final InputStream stdin = System.in;
     private final PrintStream stdout = System.out;
 
