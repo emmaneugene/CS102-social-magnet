@@ -10,16 +10,16 @@ import java.io.InputStream;
 import java.io.PrintStream;
 
 public class TestApp {
-    @BeforeAll
-    public static void initApplication() {
-        App.shared().setAppName("Social Magnet");
-    }
-
     private final InputStream stdin = System.in;
     private final PrintStream stdout = System.out;
 
     private static ByteArrayInputStream input;
     private static ByteArrayOutputStream output;
+
+    @BeforeAll
+    public static void initApplication() {
+        App.shared().setAppName("Social Magnet");
+    }
 
     @BeforeEach
     public void setOutputStreams() {
