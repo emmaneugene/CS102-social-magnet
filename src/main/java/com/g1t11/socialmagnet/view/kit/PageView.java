@@ -1,5 +1,7 @@
 package com.g1t11.socialmagnet.view.kit;
 
+import java.util.Objects;
+
 import com.g1t11.socialmagnet.App;
 
 /**
@@ -46,5 +48,13 @@ public class PageView extends View {
         System.out.println(String.format(headerTemplate, App.shared().getAppName(), pageTitle));
         if (status != null)
             status.render();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof PageView)) return false;
+        PageView other = (PageView) o;
+        return Objects.equals(pageTitle, other.pageTitle)
+            && Objects.equals(status, other.status);
     }
 }

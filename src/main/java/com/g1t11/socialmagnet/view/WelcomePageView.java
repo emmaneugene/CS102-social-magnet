@@ -1,6 +1,7 @@
 package com.g1t11.socialmagnet.view;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Calendar;
 
 import com.g1t11.socialmagnet.App;
@@ -64,5 +65,15 @@ public class WelcomePageView extends PageView {
         String time = Greeting.basedOnHour(hour);
         String greeting = String.format("Good %s, %s!", time, App.shared().getSession().getUsername());
         greetingView.setText(greeting);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof WelcomePageView)) return false;
+        WelcomePageView other = (WelcomePageView) o;
+        return Objects.equals(greetingView, other.greetingView)
+            && Objects.equals(actionsView, other.actionsView)
+            && Objects.equals(promptView, other.promptView)
+            && Objects.equals(fixedHourOfDay, other.fixedHourOfDay);
     }
 }

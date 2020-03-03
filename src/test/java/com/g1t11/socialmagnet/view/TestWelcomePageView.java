@@ -1,14 +1,14 @@
 package com.g1t11.socialmagnet.view;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import com.g1t11.socialmagnet.model.kit.NumberedAction;
 import com.g1t11.socialmagnet.TestApp;
+import com.g1t11.socialmagnet.model.kit.NumberedAction;
 import com.g1t11.socialmagnet.view.kit.TextView;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class TestWelcomePageView extends TestApp {
     private final List<NumberedAction> actions = new ArrayList<>(List.of(
@@ -77,7 +77,7 @@ public class TestWelcomePageView extends TestApp {
     }
 
     @Test
-    public void testWithStatus() {
+    public void testRenderWithStatus() {
         view = new WelcomePageView(actions, 20);
 
         view.setStatus(new TextView("Please enter a choice between 1 & 3!"));
