@@ -1,6 +1,7 @@
 package com.g1t11.socialmagnet.view.kit;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.g1t11.socialmagnet.view.kit.ListItemDataSource;
 
@@ -22,5 +23,12 @@ public class ListView extends View {
         for (ListItemDataSource ds : dataSource) {
             ds.render();
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof ListView)) return false;
+        ListView other = (ListView) o;
+        return Objects.deepEquals(dataSource, other.dataSource);
     }
 }

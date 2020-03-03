@@ -1,5 +1,7 @@
 package com.g1t11.socialmagnet.view.kit;
 
+import java.util.Objects;
+
 public class PromptView extends TextView {
     /**
      * @param text The message of the prompt
@@ -16,5 +18,11 @@ public class PromptView extends TextView {
 
     public PromptView() {
         this("Enter your choice");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof PromptView)) return false;
+        return super.equals(o);
     }
 }

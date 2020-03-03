@@ -1,5 +1,7 @@
 package com.g1t11.socialmagnet.model.kit;
 
+import java.util.Objects;
+
 public abstract class Action {
     private String label;
 
@@ -16,5 +18,13 @@ public abstract class Action {
 
     public String getTrigger() {
         return trigger;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Action)) return false;
+        Action other = (Action) o;
+        return Objects.equals(label, other.label)
+            && Objects.equals(trigger, other.trigger);
     }
 }

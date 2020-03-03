@@ -2,6 +2,7 @@ package com.g1t11.socialmagnet.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.g1t11.socialmagnet.App;
 import com.g1t11.socialmagnet.model.kit.NumberedAction;
@@ -36,8 +37,19 @@ public class WelcomePageController extends Controller {
                 App.shared().exit();
                 break;
             default:
-                view.setStatus(new TextView("Please enter a choice between 1 & 3!"));
+                displayErrorMessage("Please enter a choice between 1 & 3!");
                 break;
         }
+    }
+
+    public void displayErrorMessage(String message) {
+        view.setStatus(new TextView(message));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof WelcomePageController)) return false;
+        WelcomePageController other = (WelcomePageController) o;
+        return Objects.equals(view, other.view);
     }
 }
