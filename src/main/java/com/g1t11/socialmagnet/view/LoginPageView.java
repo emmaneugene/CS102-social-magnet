@@ -18,6 +18,5 @@ public class LoginPageView extends PageView {
     @Override
     public void render() {
         super.render();
-        System.out.println("Login?");
     }
 }

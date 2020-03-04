@@ -26,15 +26,12 @@ public class WelcomePageView extends PageView {
 
     ListView actionsView;
 
-    PromptView promptView;
-
     Integer fixedHourOfDay = null;
 
     public WelcomePageView(List<NumberedAction> actions) {
         super("Welcome");
         greetingView = new TextView("Good morning, anonymous!");
         actionsView  = new ListView(actions);
-        promptView   = new PromptView();
     }
 
     public WelcomePageView(List<NumberedAction> actions, int fixedHourOfDay) {
@@ -48,7 +45,6 @@ public class WelcomePageView extends PageView {
         updateGreeting();
         greetingView.render();
         actionsView.render();
-        promptView.render();
     }
 
     /**
@@ -73,7 +69,6 @@ public class WelcomePageView extends PageView {
         WelcomePageView other = (WelcomePageView) o;
         return Objects.equals(greetingView, other.greetingView)
             && Objects.equals(actionsView, other.actionsView)
-            && Objects.equals(promptView, other.promptView)
             && Objects.equals(fixedHourOfDay, other.fixedHourOfDay);
     }
 
@@ -82,8 +77,7 @@ public class WelcomePageView extends PageView {
         return String.join("\n",
             super.toString(),
             greetingView.toString(),
-            actionsView.toString(),
-            promptView.toString()
+            actionsView.toString()
         );
     }
 }

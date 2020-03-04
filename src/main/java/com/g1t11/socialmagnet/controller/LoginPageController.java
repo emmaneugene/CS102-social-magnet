@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import com.g1t11.socialmagnet.App;
 import com.g1t11.socialmagnet.view.LoginPageView;
+import com.g1t11.socialmagnet.view.kit.*;
 
 public class LoginPageController extends Controller {
 
@@ -16,7 +17,11 @@ public class LoginPageController extends Controller {
 
     @Override
     public void handleInput() {
-        if (App.shared().input().next().equals("y")) {
+        PromptInput input = new PromptInput("Return?");
+
+        String inputStr = input.next();
+        System.out.println(inputStr);
+        if (inputStr.equals("y")) {
             App.shared().getNavigation().pop();
         }
     }

@@ -7,7 +7,7 @@ import java.util.Objects;
 import com.g1t11.socialmagnet.App;
 import com.g1t11.socialmagnet.model.kit.NumberedAction;
 import com.g1t11.socialmagnet.view.WelcomePageView;
-import com.g1t11.socialmagnet.view.kit.TextView;
+import com.g1t11.socialmagnet.view.kit.*;
 
 public class WelcomePageController extends Controller {
     private final List<NumberedAction> actions = new ArrayList<>(List.of(
@@ -25,8 +25,8 @@ public class WelcomePageController extends Controller {
 
     @Override
     public void handleInput() {
-        String input = App.shared().input().next();
-        switch (input) {
+        PromptInput input = new PromptInput("Enter your choice");
+        switch (input.next()) {
             case "1":
                 App.shared().getNavigation().prepareForNavigation(new RegisterPageController());
                 break;

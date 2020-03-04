@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import com.g1t11.socialmagnet.App;
 import com.g1t11.socialmagnet.view.RegisterPageView;
+import com.g1t11.socialmagnet.view.kit.*;
 
 public class RegisterPageController extends Controller {
 
@@ -16,7 +17,9 @@ public class RegisterPageController extends Controller {
 
     @Override
     public void handleInput() {
-        if (App.shared().input().next().equals("y")) {
+        PromptInput input = new PromptInput("Return?");
+
+        if (input.next().equals("y")) {
             App.shared().getNavigation().pop();
         }
     }
