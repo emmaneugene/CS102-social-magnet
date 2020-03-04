@@ -3,8 +3,6 @@ package com.g1t11.socialmagnet.view.kit;
 import java.util.List;
 import java.util.Objects;
 
-import com.g1t11.socialmagnet.view.kit.ListItemDataSource;
-
 /**
  * A {@link View} component that renders a list of items.
  * Items are rendered by implementing {@link ListItemDataSource}.

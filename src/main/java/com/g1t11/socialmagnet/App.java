@@ -1,5 +1,6 @@
 package com.g1t11.socialmagnet;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 import com.g1t11.socialmagnet.controller.Navigation;

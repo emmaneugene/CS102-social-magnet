@@ -1,9 +1,11 @@
 package com.g1t11.socialmagnet.data;
 
-import com.mysql.cj.jdbc.Driver;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+
+import com.mysql.cj.jdbc.Driver;
 
 public class Database {
     /**

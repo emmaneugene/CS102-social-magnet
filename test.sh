@@ -1,0 +1,2 @@
+source .env;
+mvn test;
