@@ -14,9 +14,9 @@ public class PromptInput {
         this.prompt = prompt;
     }
 
-    public String next() {
+    public String nextLine() {
         System.out.printf("%s %s ", prompt, promptIndicator);
-        return sc.next();
+        return sc.nextLine();
     }
 
     public int nextInt() {
@@ -27,9 +27,5 @@ public class PromptInput {
     public double nextDouble() {
         System.out.printf("%s %s ", prompt, promptIndicator);
         return sc.nextDouble();
-    }
-
-    public void setInputStream(InputStream in) {
-        sc = new Scanner(in);
     }
 }

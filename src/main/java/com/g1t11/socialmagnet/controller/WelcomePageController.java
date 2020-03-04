@@ -26,7 +26,7 @@ public class WelcomePageController extends Controller {
     @Override
     public void handleInput() {
         PromptInput input = new PromptInput("Enter your choice");
-        switch (input.next()) {
+        switch (input.nextLine()) {
             case "1":
                 App.shared().getNavigation().prepareForNavigation(new RegisterPageController());
                 break;

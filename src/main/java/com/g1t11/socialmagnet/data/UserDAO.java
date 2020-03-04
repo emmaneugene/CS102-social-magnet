@@ -37,7 +37,7 @@ public class UserDAO extends DAO {
             u.setFullName(fullname);
             u.setFriends(getFriends(u));
         } catch (SQLException e) {
-            System.out.println("SQLException: " + e.getMessage());
+            System.err.println("SQLException: " + e.getMessage());
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
@@ -77,7 +77,7 @@ public class UserDAO extends DAO {
                 friends.add(u);
             }
         } catch (SQLException e) {
-            System.out.println("SQLException: " + e.getMessage());
+            System.err.println("SQLException: " + e.getMessage());
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
@@ -101,7 +101,7 @@ public class UserDAO extends DAO {
             rs = stmt.executeQuery();
             return rs.next();
         } catch (SQLException e) {
-            System.out.println("SQLException: " + e.getMessage());
+            System.err.println("SQLException: " + e.getMessage());
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }

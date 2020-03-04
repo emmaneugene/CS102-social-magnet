@@ -18,7 +18,7 @@ public class RegisterPageController extends Controller {
     public void handleInput() {
         PromptInput input = new PromptInput("Return?");
 
-        if (input.next().equals("y")) {
+        if (input.nextLine().equals("y")) {
             App.shared().getNavigation().pop();
         }
     }
