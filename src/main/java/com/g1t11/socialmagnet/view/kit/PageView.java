@@ -38,6 +38,10 @@ public class PageView extends View {
         this.status = status;
     }
 
+    public void setStatus(String statusText) {
+        this.status = new TextView(statusText);
+    }
+
     public void clearStatus() {
         this.status = null;
     }

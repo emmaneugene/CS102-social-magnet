@@ -3,8 +3,8 @@ package com.g1t11.socialmagnet.controller;
 import java.util.Objects;
 
 import com.g1t11.socialmagnet.App;
-import com.g1t11.socialmagnet.view.LoginPageView;
 import com.g1t11.socialmagnet.util.PromptInput;
+import com.g1t11.socialmagnet.view.LoginPageView;
 
 public class LoginPageController extends Controller {
 
@@ -17,17 +17,18 @@ public class LoginPageController extends Controller {
 
     @Override
     public void handleInput() {
-        PromptInput usernameInput = new PromptInput("Enter your username");
-        String username = usernameInput.nextLine();
+        PromptInput input = new PromptInput("Enter your username");
+        String username = input.nextLine();
 
-        PromptInput passwordInput = new PromptInput("Enter your password");
-        String password = passwordInput.nextLine();
+        input.setPrompt("Enter your password");
+        String password = input.nextLine();
 
-        boolean loginSuccessful = App.shared().getSession().login(username, password);
+        boolean loginSuccessful = App.shared().session().login(username, password);
         if (loginSuccessful) {
-            App.shared().getNavigation().pop();
+            App.shared().navigation().pop();
         } else {
-            App.shared().getNavigation().pop();
+            App.shared().navigation().pop();
+            App.shared().navigation().currentController().getView().setStatus("Login error! Please try again.");
         }
     }
 

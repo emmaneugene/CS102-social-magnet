@@ -1,7 +1,5 @@
 package com.g1t11.socialmagnet.data;
 
-import java.sql.Connection;
-
 import com.g1t11.socialmagnet.model.social.User;
 
 /**

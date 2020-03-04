@@ -22,7 +22,7 @@ public class Navigation {
         navigationStack.add(first);
     }
 
-    public Controller getCurrentController() {
+    public Controller currentController() {
         int size = navigationStack.size();
         if (size == 0) return null;
         return navigationStack.get(size - 1);
@@ -47,9 +47,5 @@ public class Navigation {
      */
     public void prepareForNavigation(Controller next) {
         navigationStack.add(next);
-    }
-
-    public void runCurrentController() {
-        getCurrentController().run();
     }
 }

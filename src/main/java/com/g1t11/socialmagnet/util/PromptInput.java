@@ -13,6 +13,10 @@ public class PromptInput {
         this.prompt = prompt;
     }
 
+    public void setPrompt(String prompt) {
+        this.prompt = prompt;
+    }
+
     public String nextLine() {
         System.out.printf("%s %s ", prompt, promptIndicator);
         return sc.nextLine();

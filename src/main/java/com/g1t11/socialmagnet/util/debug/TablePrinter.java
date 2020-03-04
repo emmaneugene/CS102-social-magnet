@@ -30,7 +30,7 @@ public class TablePrinter {
         ResultSet rs = null;
 
         try {
-            stmt = App.shared().getDatabase().connection().createStatement();
+            stmt = App.shared().database().connection().createStatement();
             rs = stmt.executeQuery(query);
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());

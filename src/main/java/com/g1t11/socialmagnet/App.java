@@ -9,11 +9,11 @@ import com.g1t11.socialmagnet.data.Session;
 public class App {
     private String appName = null;
 
-    private Navigation navigation = null;
+    private Navigation nav = null;
 
-    private Database database = null;
+    private Database db = null;
 
-    private Session session = null;
+    private Session sesh = null;
 
     /**
      * Condition for application event loop.
@@ -22,11 +22,11 @@ public class App {
     private boolean isRunning = true;
 
     private App() {
-        navigation = new Navigation();
-        database = new Database();
-        database.establishDefaultConnection();
-        UserDAO userDao = new UserDAO(database.connection());
-        session = new Session(userDao);
+        nav = new Navigation();
+        db = new Database();
+        db.establishDefaultConnection();
+        UserDAO userDao = new UserDAO(db.connection());
+        sesh = new Session(userDao);
     }
 
     /**
@@ -60,16 +60,16 @@ public class App {
             this.appName = appName;
     }
 
-    public Navigation getNavigation() {
-        return navigation;
+    public Navigation navigation() {
+        return nav;
     }
 
-    public Database getDatabase() {
-        return database;
+    public Database database() {
+        return db;
     }
 
-    public Session getSession() {
-        return session;
+    public Session session() {
+        return sesh;
     }
 
     public static void restart() {
@@ -89,13 +89,13 @@ public class App {
      */
     public void run() {
         while (isRunning) {
-            getNavigation().runCurrentController();
+            navigation().currentController().run();
         }
     }
 
     public static void main(String[] args) {
         App.shared().setAppName("Social Magnet");
-        App.shared().navigation.setFirstController(new WelcomePageController());
+        App.shared().navigation().setFirstController(new WelcomePageController());
         App.shared().run();
     }
 }

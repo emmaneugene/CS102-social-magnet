@@ -4,8 +4,8 @@ import java.util.Objects;
 
 import com.g1t11.socialmagnet.App;
 import com.g1t11.socialmagnet.util.PromptInput;
-import com.g1t11.socialmagnet.view.kit.*;
 import com.g1t11.socialmagnet.view.WelcomePageView;
+import com.g1t11.socialmagnet.view.kit.PageView;
 
 public class WelcomePageController extends Controller {
 
@@ -21,22 +21,24 @@ public class WelcomePageController extends Controller {
         PromptInput input = new PromptInput("Enter your choice");
         switch (input.nextLine()) {
             case "1":
-                App.shared().getNavigation().prepareForNavigation(new RegisterPageController());
+                App.shared().navigation().prepareForNavigation(new RegisterPageController());
                 break;
             case "2":
-                App.shared().getNavigation().prepareForNavigation(new LoginPageController());
+                App.shared().navigation().prepareForNavigation(new LoginPageController());
                 break;
             case "3":
                 App.shared().exit();
                 break;
             default:
-                displayErrorMessage("Please enter a choice between 1 & 3!");
+                view.setStatus("Please enter a choice between 1 & 3!");
                 break;
         }
     }
 
-    public void displayErrorMessage(String message) {
-        view.setStatus(new TextView(message));
+    @Override
+    public PageView getView() {
+        // if (view == null) view = new WelcomePageView();
+        return view;
     }
 
     @Override
