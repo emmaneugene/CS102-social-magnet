@@ -18,8 +18,8 @@ public class Navigation {
      * @param first The root {@link Controller} for navigation.
      */
     public void setFirstController(Controller first) {
-        if (navigationStack.isEmpty())
-            navigationStack.add(first);
+        navigationStack.clear();
+        navigationStack.add(first);
     }
 
     public Controller getCurrentController() {

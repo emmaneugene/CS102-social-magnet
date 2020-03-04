@@ -4,13 +4,24 @@ import com.g1t11.socialmagnet.App;
 import com.g1t11.socialmagnet.TestApp;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class TestWelcomePageController extends TestApp {
-    @BeforeAll
-    public static void initController() {
+    @BeforeEach
+    public void initController() {
         App.shared().getNavigation().setFirstController(new WelcomePageController());
+    }
+
+    @Test
+    public void simulateLogin() {
+        provideInput("2");
+        App.shared().getNavigation().getCurrentController().run();
+
+        LoginPageController expected = new LoginPageController();
+        expected.updateView();
+
+        Assertions.assertEquals(expected, App.shared().getNavigation().getCurrentController());
     }
 
     @Test
