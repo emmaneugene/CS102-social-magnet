@@ -31,4 +31,13 @@ public class ListView extends View {
         ListView other = (ListView) o;
         return Objects.deepEquals(dataSource, other.dataSource);
     }
+
+    @Override
+    public String toString() {
+        String result = "";
+        for (ListItemDataSource ds : dataSource) {
+            result += ds.toString() + "\n";
+        }
+        return result;
+    }
 }

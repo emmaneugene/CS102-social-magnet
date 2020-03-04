@@ -57,4 +57,12 @@ public class PageView extends View {
         return Objects.equals(pageTitle, other.pageTitle)
             && Objects.equals(status, other.status);
     }
+
+    @Override
+    public String toString() {
+        String result = String.format(headerTemplate + "\n", App.shared().getAppName(), pageTitle);
+        if (status != null)
+            result += status.toString();
+        return result;
+    }
 }

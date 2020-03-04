@@ -19,6 +19,7 @@ public class TestWelcomePageController extends TestApp {
         App.shared().getNavigation().getCurrentController().run();
 
         WelcomePageController expected = new WelcomePageController();
+        expected.updateView();
         expected.displayErrorMessage("Please enter a choice between 1 & 3!");
 
         Assertions.assertEquals(expected, App.shared().getNavigation().getCurrentController());

@@ -20,4 +20,11 @@ public abstract class Controller {
     public abstract void updateView();
 
     public abstract void handleInput();
+
+    @Override
+    public String toString() {
+        if (view != null)
+            return view.toString();
+        return super.toString();
+    }
 }

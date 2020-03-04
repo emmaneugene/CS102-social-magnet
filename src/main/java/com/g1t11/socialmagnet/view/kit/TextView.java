@@ -40,4 +40,9 @@ public class TextView extends View {
         return Objects.equals(text, other.text)
             && Objects.equals(newLine, other.newLine);
     }
+
+    @Override
+    public String toString() {
+        return this.text + (newLine ? "\n" : "");
+    }
 }

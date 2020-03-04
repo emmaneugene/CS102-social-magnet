@@ -76,4 +76,14 @@ public class WelcomePageView extends PageView {
             && Objects.equals(promptView, other.promptView)
             && Objects.equals(fixedHourOfDay, other.fixedHourOfDay);
     }
+
+    @Override
+    public String toString() {
+        return String.join("\n",
+            super.toString(),
+            greetingView.toString(),
+            actionsView.toString(),
+            promptView.toString()
+        );
+    }
 }
