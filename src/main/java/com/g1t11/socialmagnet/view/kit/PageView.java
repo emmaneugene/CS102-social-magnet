@@ -46,8 +46,10 @@ public class PageView extends View {
     public void render() {
         clearScreen();
         System.out.println(String.format(headerTemplate, App.shared().getAppName(), pageTitle));
-        if (status != null)
+        if (status != null) {
             status.render();
+            clearStatus();
+        }
     }
 
     @Override
