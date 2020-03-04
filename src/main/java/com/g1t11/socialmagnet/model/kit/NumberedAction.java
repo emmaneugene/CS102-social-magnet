@@ -8,6 +8,11 @@ public class NumberedAction extends Action implements ListItemDataSource {
     }
 
 
+    @Override
+    public String toString() {
+        return String.format("%s. %s\n", getTrigger(), getLabel());
+    }
+
     //============================//
     // ItemViewDataSource methods //
     //============================//

@@ -27,4 +27,9 @@ public abstract class Action {
         return Objects.equals(label, other.label)
             && Objects.equals(trigger, other.trigger);
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s %s", label, trigger);
+    }
 }

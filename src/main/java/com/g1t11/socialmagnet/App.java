@@ -44,6 +44,8 @@ public class App {
     }
 
     public String getAppName() {
+        if (appName == null)
+            return "";
         return appName;
     }
 
@@ -68,7 +70,7 @@ public class App {
     }
 
     public Scanner input() {
-        return appIn;
+        return new Scanner(System.in);
     }
 
     public static void restart() {

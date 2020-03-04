@@ -1,7 +1,5 @@
 package com.g1t11.socialmagnet.view.kit;
 
-import java.util.Objects;
-
 public class PromptView extends TextView {
     /**
      * @param text The message of the prompt
