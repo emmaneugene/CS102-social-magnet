@@ -1,4 +1,4 @@
-package com.g1t11.socialmagnet.model;
+package com.g1t11.socialmagnet.model.farm;
 
 import java.util.ArrayList;
 
@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * - inventory : ArrayList<InventoryItem>
  * - stolenCrops : ArrayList<Stealing>
  */
-public class Farmer extends User {
+public class Farmer {
     private String rank;
     private int exp;
     private int wealth;

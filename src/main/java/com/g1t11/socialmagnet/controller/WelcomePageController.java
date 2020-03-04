@@ -1,22 +1,15 @@
 package com.g1t11.socialmagnet.controller;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import com.g1t11.socialmagnet.App;
-import com.g1t11.socialmagnet.model.kit.NumberedAction;
-import com.g1t11.socialmagnet.view.WelcomePageView;
+import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.kit.*;
+import com.g1t11.socialmagnet.view.WelcomePageView;
 
 public class WelcomePageController extends Controller {
-    private final List<NumberedAction> actions = new ArrayList<>(List.of(
-        new NumberedAction("Register", "1"),
-        new NumberedAction("Login", "2"),
-        new NumberedAction("Exit", "3")
-    ));
 
-    private WelcomePageView view = new WelcomePageView(actions);
+    private WelcomePageView view = new WelcomePageView();
 
     @Override
     public void updateView() {

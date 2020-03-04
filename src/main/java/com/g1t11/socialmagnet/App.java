@@ -4,7 +4,7 @@ import com.g1t11.socialmagnet.controller.Navigation;
 import com.g1t11.socialmagnet.controller.WelcomePageController;
 import com.g1t11.socialmagnet.data.Database;
 import com.g1t11.socialmagnet.data.UserDAO;
-import com.g1t11.socialmagnet.model.Session;
+import com.g1t11.socialmagnet.data.Session;
 
 public class App {
     private String appName = null;

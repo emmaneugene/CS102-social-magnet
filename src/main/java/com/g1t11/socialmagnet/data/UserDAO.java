@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.g1t11.socialmagnet.model.User;
-import com.g1t11.socialmagnet.model.UserNotFoundException;
+import com.g1t11.socialmagnet.model.social.User;
+import com.g1t11.socialmagnet.model.social.UserNotFoundException;
 
 public class UserDAO extends DAO {
     public UserDAO(Connection conn) {

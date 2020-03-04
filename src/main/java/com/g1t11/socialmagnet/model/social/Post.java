@@ -1,4 +1,4 @@
-package com.g1t11.socialmagnet.model;
+package com.g1t11.socialmagnet.model.social;
 
 import java.util.ArrayList;
 import java.util.Date;

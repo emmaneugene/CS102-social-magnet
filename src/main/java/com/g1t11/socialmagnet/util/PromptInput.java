@@ -1,10 +1,9 @@
-package com.g1t11.socialmagnet.controller;
+package com.g1t11.socialmagnet.util;
 
-import java.io.InputStream;
 import java.util.Scanner;
 
 public class PromptInput {
-    private Scanner sc = new Scanner(System.in);
+    private final Scanner sc = new Scanner(System.in);
 
     private String prompt;
 

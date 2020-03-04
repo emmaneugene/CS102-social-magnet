@@ -4,22 +4,20 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * A {@link View} component that renders a list of items.
- * Items are rendered by implementing {@link ListItemDataSource}.
- * @see ListItemDataSource
+ * A {@link View} component that renders a list of Views.
  */
 public class ListView extends View {
-    List<? extends ListItemDataSource> dataSource;
+    List<? extends View> items;
 
-    public ListView(List<? extends ListItemDataSource> dataSource) {
+    public ListView(List<? extends View> items) {
         super();
-        this.dataSource = dataSource;
+        this.items = items;
     }
 
     @Override
     public void render() {
-        for (ListItemDataSource ds : dataSource) {
-            ds.render();
+        for (View item : items) {
+            item.render();
         }
     }
 
@@ -27,14 +25,14 @@ public class ListView extends View {
     public boolean equals(Object o) {
         if (!(o instanceof ListView)) return false;
         ListView other = (ListView) o;
-        return Objects.deepEquals(dataSource, other.dataSource);
+        return Objects.deepEquals(items, other.items);
     }
 
     @Override
     public String toString() {
         String result = "";
-        for (ListItemDataSource ds : dataSource) {
-            result += ds.toString() + "\n";
+        for (View item : items) {
+            result += item.toString() + "\n";
         }
         return result;
     }

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Objects;
 
 import com.g1t11.socialmagnet.App;
-import com.g1t11.socialmagnet.model.kit.NumberedAction;
 import com.g1t11.socialmagnet.util.Greeting;
 import com.g1t11.socialmagnet.view.kit.*;
 
@@ -14,28 +13,31 @@ import com.g1t11.socialmagnet.view.kit.*;
 == Social Magnet :: Welcome ==
 Good morning, anonymous!
 1. Register
-2. Login 
+2. Login
 3. Exit
 Enter your choice > 4
-Please enter a choice between 1 & 3! 
+Please enter a choice between 1 & 3!
 
 */
 
 public class WelcomePageView extends PageView {
     TextView greetingView;
 
-    ListView actionsView;
+    private final ListView actionsView = new ListView(List.of(
+        new TextView("1. Register"),
+        new TextView("2. Login"),
+        new TextView("3. Exit")
+    ));
 
     Integer fixedHourOfDay = null;
 
-    public WelcomePageView(List<NumberedAction> actions) {
+    public WelcomePageView() {
         super("Welcome");
         greetingView = new TextView("Good morning, anonymous!");
-        actionsView  = new ListView(actions);
     }
 
-    public WelcomePageView(List<NumberedAction> actions, int fixedHourOfDay) {
-        this(actions);
+    public WelcomePageView(int fixedHourOfDay) {
+        this();
         this.fixedHourOfDay = fixedHourOfDay;
     }
 
@@ -48,7 +50,7 @@ public class WelcomePageView extends PageView {
     }
 
     /**
-     * Update {@link #greetingView} based on the time of day. 
+     * Update {@link #greetingView} based on the time of day.
      */
     private void updateGreeting() {
         int hour;

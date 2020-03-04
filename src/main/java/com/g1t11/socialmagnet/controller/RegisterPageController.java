@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import com.g1t11.socialmagnet.App;
 import com.g1t11.socialmagnet.view.RegisterPageView;
+import com.g1t11.socialmagnet.util.PromptInput;
 
 public class RegisterPageController extends Controller {
 

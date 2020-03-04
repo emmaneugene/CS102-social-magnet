@@ -1,9 +1,8 @@
-package com.g1t11.socialmagnet.model;
+package com.g1t11.socialmagnet.data;
 
 import java.sql.Connection;
 
-import com.g1t11.socialmagnet.data.UserDAO;
-import com.g1t11.socialmagnet.model.User;
+import com.g1t11.socialmagnet.model.social.User;
 
 /**
  * Handles user authentication and session management.
@@ -32,8 +31,6 @@ public class Session {
 
     /**
      * Verify login information against the database.
-     * @throws WrongPasswordException Wrong password given.
-     * @throws UserNotFoundException User does not exist in the database.
      */
     public boolean login(String username, String password) {
         if (userDao.checkCredentials(username, password)) {
