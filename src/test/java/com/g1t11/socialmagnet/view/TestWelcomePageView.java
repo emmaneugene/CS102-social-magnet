@@ -1,8 +1,5 @@
 package com.g1t11.socialmagnet.view;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.g1t11.socialmagnet.TestApp;
 import com.g1t11.socialmagnet.view.kit.TextView;
 
