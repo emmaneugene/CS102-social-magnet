@@ -25,6 +25,19 @@ public class TestWelcomePageController extends TestApp {
     }
 
     @Test
+    public void simulateLoginAndBack() {
+        provideInput("2");
+        App.shared().getNavigation().getCurrentController().run();
+
+        App.shared().getNavigation().pop();
+
+        WelcomePageController expected = new WelcomePageController();
+        expected.updateView();
+
+        Assertions.assertEquals(expected, App.shared().getNavigation().getCurrentController());
+    }
+
+    @Test
     public void simulateInvalidInput() {
         provideInput("5");
         App.shared().getNavigation().getCurrentController().run();
