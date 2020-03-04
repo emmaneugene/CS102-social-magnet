@@ -15,7 +15,7 @@ public class TestUserDAO extends TestApp {
 
     @Before
     public void initDAO() {
-        userDAO = new UserDAO(App.shared().getDatabase().connection());
+        userDAO = new UserDAO(App.shared().database().connection());
     }
 
     @Test
