@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.g1t11.socialmagnet.TestApp;
-import com.g1t11.socialmagnet.model.kit.NumberedAction;
 import com.g1t11.socialmagnet.view.kit.TextView;
 
 import org.junit.Assert;
@@ -21,17 +20,11 @@ public class TestWelcomePageView extends TestApp {
     public final SystemOutRule systemOutRule 
         = new SystemOutRule().mute().enableLog();
 
-    private final List<NumberedAction> actions = new ArrayList<>(List.of(
-        new NumberedAction("Register", "1"),
-        new NumberedAction("Login", "2"),
-        new NumberedAction("Exit", "3")
-    ));
-
     WelcomePageView view = null;
 
     @Test
     public void testRenderMorning() {
-        view = new WelcomePageView(actions, 8);
+        view = new WelcomePageView(8);
 
         view.render();
 
@@ -50,7 +43,7 @@ public class TestWelcomePageView extends TestApp {
 
     @Test
     public void testRenderAfternoon() {
-        view = new WelcomePageView(actions, 13);
+        view = new WelcomePageView(13);
 
         view.render();
 
@@ -69,7 +62,7 @@ public class TestWelcomePageView extends TestApp {
 
     @Test
     public void testRenderEvening() {
-        view = new WelcomePageView(actions, 20);
+        view = new WelcomePageView(20);
 
         view.render();
 
@@ -88,7 +81,7 @@ public class TestWelcomePageView extends TestApp {
 
     @Test
     public void testRenderWithStatus() {
-        view = new WelcomePageView(actions, 20);
+        view = new WelcomePageView(20);
 
         view.setStatus(new TextView("Please enter a choice between 1 & 3!"));
 

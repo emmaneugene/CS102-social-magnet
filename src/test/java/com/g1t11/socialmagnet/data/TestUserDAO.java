@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.g1t11.socialmagnet.App;
 import com.g1t11.socialmagnet.TestApp;
-import com.g1t11.socialmagnet.model.User;
+import com.g1t11.socialmagnet.model.social.User;
 
 import org.junit.Assert;
 import org.junit.Before;
