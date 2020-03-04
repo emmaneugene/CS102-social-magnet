@@ -95,16 +95,7 @@ public class App {
         }
     }
 
-    public static void sourceEnv() {
-        try {
-            new ProcessBuilder("/bin/bash", "-c", ". env.sh; source .env").start();
-        } catch (IOException e) {
-            System.out.println("IOException: " + e.getMessage());
-        }
-    }
-
     public static void main(String[] args) {
-        App.sourceEnv();
         App.shared().setAppName("Social Magnet");
         App.shared().navigation.setFirstController(new WelcomePageController());
         App.shared().database.establishDefaultConnection();
