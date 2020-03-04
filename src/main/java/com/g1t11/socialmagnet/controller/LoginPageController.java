@@ -4,7 +4,6 @@ import java.util.Objects;
 
 import com.g1t11.socialmagnet.App;
 import com.g1t11.socialmagnet.view.LoginPageView;
-import com.g1t11.socialmagnet.view.kit.*;
 
 public class LoginPageController extends Controller {
 
@@ -17,11 +16,16 @@ public class LoginPageController extends Controller {
 
     @Override
     public void handleInput() {
-        PromptInput input = new PromptInput("Return?");
+        PromptInput usernameInput = new PromptInput("Enter your username");
+        String username = usernameInput.nextLine();
 
-        String inputStr = input.next();
-        System.out.println(inputStr);
-        if (inputStr.equals("y")) {
+        PromptInput passwordInput = new PromptInput("Enter your password");
+        String password = passwordInput.nextLine();
+
+        boolean loginSuccessful = App.shared().getSession().login(username, password);
+        if (loginSuccessful) {
+            App.shared().getNavigation().pop();
+        } else {
             App.shared().getNavigation().pop();
         }
     }

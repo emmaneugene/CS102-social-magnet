@@ -3,16 +3,17 @@ package com.g1t11.socialmagnet;
 import com.g1t11.socialmagnet.controller.Navigation;
 import com.g1t11.socialmagnet.controller.WelcomePageController;
 import com.g1t11.socialmagnet.data.Database;
-import com.g1t11.socialmagnet.data.Session;
+import com.g1t11.socialmagnet.data.UserDAO;
+import com.g1t11.socialmagnet.model.Session;
 
 public class App {
     private String appName = null;
 
-    private Navigation navigation = new Navigation();
+    private Navigation navigation = null;
 
-    private Database database = new Database();
+    private Database database = null;
 
-    private Session session = new Session();
+    private Session session = null;
 
     /**
      * Condition for application event loop.
@@ -20,7 +21,13 @@ public class App {
      */
     private boolean isRunning = true;
 
-    private App() {}
+    private App() {
+        navigation = new Navigation();
+        database = new Database();
+        database.establishDefaultConnection();
+        UserDAO userDao = new UserDAO(database.connection());
+        session = new Session(userDao);
+    }
 
     /**
      * Singleton instance representing the current running application.
@@ -89,7 +96,6 @@ public class App {
     public static void main(String[] args) {
         App.shared().setAppName("Social Magnet");
         App.shared().navigation.setFirstController(new WelcomePageController());
-        App.shared().database.establishDefaultConnection();
         App.shared().run();
     }
 }

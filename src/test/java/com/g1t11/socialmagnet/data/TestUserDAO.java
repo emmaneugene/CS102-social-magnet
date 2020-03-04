@@ -2,19 +2,20 @@ package com.g1t11.socialmagnet.data;
 
 import java.util.List;
 
+import com.g1t11.socialmagnet.App;
 import com.g1t11.socialmagnet.TestApp;
 import com.g1t11.socialmagnet.model.User;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 public class TestUserDAO extends TestApp {
     private UserDAO userDAO;
 
-    @BeforeEach
+    @Before
     public void initDAO() {
-        userDAO = new UserDAO();
+        userDAO = new UserDAO(App.shared().getDatabase().connection());
     }
 
     @Test
@@ -26,7 +27,21 @@ public class TestUserDAO extends TestApp {
 
         User user = userDAO.getUser("adam");
 
-        Assertions.assertNotNull(expectedUser);
-        Assertions.assertEquals(expectedUser, user);
+        Assert.assertNotNull(expectedUser);
+        Assert.assertEquals(expectedUser, user);
+    }
+
+    @Test
+    public void testCheckCredentialsValid() {
+        boolean loginSuccessful = userDAO.checkCredentials("adam", "maroon5");
+
+        Assert.assertTrue(loginSuccessful);
+    }
+
+    @Test
+    public void testCheckCredentialsInvalid() {
+        boolean loginSuccessful = userDAO.checkCredentials("adam", "solocareer");
+
+        Assert.assertFalse(loginSuccessful);
     }
 }

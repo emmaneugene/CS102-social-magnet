@@ -1,5 +1,6 @@
-package com.g1t11.socialmagnet.view.kit;
+package com.g1t11.socialmagnet.controller;
 
+import java.io.InputStream;
 import java.util.Scanner;
 
 public class PromptInput {
@@ -13,9 +14,9 @@ public class PromptInput {
         this.prompt = prompt;
     }
 
-    public String next() {
+    public String nextLine() {
         System.out.printf("%s %s ", prompt, promptIndicator);
-        return sc.next();
+        return sc.nextLine();
     }
 
     public int nextInt() {
