@@ -27,7 +27,7 @@ public class TestWelcomePageController extends TestApp {
     public void testGoToLoginAndBack() {
         provideInput("2");
         App.shared().getNavigation().getCurrentController().run();
-        provideInput("y");
+        provideInput("adam\r\nmaroon5\r\n");
         App.shared().getNavigation().getCurrentController().run();
 
         WelcomePageController expected = new WelcomePageController();

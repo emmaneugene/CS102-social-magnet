@@ -2,6 +2,7 @@ package com.g1t11.socialmagnet.data;
 
 import java.util.List;
 
+import com.g1t11.socialmagnet.App;
 import com.g1t11.socialmagnet.TestApp;
 import com.g1t11.socialmagnet.model.User;
 
@@ -14,7 +15,7 @@ public class TestUserDAO extends TestApp {
 
     @BeforeEach
     public void initDAO() {
-        userDAO = new UserDAO();
+        userDAO = new UserDAO(App.shared().getDatabase().connection());
     }
 
     @Test
@@ -28,5 +29,19 @@ public class TestUserDAO extends TestApp {
 
         Assertions.assertNotNull(expectedUser);
         Assertions.assertEquals(expectedUser, user);
+    }
+
+    @Test
+    public void testCheckCredentialsValid() {
+        boolean loginSuccessful = userDAO.checkCredentials("adam", "maroon5");
+
+        Assertions.assertTrue(loginSuccessful);
+    }
+
+    @Test
+    public void testCheckCredentialsInvalid() {
+        boolean loginSuccessful = userDAO.checkCredentials("adam", "solocareer");
+
+        Assertions.assertFalse(loginSuccessful);
     }
 }

@@ -7,11 +7,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.g1t11.socialmagnet.App;
 import com.g1t11.socialmagnet.model.User;
+import com.g1t11.socialmagnet.model.UserNotFoundException;
 
-public class UserDAO {
-    private Connection conn = App.shared().getDatabase().connection();
+public class UserDAO extends DAO {
+    public UserDAO(Connection conn) {
+        super(conn);
+    }
+
     public User getUser(String username) {
         ResultSet rs = null;
         User u = new User();
@@ -22,11 +25,11 @@ public class UserDAO {
             "WHERE username = ?"
         );
 
-        try ( PreparedStatement stmt = conn.prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
             stmt.setString(1, username);
 
             rs = stmt.executeQuery();
-            rs.next();
+            if (!rs.next()) throw new UserNotFoundException();
 
             String fullname = rs.getString("fullname");
 
@@ -36,9 +39,7 @@ public class UserDAO {
         } catch (SQLException e) {
             System.out.println("SQLException: " + e.getMessage());
         } finally {
-            try {
-                if (rs != null) rs.close();
-            } catch (SQLException e) {}
+            try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
 
         return u;
@@ -61,7 +62,7 @@ public class UserDAO {
             "JOIN user ON friend_name = user.username;"
         );
 
-        try ( PreparedStatement stmt = conn.prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getUsername());
 
@@ -78,11 +79,33 @@ public class UserDAO {
         } catch (SQLException e) {
             System.out.println("SQLException: " + e.getMessage());
         } finally {
-            try {
-                if (rs != null) rs.close();
-            } catch (SQLException e) {}
+            try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
 
         return friends;
+    }
+
+    public boolean checkCredentials(String username, String password) {
+        ResultSet rs = null;
+
+        String queryString = String.join("\n",
+            "SELECT username",
+            "FROM user",
+            "WHERE username = ? AND pwd = ?"
+        );
+
+        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+
+            rs = stmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            System.out.println("SQLException: " + e.getMessage());
+        } finally {
+            try { if (rs != null) rs.close(); } catch (SQLException e) {}
+        }
+
+        return false;
     }
 }

@@ -1,5 +1,6 @@
-package com.g1t11.socialmagnet.view.kit;
+package com.g1t11.socialmagnet.controller;
 
+import java.io.InputStream;
 import java.util.Scanner;
 
 public class PromptInput {
@@ -26,5 +27,9 @@ public class PromptInput {
     public double nextDouble() {
         System.out.printf("%s %s ", prompt, promptIndicator);
         return sc.nextDouble();
+    }
+
+    public void setInputStream(InputStream in) {
+        sc = new Scanner(in);
     }
 }

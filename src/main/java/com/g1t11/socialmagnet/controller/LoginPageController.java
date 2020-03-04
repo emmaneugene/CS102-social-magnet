@@ -4,9 +4,11 @@ import java.util.Objects;
 
 import com.g1t11.socialmagnet.App;
 import com.g1t11.socialmagnet.view.LoginPageView;
-import com.g1t11.socialmagnet.view.kit.*;
 
 public class LoginPageController extends Controller {
+    public PromptInput usernameInput = new PromptInput("Enter your username");
+
+    public PromptInput passwordInput = new PromptInput("Enter your password");
 
     private LoginPageView view = new LoginPageView();
 
@@ -17,11 +19,13 @@ public class LoginPageController extends Controller {
 
     @Override
     public void handleInput() {
-        PromptInput input = new PromptInput("Return?");
+        String username = usernameInput.next();
+        String password = passwordInput.next();
 
-        String inputStr = input.next();
-        System.out.println(inputStr);
-        if (inputStr.equals("y")) {
+        boolean loginSuccessful = App.shared().getSession().login(username, password);
+        if (loginSuccessful) {
+            App.shared().getNavigation().pop();
+        } else {
             App.shared().getNavigation().pop();
         }
     }
