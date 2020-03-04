@@ -17,11 +17,18 @@ public class RegisterPageController extends Controller {
 
     @Override
     public void handleInput() {
-        PromptInput input = new PromptInput("Return?");
+        PromptInput input = new PromptInput("Enter your username");
+        String username = input.nextLine();
 
-        if (input.nextLine().equals("y")) {
-            App.shared().navigation().pop();
-        }
+        input.setPrompt("Enter your full name");
+        String fullName = input.nextLine();
+
+        input.setPrompt("Enter your password");
+        String password = input.nextLine();
+
+        input.setPrompt("Confirm your password");
+        String passwordCheck = input.nextLine();
+
     }
 
     @Override
