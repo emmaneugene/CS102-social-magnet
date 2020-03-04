@@ -14,36 +14,33 @@ public class TestWelcomePageController extends TestApp {
     }
 
     @Test
-    public void simulateLogin() {
+    public void testGoToLogin() {
         provideInput("2");
         App.shared().getNavigation().getCurrentController().run();
 
         LoginPageController expected = new LoginPageController();
-        expected.updateView();
 
         Assertions.assertEquals(expected, App.shared().getNavigation().getCurrentController());
     }
 
     @Test
-    public void simulateLoginAndBack() {
+    public void testGoToLoginAndBack() {
         provideInput("2");
         App.shared().getNavigation().getCurrentController().run();
-
-        App.shared().getNavigation().pop();
+        provideInput("y");
+        App.shared().getNavigation().getCurrentController().run();
 
         WelcomePageController expected = new WelcomePageController();
-        expected.updateView();
 
         Assertions.assertEquals(expected, App.shared().getNavigation().getCurrentController());
     }
 
     @Test
-    public void simulateInvalidInput() {
-        provideInput("5");
+    public void testInvalidInput() {
+        provideInput("pass");
         App.shared().getNavigation().getCurrentController().run();
 
         WelcomePageController expected = new WelcomePageController();
-        expected.updateView();
         expected.displayErrorMessage("Please enter a choice between 1 & 3!");
 
         Assertions.assertEquals(expected, App.shared().getNavigation().getCurrentController());
@@ -52,10 +49,10 @@ public class TestWelcomePageController extends TestApp {
     @Test
     public void simulateExit() {
         provideInput("3");
-        App.shared().getNavigation().getCurrentController().handleInput();
+        App.shared().getNavigation().getCurrentController().run();
 
-        String expectedMessage = "Goodbye!\n";
-        String message = getOutput();
-        Assertions.assertEquals(expectedMessage, message);
+        String expectedMessage = "Enter your choice > Goodbye!";
+        String[] lines = getOutput().split("\n");
+        Assertions.assertEquals(expectedMessage, lines[lines.length - 1]);
     }
 }

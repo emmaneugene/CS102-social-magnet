@@ -32,6 +32,7 @@ public class TestApp {
     public void restoreOutputStreams() {
         System.setIn(stdin);
         System.setOut(stdout);
+        System.out.println(output);
     }
 
     /**
