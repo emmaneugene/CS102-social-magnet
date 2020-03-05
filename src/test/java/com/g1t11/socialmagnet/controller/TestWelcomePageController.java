@@ -65,7 +65,7 @@ public class TestWelcomePageController extends TestApp {
         App.shared().navigation().currentController().run();
 
         String expectedMessage = "Enter your choice > Goodbye!";
-        String[] lines = systemOutRule.getLog().split("\n");
+        String[] lines = systemOutRule.getLog().split(System.lineSeparator());
         Assert.assertEquals(expectedMessage, lines[lines.length - 1]);
     }
 }
