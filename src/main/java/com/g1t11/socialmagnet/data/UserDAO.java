@@ -131,7 +131,13 @@ public class UserDAO extends DAO {
         return false;
     }
 
-    public void addUser(String username, String fullname, String pwd) {
+    /**
+     * Adds a user with the given parameters to the database.
+     *
+     * If a user with the same username already exists, then return false.
+     * @return True if the user was added successfullly.
+     */
+    public boolean addUser(String username, String fullname, String pwd) {
         ResultSet rs = null;
 
         String queryString = String.join(" ",
@@ -146,9 +152,14 @@ public class UserDAO extends DAO {
 
             stmt.execute();
         } catch (SQLException e) {
+            // 1062 represents a duplicate primary key entry.
+            if (e.getErrorCode() == 1062) return false;
+
             System.err.println("SQLException: " + e.getMessage());
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
+
+        return true;
     }
 }

@@ -38,9 +38,6 @@ public class Session {
     }
 
     public boolean register(String username, String fullName, String password) {
-        if (userDao.userExists(username))
-            return false;
-        userDao.addUser(username, fullName, password);
-        return true;
+        return userDao.addUser(username, fullName, password);
     }
 }
