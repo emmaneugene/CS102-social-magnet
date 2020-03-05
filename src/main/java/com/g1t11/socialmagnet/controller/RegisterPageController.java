@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import com.g1t11.socialmagnet.App;
 import com.g1t11.socialmagnet.view.RegisterPageView;
+import com.g1t11.socialmagnet.util.InputValidator;
 import com.g1t11.socialmagnet.util.PromptInput;
 
 public class RegisterPageController extends Controller {
@@ -20,8 +21,7 @@ public class RegisterPageController extends Controller {
         PromptInput input = new PromptInput("Enter your username");
         String username = input.nextLine();
 
-        boolean isAlphanumeric = username != null && username.matches("^[a-zA-Z0-9]*$");
-        if (!isAlphanumeric) {
+        if (!InputValidator.isAlphanumeric(username)) {
             App.shared().navigation().pop();
             App.shared().navigation().currentController().getView().setStatus("Username should only contain alphanumeric characters.");
             return;
@@ -38,7 +38,7 @@ public class RegisterPageController extends Controller {
 
         if (!password.equals(passwordCheck)) {
             App.shared().navigation().pop();
-            App.shared().navigation().currentController().getView().setStatus("Password does not match.");
+            App.shared().navigation().currentController().getView().setStatus("Passwords do not match.");
             return;
         }
 
@@ -46,10 +46,10 @@ public class RegisterPageController extends Controller {
 
         if (registerSuccessful) {
             App.shared().navigation().pop();
-            App.shared().navigation().currentController().getView().setStatus(username + " , your account is successfully created!");
+            App.shared().navigation().currentController().getView().setStatus(String.format("Registered %s successfully!", username));
         } else {
             App.shared().navigation().pop();
-            App.shared().navigation().currentController().getView().setStatus("Username exists. Choose another username");
+            App.shared().navigation().currentController().getView().setStatus(String.format("%s already exists. Choose another username.", username));
         }
     }
 
