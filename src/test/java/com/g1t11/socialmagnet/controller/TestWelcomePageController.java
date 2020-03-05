@@ -42,6 +42,7 @@ public class TestWelcomePageController extends TestApp {
         App.shared().navigation().currentController().run();
 
         WelcomePageController expected = new WelcomePageController();
+        expected.updateView();
 
         Assert.assertEquals(expected, App.shared().navigation().currentController());
     }
@@ -52,7 +53,8 @@ public class TestWelcomePageController extends TestApp {
         App.shared().navigation().currentController().run();
 
         WelcomePageController expected = new WelcomePageController();
-        // expected.navigation("Please enter a choice between 1 & 3!");
+        expected.updateView();
+        expected.getView().setStatus("Please enter a choice between 1 & 3!");
 
         Assert.assertEquals(expected, App.shared().navigation().currentController());
     }
