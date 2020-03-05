@@ -108,4 +108,45 @@ public class UserDAO extends DAO {
 
         return false;
     }
+
+    public boolean checkUserExist(String username) {
+        ResultSet rs = null;
+
+        String queryString = String.join("\n",
+            "SELECT username",
+            "FROM user",
+            "WHERE username = ?"
+        );
+
+        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+            stmt.setString(1, username);
+
+            rs = stmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        } finally {
+            try { if (rs != null) rs.close(); } catch (SQLException e) {}
+        }
+        return false;
+    }
+
+    public void addUser(String username, String fullname, String pwd) {
+        ResultSet rs = null;
+
+        String queryString = String.join("\n",
+            "INSERT INTO user (username, fullname, pwd) VALUES",
+            "(?, ?, ?)"
+        );
+
+        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+            stmt.setString(1, username);
+            stmt.setString(2, fullname);
+            stmt.setString(3, pwd);
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        } finally {
+            try { if (rs != null) rs.close(); } catch (SQLException e) {}
+        }
+    }
 }

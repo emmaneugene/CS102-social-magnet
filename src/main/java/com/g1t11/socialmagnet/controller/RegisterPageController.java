@@ -29,6 +29,19 @@ public class RegisterPageController extends Controller {
         input.setPrompt("Confirm your password");
         String passwordCheck = input.nextLine();
 
+        if (!password.equals(passwordCheck)) {
+            App.shared().navigation().pop();
+            App.shared().navigation().currentController().getView().setStatus("Password does not match.");
+        }
+
+        boolean registerSuccessful = App.shared().session().register(username, fullName, password);
+
+        if (registerSuccessful) {
+            App.shared().navigation().pop();
+        } else {
+            App.shared().navigation().pop();
+            App.shared().navigation().currentController().getView().setStatus("Username exists. Choose another username");
+        }
     }
 
     @Override
