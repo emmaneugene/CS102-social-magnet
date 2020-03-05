@@ -20,6 +20,13 @@ public class RegisterPageController extends Controller {
         PromptInput input = new PromptInput("Enter your username");
         String username = input.nextLine();
 
+        boolean isAlphanumeric = username != null && username.matches("^[a-zA-Z0-9]*$");
+        if (!isAlphanumeric) {
+            App.shared().navigation().pop();
+            App.shared().navigation().currentController().getView().setStatus("Username should only contain alphanumeric characters.");
+            return;
+        }
+
         input.setPrompt("Enter your full name");
         String fullName = input.nextLine();
 
@@ -32,12 +39,14 @@ public class RegisterPageController extends Controller {
         if (!password.equals(passwordCheck)) {
             App.shared().navigation().pop();
             App.shared().navigation().currentController().getView().setStatus("Password does not match.");
+            return;
         }
 
         boolean registerSuccessful = App.shared().session().register(username, fullName, password);
 
         if (registerSuccessful) {
             App.shared().navigation().pop();
+            App.shared().navigation().currentController().getView().setStatus(username + " , your account is successfully created!");
         } else {
             App.shared().navigation().pop();
             App.shared().navigation().currentController().getView().setStatus("Username exists. Choose another username");
