@@ -4,14 +4,17 @@ import java.util.Objects;
 
 import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.MainMenuView;
+import com.g1t11.socialmagnet.view.kit.*;
 
 public class MainMenuController extends Controller {
-    MainMenuView view = new MainMenuView();
+    public MainMenuController() {
+        view = new MainMenuView();
+    }
 
     @Override
     public void updateView() {
         String fullname = nav.getSession().getUser().getFullname();
-        view.setFullname(fullname);
+        ((MainMenuView) view).setFullname(fullname);
         view.render();
     }
 
@@ -28,6 +31,11 @@ public class MainMenuController extends Controller {
                 nav.setFirstController(new WelcomePageController());
                 break;
         }
+    }
+
+    @Override
+    public PageView getView() {
+        return view;
     }
 
     @Override

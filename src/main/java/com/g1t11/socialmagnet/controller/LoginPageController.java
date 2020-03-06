@@ -6,8 +6,9 @@ import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.LoginPageView;
 
 public class LoginPageController extends Controller {
-
-    private LoginPageView view = new LoginPageView();
+    public LoginPageController() {
+        view = new LoginPageView();
+    }
 
     @Override
     public void updateView() {

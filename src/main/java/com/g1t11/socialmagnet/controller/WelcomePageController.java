@@ -4,16 +4,16 @@ import java.util.Objects;
 
 import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.WelcomePageView;
-import com.g1t11.socialmagnet.view.kit.PageView;
 
 public class WelcomePageController extends Controller {
-
-    private WelcomePageView view = new WelcomePageView();
+    public WelcomePageController() {
+        view = new WelcomePageView();
+    }
 
     @Override
     public void updateView() {
         String username = nav.getSession().getUser() == null ? "anonymous" : nav.getSession().getUser().getUsername();
-        view.setUsername(username);
+        ((WelcomePageView) view).setUsername(username);
         view.render();
     }
 
@@ -35,12 +35,6 @@ public class WelcomePageController extends Controller {
                 view.setStatus("Please enter a choice between 1 & 3!");
                 break;
         }
-    }
-
-    @Override
-    public PageView getView() {
-        // if (view == null) view = new WelcomePageView();
-        return view;
     }
 
     @Override
