@@ -8,8 +8,12 @@ import com.g1t11.socialmagnet.util.Greeting;
 import com.g1t11.socialmagnet.view.kit.*;
 
 public class WelcomePageView extends PageView {
+<<<<<<< HEAD
 
     TextView greetingView;
+=======
+    private TextView greetingView;
+>>>>>>> Implement MainMenu and logout functionality
 
     String username = null;
 

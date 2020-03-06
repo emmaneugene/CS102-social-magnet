@@ -1,9 +1,48 @@
 package com.g1t11.socialmagnet.view;
 
+import java.util.List;
+import java.util.Objects;
+
+import com.g1t11.socialmagnet.App;
 import com.g1t11.socialmagnet.view.kit.*;
 
 public class MainMenuView extends PageView {
+    private TextView greetingView;
+
+    private final ListView actionsView = new ListView(List.of(
+        new TextView("1. News Feed"),
+        new TextView("2. My Wall"),
+        new TextView("3. My Friends"),
+        new TextView("4. City Farmers"),
+        new TextView("5. Logout")
+    ));
+
     public MainMenuView() {
         super("Main Menu");
+        greetingView = new TextView(String.format("Welcome, %s!", App.shared().session().getUsername()));
+    }
+
+    @Override
+    public void render() {
+        super.render();
+        greetingView.render();
+        actionsView.render();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof MainMenuView)) return false;
+        MainMenuView other = (MainMenuView) o;
+        return Objects.equals(greetingView, other.greetingView)
+            && Objects.equals(actionsView, other.actionsView);
+    }
+
+    @Override
+    public String toString() {
+        return String.join("\n",
+            super.toString(),
+            greetingView.toString(),
+            actionsView.toString()
+        );
     }
 }
