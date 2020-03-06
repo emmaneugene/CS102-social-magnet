@@ -1,5 +1,7 @@
 package com.g1t11.socialmagnet.controller;
 
+import java.util.Objects;
+
 import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.MainMenuView;
 
@@ -26,5 +28,12 @@ public class MainMenuController extends Controller {
                 nav.setFirstController(new WelcomePageController());
                 break;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof MainMenuController)) return false;
+        MainMenuController other = (MainMenuController) o;
+        return Objects.equals(view, other.view);
     }
 }
