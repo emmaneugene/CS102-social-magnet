@@ -8,14 +8,9 @@ import com.g1t11.socialmagnet.util.Greeting;
 import com.g1t11.socialmagnet.view.kit.*;
 
 public class WelcomePageView extends PageView {
-<<<<<<< HEAD
-
-    TextView greetingView;
-=======
     private TextView greetingView;
->>>>>>> Implement MainMenu and logout functionality
 
-    String username = null;
+    String username;
 
     private final ListView actionsView = new ListView(List.of(
         new TextView("1. Register"),
@@ -27,7 +22,7 @@ public class WelcomePageView extends PageView {
 
     public WelcomePageView() {
         super("Welcome");
-        greetingView = new TextView("Good morning, anonymous!");
+        greetingView = new TextView();
     }
 
     public WelcomePageView(int fixedHourOfDay) {

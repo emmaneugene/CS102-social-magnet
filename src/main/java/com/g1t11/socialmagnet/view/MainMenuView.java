@@ -3,11 +3,12 @@ package com.g1t11.socialmagnet.view;
 import java.util.List;
 import java.util.Objects;
 
-import com.g1t11.socialmagnet.App;
 import com.g1t11.socialmagnet.view.kit.*;
 
 public class MainMenuView extends PageView {
     private TextView greetingView;
+
+    String fullname;
 
     private final ListView actionsView = new ListView(List.of(
         new TextView("1. News Feed"),
@@ -19,14 +20,24 @@ public class MainMenuView extends PageView {
 
     public MainMenuView() {
         super("Main Menu");
-        greetingView = new TextView(String.format("Welcome, %s!", App.shared().session().getUsername()));
+        greetingView = new TextView();
+    }
+
+    public void setFullname(String fullname) {
+        assert fullname != null;
+        this.fullname = fullname;
     }
 
     @Override
     public void render() {
         super.render();
+        updateGreeting();
         greetingView.render();
         actionsView.render();
+    }
+
+    private void updateGreeting() {
+        greetingView.setText(String.format("Welcome, %s!", fullname));
     }
 
     @Override

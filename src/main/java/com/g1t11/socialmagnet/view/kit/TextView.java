@@ -5,15 +5,19 @@ import java.util.Objects;
 public class TextView extends View {
     private String text;
 
-    boolean newLine = true;
-
-    public TextView(String text) {
-        this.text = text;
-    }
+    boolean newLine;
 
     public TextView(String text, boolean newLine) {
-        this(text);
+        this.text = text;
         this.newLine = newLine;
+    }
+
+    public TextView(String text) {
+        this(text, true);
+    }
+
+    public TextView() {
+        this("");
     }
 
     public String getText() {

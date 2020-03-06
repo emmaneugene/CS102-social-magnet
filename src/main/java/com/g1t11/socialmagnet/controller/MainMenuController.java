@@ -8,6 +8,8 @@ public class MainMenuController extends Controller {
 
     @Override
     public void updateView() {
+        String fullname = nav.getSession().getUser().getFullname();
+        view.setFullname(fullname);
         view.render();
     }
 
