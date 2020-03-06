@@ -2,8 +2,6 @@ package com.g1t11.socialmagnet.view.kit;
 
 import com.g1t11.socialmagnet.TestApp;
 
-import com.g1t11.socialmagnet.view.kit.TextView;
-
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
