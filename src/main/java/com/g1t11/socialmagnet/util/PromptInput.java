@@ -13,6 +13,10 @@ public class PromptInput {
         this.prompt = prompt;
     }
 
+    public PromptInput() {
+        this("Enter your choice");
+    }
+
     public void setPrompt(String prompt) {
         this.prompt = prompt;
     }
