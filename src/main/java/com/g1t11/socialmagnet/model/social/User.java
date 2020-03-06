@@ -6,7 +6,7 @@ import java.util.Objects;
 public class User {
     private String username = null;
 
-    private String fullName = null;
+    private String fullname = null;
 
     private List<User> friends = null;
 
@@ -14,9 +14,9 @@ public class User {
 
     public User() {}
 
-    public User(String username, String fullName) {
+    public User(String username, String fullname) {
         this.username = username;
-        this.fullName = fullName;
+        this.fullname = fullname;
     }
 
     public String getUsername() {
@@ -27,12 +27,12 @@ public class User {
         this.username = username;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getFullname() {
+        return fullname;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setFullName(String fullname) {
+        this.fullname = fullname;
     }
 
     public List<User> getFriends() {
@@ -60,7 +60,7 @@ public class User {
             }
             friendsNames = friendsNames.substring(0, friendsNames.length() - 1);
         }
-        return String.format("%s; fullname: %s; friends: %s", username, fullName, friendsNames);
+        return String.format("%s; fullname: %s; friends: %s", username, fullname, friendsNames);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class User {
         if (!(o instanceof User)) return false;
         User other = (User) o;
         return Objects.equals(username, other.username)
-            && Objects.equals(fullName, other.fullName)
+            && Objects.equals(fullname, other.fullname)
             && Objects.deepEquals(friends, other.friends)
             && Objects.deepEquals(feed, other.feed);
     }

@@ -33,15 +33,44 @@ public class TestUserDAO extends TestApp {
 
     @Test
     public void testCheckCredentialsValid() {
-        boolean loginSuccessful = userDAO.checkCredentials("adam", "maroon5");
+        boolean loginSuccessful = userDAO.credentialsValid("adam", "maroon5");
 
         Assert.assertTrue(loginSuccessful);
     }
 
     @Test
     public void testCheckCredentialsInvalid() {
-        boolean loginSuccessful = userDAO.checkCredentials("adam", "solocareer");
+        boolean loginSuccessful = userDAO.credentialsValid("adam", "solocareer");
 
         Assert.assertFalse(loginSuccessful);
+    }
+
+    @Test
+    public void testUserExists() {
+        boolean userExists = userDAO.userExists("adam");
+
+        Assert.assertTrue(userExists);
+    }
+
+    @Test
+    public void testUserDoesNotExist() {
+        boolean userExists = userDAO.userExists("audrey");
+
+        Assert.assertFalse(userExists);
+    }
+
+    @Test
+    public void testAddUser() {
+        boolean registered = userDAO.addUser("gary", "Gary Oldman", "dracula123");
+
+        Assert.assertTrue(registered);
+        Assert.assertTrue(userDAO.userExists("gary"));
+    }
+
+    @Test
+    public void testAddExistingUser() {
+        boolean registered = userDAO.addUser("adam", "Adam Sandler", "uncutgems");
+
+        Assert.assertFalse(registered);
     }
 }

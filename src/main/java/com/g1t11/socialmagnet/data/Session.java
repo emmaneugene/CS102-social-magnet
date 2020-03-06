@@ -31,10 +31,13 @@ public class Session {
      * Verify login information against the database.
      */
     public boolean login(String username, String password) {
-        if (userDao.checkCredentials(username, password)) {
-            user = userDao.getUser(username);
-            return true;
-        }
-        return false;
+        if (!userDao.credentialsValid(username, password))
+            return false;
+        user = userDao.getUser(username);
+        return true;
+    }
+
+    public boolean register(String username, String fullName, String password) {
+        return userDao.addUser(username, fullName, password);
     }
 }

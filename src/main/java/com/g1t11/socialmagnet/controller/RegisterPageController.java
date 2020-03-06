@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import com.g1t11.socialmagnet.App;
 import com.g1t11.socialmagnet.view.RegisterPageView;
+import com.g1t11.socialmagnet.util.InputValidator;
 import com.g1t11.socialmagnet.util.PromptInput;
 
 public class RegisterPageController extends Controller {
@@ -17,10 +18,38 @@ public class RegisterPageController extends Controller {
 
     @Override
     public void handleInput() {
-        PromptInput input = new PromptInput("Return?");
+        PromptInput input = new PromptInput("Enter your username");
+        String username = input.nextLine();
 
-        if (input.nextLine().equals("y")) {
+        if (!InputValidator.isAlphanumeric(username)) {
             App.shared().navigation().pop();
+            App.shared().navigation().currentController().getView().setStatus("Username should only contain alphanumeric characters.");
+            return;
+        }
+
+        input.setPrompt("Enter your full name");
+        String fullName = input.nextLine();
+
+        input.setPrompt("Enter your password");
+        String password = input.nextLine();
+
+        input.setPrompt("Confirm your password");
+        String passwordCheck = input.nextLine();
+
+        if (!password.equals(passwordCheck)) {
+            App.shared().navigation().pop();
+            App.shared().navigation().currentController().getView().setStatus("Passwords do not match.");
+            return;
+        }
+
+        boolean registerSuccessful = App.shared().session().register(username, fullName, password);
+
+        if (registerSuccessful) {
+            App.shared().navigation().pop();
+            App.shared().navigation().currentController().getView().setStatus(String.format("Registered %s successfully!", username));
+        } else {
+            App.shared().navigation().pop();
+            App.shared().navigation().currentController().getView().setStatus(String.format("%s already exists. Choose another username.", username));
         }
     }
 

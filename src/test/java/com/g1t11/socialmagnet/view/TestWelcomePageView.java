@@ -26,7 +26,7 @@ public class TestWelcomePageView extends TestApp {
         view.render();
 
         String expected = "\033[H\033[2J";
-        expected += String.join("\n",
+        expected += String.join(System.lineSeparator(),
             "== Social Magnet :: Welcome ==",
             "Good morning, anonymous!",
             "1. Register",
@@ -45,7 +45,7 @@ public class TestWelcomePageView extends TestApp {
         view.render();
 
         String expected = "\033[H\033[2J";
-        expected += String.join("\n",
+        expected += String.join(System.lineSeparator(),
             "== Social Magnet :: Welcome ==",
             "Good afternoon, anonymous!",
             "1. Register",
@@ -64,7 +64,7 @@ public class TestWelcomePageView extends TestApp {
         view.render();
 
         String expected = "\033[H\033[2J";
-        expected += String.join("\n",
+        expected += String.join(System.lineSeparator(),
             "== Social Magnet :: Welcome ==",
             "Good evening, anonymous!",
             "1. Register",
@@ -85,7 +85,7 @@ public class TestWelcomePageView extends TestApp {
         view.render();
 
         String expected = "\033[H\033[2J";
-        expected += String.join("\n",
+        expected += String.join(System.lineSeparator(),
             "== Social Magnet :: Welcome ==",
             "Please enter a choice between 1 & 3!",
             "Good evening, anonymous!",
