@@ -1,12 +1,12 @@
 package com.g1t11.socialmagnet.controller;
 
-import com.g1t11.socialmagnet.App;
 import com.g1t11.socialmagnet.TestApp;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.contrib.java.lang.system.TextFromStandardInputStream;
 
@@ -17,52 +17,57 @@ public class TestWelcomePageController extends TestApp {
     @Rule
     public final SystemOutRule systemOutRule 
         = new SystemOutRule().mute().enableLog();
+    @Rule
+    public final ExpectedSystemExit exit = ExpectedSystemExit.none();
 
     @Before
     public void initController() {
-        App.shared().navigation().setFirstController(new WelcomePageController());
+        app.nav.setFirstController(new WelcomePageController());
     }
 
     @Test
     public void testGoToLogin() {
         systemInMock.provideLines("2");
-        App.shared().navigation().currentController().run();
+        app.nav.currentController().run();
 
         LoginPageController expected = new LoginPageController();
 
-        Assert.assertEquals(expected, App.shared().navigation().currentController());
+        Assert.assertEquals(expected, app.nav.currentController());
     }
 
     @Test
     public void testGoToLoginAndBack() {
         systemInMock.provideLines("2");
-        App.shared().navigation().currentController().run();
+        app.nav.currentController().run();
 
         systemInMock.provideLines("adam", "solocareer");
-        App.shared().navigation().currentController().run();
+        app.nav.currentController().run();
 
         WelcomePageController expected = new WelcomePageController();
+        expected.setNavigation(app.nav);
         expected.updateView();
 
-        Assert.assertEquals(expected, App.shared().navigation().currentController());
+        Assert.assertEquals(expected, app.nav.currentController());
     }
 
     @Test
     public void testInvalidInput() {
         systemInMock.provideLines("pass");
-        App.shared().navigation().currentController().run();
+        app.nav.currentController().run();
 
         WelcomePageController expected = new WelcomePageController();
+        expected.setNavigation(app.nav);
         expected.updateView();
         expected.getView().setStatus("Please enter a choice between 1 & 3!");
 
-        Assert.assertEquals(expected, App.shared().navigation().currentController());
+        Assert.assertEquals(expected, app.nav.currentController());
     }
 
     @Test
     public void simulateExit() {
+        exit.expectSystemExit();
         systemInMock.provideLines("3");
-        App.shared().navigation().currentController().run();
+        app.nav.currentController().run();
 
         String expectedMessage = "Enter your choice > Goodbye!";
         String[] lines = systemOutRule.getLog().split(System.lineSeparator());

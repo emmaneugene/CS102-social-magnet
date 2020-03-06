@@ -2,8 +2,6 @@ package com.g1t11.socialmagnet.view.kit;
 
 import java.util.Objects;
 
-import com.g1t11.socialmagnet.App;
-
 /**
  * {@link PageView} is the base of all screens and menus.
  * <code>PageView</code> clears the entire console before rendering any
@@ -20,7 +18,7 @@ public class PageView extends View {
      */
     private View status = null;
 
-    private final String headerTemplate = "== %s :: %s ==";
+    private final String headerTemplate = "== Social Magnet :: %s ==";
 
     public PageView(String pageTitle) {
         this.pageTitle = pageTitle;
@@ -49,7 +47,7 @@ public class PageView extends View {
     @Override
     public void render() {
         clearScreen();
-        System.out.println(String.format(headerTemplate, App.shared().getAppName(), pageTitle));
+        System.out.println(String.format(headerTemplate, pageTitle));
         if (status != null) {
             status.render();
             clearStatus();
@@ -66,7 +64,7 @@ public class PageView extends View {
 
     @Override
     public String toString() {
-        String result = String.format(headerTemplate + "\n", App.shared().getAppName(), pageTitle);
+        String result = String.format(headerTemplate + "\n", pageTitle);
         if (status != null)
             result += status.toString();
         return result;

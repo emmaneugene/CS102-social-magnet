@@ -1,11 +1,12 @@
 package com.g1t11.socialmagnet;
 
-import org.junit.BeforeClass;
+import org.junit.Before;
 
 public class TestApp {
-    @BeforeClass
-    public static void initApplication() {
-        App.shared().setAppName("Social Magnet");
-        App.shared().database().establishDefaultConnection();
+    public App app;
+
+    @Before
+    public void initApplication() {
+        app = new App();
     }
 }

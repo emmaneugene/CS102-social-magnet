@@ -20,15 +20,7 @@ public class Database {
         /* JDBC Driver must be instantiated before we can use DriverManager. */
         try {
             new Driver();
-        } catch (SQLException e) {
-            System.err.println("SQLException: " + e.getMessage());
-            System.err.println("SQLState: " + e.getSQLState());
-            System.err.println("VendorError: " + e.getErrorCode());
-        }
-    }
 
-    public void establishDefaultConnection() {
-        try {
             /*
              * Get credentials from environment variables that were loaded
              * through .env file.

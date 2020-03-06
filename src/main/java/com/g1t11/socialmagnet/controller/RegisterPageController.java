@@ -2,10 +2,9 @@ package com.g1t11.socialmagnet.controller;
 
 import java.util.Objects;
 
-import com.g1t11.socialmagnet.App;
-import com.g1t11.socialmagnet.view.RegisterPageView;
 import com.g1t11.socialmagnet.util.InputValidator;
 import com.g1t11.socialmagnet.util.PromptInput;
+import com.g1t11.socialmagnet.view.RegisterPageView;
 
 public class RegisterPageController extends Controller {
 
@@ -22,8 +21,8 @@ public class RegisterPageController extends Controller {
         String username = input.nextLine();
 
         if (!InputValidator.isAlphanumeric(username)) {
-            App.shared().navigation().pop();
-            App.shared().navigation().currentController().getView().setStatus("Username should only contain alphanumeric characters.");
+            nav.pop();
+            nav.currentController().getView().setStatus("Username should only contain alphanumeric characters.");
             return;
         }
 
@@ -37,19 +36,19 @@ public class RegisterPageController extends Controller {
         String passwordCheck = input.nextLine();
 
         if (!password.equals(passwordCheck)) {
-            App.shared().navigation().pop();
-            App.shared().navigation().currentController().getView().setStatus("Passwords do not match.");
+            nav.pop();
+            nav.currentController().getView().setStatus("Passwords do not match.");
             return;
         }
 
-        boolean registerSuccessful = App.shared().session().register(username, fullName, password);
+        boolean registerSuccessful = nav.getSession().register(username, fullName, password);
 
         if (registerSuccessful) {
-            App.shared().navigation().pop();
-            App.shared().navigation().currentController().getView().setStatus(String.format("Registered %s successfully!", username));
+            nav.pop();
+            nav.currentController().getView().setStatus(String.format("Registered %s successfully!", username));
         } else {
-            App.shared().navigation().pop();
-            App.shared().navigation().currentController().getView().setStatus(String.format("%s already exists. Choose another username.", username));
+            nav.pop();
+            nav.currentController().getView().setStatus(String.format("%s already exists. Choose another username.", username));
         }
     }
 

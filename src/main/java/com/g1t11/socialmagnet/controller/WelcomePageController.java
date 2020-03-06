@@ -2,7 +2,6 @@ package com.g1t11.socialmagnet.controller;
 
 import java.util.Objects;
 
-import com.g1t11.socialmagnet.App;
 import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.WelcomePageView;
 import com.g1t11.socialmagnet.view.kit.PageView;
@@ -13,6 +12,8 @@ public class WelcomePageController extends Controller {
 
     @Override
     public void updateView() {
+        String username = nav.getSession().getUser() == null ? "anonymous" : nav.getSession().getUser().getUsername();
+        view.setUsername(username);
         view.render();
     }
 
@@ -21,13 +22,14 @@ public class WelcomePageController extends Controller {
         PromptInput input = new PromptInput("Enter your choice");
         switch (input.nextLine()) {
             case "1":
-                App.shared().navigation().prepareForNavigation(new RegisterPageController());
+                nav.prepareForNavigation(new RegisterPageController());
                 break;
             case "2":
-                App.shared().navigation().prepareForNavigation(new LoginPageController());
+                nav.prepareForNavigation(new LoginPageController());
                 break;
             case "3":
-                App.shared().exit();
+                System.out.println("Goodbye!");
+                System.exit(0);
                 break;
             default:
                 view.setStatus("Please enter a choice between 1 & 3!");

@@ -3,6 +3,8 @@ package com.g1t11.socialmagnet.controller;
 import com.g1t11.socialmagnet.view.kit.*;
 
 public abstract class Controller {
+
+    protected Navigation nav;
     /**
      * All {@link Controller} objects have an associated {@link View}
      * @see View
@@ -23,6 +25,10 @@ public abstract class Controller {
 
     public PageView getView() {
         return view;
+    }
+
+    public void setNavigation(Navigation nav) {
+        this.nav = nav;
     }
 
     @Override
