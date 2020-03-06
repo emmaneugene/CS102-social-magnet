@@ -4,12 +4,15 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
-import com.g1t11.socialmagnet.App;
+import com.g1t11.socialmagnet.data.Session;
 import com.g1t11.socialmagnet.util.Greeting;
 import com.g1t11.socialmagnet.view.kit.*;
 
 public class WelcomePageView extends PageView {
+
     TextView greetingView;
+
+    String username = null;
 
     private final ListView actionsView = new ListView(List.of(
         new TextView("1. Register"),
@@ -24,9 +27,14 @@ public class WelcomePageView extends PageView {
         greetingView = new TextView("Good morning, anonymous!");
     }
 
-    public WelcomePageView(int fixedHourOfDay) {
+    public WelcomePageView(Session session, int fixedHourOfDay) {
         this();
         this.fixedHourOfDay = fixedHourOfDay;
+    }
+
+    public void setUsername(String username) {
+        assert username != null;
+        this.username = username;
     }
 
     @Override
@@ -49,7 +57,7 @@ public class WelcomePageView extends PageView {
             hour = fixedHourOfDay;
         }
         String time = Greeting.basedOnHour(hour);
-        String greeting = String.format("Good %s, %s!", time, App.shared().session().getUsername());
+        String greeting = String.format("Good %s, %s!", time, username);
         greetingView.setText(greeting);
     }
 

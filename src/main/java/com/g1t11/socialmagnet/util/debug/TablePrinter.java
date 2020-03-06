@@ -1,5 +1,6 @@
 package com.g1t11.socialmagnet.util.debug;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -7,10 +8,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.g1t11.socialmagnet.App;
-
 public class TablePrinter {
-    public static void printTable(String tableName, int maxRows) {
+    Connection conn;
+
+    public TablePrinter(Connection conn) {
+        this.conn = conn;
+    }
+
+    public void printTable(String tableName, int maxRows) {
         if (tableName == null || tableName.length() == 0) return;
         if (maxRows <= 0) return;
 
@@ -20,7 +25,7 @@ public class TablePrinter {
         printColumns(columns);
     }
 
-    private static ResultSet getResultSet(String tableName, int maxRows) {
+    private ResultSet getResultSet(String tableName, int maxRows) {
         assert(tableName != null && tableName.length() != 0);
         assert(maxRows > 0);
 
@@ -30,18 +35,18 @@ public class TablePrinter {
         ResultSet rs = null;
 
         try {
-            stmt = App.shared().database().connection().createStatement();
+            stmt = conn.createStatement();
             rs = stmt.executeQuery(query);
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
             System.err.println("SQLState: " + e.getSQLState());
             System.err.println("VendorError: " + e.getErrorCode());
-        } 
+        }
 
         return rs;
     }
 
-    private static List<Column> getColumns(ResultSet rs) {
+    private List<Column> getColumns(ResultSet rs) {
         if (rs == null) return null;
 
         ResultSetMetaData rsmd = null;
@@ -82,7 +87,7 @@ public class TablePrinter {
         return columns;
     }
 
-    private static void printColumns(List<Column> columns) {
+    private void printColumns(List<Column> columns) {
         if (columns == null) return;
 
         StringBuilder headerRow = new StringBuilder();
