@@ -2,7 +2,6 @@ package com.g1t11.socialmagnet.controller;
 
 import java.util.Objects;
 
-import com.g1t11.socialmagnet.App;
 import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.WelcomePageView;
 import com.g1t11.socialmagnet.view.kit.PageView;

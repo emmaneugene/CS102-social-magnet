@@ -7,16 +7,16 @@ import com.g1t11.socialmagnet.data.Session;
 
 public class App {
 
-    private Navigation nav = null;
+    public Database db = null;
 
-    private Database db = null;
+    public Session session = null;
 
-    private Session sesh = null;
+    public Navigation nav = null;
 
-    private App() {
+    public App() {
         db = new Database();
-        sesh = new Session(db.connection());
-        nav = new Navigation(sesh);
+        session = new Session(db.connection());
+        nav = new Navigation(session);
         nav.setFirstController(new WelcomePageController());
     }
 

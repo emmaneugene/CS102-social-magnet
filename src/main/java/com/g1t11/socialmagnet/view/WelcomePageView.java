@@ -4,7 +4,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
-import com.g1t11.socialmagnet.data.Session;
 import com.g1t11.socialmagnet.util.Greeting;
 import com.g1t11.socialmagnet.view.kit.*;
 
@@ -27,7 +26,7 @@ public class WelcomePageView extends PageView {
         greetingView = new TextView("Good morning, anonymous!");
     }
 
-    public WelcomePageView(Session session, int fixedHourOfDay) {
+    public WelcomePageView(int fixedHourOfDay) {
         this();
         this.fixedHourOfDay = fixedHourOfDay;
     }
