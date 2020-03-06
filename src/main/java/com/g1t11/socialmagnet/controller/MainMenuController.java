@@ -13,6 +13,7 @@ public class MainMenuController extends Controller {
 
     @Override
     public void updateView() {
+        // Inject an updated full name into the view
         String fullname = nav.getSession().getUser().getFullname();
         ((MainMenuView) view).setFullname(fullname);
         view.render();
@@ -29,6 +30,9 @@ public class MainMenuController extends Controller {
             case "5":
                 nav.getSession().logout();
                 nav.setFirstController(new WelcomePageController());
+                break;
+            default:
+                view.setStatus("Please enter a choice between 1 & 3!");
                 break;
         }
     }

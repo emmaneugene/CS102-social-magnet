@@ -46,8 +46,9 @@ public class UserDAO extends DAO {
     }
 
     /**
-     * Only loads simple attributes of friends.
-     * Includes username and fullname
+     * Only loads usernames and full names of friends.
+     * 
+     * @param user The user whose friends to get
      */
     public List<User> getFriends(User user) {
         ResultSet rs = null;

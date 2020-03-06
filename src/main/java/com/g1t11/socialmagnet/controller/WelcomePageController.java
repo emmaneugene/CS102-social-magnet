@@ -12,6 +12,7 @@ public class WelcomePageController extends Controller {
 
     @Override
     public void updateView() {
+        // Inject an updated username into the view
         String username = nav.getSession().getUser() == null ? "anonymous" : nav.getSession().getUser().getUsername();
         ((WelcomePageView) view).setUsername(username);
         view.render();

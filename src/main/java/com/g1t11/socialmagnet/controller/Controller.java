@@ -9,7 +9,9 @@ public abstract class Controller {
     protected PageView view;
 
     /**
-     * The associated {@link View} is rendered before any input is handled.
+     * The associated <code>View</code> is rendered before any input is handled.
+     * 
+     * @see View
      */
     public void run() {
         updateView();
@@ -20,7 +22,7 @@ public abstract class Controller {
 
     public abstract void handleInput();
     /**
-     * All {@link Controller} objects have an associated {@link PageView}
+     * All <code>Controller</code> objects have an associated <code>PageView</code>.
      * 
      * @see PageView
      */

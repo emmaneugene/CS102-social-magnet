@@ -9,10 +9,13 @@ public class Navigation {
     private Session session;
 
     /**
-     * Stack of {@link Controller} instances that represent the current
+     * Stack of <code>Controller</code> instances that represent the current
      * application's navigation state.
-     * On every frame update, the top-most <code>Controller</code> is used
-     * to handle UI updates and application logic.
+     * <p>
+     * On every frame update, the top-most <code>Controller</code> is used to 
+     * handle UI updates and application logic.
+     * 
+     * @see Controller
      */
     private List<Controller> navigationStack = new ArrayList<>();
 
@@ -30,7 +33,10 @@ public class Navigation {
 
     /**
      * Initiate the navigation stack.
-     * @param first The root {@link Controller} for navigation.
+     * 
+     * @param first The root <code>Controller</code> for navigation.
+     * 
+     * @see Controller
      */
     public void setFirstController(Controller first) {
         initControllerNav(first);
@@ -45,9 +51,10 @@ public class Navigation {
     }
 
     /**
-     * Remove the current {@link Controller} from the navigation stack and
-     * prepare the application to navigate to the previous
-     * <code>Controller</code>.
+     * Remove the current <code>Controller</code> from the navigation stack and
+     * prepare the application to navigate to the previous Controller.
+     * 
+     * @see Controller
      */
     public void pop() {
         int size = navigationStack.size();
@@ -57,9 +64,12 @@ public class Navigation {
     }
 
     /**
-     * Prepare the next {@link Controller} to be loaded onto the navigation
+     * Prepare the next <code>Controller</code> to be loaded onto the navigation
      * stack.
+     * 
      * @param next The <code>Controller</code> of the page to navigate to.
+     * 
+     * @see Controller
      */
     public void prepareForNavigation(Controller next) {
         initControllerNav(next);

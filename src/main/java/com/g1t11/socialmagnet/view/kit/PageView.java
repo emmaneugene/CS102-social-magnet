@@ -61,12 +61,4 @@ public class PageView extends View {
         return Objects.equals(pageTitle, other.pageTitle)
             && Objects.equals(status, other.status);
     }
-
-    @Override
-    public String toString() {
-        String result = String.format(headerTemplate + System.lineSeparator(), pageTitle);
-        if (status != null)
-            result += status.toString();
-        return result;
-    }
 }
