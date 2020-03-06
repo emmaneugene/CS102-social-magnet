@@ -47,6 +47,6 @@ public class TextView extends View {
 
     @Override
     public String toString() {
-        return this.text + (newLine ? "\n" : "");
+        return this.text + (newLine ? System.lineSeparator() : "");
     }
 }

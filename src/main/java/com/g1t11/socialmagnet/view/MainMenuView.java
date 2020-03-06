@@ -50,7 +50,7 @@ public class MainMenuView extends PageView {
 
     @Override
     public String toString() {
-        return String.join("\n",
+        return String.join(System.lineSeparator(),
             super.toString(),
             greetingView.toString(),
             actionsView.toString()

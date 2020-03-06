@@ -32,7 +32,7 @@ public class ListView extends View {
     public String toString() {
         String result = "";
         for (View item : items) {
-            result += item.toString() + "\n";
+            result += item.toString() + System.lineSeparator();
         }
         return result;
     }

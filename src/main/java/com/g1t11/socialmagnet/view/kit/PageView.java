@@ -64,7 +64,7 @@ public class PageView extends View {
 
     @Override
     public String toString() {
-        String result = String.format(headerTemplate + "\n", pageTitle);
+        String result = String.format(headerTemplate + System.lineSeparator(), pageTitle);
         if (status != null)
             result += status.toString();
         return result;
