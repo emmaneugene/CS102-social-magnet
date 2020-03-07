@@ -10,13 +10,13 @@ import com.g1t11.socialmagnet.view.kit.*;
 public class WelcomePageView extends PageView {
     private TextView greetingView;
 
-    String username;
-
     private final ListView actionsView = new ListView(List.of(
         new TextView("1. Register"),
         new TextView("2. Login"),
         new TextView("3. Exit")
     ));
+
+    String username;
 
     Integer fixedHourOfDay = null;
 
@@ -30,17 +30,17 @@ public class WelcomePageView extends PageView {
         this.fixedHourOfDay = fixedHourOfDay;
     }
 
-    public void setUsername(String username) {
-        assert username != null;
-        this.username = username;
-    }
-
     @Override
     public void render() {
         super.render();
         updateGreeting();
         greetingView.render();
         actionsView.render();
+    }
+
+    public void setUsername(String username) {
+        assert username != null;
+        this.username = username;
     }
 
     /**

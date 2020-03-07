@@ -8,8 +8,6 @@ import com.g1t11.socialmagnet.view.kit.*;
 public class MainMenuView extends PageView {
     private TextView greetingView;
 
-    String fullname;
-
     private final ListView actionsView = new ListView(List.of(
         new TextView("1. News Feed"),
         new TextView("2. My Wall"),
@@ -18,14 +16,11 @@ public class MainMenuView extends PageView {
         new TextView("5. Logout")
     ));
 
+    String fullname;
+
     public MainMenuView() {
         super("Main Menu");
         greetingView = new TextView();
-    }
-
-    public void setFullname(String fullname) {
-        assert fullname != null;
-        this.fullname = fullname;
     }
 
     @Override
@@ -34,6 +29,11 @@ public class MainMenuView extends PageView {
         updateGreeting();
         greetingView.render();
         actionsView.render();
+    }
+
+    public void setFullname(String fullname) {
+        assert fullname != null;
+        this.fullname = fullname;
     }
 
     private void updateGreeting() {

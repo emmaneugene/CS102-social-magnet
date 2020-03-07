@@ -3,7 +3,6 @@ package com.g1t11.socialmagnet.controller;
 import com.g1t11.socialmagnet.view.kit.*;
 
 public abstract class Controller {
-
     protected Navigation nav;
 
     protected PageView view;

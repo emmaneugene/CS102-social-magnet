@@ -6,7 +6,6 @@ import com.g1t11.socialmagnet.data.Database;
 import com.g1t11.socialmagnet.data.Session;
 
 public class App {
-
     public Database db = null;
 
     public Session session = null;

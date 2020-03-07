@@ -5,6 +5,7 @@ package com.g1t11.socialmagnet.model.social;
  */
 public class Comment {
     private String username;
+    
     private String content;
 
     public Comment() {}
