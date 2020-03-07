@@ -1,5 +1,7 @@
 package com.g1t11.socialmagnet.model.social;
 
+import java.util.Objects;
+
 /**
  * Comment
  */
@@ -29,6 +31,14 @@ public class Comment {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Comment)) return false;
+        Comment other = (Comment) o;
+        return Objects.equals(username, other.username)
+            && Objects.equals(content, other.content);
     }
 }
     

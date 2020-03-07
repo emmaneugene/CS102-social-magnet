@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.g1t11.socialmagnet.model.social.Comment;
 import com.g1t11.socialmagnet.model.social.Post;
 
 public class PostDAO extends DAO {
@@ -52,6 +53,8 @@ public class PostDAO extends DAO {
                 p.setToUsername(rs.getString("recipient"));
                 p.setContent(rs.getString("content"));
 
+                p.setComments(getComments(p.getId(), 3));
+
                 posts.add(p);
             }
         } catch (SQLException e) {
@@ -61,5 +64,40 @@ public class PostDAO extends DAO {
         }
 
         return posts;
+    }
+
+    public List<Comment> getComments(int postId, int limit) {
+        ResultSet rs = null;
+        List<Comment> comments = new ArrayList<>();
+
+        String queryString = String.join(" ",
+            "SELECT commenter, content",
+            "FROM comment",
+            "WHERE post_id = ?",
+            "ORDER BY commented_on DESC",
+            "LIMIT ?"
+        );
+
+        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+            stmt.setInt(1, postId);
+            stmt.setInt(2, limit);
+
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Comment c = new Comment();
+
+                c.setUsername(rs.getString("commenter"));
+                c.setContent(rs.getString("content"));
+
+                comments.add(c);
+            }
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        } finally {
+            try { if (rs != null) rs.close(); } catch (SQLException e) {}
+        }
+
+        return comments;
     }
 }
