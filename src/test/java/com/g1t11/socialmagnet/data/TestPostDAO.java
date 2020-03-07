@@ -2,7 +2,6 @@ package com.g1t11.socialmagnet.data;
 
 import java.util.List;
 
-import com.g1t11.socialmagnet.TestApp;
 import com.g1t11.socialmagnet.model.social.Post;
 
 import org.junit.Assert;
@@ -10,12 +9,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 
-public class TestPostDAO extends TestApp {
+public class TestPostDAO {
     private PostDAO postDAO;
 
     @Before
     public void initDAO() {
-        postDAO = new PostDAO(app.db.connection());
+        Database db = new Database();
+        postDAO = new PostDAO(db.connection());
     }
 
     @Test
