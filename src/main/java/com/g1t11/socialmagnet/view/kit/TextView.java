@@ -2,7 +2,7 @@ package com.g1t11.socialmagnet.view.kit;
 
 import java.util.Objects;
 
-public class TextView extends View {
+public class TextView implements View {
     private String text;
 
     boolean newLine;

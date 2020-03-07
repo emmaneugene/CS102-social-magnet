@@ -8,13 +8,13 @@ import com.g1t11.socialmagnet.view.kit.*;
 public class MainMenuView extends PageView {
     private TextView greetingView;
 
-    private final ListView actionsView = new ListView(List.of(
+    private final List<TextView> actionViews = List.of(
         new TextView("1. News Feed"),
         new TextView("2. My Wall"),
         new TextView("3. My Friends"),
         new TextView("4. City Farmers"),
         new TextView("5. Logout")
-    ));
+    );
 
     String fullname;
 
@@ -28,7 +28,9 @@ public class MainMenuView extends PageView {
         super.render();
         updateGreeting();
         greetingView.render();
-        actionsView.render();
+        for (TextView actionView : actionViews) {
+            actionView.render();
+        }
     }
 
     public void setFullname(String fullname) {
@@ -45,15 +47,6 @@ public class MainMenuView extends PageView {
         if (!(o instanceof MainMenuView)) return false;
         MainMenuView other = (MainMenuView) o;
         return Objects.equals(greetingView, other.greetingView)
-            && Objects.equals(actionsView, other.actionsView);
-    }
-
-    @Override
-    public String toString() {
-        return String.join(System.lineSeparator(),
-            super.toString(),
-            greetingView.toString(),
-            actionsView.toString()
-        );
+            && Objects.deepEquals(actionViews, other.actionViews);
     }
 }

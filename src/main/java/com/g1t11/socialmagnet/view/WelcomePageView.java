@@ -10,11 +10,11 @@ import com.g1t11.socialmagnet.view.kit.*;
 public class WelcomePageView extends PageView {
     private TextView greetingView;
 
-    private final ListView actionsView = new ListView(List.of(
+    private final List<TextView> actionViews = List.of(
         new TextView("1. Register"),
         new TextView("2. Login"),
         new TextView("3. Exit")
-    ));
+    );
 
     String username;
 
@@ -35,7 +35,9 @@ public class WelcomePageView extends PageView {
         super.render();
         updateGreeting();
         greetingView.render();
-        actionsView.render();
+        for (TextView actionView : actionViews) {
+            actionView.render();
+        }
     }
 
     public void setUsername(String username) {
@@ -64,16 +66,7 @@ public class WelcomePageView extends PageView {
         if (!(o instanceof WelcomePageView)) return false;
         WelcomePageView other = (WelcomePageView) o;
         return Objects.equals(greetingView, other.greetingView)
-            && Objects.equals(actionsView, other.actionsView)
+            && Objects.deepEquals(actionViews, other.actionViews)
             && Objects.equals(fixedHourOfDay, other.fixedHourOfDay);
-    }
-
-    @Override
-    public String toString() {
-        return String.join(System.lineSeparator(),
-            super.toString(),
-            greetingView.toString(),
-            actionsView.toString()
-        );
     }
 }

@@ -1,5 +1,6 @@
 package com.g1t11.socialmagnet.model.social;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,13 +16,13 @@ public class Post {
     /**
      * Stores a shallow list of User (only username and fullname) who like and dislike a post
      */
-    private List<User> likes = null;
-    private List<User> dislikes = null;
+    private List<User> likes = new ArrayList<>();
+    private List<User> dislikes = new ArrayList<>();
 
     /**
      * Only loaded when we view the thread.
      */
-    private List<Comment> comments = null;
+    private List<Comment> comments = new ArrayList<>();
 
     public Post(int id) {
         this.id = id;

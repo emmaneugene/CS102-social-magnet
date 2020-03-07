@@ -9,7 +9,7 @@ import java.util.Objects;
  * static views.
  * @see View
  */
-public class PageView extends View {
+public class PageView implements View {
     private String pageTitle;
 
     /**
@@ -42,6 +42,14 @@ public class PageView extends View {
 
     public void clearStatus() {
         this.status = null;
+    }
+
+    /**
+     * A system-independent method of clearing the console.
+     */
+    public void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 
     @Override
