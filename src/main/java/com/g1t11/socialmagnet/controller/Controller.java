@@ -5,14 +5,13 @@ import com.g1t11.socialmagnet.view.kit.*;
 public abstract class Controller {
 
     protected Navigation nav;
-    /**
-     * All {@link Controller} objects have an associated {@link View}
-     * @see View
-     */
-    private PageView view;
+
+    protected PageView view;
 
     /**
-     * The associated {@link View} is rendered before any input is handled.
+     * The associated <code>View</code> is rendered before any input is handled.
+     * 
+     * @see View
      */
     public void run() {
         updateView();
@@ -22,19 +21,16 @@ public abstract class Controller {
     public abstract void updateView();
 
     public abstract void handleInput();
-
+    /**
+     * All <code>Controller</code> objects have an associated <code>PageView</code>.
+     * 
+     * @see PageView
+     */
     public PageView getView() {
         return view;
-    }
+    };
 
     public void setNavigation(Navigation nav) {
         this.nav = nav;
-    }
-
-    @Override
-    public String toString() {
-        if (view != null)
-            return view.toString();
-        return super.toString();
     }
 }

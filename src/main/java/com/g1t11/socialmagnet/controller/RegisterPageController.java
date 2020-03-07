@@ -7,8 +7,9 @@ import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.RegisterPageView;
 
 public class RegisterPageController extends Controller {
-
-    private RegisterPageView view = new RegisterPageView();
+    public RegisterPageController() {
+        view = new RegisterPageView();
+    }
 
     @Override
     public void updateView() {
