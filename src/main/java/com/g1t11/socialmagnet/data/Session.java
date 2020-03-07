@@ -11,9 +11,9 @@ import com.g1t11.socialmagnet.model.social.User;
  * Handles user authentication and session management.
  */
 public class Session {
-    Connection conn;
+    private Connection conn;
 
-    UserDAO userDAO;
+    private UserDAO userDAO;
 
     /**
      * Currently logged-in user
@@ -26,10 +26,9 @@ public class Session {
     }
 
     /**
-     * Get the currently logged-in user's name.
-     * If no user is logged in, return "anonymous".
+     * Get the currently logged-in user.
      */
-    public User getUser() {
+    public User currentUser() {
         return user;
     }
 

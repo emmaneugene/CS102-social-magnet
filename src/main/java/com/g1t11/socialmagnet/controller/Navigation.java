@@ -1,5 +1,6 @@
 package com.g1t11.socialmagnet.controller;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +20,8 @@ public class Navigation {
      */
     private List<Controller> navigationStack = new ArrayList<>();
 
-    public Navigation(Session session) {
-        this.session = session;
+    public Navigation(Connection conn) {
+        session = new Session(conn);
     }
 
     public Session getSession() {

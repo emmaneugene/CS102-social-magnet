@@ -1,12 +1,14 @@
 package com.g1t11.socialmagnet.controller;
 
+import java.sql.Connection;
 import java.util.Objects;
 
 import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.LoginPageView;
 
 public class LoginPageController extends Controller {
-    public LoginPageController() {
+    public LoginPageController(Connection conn) {
+        super(conn);
         view = new LoginPageView();
     }
 
@@ -25,7 +27,7 @@ public class LoginPageController extends Controller {
 
         boolean loginSuccessful = nav.getSession().login(username, password);
         if (loginSuccessful) {
-            nav.prepareForNavigation(new MainMenuController());
+            nav.prepareForNavigation(new MainMenuController(conn));
         } else {
             nav.pop();
             nav.currentController().getView().setStatus("Login error! Please try again.");

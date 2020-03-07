@@ -1,5 +1,6 @@
 package com.g1t11.socialmagnet.controller;
 
+import java.sql.Connection;
 import java.util.Objects;
 
 import com.g1t11.socialmagnet.util.InputValidator;
@@ -7,7 +8,8 @@ import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.RegisterPageView;
 
 public class RegisterPageController extends Controller {
-    public RegisterPageController() {
+    public RegisterPageController(Connection conn) {
+        super(conn);
         view = new RegisterPageView();
     }
 
