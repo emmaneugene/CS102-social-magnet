@@ -13,7 +13,7 @@ import com.g1t11.socialmagnet.model.social.User;
 public class Session {
     Connection conn;
 
-    UserDAO userDao;
+    UserDAO userDAO;
 
     /**
      * Currently logged-in user
@@ -22,7 +22,7 @@ public class Session {
 
     public Session(Connection conn) {
         this.conn = conn;
-        userDao = new UserDAO(conn);
+        userDAO = new UserDAO(conn);
     }
 
     /**
@@ -39,7 +39,7 @@ public class Session {
     public boolean login(String username, String password) {
         if (!credentialsValid(username, password))
             return false;
-        user = userDao.getUser(username);
+        user = userDAO.getUser(username);
         return true;
     }
 

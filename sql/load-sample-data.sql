@@ -9,13 +9,13 @@ INSERT INTO user (username, fullname, pwd) VALUES
 ("frank",   "Frank Sinatra",  "flymetothemoon");
 
 INSERT INTO post (author, recipient, posted_on, content) VALUES
-("adam",    "adam",    "2019-03-02 15:30:00", "Hello, world!"),
-("adam",    "adam",    "2019-03-02 15:30:00", "I'm going crazy!!"),
-("britney", "elijah",  "2019-03-02 15:30:00", "Don't know what you're talking about"),
-("charlie", "charlie", "2019-03-02 15:30:00", "Where is City Farmer??"),
-("charlie", "adam",    "2019-03-02 15:30:00", "Who are you talking to?"),
-("danny",   "frank",   "2019-03-02 15:30:00", "Look out, Fakebook! Social Magnet is going to get more users!"),
-("elijah",  "elijah",  "2019-03-02 15:30:00", "Had a great night with adam, britney, and @charkie");
+("adam",    "adam",    "2019-03-02 08:30:00", "Hello, world!"),
+("adam",    "adam",    "2019-05-02 10:30:00", "I'm going crazy!!"),
+("britney", "elijah",  "2019-05-15 20:30:00", "Don't know what you're talking about"),
+("charlie", "charlie", "2019-09-03 20:30:00", "Where is City Farmer??"),
+("charlie", "adam",    "2019-09-04 09:30:00", "Who are you talking to?"),
+("danny",   "frank",   "2019-09-02 15:30:00", "Look out, Fakebook! Social Magnet is going to get more users!"),
+("elijah",  "elijah",  "2019-09-02 22:30:00", "Had a great night with adam, britney, and @charkie");
 
 INSERT INTO tag (post_id, tagged_user) VALUES
 (7, "adam"),
