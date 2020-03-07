@@ -53,7 +53,8 @@ public class PostDAO extends DAO {
                 p.setToUsername(rs.getString("recipient"));
                 p.setContent(rs.getString("content"));
 
-                p.setComments(getComments(p.getId(), 3));
+                p.setActualCommentsCount(getCommentsCount(p.getId()));
+                p.setComments(getCommentsLatestLast(p.getId(), 3));
 
                 posts.add(p);
             }
@@ -66,16 +67,42 @@ public class PostDAO extends DAO {
         return posts;
     }
 
-    public List<Comment> getComments(int postId, int limit) {
+    public int getCommentsCount(int postId) {
+        ResultSet rs = null;
+        int commentCount = 0;
+
+        String queryString = String.join(" ",
+            "SELECT COUNT(*)",
+            "FROM comment",
+            "WHERE post_id = ?"
+        );
+
+        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+            stmt.setInt(1, postId);
+
+            rs = stmt.executeQuery();
+            rs.next();
+            commentCount = rs.getInt("COUNT(*)");
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        } finally {
+            try { if (rs != null) rs.close(); } catch (SQLException e) {}
+        }
+
+        return commentCount;
+    }
+
+    public List<Comment> getCommentsLatestLast(int postId, int limit) {
         ResultSet rs = null;
         List<Comment> comments = new ArrayList<>();
 
         String queryString = String.join(" ",
             "SELECT commenter, content",
-            "FROM comment",
-            "WHERE post_id = ?",
+            "FROM",
+            "(SELECT * FROM comment WHERE post_id = ?",
             "ORDER BY commented_on DESC",
-            "LIMIT ?"
+            "LIMIT ?) AS c",
+            "ORDER BY commented_on"
         );
 
         try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {

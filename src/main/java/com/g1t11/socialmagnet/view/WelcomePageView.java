@@ -4,7 +4,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
-import com.g1t11.socialmagnet.util.Greeting;
 import com.g1t11.socialmagnet.view.kit.*;
 
 public class WelcomePageView extends PageView {
@@ -56,8 +55,8 @@ public class WelcomePageView extends PageView {
         } else {
             hour = fixedHourOfDay;
         }
-        String time = Greeting.basedOnHour(hour);
-        String greeting = String.format("Good %s, %s!", time, username);
+        String timeOfDay = basedOnHour(hour);
+        String greeting = String.format("Good %s, %s!", timeOfDay, username);
         greetingView.setText(greeting);
     }
 
@@ -68,5 +67,11 @@ public class WelcomePageView extends PageView {
         return Objects.equals(greetingView, other.greetingView)
             && Objects.deepEquals(actionViews, other.actionViews)
             && Objects.equals(fixedHourOfDay, other.fixedHourOfDay);
+    }
+
+    public String basedOnHour(int hour) {
+        if (hour < 12) return "morning";
+        if (hour < 19) return "afternoon";
+        return "evening";
     }
 }

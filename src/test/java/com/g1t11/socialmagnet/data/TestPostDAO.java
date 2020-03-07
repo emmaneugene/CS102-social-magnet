@@ -23,10 +23,11 @@ public class TestPostDAO {
     public void testGetNewsFeedPosts() {
         Post post4 = new Post(7, "elijah", "elijah", "Had a great night with adam, britney, and @charlie");
         post4.setComments(List.of(
-            new Comment("elijah",  "Maybe you shouldn't stay out too late!"),
+            new Comment("britney", "How did you guys wake up so early??"),
             new Comment("adam",    "Early bird gets the worm!"),
-            new Comment("britney", "How did you guys wake up so early??")
+            new Comment("elijah",  "Maybe you shouldn't stay out too late!")
         ));
+        post4.setActualCommentsCount(4);
         List<Post> expected = List.of(
             new Post(10, "britney", "britney", "I'm so lonely..."),
             new Post(9,  "britney", "elijah",  "We should meet up again! elijah @adsm"),
@@ -41,13 +42,19 @@ public class TestPostDAO {
     }
 
     @Test
+    public void testGetCommentsCount() {
+        Assert.assertEquals(4, postDAO.getCommentsCount(7));
+    }
+
+    @Test
     public void testGetComments() {
         List<Comment> expected = List.of(
-            new Comment("elijah", "Bye!"),
-            new Comment("charlie", "Good job! You started programming.")
+            new Comment("britney", "How did you guys wake up so early??"),
+            new Comment("adam",    "Early bird gets the worm!"),
+            new Comment("elijah",  "Maybe you shouldn't stay out too late!")
         );
 
-        List<Comment> comments = postDAO.getComments(1, 3);
+        List<Comment> comments = postDAO.getCommentsLatestLast(7, 3);
 
         Assert.assertEquals(expected, comments);
     }

@@ -22,7 +22,8 @@ public class Post {
     /**
      * Only loaded when we view the thread.
      */
-    private List<Comment> comments = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>(3);
+    private int actualCommentsCount = 0;
 
     public Post(int id) {
         this.id = id;
@@ -87,6 +88,14 @@ public class Post {
         this.comments = comments;
     }
 
+    public int getActualCommentsCount() {
+        return actualCommentsCount;
+    }
+
+    public void setActualCommentsCount(int actualCommentsCount) {
+        this.actualCommentsCount = actualCommentsCount;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Post)) return false;
@@ -97,6 +106,7 @@ public class Post {
             && Objects.equals(content, other.content)
             && Objects.deepEquals(likes, other.likes)
             && Objects.deepEquals(dislikes, other.dislikes)
-            && Objects.deepEquals(comments, other.comments);
+            && Objects.deepEquals(comments, other.comments)
+            && Objects.equals(actualCommentsCount, other.actualCommentsCount);
     }
 }

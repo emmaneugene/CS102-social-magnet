@@ -24,7 +24,8 @@ INSERT INTO post (author, recipient, posted_on, content) VALUES
 
 INSERT INTO tag (post_id, tagged_user) VALUES
 (7, "adam"),
-(7, "britney");
+(7, "britney"),
+(9, "elijah");
 
 INSERT INTO friend (user_1, user_2) VALUES
 ("adam",    "charlie"),

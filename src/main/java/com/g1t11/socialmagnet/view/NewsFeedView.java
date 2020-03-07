@@ -7,7 +7,7 @@ import com.g1t11.socialmagnet.model.social.Post;
 import com.g1t11.socialmagnet.view.kit.*;
 
 public class NewsFeedView extends PageView {
-    List<PostView> postViews = new ArrayList<>(5);
+    private List<SimplePostView> postViews = new ArrayList<>(5);
 
     public NewsFeedView() {
         super("News Feed");
@@ -16,17 +16,17 @@ public class NewsFeedView extends PageView {
     @Override
     public void render() {
         super.render();
-        int index = 1;
-        for (PostView postView : postViews) {
-            System.out.print(index++ + " ");
+        for (SimplePostView postView : postViews) {
             postView.render();
+            System.out.println();
         }
     }
 
     public void setPosts(List<Post> posts) {
         postViews.clear();
+        int index = 1;
         for (Post post : posts) {
-            postViews.add(new PostView(post));
+            postViews.add(new SimplePostView(index++, post));
         }
     }
 }
