@@ -18,6 +18,9 @@ public class PostDAO extends DAO {
     /**
      * News feed posts include all latest posts on the current user's wall or
      * the current user's friends' walls.
+     * <p>
+     * Posts on the current user's wall are either posted to the wall, or exist
+     * due to the user being tagged.
      * 
      * @param username The user whose news feed to load
      * @param limit The number of latest posts to retrieve
@@ -30,10 +33,13 @@ public class PostDAO extends DAO {
         String queryString = String.join(" ",
             "SELECT post_id, author, recipient, content",
             "FROM post",
-            "WHERE recipient = ? OR recipient IN",
+            "WHERE recipient = ?",
+            "OR recipient IN",
             "(SELECT user_1 FROM friend WHERE user_2 = ?",
             "UNION",
             "SELECT user_2 FROM friend WHERE user_1 = ?)",
+            "OR post_id IN",
+            "(SELECT post_id FROM tag WHERE tagged_user = ?)",
             "ORDER BY posted_on DESC",
             "LIMIT ?"
         );
@@ -42,7 +48,8 @@ public class PostDAO extends DAO {
             stmt.setString(1, username);
             stmt.setString(2, username);
             stmt.setString(3, username);
-            stmt.setInt(4, limit);
+            stmt.setString(4, username);
+            stmt.setInt(5, limit);
 
             rs = stmt.executeQuery();
 

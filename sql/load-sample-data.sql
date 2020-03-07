@@ -19,7 +19,7 @@ INSERT INTO post (author, recipient, posted_on, content) VALUES
 ("elijah",  "elijah",  "2019-09-15 08:30:00", "Had a great night with adam, britney, and @charlie"),
 ("adam",    "elijah",  "2019-10-02 12:30:00", "Where did you go?"),
 # adam is spelt wrongly, therefore the tag does not work.
-("britney", "elijah",  "2019-10-03 13:30:00", "We should meet up again! elijah @adsm"),
+("britney", "charlie", "2019-10-03 13:30:00", "We should meet up again! elijah @adsm"),
 ("britney", "britney", "2019-10-04 14:30:00", "I'm so lonely...");
 
 INSERT INTO tag (post_id, tagged_user) VALUES

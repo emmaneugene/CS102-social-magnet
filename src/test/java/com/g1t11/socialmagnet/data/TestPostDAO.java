@@ -30,7 +30,7 @@ public class TestPostDAO {
         post4.setActualCommentsCount(4);
         List<Post> expected = List.of(
             new Post(10, "britney", "britney", "I'm so lonely..."),
-            new Post(9,  "britney", "elijah",  "We should meet up again! elijah @adsm"),
+            new Post(9,  "britney", "charlie", "We should meet up again! elijah @adsm"),
             new Post(8,  "adam",    "elijah",  "Where did you go?"),
             post4,
             new Post(5,  "charlie", "adam",    "Who are you talking to?")
