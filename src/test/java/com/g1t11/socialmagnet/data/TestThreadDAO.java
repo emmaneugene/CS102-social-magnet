@@ -3,40 +3,40 @@ package com.g1t11.socialmagnet.data;
 import java.util.List;
 
 import com.g1t11.socialmagnet.model.social.Comment;
-import com.g1t11.socialmagnet.model.social.Post;
+import com.g1t11.socialmagnet.model.social.Thread;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 
-public class TestPostDAO {
-    private PostDAO postDAO;
+public class TestThreadDAO {
+    private ThreadDAO postDAO;
 
     @Before
     public void initDAO() {
         Database db = new Database();
-        postDAO = new PostDAO(db.connection());
+        postDAO = new ThreadDAO(db.connection());
     }
 
     @Test
     public void testGetNewsFeedPosts() {
-        Post post4 = new Post(7, "elijah", "elijah", "Had a great night with adam, britney, and @charlie");
+        Thread post4 = new Thread(7, "elijah", "elijah", "Had a great night with adam, britney, and @charlie");
         post4.setComments(List.of(
             new Comment("britney", "How did you guys wake up so early??"),
             new Comment("adam",    "Early bird gets the worm!"),
             new Comment("elijah",  "Maybe you shouldn't stay out too late!")
         ));
         post4.setActualCommentsCount(4);
-        List<Post> expected = List.of(
-            new Post(10, "britney", "britney", "I'm so lonely..."),
-            new Post(9,  "britney", "charlie", "We should meet up again! elijah @adsm"),
-            new Post(8,  "adam",    "elijah",  "Where did you go?"),
+        List<Thread> expected = List.of(
+            new Thread(10, "britney", "britney", "I'm so lonely..."),
+            new Thread(9,  "britney", "charlie", "We should meet up again! elijah @adsm"),
+            new Thread(8,  "adam",    "elijah",  "Where did you go?"),
             post4,
-            new Post(5,  "charlie", "adam",    "Who are you talking to?")
+            new Thread(5,  "charlie", "adam",    "Who are you talking to?")
         );
 
-        List<Post> newsFeedPosts = postDAO.getNewsFeedPosts("elijah", 5);
+        List<Thread> newsFeedPosts = postDAO.getNewsFeedThreads("elijah", 5);
 
         Assert.assertEquals(expected, newsFeedPosts);
     }

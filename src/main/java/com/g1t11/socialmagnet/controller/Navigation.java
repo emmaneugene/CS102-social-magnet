@@ -64,6 +64,12 @@ public class Navigation {
         navigationStack.remove(size - 1);
     }
 
+    public void pop(int count) {
+        for (int i = 0; i < count; i++) {
+            pop();
+        }
+    }
+
     /**
      * Prepare the next <code>Controller</code> to be loaded onto the navigation
      * stack.

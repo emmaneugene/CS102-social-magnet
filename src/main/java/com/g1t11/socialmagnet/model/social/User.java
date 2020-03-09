@@ -1,5 +1,6 @@
 package com.g1t11.socialmagnet.model.social;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -8,9 +9,7 @@ public class User {
 
     private String fullname = null;
 
-    private List<User> friends = null;
-
-    private List<Post> feed = null;
+    private List<User> friends = new ArrayList<>();
 
     public User() {}
 
@@ -43,33 +42,11 @@ public class User {
         this.friends = friends;
     }
 
-    public List<Post> getFeed() {
-        return feed;
-    }
-
-    public void setFeed(List<Post> feed) {
-        this.feed = feed;
-    }
-
-    @Override
-    public String toString() {
-        String friendsNames = "";
-        if (friends != null) {
-            for (User friend : friends) {
-                friendsNames += friend.username + ",";
-            }
-            friendsNames = friendsNames.substring(0, friendsNames.length() - 1);
-        }
-        return String.format("%s; fullname: %s; friends: %s", username, fullname, friendsNames);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof User)) return false;
         User other = (User) o;
         return Objects.equals(username, other.username)
-            && Objects.equals(fullname, other.fullname)
-            && Objects.deepEquals(friends, other.friends)
-            && Objects.deepEquals(feed, other.feed);
+            && Objects.equals(fullname, other.fullname);
     }
 }

@@ -36,7 +36,7 @@ public class MainMenuController extends Controller {
                 nav.setFirstController(new WelcomePageController(conn));
                 break;
             default:
-                view.setStatus("Please enter a choice between 1 & 3!");
+                view.setStatus("Please enter a choice between 1 & 5!");
                 break;
         }
     }

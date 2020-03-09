@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Post {
+public class Thread {
     private int id;
 
     private String fromUsername = null;
@@ -13,11 +13,13 @@ public class Post {
 
     private String content = null;
 
+    private boolean tagged = false;
+
     /**
      * Stores a shallow list of User (only username and fullname) who like and dislike a post
      */
-    private List<User> likes = new ArrayList<>();
-    private List<User> dislikes = new ArrayList<>();
+    private List<User> likers = new ArrayList<>();
+    private List<User> dislikers = new ArrayList<>();
 
     /**
      * Only loaded when we view the thread.
@@ -25,15 +27,20 @@ public class Post {
     private List<Comment> comments = new ArrayList<>(3);
     private int actualCommentsCount = 0;
 
-    public Post(int id) {
+    public Thread(int id) {
         this.id = id;
     }
 
-    public Post(int id, String fromUsername, String toUsername, String content) {
+    public Thread(int id, String fromUsername, String toUsername, String content, boolean tagged) {
         this(id);
         this.fromUsername = fromUsername;
         this.toUsername = toUsername;
         this.content = content;
+        this.tagged = tagged;
+    }
+
+    public Thread(int id, String fromUsername, String toUsername, String content) {
+        this(id, fromUsername, toUsername, content, false);
     }
 
     public int getId() {
@@ -64,20 +71,24 @@ public class Post {
         this.content = content;
     }
 
-    public List<User> getLikes() {
-        return likes;
+    public boolean isTagged() {
+        return tagged;
     }
 
-    public void setLikes(List<User> likes) {
-        this.likes = likes;
+    public List<User> getLikers() {
+        return likers;
     }
 
-    public List<User> getDislikes() {
-        return dislikes;
+    public void setLikers(List<User> likes) {
+        this.likers = likes;
     }
 
-    public void setDislikes(List<User> dislikes) {
-        this.dislikes = dislikes;
+    public List<User> getDislikers() {
+        return dislikers;
+    }
+
+    public void setDislikers(List<User> dislikes) {
+        this.dislikers = dislikes;
     }
 
     public List<Comment> getComments() {
@@ -98,15 +109,16 @@ public class Post {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Post)) return false;
-        Post other = (Post) o;
+        if (!(o instanceof Thread)) return false;
+        Thread other = (Thread) o;
         return Objects.equals(id, other.id)
             && Objects.equals(fromUsername, other.fromUsername)
             && Objects.equals(toUsername, other.toUsername)
             && Objects.equals(content, other.content)
-            && Objects.deepEquals(likes, other.likes)
-            && Objects.deepEquals(dislikes, other.dislikes)
+            && Objects.deepEquals(likers, other.likers)
+            && Objects.deepEquals(dislikers, other.dislikers)
             && Objects.deepEquals(comments, other.comments)
-            && Objects.equals(actualCommentsCount, other.actualCommentsCount);
+            && Objects.equals(actualCommentsCount, other.actualCommentsCount)
+            && Objects.equals(tagged, other.tagged);
     }
 }

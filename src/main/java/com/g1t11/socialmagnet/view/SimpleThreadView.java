@@ -3,35 +3,34 @@ package com.g1t11.socialmagnet.view;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.g1t11.socialmagnet.model.social.Comment;
-import com.g1t11.socialmagnet.model.social.Post;
+import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.view.kit.*;
 
-public class SimplePostView implements View {
+public class SimpleThreadView implements View {
     private final static int commentsToDisplay = 3;
 
-    private int postIndex;
+    private int threadIndex;
 
-    private Post post;
+    private Thread thread;
 
     private List<CommentView> commentViews = new ArrayList<>(commentsToDisplay);
     
-    public SimplePostView(int postIndex, Post post) {
-        this.postIndex = postIndex;
-        this.post = post;
+    public SimpleThreadView(int threadIndex, Thread thread) {
+        this.threadIndex = threadIndex;
+        this.thread = thread;
         setComments();
     }
 
     private void setComments() {
         commentViews.clear();
-        int maxIndex = post.getActualCommentsCount();
+        int maxIndex = thread.getActualCommentsCount();
         /**
          * If we have more comments than we can display, we want to offset the
          * such that the last comment rendered has the maximum index.
          */
         int offset = maxIndex > commentsToDisplay ? maxIndex - commentsToDisplay : 0;
-        for (int i = 0; i < post.getComments().size(); i++) {
-            commentViews.add(new CommentView(postIndex, i + offset + 1, post.getComments().get(i)));
+        for (int i = 0; i < thread.getComments().size(); i++) {
+            commentViews.add(new CommentView(threadIndex, i + offset + 1, thread.getComments().get(i)));
         }
     }
 
@@ -43,12 +42,12 @@ public class SimplePostView implements View {
     }
 
     private void renderContent() {
-        System.out.printf("%d %s: %s\n", postIndex, post.getFromUsername(), post.getContent());
+        System.out.printf("%d %s: %s\n", threadIndex, thread.getFromUsername(), thread.getContent());
     }
 
     private void renderLikes() {
-        int likes = post.getLikes().size();
-        int dislikes = post.getDislikes().size();
+        int likes = thread.getLikers().size();
+        int dislikes = thread.getDislikers().size();
         System.out.printf("[ %s, %s ]\n", countedWord(likes, "like", "likes"), countedWord(dislikes, "dislike", "dislikes"));
     }
 

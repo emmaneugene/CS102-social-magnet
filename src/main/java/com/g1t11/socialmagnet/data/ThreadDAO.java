@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.g1t11.socialmagnet.model.social.Comment;
-import com.g1t11.socialmagnet.model.social.Post;
+import com.g1t11.socialmagnet.model.social.Thread;
 
-public class PostDAO extends DAO {
-    public PostDAO(Connection conn) {
+public class ThreadDAO extends DAO {
+    public ThreadDAO(Connection conn) {
         super(conn);
     }
 
@@ -26,9 +26,9 @@ public class PostDAO extends DAO {
      * @param limit The number of latest posts to retrieve
      * @return Posts to be displayed on the news feed
      */
-    public List<Post> getNewsFeedPosts(String username, int limit) {
+    public List<Thread> getNewsFeedThreads(String username, int limit) {
         ResultSet rs = null;
-        List<Post> posts = new ArrayList<>();
+        List<Thread> posts = new ArrayList<>();
 
         String queryString = String.join(" ",
             "SELECT post_id, author, recipient, content",
@@ -54,7 +54,7 @@ public class PostDAO extends DAO {
             rs = stmt.executeQuery();
 
             while (rs.next()) {
-                Post p = new Post(rs.getInt("post_id"));
+                Thread p = new Thread(rs.getInt("post_id"));
 
                 p.setFromUsername(rs.getString("author"));
                 p.setToUsername(rs.getString("recipient"));
