@@ -6,67 +6,84 @@ import java.util.ArrayList;
 /**
  * Farmer extends User
  * - rank : String
- * - exp : int
+ * - XP : int
  * - wealth : int
  * - farmland : ArrayList<Plot>
  * - inventory : ArrayList<InventoryItem>
- * - stolenCrops : ArrayList<Stealing>
+ * + getRank() : String
  */
 public class Farmer extends User {
-    private String rank = null;
+    private int XP = 0;
 
-    private int exp = 0;
-
+    /** 
+     *  By default, new farmers start with 50 gold 
+     */ 
     private int wealth = 50;
 
     private ArrayList<Plot> farmland = null;
 
     private ArrayList<InventoryItem> inventory = null;
 
-    private ArrayList<Stealing> stolenCrops = null;
-
-    public Farmer() {}
-
+    /**
+     * Constructor for a brand new Farmer object
+     */
     public Farmer(String username, String fullName) {
         super(username, fullName);
     }
 
+    /**
+     * Constructor for an existing Farmer (data from database) 
+     */
+    public Farmer(String username, String fullName, int XP, int wealth, ArrayList<Plot> farmland, ArrayList<InventoryItem> inventory) {
+        super(username, fullName);
+        this.XP = XP;
+        this.wealth = wealth;
+        this.farmland = farmland;
+        this.inventory = inventory;
+    }
+
     public String getRank() {
-        return rank;
+        if (XP < 1000) {
+            return "Novice";
+        }
+        if (XP < 2500) {
+            return "Apprentice";
+        }
+        if (XP < 5000) {
+            return "Journeyman";
+        }
+        if (XP < 12000) {
+            return "Grandmaster";
+        }
+        return "Legendary";
     }
 
-    public String setRank() {
-        //TODO: set farmer's rank based on exp, whenever the exp changes
-        return null;
+
+    public int getXP() {
+        return XP;
     }
 
-    public int getExp() {
-        return exp;
-    }
-
-    public void setExp(int exp) {
-        this.exp = exp;
-    }
-
-    // convenience method to add exp
-    public void addExp(int exp_earned) {
-        exp += exp_earned;
+    /**
+     * Convenience method to add XP
+     */
+    public void addXP(int XP_earned) {
+        XP += XP_earned;
     }
 
     public int getWealth() {
         return wealth;
     }
 
-    public void setWealth(int wealth) {
-        this.wealth = wealth;
+    public void addWealth(int wealth) {
+        this.wealth += wealth;
+    }
+
+    public void subtractWealth(int wealth) {
+        this.wealth -= wealth;
     }
 
     public ArrayList<Plot> getFarmland() {
         return farmland;
-    }
-
-    public void setFarmland(ArrayList<Plot> farmland) {
-        this.farmland = farmland;
     }
 
     public void addPlot(Plot plot) {
@@ -77,23 +94,8 @@ public class Farmer extends User {
         return inventory;
     }
 
-    public void setInventory(ArrayList<InventoryItem> inventory) {
-        this.inventory = inventory;
-    }
 
     public void addInventoryItem(InventoryItem item) {
         inventory.add(item);
-    }
-
-    public ArrayList<Stealing> getStolenCrops() {
-        return stolenCrops;
-    }
-
-    public void setStolenCrops(ArrayList<Stealing> stolenCrops) {
-        this.stolenCrops = stolenCrops;
-    }
-
-    public void addStolenCrop(Stealing stolenCrop) {
-        stolenCrops.add(stolenCrop);
     }
 }

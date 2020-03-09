@@ -4,8 +4,8 @@ import java.util.Date;
 
 /**
  * Gift
- * - sender : Farmer/User(?)
- * - recipient : Farmer/User(?)
+ * - sender : Farmer
+ * - recipient : Farmer
  * - crop : Crop
  * - timestamp : Date
  */
