@@ -8,8 +8,9 @@ import com.g1t11.socialmagnet.view.RegisterPageView;
 import com.g1t11.socialmagnet.view.kit.TextView;
 
 public class RegisterPageController extends Controller {
-
-    private RegisterPageView view = new RegisterPageView();
+    public RegisterPageController() {
+        view = new RegisterPageView();
+    }
 
     @Override
     public void updateView() {

@@ -4,7 +4,10 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * A {@link View} component that renders a list of Views.
+ * A <code>View</code> component that stores and renders a list of 
+ * <code>View</code>.
+ * 
+ * @see View
  */
 public class ListView extends View {
     List<? extends View> items;
@@ -26,14 +29,5 @@ public class ListView extends View {
         if (!(o instanceof ListView)) return false;
         ListView other = (ListView) o;
         return Objects.deepEquals(items, other.items);
-    }
-
-    @Override
-    public String toString() {
-        String result = "";
-        for (View item : items) {
-            result += item.toString() + "\n";
-        }
-        return result;
     }
 }

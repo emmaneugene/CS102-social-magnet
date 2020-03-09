@@ -2,7 +2,7 @@ package com.g1t11.socialmagnet.view.kit;
 
 public abstract class View {
     /**
-     * Render the main content of the {@link View}.
+     * Render the main content of the <code>View</code>.
      */
     public abstract void render();
 

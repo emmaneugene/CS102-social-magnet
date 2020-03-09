@@ -43,6 +43,13 @@ public class Session {
         return true;
     }
 
+    public boolean logout() {
+        if (user == null)
+            return false;
+        user = null;
+        return true;
+    }
+
     public boolean register(String username, String fullName, String password) {
         return addUser(username, fullName, password);
     }

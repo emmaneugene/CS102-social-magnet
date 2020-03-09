@@ -9,6 +9,7 @@ import com.mysql.cj.jdbc.Driver;
 public class Database {
     /**
      * Connection to the database.
+     * <p>
      * Reconnecting and closing a connection is slow and expensive. Instead,
      * maintain a single connection during the application's runtime and
      * re-establish it if the connection is dropped.

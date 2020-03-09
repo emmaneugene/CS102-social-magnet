@@ -8,10 +8,9 @@ import com.g1t11.socialmagnet.util.Greeting;
 import com.g1t11.socialmagnet.view.kit.*;
 
 public class WelcomePageView extends PageView {
+    private TextView greetingView;
 
-    TextView greetingView;
-
-    String username = null;
+    String username;
 
     private final ListView actionsView = new ListView(List.of(
         new TextView("1. Register"),
@@ -23,7 +22,7 @@ public class WelcomePageView extends PageView {
 
     public WelcomePageView() {
         super("Welcome");
-        greetingView = new TextView("Good morning, anonymous!");
+        greetingView = new TextView();
     }
 
     public WelcomePageView(int fixedHourOfDay) {
@@ -71,7 +70,7 @@ public class WelcomePageView extends PageView {
 
     @Override
     public String toString() {
-        return String.join("\n",
+        return String.join(System.lineSeparator(),
             super.toString(),
             greetingView.toString(),
             actionsView.toString()
