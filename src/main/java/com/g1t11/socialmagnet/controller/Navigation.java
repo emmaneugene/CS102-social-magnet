@@ -78,7 +78,7 @@ public class Navigation {
      * 
      * @see Controller
      */
-    public void prepareForNavigation(Controller next) {
+    public void push(Controller next) {
         initControllerNav(next);
         navigationStack.add(next);
     }

@@ -27,7 +27,7 @@ public class LoginPageController extends Controller {
 
         boolean loginSuccessful = nav.getSession().login(username, password);
         if (loginSuccessful) {
-            nav.prepareForNavigation(new MainMenuController(conn));
+            nav.push(new MainMenuController(conn));
         } else {
             nav.pop();
             nav.currentController().getView().setStatus("Login error! Please try again.");

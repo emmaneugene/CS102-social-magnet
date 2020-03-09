@@ -26,7 +26,7 @@ public class MainMenuController extends Controller {
         PromptInput input = new PromptInput();
         switch (input.nextLine()) {
             case "1":
-                nav.prepareForNavigation(new NewsFeedController(conn));
+                nav.push(new NewsFeedController(conn));
                 break;
             case "2":
             case "3":

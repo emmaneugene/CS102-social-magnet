@@ -25,10 +25,10 @@ public class WelcomePageController extends Controller {
         PromptInput input = new PromptInput();
         switch (input.nextLine()) {
             case "1":
-                nav.prepareForNavigation(new RegisterPageController(conn));
+                nav.push(new RegisterPageController(conn));
                 break;
             case "2":
-                nav.prepareForNavigation(new LoginPageController(conn));
+                nav.push(new LoginPageController(conn));
                 break;
             case "3":
                 System.out.println("Goodbye!");

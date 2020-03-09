@@ -35,7 +35,7 @@ public class NewsFeedController extends Controller {
             nav.pop();
         } else if (threads.size() > 0 && choice.matches(String.format("T[1-%d]", threads.size()))) {
             int index = Character.getNumericValue(choice.charAt(1));
-            nav.prepareForNavigation(new ThreadController(conn, index, threads.get(index - 1)));
+            nav.push(new ThreadController(conn, index, threads.get(index - 1)));
         } else {
             view.setStatus("Please select a valid option.");
         }
