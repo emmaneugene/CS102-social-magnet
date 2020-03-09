@@ -38,6 +38,7 @@ public class ThreadView extends PageView {
 
     @Override
     public void render() {
+        super.render();
         renderContent();
         renderComments();
         System.out.println();

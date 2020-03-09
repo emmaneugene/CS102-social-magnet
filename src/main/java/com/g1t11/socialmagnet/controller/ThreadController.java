@@ -1,8 +1,6 @@
 package com.g1t11.socialmagnet.controller;
 
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.util.PromptInput;

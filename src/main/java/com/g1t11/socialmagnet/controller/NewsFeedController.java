@@ -22,7 +22,8 @@ public class NewsFeedController extends Controller {
     @Override
     public void updateView() {
         String currentUsername = nav.getSession().currentUser().getUsername();
-        ((NewsFeedView) view).setThreads(threadDAO.getNewsFeedThreads(currentUsername, 5));
+        threads = threadDAO.getNewsFeedThreads(currentUsername, 5);
+        ((NewsFeedView) view).setThreads(threads);
         view.render();
     }
     
@@ -32,7 +33,7 @@ public class NewsFeedController extends Controller {
         String choice = input.nextLine();
         if (choice.equals("M")) {
             nav.pop();
-        } else if (choice.matches(String.format("T[1-%d]", threads.size()))) {
+        } else if (threads.size() > 0 && choice.matches(String.format("T[1-%d]", threads.size()))) {
             int index = Character.getNumericValue(choice.charAt(1));
             nav.prepareForNavigation(new ThreadController(conn, index, threads.get(index - 1)));
         } else {
