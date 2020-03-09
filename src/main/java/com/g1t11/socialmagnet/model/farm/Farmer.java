@@ -1,7 +1,9 @@
 package com.g1t11.socialmagnet.model.farm;
 
-import com.g1t11.socialmagnet.model.social.User;
 import java.util.ArrayList;
+import java.util.List;
+
+import com.g1t11.socialmagnet.model.social.User;
 
 /**
  * Farmer extends User
@@ -20,9 +22,9 @@ public class Farmer extends User {
      */ 
     private int wealth = 50;
 
-    private ArrayList<Plot> farmland = null;
+    private List<Plot> farmland = new ArrayList<>();
 
-    private ArrayList<InventoryItem> inventory = null;
+    private List<InventoryItem> inventory = new ArrayList<>();
 
     /**
      * Constructor for a brand new Farmer object
@@ -34,7 +36,7 @@ public class Farmer extends User {
     /**
      * Constructor for an existing Farmer (data from database) 
      */
-    public Farmer(String username, String fullName, int XP, int wealth, ArrayList<Plot> farmland, ArrayList<InventoryItem> inventory) {
+    public Farmer(String username, String fullName, int XP, int wealth, List<Plot> farmland, List<InventoryItem> inventory) {
         super(username, fullName);
         this.XP = XP;
         this.wealth = wealth;
@@ -66,8 +68,8 @@ public class Farmer extends User {
     /**
      * Convenience method to add XP
      */
-    public void addXP(int XP_earned) {
-        XP += XP_earned;
+    public void addXP(int XPEarned) {
+        XP += XPEarned;
     }
 
     public int getWealth() {
@@ -82,7 +84,7 @@ public class Farmer extends User {
         this.wealth -= wealth;
     }
 
-    public ArrayList<Plot> getFarmland() {
+    public List<Plot> getFarmland() {
         return farmland;
     }
 
@@ -90,10 +92,9 @@ public class Farmer extends User {
         farmland.add(plot);
     }
 
-    public ArrayList<InventoryItem> getInventory() {
+    public List<InventoryItem> getInventory() {
         return inventory;
     }
-
 
     public void addInventoryItem(InventoryItem item) {
         inventory.add(item);

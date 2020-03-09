@@ -2,6 +2,7 @@ package com.g1t11.socialmagnet.model.farm;
 
 import java.util.Date;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Random;
  * - crop : Crop
  * - timePlanted : Date
  * - readyToHarvest : boolean
- * - harvest : int
+ * - yield : int
  * - percentStolen : int
  * + checkProgress(): int
  * + isWilted() : boolean
@@ -23,11 +24,11 @@ public class Plot {
 
     private boolean wilted = false;
 
-    private int harvest = 0;
+    private int yield = 0;
 
     private int percentStolen = 0;
 
-    private ArrayList<Farmer> robbers = null;
+    private List<String> robberNames = new ArrayList<>();
 
     /** 
      * Constructor for an empty plot
@@ -66,16 +67,16 @@ public class Plot {
         return wilted;
     }
 
-    public int getHarvest() {
-        return harvest;
+    public int getYield() {
+        return yield;
     }
 
     public int getPercentStolen() {
         return percentStolen;
     }
 
-    public ArrayList<Farmer> getRobbers() {
-        return robbers;
+    public List<String> getRobbers() {
+        return robberNames;
     }
 
     public void plantCrop(Crop crop) {
@@ -94,27 +95,27 @@ public class Plot {
             readyToHarvest = false;
             wilted = true;
         } else if (minutesElapsed >= crop.getTime()) {
-            updateHarvest();
+            updateYield();
         }
     }
 
-    public void updateHarvest() {
+    public void updateYield() {
         Random rand = new Random();
-        harvest = crop.getMinYield() + rand.nextInt(crop.getMaxYield() - crop.getMinYield());
+        yield = crop.getMinYield() + rand.nextInt(crop.getMaxYield() - crop.getMinYield());
     }
     
     public void getRobbedBy(Farmer farmer) {
         //TODO:generate a percentage of harvest (1-5) to give the robber, but keep within the limit of 20%
-        robbers.add(farmer);
+        robberNames.add(farmer.getUsername());
     }
 
     public void clear() {
-        this.crop = null;
-        this.timePlanted = null;
-        this.readyToHarvest = false;
-        this.wilted = false;
-        this.harvest = 0;
-        this.percentStolen = 0;
-        this.robbers = null;
+        crop = null;
+        timePlanted = null;
+        readyToHarvest = false;
+        wilted = false;
+        yield = 0;
+        percentStolen = 0;
+        robberNames.clear();
     }
 }
