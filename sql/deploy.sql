@@ -4,7 +4,7 @@ CREATE DATABASE magnet;
 
 -- use this database to create and populate the tables
 USE magnet;
-SET time_zone = '+0000';
+SET time_zone = '+00:00';
 
 -- create commands (this is just an example)
 CREATE TABLE user (
