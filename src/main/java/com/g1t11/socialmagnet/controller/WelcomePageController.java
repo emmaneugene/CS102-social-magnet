@@ -5,6 +5,7 @@ import java.util.Objects;
 import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.WelcomePageView;
 import com.g1t11.socialmagnet.view.kit.PageView;
+import com.g1t11.socialmagnet.view.kit.TextView;
 
 public class WelcomePageController extends Controller {
 
@@ -32,7 +33,7 @@ public class WelcomePageController extends Controller {
                 System.exit(0);
                 break;
             default:
-                view.setStatus("Please enter a choice between 1 & 3!");
+                view.setStatus("Please enter a choice between 1 & 3!", TextView.Color.RED);
                 break;
         }
     }
