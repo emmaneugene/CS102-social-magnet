@@ -10,10 +10,11 @@ import java.util.Random;
  * - crop : Crop
  * - timePlanted : Date
  * - readyToHarvest : boolean
+ * - wilted : boolean
+ * - percentProgress : int
  * - yield : int
  * - percentStolen : int
- * + checkProgress(): int
- * + isWilted() : boolean
+ * - robberNames : List<String>
  */
 public class Plot {
     private Crop crop = null;
@@ -23,6 +24,8 @@ public class Plot {
     private boolean readyToHarvest = false;
 
     private boolean wilted = false;
+
+    private int percentProgress = 0;
 
     private int yield = 0;
 
@@ -71,6 +74,10 @@ public class Plot {
         return yield;
     }
 
+    public int getPercentProgress() {
+        return percentProgress;
+    }
+
     public int getPercentStolen() {
         return percentStolen;
     }
@@ -87,6 +94,7 @@ public class Plot {
     /**
      * If crop is wilted, changes readyToHarvest to 'false' and wilted to 'true'
      * If crop is fully grown, invokes updateHarvest()
+     * Otherwise, updates percentProgress
      */
     public void updateStatus() {
         Date now = new Date();
@@ -96,17 +104,42 @@ public class Plot {
             wilted = true;
         } else if (minutesElapsed >= crop.getTime()) {
             updateYield();
+        } else {
+            percentProgress = (int) (minutesElapsed / crop.getTime() * 100);
         }
     }
 
+    /**
+     * Generates the quantity yield of the crop as a random number between minYield and maxYield
+     * This function should only be called ONCE per crop growing  
+     */ 
     public void updateYield() {
         Random rand = new Random();
         yield = crop.getMinYield() + rand.nextInt(crop.getMaxYield() - crop.getMinYield());
     }
     
-    public void getRobbedBy(Farmer farmer) {
-        //TODO:generate a percentage of harvest (1-5) to give the robber, but keep within the limit of 20%
+    /**
+     * Allows a farmer to harvest his own crop, and clears the plot thereafter
+     * @return the quantity of crop harvested
+     */
+    public int harvest() {
+        int harvestQuantity = yield * (100 - percentStolen) / 100;
+        clear();
+        return harvestQuantity;
+    }
+
+    /** 
+     * Processes a robbery by a farmer
+     * - adds farmer's username to robberNames
+     * - updates percentStolen
+     * @return the quantity of crop stolen
+     */ 
+    public int getRobbedBy(Farmer farmer) {
+        Random rand = new Random();
+        int percentStolenByFarmer = Math.min(1 + rand.nextInt(4), 20 - percentStolen);
+        percentStolen += percentStolenByFarmer;
         robberNames.add(farmer.getUsername());
+        return yield * percentStolenByFarmer / 100;
     }
 
     public void clear() {
@@ -114,6 +147,7 @@ public class Plot {
         timePlanted = null;
         readyToHarvest = false;
         wilted = false;
+        percentProgress = 0;
         yield = 0;
         percentStolen = 0;
         robberNames.clear();
