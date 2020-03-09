@@ -2,6 +2,8 @@ package com.g1t11.socialmagnet.view.kit;
 
 import java.util.Objects;
 
+import com.g1t11.socialmagnet.view.kit.TextView.Color;
+
 /**
  * {@link PageView} is the base of all screens and menus.
  * <code>PageView</code> clears the entire console before rendering any
@@ -38,6 +40,10 @@ public class PageView implements View {
 
     public void setStatus(String statusText) {
         this.status = new TextView(statusText);
+    }
+
+    public void setStatus(String statusText, Color color) {
+        this.status = new TextView(statusText, color);
     }
 
     public void clearStatus() {

@@ -6,7 +6,7 @@ if [ ! -f "$FILE" ]; then
   exit 1
 fi
 
-mvn clean;
 source .env;
-./precompile
-mvn test;
+
+mysql -u"$DB_USER" -p"$DB_PASS" < sql/deploy.sql &&
+mysql -u"$DB_USER" -p"$DB_PASS" < sql/load-sample-data.sql;

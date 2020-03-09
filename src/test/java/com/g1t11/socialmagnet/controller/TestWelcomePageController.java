@@ -1,6 +1,6 @@
 package com.g1t11.socialmagnet.controller;
-
 import com.g1t11.socialmagnet.TestApp;
+import com.g1t11.socialmagnet.view.kit.TextView;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.contrib.java.lang.system.TextFromStandardInputStream;
+
 
 public class TestWelcomePageController extends TestApp {
     @Rule
@@ -58,7 +59,7 @@ public class TestWelcomePageController extends TestApp {
         WelcomePageController expected = new WelcomePageController(app.db.connection());
         expected.setNavigation(app.nav);
         expected.updateView();
-        expected.getView().setStatus("Please enter a choice between 1 & 3!");
+        expected.getView().setStatus("Please enter a choice between 1 & 3!", TextView.Color.RED);
 
         Assert.assertEquals(expected, app.nav.currentController());
     }

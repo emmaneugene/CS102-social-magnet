@@ -6,6 +6,7 @@ import java.util.Objects;
 import com.g1t11.socialmagnet.util.InputValidator;
 import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.RegisterPageView;
+import com.g1t11.socialmagnet.view.kit.TextView;
 
 public class RegisterPageController extends Controller {
     public RegisterPageController(Connection conn) {
@@ -25,7 +26,7 @@ public class RegisterPageController extends Controller {
 
         if (!InputValidator.isAlphanumeric(username)) {
             nav.pop();
-            nav.currentController().getView().setStatus("Username should only contain alphanumeric characters.");
+            nav.currentController().getView().setStatus("Username should only contain alphanumeric characters.", TextView.Color.RED);
             return;
         }
 
@@ -40,7 +41,7 @@ public class RegisterPageController extends Controller {
 
         if (!password.equals(passwordCheck)) {
             nav.pop();
-            nav.currentController().getView().setStatus("Passwords do not match.");
+            nav.currentController().getView().setStatus("Passwords do not match.", TextView.Color.RED);
             return;
         }
 
@@ -48,10 +49,10 @@ public class RegisterPageController extends Controller {
 
         if (registerSuccessful) {
             nav.pop();
-            nav.currentController().getView().setStatus(String.format("Registered %s successfully!", username));
+            nav.currentController().getView().setStatus(String.format("Registered %s successfully!", username), TextView.Color.GREEN);
         } else {
             nav.pop();
-            nav.currentController().getView().setStatus(String.format("%s already exists. Choose another username.", username));
+            nav.currentController().getView().setStatus(String.format("%s already exists. Choose another username.", username), TextView.Color.RED);
         }
     }
 
