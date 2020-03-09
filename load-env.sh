@@ -1,3 +1,6 @@
+# Create your own .env file
+# Look at .env-sample for an example of how to set it up
+
 FILE=.env
 if [ ! -f "$FILE" ]; then
   RED='\033[0;31m'
