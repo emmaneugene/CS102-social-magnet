@@ -76,7 +76,62 @@ CREATE TABLE requests (
     FOREIGN KEY (recipient) REFERENCES user (username)
 );
 
--- insert commands (needed for your application to work)
--- INSERT INTO contact (contact_id, given_name, family_name, email)
--- VALUES
--- (1, 'Dukester', 'Lee', geek@smu.edu.sg');
+CREATE TABLE farmer (
+    username VARCHAR(255) NOT NULL,
+    xp INT NOT NULL,
+    wealth INT NOT NULL,
+    PRIMARY KEY (username),
+    FOREIGN KEY (username) REFERENCES user (username)
+);
+
+CREATE TABLE crop (
+    crop_name VARCHAR(255) NOT NULL,
+    cost INT NOT NULL,
+    crop_time INT NOT NULL,
+    xp INT NOT NULL,
+    min_yield INT NOT NULL,
+    max_yield INT NOT NULL,
+    sale_price INT NOT NULL,
+    PRIMARY KEY (crop_name)
+);
+
+CREATE TABLE plot (
+    farmer VARCHAR(255) NOT NULL,
+    plot_id INT NOT NULL,
+    crop_name VARCHAR(255) NULL,
+    time_planted DATETIME NULL,
+    yield INT NULL,
+    percent_stolen INT NULL,
+    PRIMARY KEY (farmer, plot_id),
+    FOREIGN KEY (farmer) REFERENCES farmer (username),
+    FOREIGN KEY (crop_name) REFERENCES crop (crop_name)
+);
+
+CREATE TABLE stealing (
+    victim VARCHAR(255) NOT NULL,
+    stolen_plot_id INT NOT NULL,
+    stealer VARCHAR(255) NOT NULL,
+    PRIMARY KEY (victim, stolen_plot_id, stealer),
+    FOREIGN KEY (victim, stolen_plot_id) REFERENCES plot (farmer, plot_id),
+    FOREIGN KEY (stealer) REFERENCES farmer (username)
+);
+
+CREATE TABLE inventory (
+    username VARCHAR(255) NOT NULL,
+    crop_name VARCHAR(255) NOT NULL,
+    quantity INT NOT NULL,
+    PRIMARY KEY (username, crop_name),
+    FOREIGN KEY (username) REFERENCES farmer (username),
+    FOREIGN KEY (crop_name) REFERENCES crop (crop_name)
+);
+
+CREATE TABLE gift (
+    gifter VARCHAR(255) NOT NULL,
+    giftee VARCHAR(255) NOT NULL,
+    crop_name VARCHAR(255) NOT NULL,
+    gifted_on DATETIME NOT NULL,
+    PRIMARY KEY (gifter, giftee, crop_name, gifted_on),
+    FOREIGN KEY (gifter) REFERENCES farmer (username),
+    FOREIGN KEY (giftee) REFERENCES farmer (username),
+    FOREIGN KEY (crop_name) REFERENCES crop (crop_name)
+);
