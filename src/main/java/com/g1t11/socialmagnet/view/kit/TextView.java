@@ -49,6 +49,7 @@ public class TextView extends View {
 
     public TextView(String text, Color color) {
         this.text = String.format("%s%s%s", map.get(color), text, map.get(Color.RESET));
+        this.newLine = true;
     }
 
     public String getText() {
