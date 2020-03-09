@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.LoginPageView;
+import com.g1t11.socialmagnet.view.kit.TextView;
 
 public class LoginPageController extends Controller {
     public LoginPageController() {
@@ -28,7 +29,7 @@ public class LoginPageController extends Controller {
             nav.prepareForNavigation(new MainMenuController());
         } else {
             nav.pop();
-            nav.currentController().getView().setStatus("Login error! Please try again.");
+            nav.currentController().getView().setStatus("Login error! Please try again.", TextView.Color.RED);
         }
     }
 
