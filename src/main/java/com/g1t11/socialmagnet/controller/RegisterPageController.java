@@ -46,7 +46,7 @@ public class RegisterPageController extends Controller {
 
         if (registerSuccessful) {
             nav.pop();
-            nav.currentController().getView().setStatus(String.format("Registered %s successfully!", username));
+            nav.currentController().getView().setStatus(String.format("Registered %s successfully!", username), TextView.Color.GREEN);
         } else {
             nav.pop();
             nav.currentController().getView().setStatus(String.format("%s already exists. Choose another username.", username), TextView.Color.RED);
