@@ -32,7 +32,7 @@ public class WelcomePageController extends Controller {
                 nav.push(new LoginPageController(conn));
                 break;
             case "3":
-                System.out.println(new TextView("Goodbye!", Color.GREEN));
+                System.out.println(Painter.paint("Goodbye!", Painter.Color.GREEN));
                 System.exit(0);
                 break;
             default:
