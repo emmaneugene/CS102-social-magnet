@@ -31,6 +31,10 @@ public class Painter {
         }
     };
 
+    public static String paint(String text, Color color) {
+        return map.get(color) + text + map.get(Color.RESET);
+    }
+
     /**
      * Paint a string by placing color markers within the format.
      * 
@@ -40,7 +44,7 @@ public class Painter {
      * with the <code>%r</code> markers.
      * @return A painted string with all original format code untouched.
      */
-    public static String paint(String formatText, Color ...colors) {
+    public static String paintf(String formatText, Color ...colors) {
         Object[] colorCodes = new String[colors.length];
         for (int i = 0; i < colors.length; i++) {
             colorCodes[i] = map.get(colors[i]);

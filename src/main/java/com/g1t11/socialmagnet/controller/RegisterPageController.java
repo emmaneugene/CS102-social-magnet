@@ -3,9 +3,9 @@ package com.g1t11.socialmagnet.controller;
 import java.util.Objects;
 
 import com.g1t11.socialmagnet.util.InputValidator;
+import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.RegisterPageView;
-import com.g1t11.socialmagnet.view.kit.TextView;
 
 public class RegisterPageController extends Controller {
     public RegisterPageController() {
@@ -24,7 +24,7 @@ public class RegisterPageController extends Controller {
 
         if (!InputValidator.isAlphanumeric(username)) {
             nav.pop();
-            nav.currentController().getView().setStatus("Username should only contain alphanumeric characters.", TextView.Color.RED);
+            nav.currentController().getView().setStatus(Painter.paint("Username should only contain alphanumeric characters.", Painter.Color.RED));
             return;
         }
 
@@ -39,7 +39,7 @@ public class RegisterPageController extends Controller {
 
         if (!password.equals(passwordCheck)) {
             nav.pop();
-            nav.currentController().getView().setStatus("Passwords do not match.", TextView.Color.RED);
+            nav.currentController().getView().setStatus(Painter.paint("Passwords do not match.", Painter.Color.RED));
             return;
         }
 
@@ -47,10 +47,10 @@ public class RegisterPageController extends Controller {
 
         if (registerSuccessful) {
             nav.pop();
-            nav.currentController().getView().setStatus(String.format("Registered %s successfully!", username), TextView.Color.GREEN);
+            nav.currentController().getView().setStatus(String.format(Painter.paint("Registered %s successfully!", Painter.Color.GREEN), username));
         } else {
             nav.pop();
-            nav.currentController().getView().setStatus(String.format("%s already exists. Choose another username.", username), TextView.Color.RED);
+            nav.currentController().getView().setStatus(String.format(Painter.paint("%s already exists. Choose another username.", Painter.Color.RED), username));
         }
     }
 
