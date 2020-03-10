@@ -7,7 +7,10 @@ import java.util.Date;
  */
 public class Comment {
     private Post post;
+
     private User author;
+
     private String content;
+    
     private Date timestamp;
 }
