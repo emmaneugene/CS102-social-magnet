@@ -1,21 +1,25 @@
 package com.g1t11.socialmagnet.view;
 
+import com.g1t11.socialmagnet.util.Painter;
+import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.kit.*;
-import com.g1t11.socialmagnet.view.kit.TextView.Color;
 
 public class LikeBarView implements View {
-    private TextView likeView;
-
-    private TextView dislikeView;
+    int likes;
+    
+    int dislikes;
 
     public LikeBarView(int likes, int dislikes) {
-        this.likeView = new TextView(countedWord(likes, "like", "likes"), Color.YELLOW);
-        this.dislikeView = new TextView(countedWord(likes, "dislike", "dislikes"), Color.PURPLE);
+        this.likes = likes;
+        this.dislikes = dislikes;
     }
 
     @Override
     public void render() {
-        System.out.printf("[ %s, %s ]\n", likeView, dislikeView);
+        String likesString = countedWord(likes, "like", "likes");
+        String dislikesString = countedWord(dislikes, "dislike", "dislikes");
+        String paintedTemplate = Painter.paintf("[ %r%s%r, %r%s%r ]\n", Color.YELLOW, Color.RESET, Color.PURPLE, Color.RESET);
+        System.out.printf(paintedTemplate, likesString, dislikesString);
     }
 
     private String countedWord(int count, String singular, String plural) {

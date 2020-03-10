@@ -3,9 +3,9 @@ package com.g1t11.socialmagnet.controller;
 import java.sql.Connection;
 import java.util.Objects;
 
+import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.MainMenuView;
-import com.g1t11.socialmagnet.view.kit.*;
 
 public class MainMenuController extends Controller {
     public MainMenuController(Connection conn) {
@@ -36,14 +36,9 @@ public class MainMenuController extends Controller {
                 nav.setFirstController(new WelcomePageController(conn));
                 break;
             default:
-                view.setStatus("Please enter a choice between 1 & 3!", TextView.Color.RED);
+                view.setStatus(Painter.paint("Please enter a choice between 1 & 3!", Painter.Color.RED));
                 break;
         }
-    }
-
-    @Override
-    public PageView getView() {
-        return view;
     }
 
     @Override
