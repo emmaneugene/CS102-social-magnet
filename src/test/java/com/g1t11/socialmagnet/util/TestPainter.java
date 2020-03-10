@@ -17,18 +17,18 @@ public class TestPainter {
 
     @Test
     public void testPaintf() {
-        String expected = "\u001b[31mred\u001b[32mgreen\u001b[34mblue\u001b[0m";
+        String expected = "\u001b[31mred\u001b[0m\u001b[32mgreen\u001b[0m\u001b[34mblue\u001b[0m";
         
-        String painted = Painter.paintf("%rred%rgreen%rblue", Color.RED, Color.GREEN, Color.BLUE);
+        String painted = Painter.paintf("%{red%}%{green%}%{blue%}", Color.RED, Color.GREEN, Color.BLUE);
 
         Assert.assertEquals(expected, painted);
     }
 
     @Test
     public void testPaintfWithStringFormat() {
-        String expected = "\u001b[31mred%.2f \u001b[34m%s\u001b[0m";
+        String expected = "\u001b[31mred%.2f\u001b[0m \u001b[34m%s\u001b[0m";
 
-        String painted = Painter.paintf("%rred%.2f %r%s", Color.RED, Color.BLUE);
+        String painted = Painter.paintf("%{red%.2f%} %{%s%}", Color.RED, Color.BLUE);
 
         Assert.assertEquals(expected, painted);
     }

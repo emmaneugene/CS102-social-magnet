@@ -38,20 +38,20 @@ public class Painter {
     /**
      * Paint a string by placing color markers within the format.
      * 
-     * @param formatText The string to be painted. Mark where color codes
-     * should be placed by placing <code>%r</code> format markers.
-     * @param colors A sequence of {@link Color} to be substituted positionally
-     * with the <code>%r</code> markers.
+     * @param formatText The string to be painted. Wrap sections of the string
+     * to be painted with %{ and %}.
+     * @param colors A sequence of {@link Color} to paint each section positionally.
      * @return A painted string with all original format code untouched.
      */
     public static String paintf(String formatText, Color ...colors) {
-        Object[] colorCodes = new String[colors.length];
+        Object[] colorCodes = new String[colors.length * 2];
         for (int i = 0; i < colors.length; i++) {
-            colorCodes[i] = map.get(colors[i]);
+            colorCodes[i * 2] = map.get(colors[i]);
+            colorCodes[i * 2 + 1] = map.get(Color.RESET);
         }
 
         String noFormatCodes = formatText.replaceAll("%", "%%");
-        String preparedForPaint = noFormatCodes.replaceAll("%%r", "%s");
-        return String.format(preparedForPaint, colorCodes) + map.get(Color.RESET);
+        String preparedForPaint = noFormatCodes.replaceAll("%%\\{", "%s").replaceAll("%%\\}", "%s");
+        return String.format(preparedForPaint, colorCodes);
     }
 }
