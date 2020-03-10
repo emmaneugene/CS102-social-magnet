@@ -8,6 +8,7 @@ import com.g1t11.socialmagnet.data.ThreadDAO;
 import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.NewsFeedView;
+import com.g1t11.socialmagnet.view.kit.TextView.Color;
 
 public class NewsFeedController extends Controller {
     private ThreadDAO threadDAO = new ThreadDAO(conn);
@@ -36,7 +37,7 @@ public class NewsFeedController extends Controller {
             int index = Character.getNumericValue(choice.charAt(1));
             nav.push(new ThreadController(conn, index, threads.get(index - 1)));
         } else {
-            view.setStatus("Please select a valid option.");
+            view.setStatus("Please select a valid option.", Color.RED);
         }
     }
 }

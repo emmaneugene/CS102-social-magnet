@@ -6,6 +6,7 @@ import java.util.Objects;
 import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.WelcomePageView;
 import com.g1t11.socialmagnet.view.kit.TextView;
+import com.g1t11.socialmagnet.view.kit.TextView.Color;
 
 public class WelcomePageController extends Controller {
     public WelcomePageController(Connection conn) {
@@ -32,7 +33,7 @@ public class WelcomePageController extends Controller {
                 nav.push(new LoginPageController(conn));
                 break;
             case "3":
-                System.out.println("Goodbye!");
+                System.out.println(new TextView("Goodbye!", Color.GREEN));
                 System.exit(0);
                 break;
             default:

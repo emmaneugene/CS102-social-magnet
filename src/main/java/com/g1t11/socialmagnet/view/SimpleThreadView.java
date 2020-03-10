@@ -13,11 +13,14 @@ public class SimpleThreadView implements View {
 
     private Thread thread;
 
+    private LikeBarView likeBarView;
+
     private List<CommentView> commentViews = new ArrayList<>(commentsToDisplay);
     
     public SimpleThreadView(int threadIndex, Thread thread) {
         this.threadIndex = threadIndex;
         this.thread = thread;
+        likeBarView = new LikeBarView(thread.getLikers().size(), thread.getDislikers().size());
         setComments();
     }
 
@@ -37,23 +40,12 @@ public class SimpleThreadView implements View {
     @Override
     public void render() {
         renderContent();
-        renderLikes();
+        likeBarView.render();
         renderComments();
     }
 
     private void renderContent() {
         System.out.printf("%d %s: %s\n", threadIndex, thread.getFromUsername(), thread.getContent());
-    }
-
-    private void renderLikes() {
-        int likes = thread.getLikers().size();
-        int dislikes = thread.getDislikers().size();
-        System.out.printf("[ %s, %s ]\n", countedWord(likes, "like", "likes"), countedWord(dislikes, "dislike", "dislikes"));
-    }
-
-    private String countedWord(int count, String singular, String plural) {
-        if (count == 1) return String.format("%d %s", count, singular);
-        return String.format("%d %s", count, plural);
     }
 
     private void renderComments() {
