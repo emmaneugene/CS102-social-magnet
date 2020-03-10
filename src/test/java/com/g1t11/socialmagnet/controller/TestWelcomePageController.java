@@ -1,6 +1,6 @@
 package com.g1t11.socialmagnet.controller;
 import com.g1t11.socialmagnet.TestApp;
-import com.g1t11.socialmagnet.view.kit.TextView;
+import com.g1t11.socialmagnet.util.Painter;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -59,7 +59,7 @@ public class TestWelcomePageController extends TestApp {
         WelcomePageController expected = new WelcomePageController();
         expected.setNavigation(app.nav);
         expected.updateView();
-        expected.getView().setStatus("Please enter a choice between 1 & 3!", TextView.Color.RED);
+        expected.getView().setStatus(Painter.paint("Please enter a choice between 1 & 3!", Painter.Color.RED));
 
         Assert.assertEquals(expected, app.nav.currentController());
     }
