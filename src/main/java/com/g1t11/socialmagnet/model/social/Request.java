@@ -8,6 +8,9 @@ package com.g1t11.socialmagnet.model.social;
  */
 public class Request {
     private User sender;
+
     private User recipient;
+
     private boolean accepted;
+    
 }
