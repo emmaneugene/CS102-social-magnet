@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class TextView implements View {
     public enum Color {
-        RESET,
+        NONE,
         BLACK,
         RED,
         GREEN,
@@ -19,7 +19,7 @@ public class TextView implements View {
     protected static final Map<Color, String> map = new HashMap<Color, String>() {
         private static final long serialVersionUID = 1L;
         {
-            put(Color.RESET, "\u001B[0m");
+            put(Color.NONE, "\u001B[0m");
             put(Color.BLACK, "\u001B[30m");
             put(Color.RED, "\u001b[31m");
             put(Color.GREEN, "\u001b[32m");
@@ -34,9 +34,17 @@ public class TextView implements View {
 
     boolean newLine;
 
-    public TextView(String text, boolean newLine) {
-        this.text = text;
+    public TextView(String text, boolean newLine, Color color) {
+        this.text = String.format("%s%s%s", map.get(color), text, map.get(Color.NONE));
         this.newLine = newLine;
+    }
+
+    public TextView(String text, boolean newLine) {
+        this(text, newLine, Color.NONE);
+    }
+
+    public TextView(String text, Color color) {
+        this(text, true, color);
     }
 
     public TextView(String text) {
@@ -47,13 +55,12 @@ public class TextView implements View {
         this("");
     }
 
-    public TextView(String text, Color color) {
-        this.text = String.format("%s%s%s", map.get(color), text, map.get(Color.RESET));
-        this.newLine = true;
-    }
-
     public String getText() {
         return text;
+    }
+
+    public void setText(String text, Color color) {
+        this.text = String.format("%s%s%s", map.get(color), text, map.get(Color.NONE));
     }
 
     public void setText(String text) {
