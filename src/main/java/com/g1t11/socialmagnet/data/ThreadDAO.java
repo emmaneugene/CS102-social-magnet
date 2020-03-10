@@ -29,17 +29,24 @@ public class ThreadDAO extends DAO {
      */
     public List<Thread> getNewsFeedThreads(User user, int limit) {
         ResultSet rs = null;
-        List<Thread> posts = new ArrayList<>();
+        List<Thread> threads = new ArrayList<>();
 
+        /**
+         * Left join appends all tagging information onto each post before
+         * filtering based on the WHERE and IN conditions.
+         * Therefore, for every post record, we can check if the current
+         * user is tagged. If so, then we set `is_tagged` to TRUE.
+         */
         String queryString = String.join(" ",
-            "SELECT post_id, author, recipient, content",
+            "SELECT post.post_id AS post_id, author, recipient, content,",
+            "IF(tag.tagged_user = ?, TRUE, FALSE) AS is_tagged",
             "FROM post",
+            "LEFT JOIN tag ON tag.post_id = post.post_id AND tagged_user = ?",
             "WHERE recipient = ?",
             "OR recipient IN",
             "(SELECT user_1 FROM friend WHERE user_2 = ?",
-            "UNION",
-            "SELECT user_2 FROM friend WHERE user_1 = ?)",
-            "OR post_id IN",
+            "UNION SELECT user_2 FROM friend WHERE user_1 = ?)",
+            "OR post.post_id IN",
             "(SELECT post_id FROM tag WHERE tagged_user = ?)",
             "ORDER BY posted_on DESC",
             "LIMIT ?"
@@ -50,23 +57,26 @@ public class ThreadDAO extends DAO {
             stmt.setString(2, user.getUsername());
             stmt.setString(3, user.getUsername());
             stmt.setString(4, user.getUsername());
-            stmt.setInt(5, limit);
+            stmt.setString(5, user.getUsername());
+            stmt.setString(6, user.getUsername());
+            stmt.setInt(7, limit);
 
             rs = stmt.executeQuery();
 
             while (rs.next()) {
-                Thread p = new Thread(rs.getInt("post_id"));
+                Thread thread = new Thread(
+                    rs.getInt("post_id"),
+                    rs.getString("author"),
+                    rs.getString("recipient"),
+                    rs.getString("content"),
+                    rs.getBoolean("is_tagged"));
 
-                p.setFromUsername(rs.getString("author"));
-                p.setToUsername(rs.getString("recipient"));
-                p.setContent(rs.getString("content"));
+                thread.setActualCommentsCount(getCommentsCount(thread));
+                thread.setComments(getCommentsLatestLast(thread, 3));
+                thread.setLikers(getLikers(thread));
+                thread.setDislikers(getDislikers(thread));
 
-                p.setActualCommentsCount(getCommentsCount(p));
-                p.setComments(getCommentsLatestLast(p, 3));
-                p.setLikers(getLikers(p));
-                p.setDislikers(getDislikers(p));
-
-                posts.add(p);
+                threads.add(thread);
             }
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
@@ -74,7 +84,7 @@ public class ThreadDAO extends DAO {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
 
-        return posts;
+        return threads;
     }
 
     public int getCommentsCount(Thread thread) {

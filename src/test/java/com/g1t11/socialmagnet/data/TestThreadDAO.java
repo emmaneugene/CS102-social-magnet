@@ -24,9 +24,9 @@ public class TestThreadDAO {
     public void testGetNewsFeedThreads() {
         List<Thread> expected = List.of(
             new Thread(10, "britney", "britney", "I'm so lonely..."),
-            new Thread(9,  "britney", "charlie", "We should meet up again! elijah @adsm"),
+            new Thread(9,  "britney", "charlie", "We should meet up again! elijah @adsm", true),
             new Thread(8,  "adam",    "elijah",  "Where did you go?"),
-            new Thread(7, "elijah", "elijah", "Had a great night with adam, britney, and @charlie"),
+            new Thread(7,  "elijah",  "elijah",  "Had a great night with adam, britney, and @charlie"),
             new Thread(5,  "charlie", "adam",    "Who are you talking to?")
         );
 
@@ -39,6 +39,7 @@ public class TestThreadDAO {
             Assert.assertEquals(exp.getFromUsername(), act.getFromUsername());
             Assert.assertEquals(exp.getToUsername(), act.getToUsername());
             Assert.assertEquals(exp.getContent(), act.getContent());
+            Assert.assertEquals(exp.isTagged(), act.isTagged());
         }
     }
 
