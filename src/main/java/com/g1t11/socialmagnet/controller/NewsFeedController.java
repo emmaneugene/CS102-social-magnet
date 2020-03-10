@@ -21,8 +21,7 @@ public class NewsFeedController extends Controller {
 
     @Override
     public void updateView() {
-        String currentUsername = nav.getSession().currentUser().getUsername();
-        threads = threadDAO.getNewsFeedThreads(currentUsername, 5);
+        threads = threadDAO.getNewsFeedThreads(nav.getSession().currentUser(), 5);
         ((NewsFeedView) view).setThreads(threads);
         view.render();
     }

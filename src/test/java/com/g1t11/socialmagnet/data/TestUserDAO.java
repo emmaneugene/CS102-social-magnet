@@ -18,15 +18,23 @@ public class TestUserDAO {
     }
 
     @Test
-    public void testGetUserAndFriends() {
-        User expectedUser = new User("adam",    "Adam Levine");
-        User friendOne    = new User("charlie", "Charlie Puth");
-        User friendTwo    = new User("elijah",  "Elijah Wood");
-        expectedUser.setFriends(List.of(friendOne, friendTwo));
+    public void testGetUser() {
+        User expectedUser = new User("adam", "Adam Levine");
 
         User user = userDAO.getUser("adam");
 
         Assert.assertNotNull(expectedUser);
         Assert.assertEquals(expectedUser, user);
+    }
+
+    @Test
+    public void testGetFriends() {
+        User friendOne    = new User("charlie", "Charlie Puth");
+        User friendTwo    = new User("elijah",  "Elijah Wood");
+        List<User> expected = List.of(friendOne, friendTwo);
+
+        List<User> friends = userDAO.getFriends(new User("adam", "Adam Levine"));
+
+        Assert.assertEquals(expected, friends);
     }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.g1t11.socialmagnet.model.social.Comment;
 import com.g1t11.socialmagnet.model.social.Thread;
+import com.g1t11.socialmagnet.model.social.User;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -20,7 +21,7 @@ public class TestThreadDAO {
     }
 
     @Test
-    public void testGetNewsFeedPosts() {
+    public void testGetNewsFeedThreads() {
         Thread post4 = new Thread(7, "elijah", "elijah", "Had a great night with adam, britney, and @charlie");
         post4.setComments(List.of(
             new Comment("britney", "How did you guys wake up so early??"),
@@ -36,14 +37,14 @@ public class TestThreadDAO {
             new Thread(5,  "charlie", "adam",    "Who are you talking to?")
         );
 
-        List<Thread> newsFeedPosts = postDAO.getNewsFeedThreads("elijah", 5);
+        List<Thread> newsFeedPosts = postDAO.getNewsFeedThreads(new User("elijah", "Elijah Wood"), 5);
 
         Assert.assertEquals(expected, newsFeedPosts);
     }
 
     @Test
     public void testGetCommentsCount() {
-        Assert.assertEquals(4, postDAO.getCommentsCount(7));
+        Assert.assertEquals(4, postDAO.getCommentsCount(new Thread(7)));
     }
 
     @Test
@@ -54,7 +55,7 @@ public class TestThreadDAO {
             new Comment("elijah",  "Maybe you shouldn't stay out too late!")
         );
 
-        List<Comment> comments = postDAO.getCommentsLatestLast(7, 3);
+        List<Comment> comments = postDAO.getCommentsLatestLast(new Thread(7), 3);
 
         Assert.assertEquals(expected, comments);
     }

@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.g1t11.socialmagnet.model.social.Comment;
 import com.g1t11.socialmagnet.model.social.Thread;
+import com.g1t11.socialmagnet.model.social.User;
 
 public class ThreadDAO extends DAO {
     public ThreadDAO(Connection conn) {
@@ -26,7 +27,7 @@ public class ThreadDAO extends DAO {
      * @param limit The number of latest posts to retrieve
      * @return Posts to be displayed on the news feed
      */
-    public List<Thread> getNewsFeedThreads(String username, int limit) {
+    public List<Thread> getNewsFeedThreads(User user, int limit) {
         ResultSet rs = null;
         List<Thread> posts = new ArrayList<>();
 
@@ -45,10 +46,10 @@ public class ThreadDAO extends DAO {
         );
 
         try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
-            stmt.setString(1, username);
-            stmt.setString(2, username);
-            stmt.setString(3, username);
-            stmt.setString(4, username);
+            stmt.setString(1, user.getUsername());
+            stmt.setString(2, user.getUsername());
+            stmt.setString(3, user.getUsername());
+            stmt.setString(4, user.getUsername());
             stmt.setInt(5, limit);
 
             rs = stmt.executeQuery();
@@ -60,8 +61,8 @@ public class ThreadDAO extends DAO {
                 p.setToUsername(rs.getString("recipient"));
                 p.setContent(rs.getString("content"));
 
-                p.setActualCommentsCount(getCommentsCount(p.getId()));
-                p.setComments(getCommentsLatestLast(p.getId(), 3));
+                p.setActualCommentsCount(getCommentsCount(p));
+                p.setComments(getCommentsLatestLast(p, 3));
 
                 posts.add(p);
             }
@@ -74,7 +75,7 @@ public class ThreadDAO extends DAO {
         return posts;
     }
 
-    public int getCommentsCount(int postId) {
+    public int getCommentsCount(Thread thread) {
         ResultSet rs = null;
         int commentCount = 0;
 
@@ -85,7 +86,7 @@ public class ThreadDAO extends DAO {
         );
 
         try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
-            stmt.setInt(1, postId);
+            stmt.setInt(1, thread.getId());
 
             rs = stmt.executeQuery();
             rs.next();
@@ -99,7 +100,7 @@ public class ThreadDAO extends DAO {
         return commentCount;
     }
 
-    public List<Comment> getCommentsLatestLast(int postId, int limit) {
+    public List<Comment> getCommentsLatestLast(Thread thread, int limit) {
         ResultSet rs = null;
         List<Comment> comments = new ArrayList<>();
 
@@ -113,7 +114,7 @@ public class ThreadDAO extends DAO {
         );
 
         try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
-            stmt.setInt(1, postId);
+            stmt.setInt(1, thread.getId());
             stmt.setInt(2, limit);
 
             rs = stmt.executeQuery();

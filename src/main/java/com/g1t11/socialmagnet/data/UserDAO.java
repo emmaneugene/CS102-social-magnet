@@ -35,7 +35,6 @@ public class UserDAO extends DAO {
 
             u.setUsername(username);
             u.setFullName(fullname);
-            u.setFriends(getFriends(u));
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
         } finally {
