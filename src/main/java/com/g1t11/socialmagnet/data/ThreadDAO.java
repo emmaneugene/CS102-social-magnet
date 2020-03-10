@@ -63,6 +63,8 @@ public class ThreadDAO extends DAO {
 
                 p.setActualCommentsCount(getCommentsCount(p));
                 p.setComments(getCommentsLatestLast(p, 3));
+                p.setLikers(getLikers(p));
+                p.setDislikers(getDislikers(p));
 
                 posts.add(p);
             }
@@ -105,8 +107,7 @@ public class ThreadDAO extends DAO {
         List<Comment> comments = new ArrayList<>();
 
         String queryString = String.join(" ",
-            "SELECT commenter, content",
-            "FROM",
+            "SELECT commenter, content FROM",
             "(SELECT * FROM comment WHERE post_id = ?",
             "ORDER BY commented_on DESC",
             "LIMIT ?) AS c",
@@ -134,5 +135,73 @@ public class ThreadDAO extends DAO {
         }
 
         return comments;
+    }
+
+    /**
+     * Returns all users who liked a thread in alphabetical order of their usernames
+     */
+    public List<User> getLikers(Thread thread) {
+        ResultSet rs = null;
+        List<User> likers = new ArrayList<>();
+
+        String queryString = String.join(" ",
+            "SELECT u.username AS username, fullname FROM",
+            "likes AS l JOIN user AS u",
+            "ON l.username = u.username",
+            "WHERE post_id = ?",
+            "ORDER BY username"
+        );
+
+        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+            stmt.setInt(1, thread.getId());
+
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                User u = new User(rs.getString("username"), rs.getString("fullname"));
+
+                likers.add(u);
+            }
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        } finally {
+            try { if (rs != null) rs.close(); } catch (SQLException e) {}
+        }
+
+        return likers;
+    }
+
+    /**
+     * Returns all users who disliked a thread in alphabetical order of their usernames
+     */
+    public List<User> getDislikers(Thread thread) {
+        ResultSet rs = null;
+        List<User> dislikers = new ArrayList<>();
+
+        String queryString = String.join(" ",
+            "SELECT u.username AS username, fullname FROM",
+            "dislikes AS d JOIN user AS u",
+            "ON d.username = u.username",
+            "WHERE post_id = ?",
+            "ORDER BY username"
+        );
+
+        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+            stmt.setInt(1, thread.getId());
+
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                User u = new User(rs.getString("username"), rs.getString("fullname"));
+
+                dislikers.add(u);
+            }
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        } finally {
+            try { if (rs != null) rs.close(); } catch (SQLException e) {}
+        }
+
+        return dislikers;
     }
 }

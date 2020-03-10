@@ -54,8 +54,7 @@ public class UserDAO extends DAO {
         List<User> friends = new ArrayList<>();
 
         String queryString = String.join(" ",
-            "SELECT username, fullname",
-            "FROM",
+            "SELECT username, fullname FROM",
             "(SELECT user_1 AS friend_name FROM friend WHERE user_2 = ?",
             "UNION",
             "SELECT user_2 FROM friend WHERE user_1 = ?) AS f",
