@@ -29,9 +29,9 @@ public class NewsFeedController extends Controller {
     
     @Override
     public void handleInput() {
-        PromptInput input = new PromptInput(Painter.paintf("[%{M%}]ain | [%{T%}]hread",
-            Painter.Color.BOLD,
-            Painter.Color.BOLD));
+        PromptInput input = new PromptInput(Painter.paintf("[[{M}]]ain | [[{T}]]hread",
+            Painter.Color.YELLOW,
+            Painter.Color.YELLOW));
         String choice = input.nextLine();
         if (choice.equals("M")) {
             nav.pop();

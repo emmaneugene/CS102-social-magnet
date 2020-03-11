@@ -49,7 +49,7 @@ public class ThreadView extends PageView {
     }
 
     protected void renderContent() {
-        String paintedTemplate = Painter.paintf("%{%d%} %{%s%}: %s\n", Painter.Color.BOLD, Painter.Color.BLUE);
+        String paintedTemplate = Painter.paintf("[{%d}] [{%s}]: %s\n", Painter.Color.YELLOW, Painter.Color.BLUE);
         System.out.printf(paintedTemplate, threadIndex, thread.getFromUsername(), thread.getContent());
     }
 
@@ -57,7 +57,7 @@ public class ThreadView extends PageView {
         System.out.println(Painter.paint("Who likes this post:", Painter.Color.GREEN));
         int index = 1;
 
-        String paintedTemplate = Painter.paintf("  %d. %s (%{%s%})\n", Painter.Color.BLUE);
+        String paintedTemplate = Painter.paintf("  %d. %s ([{%s}])\n", Painter.Color.BLUE);
         for (User liker : thread.getLikers()) {
             System.out.printf(paintedTemplate, index++, liker.getFullname(), liker.getUsername());
         }
@@ -67,7 +67,7 @@ public class ThreadView extends PageView {
         System.out.println(Painter.paint("Who dislikes this post:", Painter.Color.PURPLE));
         int index = 1;
 
-        String paintedTemplate = Painter.paintf("  %d. %s (%{%s%})\n", Painter.Color.BLUE);
+        String paintedTemplate = Painter.paintf("  %d. %s ([{%s}])\n", Painter.Color.BLUE);
         for (User disliker : thread.getDislikers()) {
             System.out.printf(paintedTemplate, index++, disliker.getFullname(), disliker.getUsername());
         }

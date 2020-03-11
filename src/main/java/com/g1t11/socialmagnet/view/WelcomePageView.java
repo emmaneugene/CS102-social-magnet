@@ -11,9 +11,9 @@ public class WelcomePageView extends PageView {
     private TextView greetingView;
 
     private final List<TextView> actionViews = List.of(
-        new TextView(Painter.paintf("%{1.%} Register", Painter.Color.BOLD)),
-        new TextView(Painter.paintf("%{2.%} Login", Painter.Color.BOLD)),
-        new TextView(Painter.paintf("%{3.%} Exit", Painter.Color.BOLD))
+        new TextView(Painter.paintf("[{1.}] Register", Painter.Color.YELLOW)),
+        new TextView(Painter.paintf("[{2.}] Login", Painter.Color.YELLOW)),
+        new TextView(Painter.paintf("[{3.}] Exit", Painter.Color.YELLOW))
     );
 
     String username;

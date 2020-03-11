@@ -19,7 +19,7 @@ public class CommentView implements View {
 
     @Override
     public void render() {
-        String paintedTemplate = Painter.paintf("  %d.%d %{%s%}: %s\n", Painter.Color.BLUE);
+        String paintedTemplate = Painter.paintf("  %d.%d [{%s}]: %s\n", Painter.Color.BLUE);
         System.out.printf(paintedTemplate, postIndex, index, comment.getUsername(), comment.getContent());
     }
 }

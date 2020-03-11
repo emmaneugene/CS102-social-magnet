@@ -46,7 +46,7 @@ public class SimpleThreadView implements View {
     }
 
     private void renderContent() {
-        String paintedTemplate = Painter.paintf("%{%d%} %{%s%}: %s\n", Painter.Color.BOLD, Painter.Color.BLUE);
+        String paintedTemplate = Painter.paintf("[{%d}] [{%s}]: %s\n", Painter.Color.YELLOW, Painter.Color.BLUE);
         System.out.printf(paintedTemplate, threadIndex, thread.getFromUsername(), thread.getContent());
     }
 
