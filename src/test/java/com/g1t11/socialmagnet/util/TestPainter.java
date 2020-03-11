@@ -17,11 +17,13 @@ public class TestPainter {
 
     @Test
     public void testPaintf() {
-        String expected = "[\u001b[31mred\u001b[0m\u001b[32mgreen\u001b[0m\u001b[34mblue\u001b[0m]";
-        
-        String painted = Painter.paintf("[[{red}][{green}][{blue}]]", Color.RED, Color.GREEN, Color.BLUE);
+        String expectedNestedColors = "[\u001b[31mred\u001b[32mgreen\u001b[0m\u001b[31mstill red\u001b[0m\u001b[34mblue\u001b[0m]";
+        String nestedColors = Painter.paintf("[[{red[{green}]still red}][{blue}]]", Color.RED, Color.GREEN, Color.BLUE);
+        Assert.assertEquals(expectedNestedColors, nestedColors);
 
-        Assert.assertEquals(expected, painted);
+        String expectedNestedColorsWithinBold = "\u001b[32m\u001b[1mbolded and green\u001b[0m\u001b[34m\u001b[1mbolded and blue\u001b[0m\u001b[0m\u001b[31msomething red\u001b[0m";
+        String nestedColorsWithinBold = Painter.paintf("[{[{bolded and green}][{bolded and blue}]}][{something red}]", Color.BOLD, Color.GREEN, Color.BLUE, Color.RED);
+        Assert.assertEquals(expectedNestedColorsWithinBold, nestedColorsWithinBold);
     }
 
     @Test
