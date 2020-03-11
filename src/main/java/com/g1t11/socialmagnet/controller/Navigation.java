@@ -7,7 +7,7 @@ import java.util.List;
 import com.g1t11.socialmagnet.data.Session;
 
 public class Navigation {
-    private Session session;
+    private Session sess;
 
     /**
      * Stack of <code>Controller</code> instances that represent the current
@@ -21,11 +21,11 @@ public class Navigation {
     private List<Controller> navigationStack = new ArrayList<>();
 
     public Navigation(Connection conn) {
-        session = new Session(conn);
+        sess = new Session(conn);
     }
 
-    public Session getSession() {
-        return session;
+    public Session session() {
+        return sess;
     }
 
     private void initControllerNav(Controller controller) {

@@ -45,7 +45,7 @@ public class RegisterPageController extends Controller {
             return;
         }
 
-        boolean registerSuccessful = nav.getSession().register(username, fullName, password);
+        boolean registerSuccessful = nav.session().register(username, fullName, password);
 
         if (registerSuccessful) {
             nav.pop();

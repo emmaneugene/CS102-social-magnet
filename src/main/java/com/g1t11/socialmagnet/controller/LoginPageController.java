@@ -26,7 +26,7 @@ public class LoginPageController extends Controller {
         input.setPrompt("Enter your password");
         String password = input.nextLine();
 
-        boolean loginSuccessful = nav.getSession().login(username, password);
+        boolean loginSuccessful = nav.session().login(username, password);
         if (loginSuccessful) {
             nav.push(new MainMenuController(conn));
         } else {

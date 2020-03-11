@@ -292,8 +292,8 @@ public class ThreadDAO extends DAO {
 
     public void replyToThread(Thread thread, User user, String content) {
         String queryString = String.join(" ",
-            "INSERT INTO comment (post_id, commenter, commented_on, content)",
-            "VALUES (?, ?, ?, ?)"
+            "INSERT INTO comment (post_id, commenter, commented_on, content) VALUES",
+            "(?, ?, ?, ?)"
         );
 
         try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {

@@ -16,7 +16,7 @@ public class MainMenuController extends Controller {
     @Override
     public void updateView() {
         // Inject an updated full name into the view
-        String fullname = nav.getSession().currentUser().getFullname();
+        String fullname = nav.session().currentUser().getFullname();
         ((MainMenuView) view).setFullname(fullname);
         view.render();
     }
@@ -32,7 +32,7 @@ public class MainMenuController extends Controller {
             case "3":
             case "4":
             case "5":
-                nav.getSession().logout();
+                nav.session().logout();
                 nav.setFirstController(new WelcomePageController(conn));
                 break;
             default:

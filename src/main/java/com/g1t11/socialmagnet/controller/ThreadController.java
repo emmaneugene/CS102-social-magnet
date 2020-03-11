@@ -11,6 +11,8 @@ import com.g1t11.socialmagnet.view.ThreadView;
 public class ThreadController extends Controller {
     private ThreadDAO threadDAO = new ThreadDAO(conn);
 
+    private int threadIndex;
+
     private Thread thread;
 
     public ThreadController(Connection conn) {
@@ -21,12 +23,13 @@ public class ThreadController extends Controller {
 
     public ThreadController(Connection conn, int threadIndex, Thread thread) {
         super(conn);
+        this.threadIndex = threadIndex;
         this.thread = thread;
-        view = new ThreadView(threadIndex, thread);
     }
 
     @Override
     public void updateView() {
+        view = new ThreadView(threadIndex, thread);
         view.render();
     }
     
@@ -35,17 +38,10 @@ public class ThreadController extends Controller {
         String promptText;
         if (isRemovable() || thread.isTagged()) {
             promptText = Painter.paintf("[[{M}]]ain | [[{K}]]ill | [[{R}]]eply | [[{L}]]ike | [[{D}]]islike",
-                Painter.Color.YELLOW,
-                Painter.Color.YELLOW,
-                Painter.Color.YELLOW,
-                Painter.Color.YELLOW,
-                Painter.Color.YELLOW);
+                Painter.Color.YELLOW, Painter.Color.YELLOW, Painter.Color.YELLOW, Painter.Color.YELLOW, Painter.Color.YELLOW);
         } else {
             promptText = Painter.paintf("[[{M}]]ain | [[{R}]]eply | [[{L}]]ike | [[{D}]]islike",
-                Painter.Color.YELLOW,
-                Painter.Color.YELLOW,
-                Painter.Color.YELLOW,
-                Painter.Color.YELLOW);
+                Painter.Color.YELLOW, Painter.Color.YELLOW, Painter.Color.YELLOW, Painter.Color.YELLOW);
         }
         PromptInput input = new PromptInput(promptText);
         String choice = input.nextLine();
@@ -56,15 +52,12 @@ public class ThreadController extends Controller {
             case "K":
                 handleKill();
                 break;
+            case "R":
+                handleReply();
+                break;
             default:
                 view.setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
         }
-    }
-
-    private boolean isRemovable() {
-        String currentUsername = nav.getSession().currentUser().getUsername();
-        return thread.getFromUsername().equals(currentUsername) 
-            || thread.getToUsername().equals(currentUsername);
     }
 
     private void handleKill() {
@@ -73,11 +66,26 @@ public class ThreadController extends Controller {
             return;
         }
         if (isRemovable()) {
-            threadDAO.deleteThread(thread, nav.getSession().currentUser());
+            threadDAO.deleteThread(thread, nav.session().currentUser());
         } else if (thread.isTagged()) {
-            threadDAO.removeTag(thread, nav.getSession().currentUser());
+            threadDAO.removeTag(thread, nav.session().currentUser());
         }
         nav.pop();
         nav.currentController().view.setStatus(Painter.paint("Successfully killed post!", Painter.Color.GREEN));
+    }
+
+    private boolean isRemovable() {
+        String currentUsername = nav.session().currentUser().getUsername();
+        return thread.getFromUsername().equals(currentUsername) 
+            || thread.getToUsername().equals(currentUsername);
+    }
+
+    private void handleReply() {
+        // Refresh the view to remove the previous prompt
+        updateView();
+        PromptInput input = new PromptInput("Enter your reply");
+        String reply = input.nextLine();
+        threadDAO.replyToThread(thread, nav.session().currentUser(), reply);
+        thread = threadDAO.getThread(thread.getId(), nav.session().currentUser());
     }
 }
