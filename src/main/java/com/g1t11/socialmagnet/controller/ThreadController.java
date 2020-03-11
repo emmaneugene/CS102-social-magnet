@@ -3,6 +3,7 @@ package com.g1t11.socialmagnet.controller;
 import java.sql.Connection;
 
 import com.g1t11.socialmagnet.model.social.Thread;
+import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.ThreadView;
 
@@ -48,7 +49,7 @@ public class ThreadController extends Controller {
                     break;
                 }
             default:
-                view.setStatus("Please select a valid option.");
+                view.setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
         }
     }
 

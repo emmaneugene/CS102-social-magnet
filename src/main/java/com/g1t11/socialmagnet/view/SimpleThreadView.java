@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.g1t11.socialmagnet.model.social.Thread;
+import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.view.kit.*;
 
 public class SimpleThreadView implements View {
@@ -45,7 +46,8 @@ public class SimpleThreadView implements View {
     }
 
     private void renderContent() {
-        System.out.printf("%d %s: %s\n", threadIndex, thread.getFromUsername(), thread.getContent());
+        String paintedTemplate = Painter.paintf("%{%d%} %{%s%}: %s\n", Painter.Color.BOLD, Painter.Color.BLUE);
+        System.out.printf(paintedTemplate, threadIndex, thread.getFromUsername(), thread.getContent());
     }
 
     private void renderComments() {

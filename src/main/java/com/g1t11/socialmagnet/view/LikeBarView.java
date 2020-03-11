@@ -18,7 +18,9 @@ public class LikeBarView implements View {
     public void render() {
         String likesString = countedWord(likes, "like", "likes");
         String dislikesString = countedWord(dislikes, "dislike", "dislikes");
-        String paintedTemplate = Painter.paintf("[ %{%s%}, %{%s%} ]\n", Color.YELLOW, Color.PURPLE);
+        String paintedTemplate = Painter.paintf("[ %{%s%}, %{%s%} ]\n",
+            likes > 0 ? Color.GREEN : Color.RESET,
+            dislikes > 0 ? Color.PURPLE : Color.RESET);
         System.out.printf(paintedTemplate, likesString, dislikesString);
     }
 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.model.social.User;
+import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.view.kit.*;
 
 public class ThreadView extends PageView {
@@ -48,22 +49,27 @@ public class ThreadView extends PageView {
     }
 
     protected void renderContent() {
-        System.out.printf("%d %s: %s\n", threadIndex, thread.getFromUsername(), thread.getContent());
+        String paintedTemplate = Painter.paintf("%{%d%} %{%s%}: %s\n", Painter.Color.BOLD, Painter.Color.BLUE);
+        System.out.printf(paintedTemplate, threadIndex, thread.getFromUsername(), thread.getContent());
     }
 
     private void renderLikes() {
-        System.out.println("Who likes this post:");
+        System.out.println(Painter.paint("Who likes this post:", Painter.Color.GREEN));
         int index = 1;
+
+        String paintedTemplate = Painter.paintf("  %d. %s (%{%s%})\n", Painter.Color.BLUE);
         for (User liker : thread.getLikers()) {
-            System.out.printf("  %d. %s (%s)\n", index++, liker.getFullname(), liker.getUsername());
+            System.out.printf(paintedTemplate, index++, liker.getFullname(), liker.getUsername());
         }
     }
 
     private void renderDislikes() {
-        System.out.println("Who dislikes this post:");
+        System.out.println(Painter.paint("Who dislikes this post:", Painter.Color.PURPLE));
         int index = 1;
+
+        String paintedTemplate = Painter.paintf("  %d. %s (%{%s%})\n", Painter.Color.BLUE);
         for (User disliker : thread.getDislikers()) {
-            System.out.printf("  %d. %s (%s)\n", index++, disliker.getFullname(), disliker.getUsername());
+            System.out.printf(paintedTemplate, index++, disliker.getFullname(), disliker.getUsername());
         }
     }
 

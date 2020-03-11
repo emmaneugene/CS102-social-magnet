@@ -13,7 +13,8 @@ public class Painter {
         BLUE,
         PURPLE,
         CYAN,
-        WHITE
+        WHITE,
+        BOLD
     }
 
     protected static final Map<Color, String> map = new HashMap<Color, String>() {
@@ -28,6 +29,7 @@ public class Painter {
             put(Color.PURPLE, "\u001b[35m");
             put(Color.CYAN, "\u001b[36m");
             put(Color.WHITE, "\u001b[37m");
+            put(Color.BOLD, "\u001b[1m");
         }
     };
 

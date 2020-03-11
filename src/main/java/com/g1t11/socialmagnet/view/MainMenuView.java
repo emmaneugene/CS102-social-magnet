@@ -3,17 +3,18 @@ package com.g1t11.socialmagnet.view;
 import java.util.List;
 import java.util.Objects;
 
+import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.view.kit.*;
 
 public class MainMenuView extends PageView {
     private TextView greetingView;
 
     private final List<TextView> actionViews = List.of(
-        new TextView("1. News Feed"),
-        new TextView("2. My Wall"),
-        new TextView("3. My Friends"),
-        new TextView("4. City Farmers"),
-        new TextView("5. Logout")
+        new TextView(Painter.paintf("%{1.%} News Feed", Painter.Color.BOLD)),
+        new TextView(Painter.paintf("%{2.%} My Wall", Painter.Color.BOLD)),
+        new TextView(Painter.paintf("%{3.%} My Friends", Painter.Color.BOLD)),
+        new TextView(Painter.paintf("%{4.%} City Farmers", Painter.Color.BOLD)),
+        new TextView(Painter.paintf("%{5.%} Logout", Painter.Color.BOLD))
     );
 
     String fullname;

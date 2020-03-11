@@ -4,15 +4,16 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
+import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.view.kit.*;
 
 public class WelcomePageView extends PageView {
     private TextView greetingView;
 
     private final List<TextView> actionViews = List.of(
-        new TextView("1. Register"),
-        new TextView("2. Login"),
-        new TextView("3. Exit")
+        new TextView(Painter.paintf("%{1.%} Register", Painter.Color.BOLD)),
+        new TextView(Painter.paintf("%{2.%} Login", Painter.Color.BOLD)),
+        new TextView(Painter.paintf("%{3.%} Exit", Painter.Color.BOLD))
     );
 
     String username;
