@@ -21,6 +21,25 @@ public class TestThreadDAO {
     }
 
     @Test
+    public void testGetThread() {
+        // Testing from the perspective of adam
+        Thread expected = new Thread(7, "elijah", "elijah", "Had a great night with adam, britney, and @charlie", true);
+        expected.setActualCommentsCount(4);
+        expected.setComments(List.of(
+            new Comment("britney", "How did you guys wake up so early??"),
+            new Comment("adam", "Early bird gets the worm!"),
+            new Comment("elijah", "Maybe you shouldn't stay out too late!")
+        ));
+        expected.setLikers(List.of(
+            new User("britney", "Britney Spears")
+        ));
+
+        Thread thread = threadDAO.getThread(7, new User("adam", "Adam Levine"));
+
+        Assert.assertEquals(expected, thread);
+    }
+
+    @Test
     public void testGetNewsFeedThreads() {
         List<Thread> expected = List.of(
             new Thread(10, "britney", "britney", "I'm so lonely..."),

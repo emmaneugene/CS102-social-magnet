@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.g1t11.socialmagnet.model.social.Comment;
@@ -14,6 +16,46 @@ import com.g1t11.socialmagnet.model.social.User;
 public class ThreadDAO extends DAO {
     public ThreadDAO(Connection conn) {
         super(conn);
+    }
+
+    public Thread getThread(int id, User user) {
+        ResultSet rs = null;
+        Thread thread = null;
+
+        String queryString = String.join(" ",
+            "SELECT post.post_id AS post_id, author, recipient, content,",
+            "IF(tag.tagged_user = ?, TRUE, FALSE) AS is_tagged",
+            "FROM post",
+            "LEFT JOIN tag ON tag.post_id = post.post_id AND tagged_user = ?",
+            "WHERE post.post_id = ?"
+        );
+
+        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+            stmt.setString(1, user.getUsername());
+            stmt.setString(2, user.getUsername());
+            stmt.setInt(3, id);
+
+            rs = stmt.executeQuery();
+            rs.next();
+
+            thread = new Thread(
+                rs.getInt("post_id"),
+                rs.getString("author"),
+                rs.getString("recipient"),
+                rs.getString("content"),
+                rs.getBoolean("is_tagged"));    
+
+            thread.setActualCommentsCount(getCommentsCount(thread));
+            thread.setComments(getCommentsLatestLast(thread, 3));
+            thread.setLikers(getLikers(thread));
+            thread.setDislikers(getDislikers(thread));
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        } finally {
+            try { if (rs != null) rs.close(); } catch (SQLException e) {}
+        }
+
+        return thread;
     }
 
     /**
@@ -241,6 +283,24 @@ public class ThreadDAO extends DAO {
             stmt.setInt(1, thread.getId());
             stmt.setString(2, user.getUsername());
             stmt.setString(3, user.getUsername());
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        }
+    }
+
+    public void replyToThread(Thread thread, User user, String content) {
+        String queryString = String.join(" ",
+            "INSERT INTO comment (post_id, commenter, commented_on, content)",
+            "VALUES (?, ?, ?, ?)"
+        );
+
+        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+            stmt.setInt(1, thread.getId());
+            stmt.setString(2, user.getUsername());
+            stmt.setTimestamp(3, new Timestamp(new Date().getTime()));
+            stmt.setString(4, content);
 
             stmt.executeUpdate();
         } catch (SQLException e) {
