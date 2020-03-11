@@ -1,6 +1,7 @@
 package com.g1t11.socialmagnet.controller;
 
 import java.sql.Connection;
+import java.util.Arrays;
 
 import com.g1t11.socialmagnet.data.ThreadDAO;
 import com.g1t11.socialmagnet.model.social.Thread;
@@ -33,11 +34,12 @@ public class ThreadController extends Controller {
     @Override
     public void handleInput() {
         String promptText;
-        // "[M]ain | [K]ill | [R]eply | [L]ike | [D]islike >"
+        Painter.Color boldColors[] = new Painter.Color[5];
+        Arrays.fill(boldColors, Painter.Color.BOLD);
         if (isRemovable() || thread.isTagged()) {
-            promptText = "[M]ain | [K]ill | [R]eply | [L]ike | [D]islike";
+            promptText = Painter.paintf("[%{M%}]ain | [%{K%}]ill | [%{R%}]eply | [%{L%}]ike | [%{D%}]islike", boldColors);
         } else {
-            promptText = "[M]ain | [R]eply | [L]ike | [D]islike";
+            promptText = Painter.paintf("[%{M%}]ain | [%{R%}]eply | [%{L%}]ike | [%{D%}]islike", boldColors);
         }
         PromptInput input = new PromptInput(promptText);
         String choice = input.nextLine();
