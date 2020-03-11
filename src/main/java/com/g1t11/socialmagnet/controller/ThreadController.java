@@ -73,11 +73,13 @@ public class ThreadController extends Controller {
         }
         if (isRemovable()) {
             threadDAO.deleteThread(thread, nav.session().currentUser());
+            nav.pop();
+            nav.currentController().view.setStatus(Painter.paint("Successfully removed post!", Painter.Color.GREEN));
         } else if (thread.isTagged()) {
             threadDAO.removeTag(thread, nav.session().currentUser());
+            nav.pop();
+            nav.currentController().view.setStatus(Painter.paint("Successfully untagged post!", Painter.Color.GREEN));
         }
-        nav.pop();
-        nav.currentController().view.setStatus(Painter.paint("Successfully killed post!", Painter.Color.GREEN));
     }
 
     private boolean isRemovable() {

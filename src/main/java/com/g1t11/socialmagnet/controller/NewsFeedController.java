@@ -38,6 +38,8 @@ public class NewsFeedController extends Controller {
         } else if (threads.size() > 0 && choice.matches(String.format("T[1-%d]", threads.size()))) {
             int index = Character.getNumericValue(choice.charAt(1));
             nav.push(new ThreadController(conn, index, threads.get(index - 1)));
+        } else if (choice.matches("T.*")) {
+            view.setStatus(Painter.paint("Use T<id> to select a thread.", Painter.Color.RED));
         } else {
             view.setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
         }
