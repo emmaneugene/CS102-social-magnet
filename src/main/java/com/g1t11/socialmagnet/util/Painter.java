@@ -39,7 +39,7 @@ public class Painter {
      * Paint a string by placing color markers within the format.
      * 
      * @param formatText The string to be painted. Wrap sections of the string
-     * to be painted with {{ and }}.
+     * to be painted with [{ and }].
      * @param colors A sequence of {@link Color} to paint each section positionally.
      * @return A painted string with all original format code untouched.
      */
@@ -51,7 +51,7 @@ public class Painter {
         }
 
         String noFormatCodes = formatText.replaceAll("%", "%%");
-        String preparedForPaint = noFormatCodes.replaceAll("\\{\\{", "%s").replaceAll("\\}\\}", "%s");
+        String preparedForPaint = noFormatCodes.replaceAll("\\[\\{", "%s").replaceAll("\\}\\]", "%s");
         return String.format(preparedForPaint, colorCodes);
     }
 }
