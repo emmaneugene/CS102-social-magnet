@@ -2,12 +2,15 @@ package com.g1t11.socialmagnet.controller;
 
 import java.sql.Connection;
 
+import com.g1t11.socialmagnet.data.ThreadDAO;
 import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.ThreadView;
 
 public class ThreadController extends Controller {
+    private ThreadDAO threadDAO = new ThreadDAO(conn);
+
     private Thread thread;
 
     public ThreadController(Connection conn) {
@@ -31,7 +34,7 @@ public class ThreadController extends Controller {
     public void handleInput() {
         String promptText;
         // "[M]ain | [K]ill | [R]eply | [L]ike | [D]islike >"
-        if (isKillable()) {
+        if (isRemovable() || thread.isTagged()) {
             promptText = "[M]ain | [K]ill | [R]eply | [L]ike | [D]islike";
         } else {
             promptText = "[M]ain | [R]eply | [L]ike | [D]islike";
@@ -43,20 +46,30 @@ public class ThreadController extends Controller {
                 nav.pop(2);
                 break;
             case "K":
-                if (isKillable()) {
-                    view.setStatus("KILLING!!");
-                    nav.pop();
-                    break;
-                }
+                handleKill();
+                break;
             default:
                 view.setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
         }
     }
 
-    private boolean isKillable() {
+    private boolean isRemovable() {
         String currentUsername = nav.getSession().currentUser().getUsername();
         return thread.getFromUsername().equals(currentUsername) 
-            || thread.getToUsername().equals(currentUsername) 
-            || thread.isTagged();
+            || thread.getToUsername().equals(currentUsername);
+    }
+
+    private void handleKill() {
+        if (!isRemovable() && !thread.isTagged()) {
+            view.setStatus(Painter.paint("This post is not killable.", Painter.Color.RED));
+            return;
+        }
+        if (isRemovable()) {
+            threadDAO.deleteThread(thread, nav.getSession().currentUser());
+        } else if (thread.isTagged()) {
+            threadDAO.removeTag(thread, nav.getSession().currentUser());
+        }
+        nav.pop();
+        nav.currentController().view.setStatus(Painter.paint("Successfully killed post!", Painter.Color.GREEN));
     }
 }

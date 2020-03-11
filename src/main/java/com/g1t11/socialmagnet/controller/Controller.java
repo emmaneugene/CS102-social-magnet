@@ -28,14 +28,6 @@ public abstract class Controller {
     public abstract void updateView();
 
     public abstract void handleInput();
-    /**
-     * All <code>Controller</code> objects have an associated <code>PageView</code>.
-     * 
-     * @see PageView
-     */
-    public PageView getView() {
-        return view;
-    };
 
     public void setNavigation(Navigation nav) {
         this.nav = nav;

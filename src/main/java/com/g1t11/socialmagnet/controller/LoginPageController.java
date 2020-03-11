@@ -31,7 +31,7 @@ public class LoginPageController extends Controller {
             nav.push(new MainMenuController(conn));
         } else {
             nav.pop();
-            nav.currentController().getView().setStatus(Painter.paint("Login error! Please try again.", Painter.Color.RED));
+            nav.currentController().view.setStatus(Painter.paint("Login error! Please try again.", Painter.Color.RED));
         }
     }
 

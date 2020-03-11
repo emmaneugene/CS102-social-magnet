@@ -26,7 +26,7 @@ public class RegisterPageController extends Controller {
 
         if (!InputValidator.isAlphanumeric(username)) {
             nav.pop();
-            nav.currentController().getView().setStatus(Painter.paint("Username should only contain alphanumeric characters.", Painter.Color.RED));
+            nav.currentController().view.setStatus(Painter.paint("Username should only contain alphanumeric characters.", Painter.Color.RED));
             return;
         }
 
@@ -41,7 +41,7 @@ public class RegisterPageController extends Controller {
 
         if (!password.equals(passwordCheck)) {
             nav.pop();
-            nav.currentController().getView().setStatus(Painter.paint("Passwords do not match.", Painter.Color.RED));
+            nav.currentController().view.setStatus(Painter.paint("Passwords do not match.", Painter.Color.RED));
             return;
         }
 
@@ -49,10 +49,10 @@ public class RegisterPageController extends Controller {
 
         if (registerSuccessful) {
             nav.pop();
-            nav.currentController().getView().setStatus(String.format(Painter.paint("Registered %s successfully!", Painter.Color.GREEN), username));
+            nav.currentController().view.setStatus(String.format(Painter.paint("Registered %s successfully!", Painter.Color.GREEN), username));
         } else {
             nav.pop();
-            nav.currentController().getView().setStatus(String.format(Painter.paint("%s already exists. Choose another username.", Painter.Color.RED), username));
+            nav.currentController().view.setStatus(String.format(Painter.paint("%s already exists. Choose another username.", Painter.Color.RED), username));
         }
     }
 

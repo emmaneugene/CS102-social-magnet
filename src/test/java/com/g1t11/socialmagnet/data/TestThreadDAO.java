@@ -84,4 +84,18 @@ public class TestThreadDAO {
 
         Assert.assertEquals(expected, dislikers);
     }
+
+    @Test
+    public void testRemoveTag() {
+        Thread thread = new Thread(7);
+        User user = new User("adam", "Adam Levine");
+        threadDAO.removeTag(thread, user);
+    }
+
+    @Test
+    public void testDeletePost() {
+        Thread thread = new Thread(8);
+        User user = new User("adam", "Adam Levine");
+        threadDAO.deleteThread(thread, user);
+    }
 }

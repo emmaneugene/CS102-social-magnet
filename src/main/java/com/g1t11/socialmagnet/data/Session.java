@@ -106,8 +106,6 @@ public class Session {
      * @return True if the user was added successfullly.
      */
     public boolean addUser(String username, String fullname, String pwd) {
-        ResultSet rs = null;
-
         String queryString = String.join(" ",
             "INSERT INTO user (username, fullname, pwd) VALUES",
             "(?, ?, ?)"
@@ -124,8 +122,6 @@ public class Session {
             if (e.getErrorCode() == 1062) return false;
 
             System.err.println("SQLException: " + e.getMessage());
-        } finally {
-            try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
 
         return true;

@@ -214,4 +214,37 @@ public class ThreadDAO extends DAO {
 
         return dislikers;
     }
+
+    public void removeTag(Thread thread, User user) {
+        String queryString = String.join(" ",
+            "DELETE FROM tag WHERE",
+            "post_id = ? AND tagged_user = ?"
+        );
+
+        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+            stmt.setInt(1, thread.getId());
+            stmt.setString(2, user.getUsername());
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        }
+    }
+
+    public void deleteThread(Thread thread, User user) {
+        String queryString = String.join(" ",
+            "DELETE FROM post",
+            "WHERE post_id = ? AND (author = ? OR recipient = ?)"
+        );
+
+        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+            stmt.setInt(1, thread.getId());
+            stmt.setString(2, user.getUsername());
+            stmt.setString(3, user.getUsername());
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        }
+    }
 }

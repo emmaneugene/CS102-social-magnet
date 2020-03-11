@@ -59,7 +59,7 @@ public class TestWelcomePageController extends TestApp {
         WelcomePageController expected = new WelcomePageController(app.db.connection());
         expected.setNavigation(app.nav);
         expected.updateView();
-        expected.getView().setStatus(Painter.paint("Please enter a choice between 1 & 3!", Painter.Color.RED));
+        expected.view.setStatus(Painter.paint("Please enter a choice between 1 & 3!", Painter.Color.RED));
 
         Assert.assertEquals(expected, app.nav.currentController());
     }

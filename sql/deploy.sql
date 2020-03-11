@@ -29,7 +29,7 @@ CREATE TABLE tag (
     post_id     INT          NOT NULL,
     tagged_user VARCHAR(255) NOT NULL,
     PRIMARY KEY (post_id,     tagged_user),
-    FOREIGN KEY (post_id)     REFERENCES post (post_id),
+    FOREIGN KEY (post_id)     REFERENCES post (post_id) ON DELETE CASCADE,
     FOREIGN KEY (tagged_user) REFERENCES user (username)
 );
 
@@ -48,7 +48,7 @@ CREATE TABLE comment (
     commented_on DATETIME     NOT NULL,
     content      TEXT(65535)  NOT NULL,
     PRIMARY KEY (comment_id),
-    FOREIGN KEY (post_id)   REFERENCES post (post_id),
+    FOREIGN KEY (post_id)   REFERENCES post (post_id) ON DELETE CASCADE,
     FOREIGN KEY (commenter) REFERENCES user (username)
 );
 
@@ -57,7 +57,7 @@ CREATE TABLE likes (
     post_id  INT          NOT NULL,
     PRIMARY KEY (username, post_id),
     FOREIGN KEY (username) REFERENCES user (username),
-    FOREIGN KEY (post_id)  REFERENCES post (post_id)
+    FOREIGN KEY (post_id)  REFERENCES post (post_id) ON DELETE CASCADE
 );
 
 CREATE TABLE dislikes (
@@ -65,13 +65,13 @@ CREATE TABLE dislikes (
     post_id  INT          NOT NULL,
     PRIMARY KEY (username, post_id),
     FOREIGN KEY (username) REFERENCES user (username),
-    FOREIGN KEY (post_id)  REFERENCES post (post_id)
+    FOREIGN KEY (post_id)  REFERENCES post (post_id) ON DELETE CASCADE
 );
 
 CREATE TABLE requests (
     sender    VARCHAR(255) NOT NULL,
     recipient VARCHAR(255) NOT NULL,
-    PRIMARY KEY (sender,    recipient),
+    PRIMARY KEY (sender, recipient),
     FOREIGN KEY (sender)    REFERENCES user (username),
     FOREIGN KEY (recipient) REFERENCES user (username)
 );
