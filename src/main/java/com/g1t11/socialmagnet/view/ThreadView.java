@@ -46,6 +46,7 @@ public class ThreadView extends PageView {
         renderLikes();
         System.out.println();
         renderDislikes();
+        System.out.println();
     }
 
     protected void renderContent() {

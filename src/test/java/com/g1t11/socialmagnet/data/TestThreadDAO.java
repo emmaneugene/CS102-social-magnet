@@ -104,11 +104,23 @@ public class TestThreadDAO {
         Assert.assertEquals(expected, dislikers);
     }
 
+    /**
+     * When performing destructive tests on the database, be sure to not affect
+     * records that are used for regular tests.
+     */
     @Test
-    public void testRemoveTag() {
-        Thread thread = new Thread(7);
-        User user = new User("adam", "Adam Levine");
+    public void testAddAndRemoveTag() {
+        Thread thread = new Thread(8);
+        User user = new User("elijah", "Elijah Wood");
+        Thread retrieved;
+
+        threadDAO.addTag(thread, user);
+        retrieved = threadDAO.getThread(8, user);
+        Assert.assertTrue(retrieved.isTagged());
+
         threadDAO.removeTag(thread, user);
+        retrieved = threadDAO.getThread(8, user);
+        Assert.assertFalse(retrieved.isTagged());
     }
 
     @Test
@@ -116,5 +128,21 @@ public class TestThreadDAO {
         Thread thread = new Thread(8);
         User user = new User("adam", "Adam Levine");
         threadDAO.deleteThread(thread, user);
+    }
+
+    @Test
+    public void testLikeThread() {
+        Thread thread = new Thread(8);
+        User user = new User("adam", "Adam Levine");
+
+        threadDAO.likeThread(thread, user);
+    }
+
+    @Test
+    public void testDislikeThread() {
+        Thread thread = new Thread(8);
+        User user = new User("adam", "Adam Levine");
+
+        threadDAO.dislikeThread(thread, user);
     }
 }

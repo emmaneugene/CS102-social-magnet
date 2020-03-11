@@ -55,6 +55,12 @@ public class ThreadController extends Controller {
             case "R":
                 handleReply();
                 break;
+            case "L":
+                handleLike();
+                break;
+            case "D":
+                handleDislike();
+                break;
             default:
                 view.setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
         }
@@ -86,6 +92,16 @@ public class ThreadController extends Controller {
         PromptInput input = new PromptInput("Enter your reply");
         String reply = input.nextLine();
         threadDAO.replyToThread(thread, nav.session().currentUser(), reply);
+        thread = threadDAO.getThread(thread.getId(), nav.session().currentUser());
+    }
+
+    private void handleLike() {
+        threadDAO.likeThread(thread, nav.session().currentUser());
+        thread = threadDAO.getThread(thread.getId(), nav.session().currentUser());
+    }
+
+    private void handleDislike() {
+        threadDAO.dislikeThread(thread, nav.session().currentUser());
         thread = threadDAO.getThread(thread.getId(), nav.session().currentUser());
     }
 }

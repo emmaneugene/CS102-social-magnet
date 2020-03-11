@@ -18,6 +18,13 @@ public class ThreadDAO extends DAO {
         super(conn);
     }
 
+    /**
+     * Gets a thread from the perspective of user. This is needed to determine
+     * whether the thread should be marked as a tagged thread.
+     * 
+     * @param id The thread id.
+     * @param user The user that is retrieving the thread.
+     */
     public Thread getThread(int id, User user) {
         ResultSet rs = null;
         Thread thread = null;
@@ -257,6 +264,22 @@ public class ThreadDAO extends DAO {
         return dislikers;
     }
 
+    public void addTag(Thread thread, User user) {
+        String queryString = String.join(" ",
+            "INSERT INTO tag (post_id, tagged_user) VALUES",
+            "(?, ?)"
+        );
+
+        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+            stmt.setInt(1, thread.getId());
+            stmt.setString(2, user.getUsername());
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        }
+    }
+
     public void removeTag(Thread thread, User user) {
         String queryString = String.join(" ",
             "DELETE FROM tag WHERE",
@@ -301,6 +324,38 @@ public class ThreadDAO extends DAO {
             stmt.setString(2, user.getUsername());
             stmt.setTimestamp(3, new Timestamp(new Date().getTime()));
             stmt.setString(4, content);
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        }
+    }
+
+    public void likeThread(Thread thread, User user) {
+        String queryString = String.join(" ",
+            "INSERT INTO likes (username, post_id) VALUES",
+            "(?, ?)"
+        );
+
+        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+            stmt.setString(1, user.getUsername());
+            stmt.setInt(2, thread.getId());
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        }
+    }
+
+    public void dislikeThread(Thread thread, User user) {
+        String queryString = String.join(" ",
+            "INSERT INTO dislikes (username, post_id) VALUES",
+            "(?, ?)"
+        );
+
+        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+            stmt.setString(1, user.getUsername());
+            stmt.setInt(2, thread.getId());
 
             stmt.executeUpdate();
         } catch (SQLException e) {
