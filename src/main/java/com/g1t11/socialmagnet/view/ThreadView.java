@@ -20,6 +20,10 @@ public class ThreadView extends PageView {
     public ThreadView(int threadIndex, Thread thread) {
         super("View a Thread");
         this.threadIndex = threadIndex;
+        setThread(thread);
+    }
+
+    public void setThread(Thread thread) {
         this.thread = thread;
         setComments();
     }

@@ -11,8 +11,6 @@ import com.g1t11.socialmagnet.view.ThreadView;
 public class ThreadController extends Controller {
     private ThreadDAO threadDAO = new ThreadDAO(conn);
 
-    private int threadIndex;
-
     private Thread thread;
 
     public ThreadController(Connection conn) {
@@ -23,13 +21,13 @@ public class ThreadController extends Controller {
 
     public ThreadController(Connection conn, int threadIndex, Thread thread) {
         super(conn);
-        this.threadIndex = threadIndex;
         this.thread = thread;
+        view = new ThreadView(threadIndex, thread);
     }
 
     @Override
     public void updateView() {
-        view = new ThreadView(threadIndex, thread);
+        ((ThreadView) view).setThread(thread);
         view.render();
     }
     
