@@ -67,7 +67,7 @@ CREATE TABLE disliker (
     FOREIGN KEY (thread_id) REFERENCES thread (thread_id) ON DELETE CASCADE
 );
 
-CREATE TABLE requests (
+CREATE TABLE request (
     sender    VARCHAR(255) NOT NULL,
     recipient VARCHAR(255) NOT NULL,
     PRIMARY KEY (sender, recipient),
@@ -238,3 +238,19 @@ CREATE PROCEDURE user_exists(IN _username VARCHAR(255))
 
 CREATE PROCEDURE add_user(IN _username VARCHAR(255), IN _fullname VARCHAR(255), IN _pwd VARCHAR(255))
     INSERT INTO user (username, fullname, pwd) VALUES (_username, _fullname, _pwd);
+
+DELIMITER $$
+CREATE PROCEDURE get_farmer_detail(IN _username VARCHAR(255))
+BEGIN
+    SET @rank := 0;
+    SELECT username, xp, r.wealth, r.wealth_rank
+    FROM farmer JOIN (
+        SELECT (@rank := @rank + 1) AS wealth_rank, wealth
+        FROM (
+            SELECT DISTINCT wealth FROM farmer
+        ) AS w
+        ORDER BY wealth DESC
+    ) AS r ON farmer.wealth = r.wealth
+    WHERE username = _username;
+END$$
+DELIMITER ;

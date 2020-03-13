@@ -64,7 +64,15 @@ INSERT INTO disliker (username, thread_id) VALUES
 ("britney", 4),
 ("elijah",  1);
 
-INSERT INTO requests (sender, recipient) VALUES
+INSERT INTO request (sender, recipient) VALUES
 ("adam",    "danny"),
 ("britney", "adam"),
 ("danny",   "britney");
+
+INSERT INTO farmer (username, xp, wealth) VALUES
+("adam", 1500, 1300),
+("britney", 2000, 1500),
+("charlie", 4000, 1500),
+("danny", 13000, 15000),
+("elijah", 10, 1000),
+("frank", 20, 500);
