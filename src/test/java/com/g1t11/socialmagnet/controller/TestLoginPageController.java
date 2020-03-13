@@ -29,12 +29,7 @@ public class TestLoginPageController extends TestApp {
     public void testGoToMainMenu() {
         systemInMock.provideLines("adam", "maroon5");
         app.nav.currentController().run();
-        app.nav.currentController().updateView();
 
-        MainMenuController expected = new MainMenuController(app.db.connection());
-        expected.setNavigation(app.nav);
-        expected.updateView();
-
-        Assert.assertEquals(expected, app.nav.currentController());
+        Assert.assertTrue(app.nav.currentController() instanceof MainMenuController);
     }
 }

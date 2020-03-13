@@ -42,11 +42,4 @@ public class MainMenuController extends Controller {
                 break;
         }
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof MainMenuController)) return false;
-        MainMenuController other = (MainMenuController) o;
-        return Objects.equals(view, other.view);
-    }
 }

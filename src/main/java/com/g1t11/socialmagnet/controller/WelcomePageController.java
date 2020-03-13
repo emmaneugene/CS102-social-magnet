@@ -40,11 +40,4 @@ public class WelcomePageController extends Controller {
                 break;
         }
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof WelcomePageController)) return false;
-        WelcomePageController other = (WelcomePageController) o;
-        return Objects.equals(view, other.view);
-    }
 }

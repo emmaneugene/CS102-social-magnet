@@ -55,11 +55,4 @@ public class RegisterPageController extends Controller {
             nav.currentController().view.setStatus(String.format(Painter.paint("%s already exists. Choose another username.", Painter.Color.RED), username));
         }
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof RegisterPageController)) return false;
-        RegisterPageController other = (RegisterPageController) o;
-        return Objects.equals(view, other.view);
-    }
 }

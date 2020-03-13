@@ -34,11 +34,4 @@ public class LoginPageController extends Controller {
             nav.currentController().view.setStatus(Painter.paint("Login error! Please try again.", Painter.Color.RED));
         }
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof LoginPageController)) return false;
-        LoginPageController other = (LoginPageController) o;
-        return Objects.equals(view, other.view);
-    }
 }
