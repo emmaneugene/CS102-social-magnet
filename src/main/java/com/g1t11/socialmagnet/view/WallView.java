@@ -8,7 +8,7 @@ import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.view.kit.*;
 
 public class WallView extends PageView {
-    private Farmer me;
+    private ProfileInfoView profileView;
     private List<SimpleThreadView> threadViews = new ArrayList<>(5);
 
     public WallView() {
@@ -18,6 +18,7 @@ public class WallView extends PageView {
     @Override
     public void render() {
         super.render();
+        profileView.render();
         for (SimpleThreadView threadView : threadViews) {
             threadView.render();
             System.out.println();
@@ -25,7 +26,7 @@ public class WallView extends PageView {
     }
 
     public void setFarmer(Farmer me) {
-        this.me = me;
+        this.profileView = new ProfileInfoView(me);
     }
 
     public void setThreads(List<Thread> threads) {
