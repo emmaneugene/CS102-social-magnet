@@ -98,6 +98,39 @@ public class ThreadDAO extends DAO {
         return threads;
     }
 
+    public List<Thread> getWallThreads(User user, int limit) {
+        String queryString = "CALL get_wall_threads(?, ?)";
+        
+        ResultSet rs = null;
+        List<Thread> threads = new ArrayList<>();
+        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+            stmt.setString(1, user.getUsername());
+            stmt.setInt(2, limit);
+
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                Thread thread = new Thread(
+                    rs.getInt("thread_id"),
+                    rs.getString("author"),
+                    rs.getString("recipient"),
+                    rs.getString("content"),
+                    rs.getInt("comment_count"),
+                    rs.getBoolean("is_tagged"));
+                setCommentsLatestLast(thread, 3);
+                setLikers(thread);
+                setDislikers(thread);
+
+                threads.add(thread);
+            }
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        } finally {
+            try { if (rs != null) rs.close(); } catch (SQLException e) {}
+        }
+
+        return threads;
+    }
+
     public void setCommentsLatestLast(Thread thread, int limit) {
         String queryString = "CALL get_thread_comments_latest_last(?, ?)";
 

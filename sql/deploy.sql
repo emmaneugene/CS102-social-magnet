@@ -212,6 +212,24 @@ CREATE PROCEDURE get_news_feed_threads(IN _username VARCHAR(255), IN _limit INT)
     ORDER BY posted_on DESC
     LIMIT _limit;
 
+CREATE PROCEDURE get_wall_threads(IN _username VARCHAR(255), IN _limit INT)
+    SELECT th.thread_id AS thread_id, author, recipient, content,
+           IFNULL(comment_count, 0) AS comment_count,
+           IF(ta.tagged_user = _username, TRUE, FALSE) AS is_tagged
+    FROM thread th
+    LEFT JOIN tag ta ON th.thread_id = ta.thread_id AND tagged_user = _username
+    LEFT JOIN (
+        SELECT thread_id, COUNT(*) AS comment_count
+        FROM comment
+        GROUP BY thread_id
+    ) AS c ON th.thread_id = c.thread_id
+    WHERE recipient = _username
+    OR th.thread_id IN (
+        SELECT thread_id FROM tag WHERE tagged_user = _username
+    )
+    ORDER BY posted_on DESC
+    LIMIT _limit;
+
 CREATE PROCEDURE add_tag(IN _thread_id INT, IN _username VARCHAR(255))
     INSERT INTO tag (thread_id, tagged_user) VALUES (_thread_id, _username);
 

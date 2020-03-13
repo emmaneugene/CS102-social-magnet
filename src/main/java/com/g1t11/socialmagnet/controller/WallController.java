@@ -7,6 +7,7 @@ import com.g1t11.socialmagnet.data.FarmerDAO;
 import com.g1t11.socialmagnet.data.ThreadDAO;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.social.Thread;
+import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.WallView;
 
@@ -33,7 +34,7 @@ public class WallController extends Controller {
 
     @Override
     public void handleInput() {
-        PromptInput input = new PromptInput("Press any key to go back");
+        PromptInput input = new PromptInput(Painter.paintf("[[{M}]]ain | [[{T}]]hread | [[{A}]]ccept Gift | [[{P}]]ost", Painter.Color.YELLOW, Painter.Color.YELLOW, Painter.Color.YELLOW, Painter.Color.YELLOW));
         input.nextLine();
         nav.pop();
     }

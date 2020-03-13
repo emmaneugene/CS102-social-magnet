@@ -63,6 +63,28 @@ public class TestThreadDAO {
     }
 
     @Test
+    public void testGetWallThreads() {
+        List<Thread> expected = List.of(
+            new Thread(7, "elijah",  "elijah", "Had a great night with adam, britney, and @charlie", 4, true),
+            new Thread(5, "charlie", "adam",   "Who are you talking to?",                            0),
+            new Thread(2, "adam",    "adam",   "I'm going crazy!!",                                  1),
+            new Thread(1, "adam",    "adam",   "Hello, world!",                                      2)
+        );
+
+        List<Thread> actual = threadDAO.getWallThreads(new User("adam", "Adam Levine"), 5);
+
+        // Assert only the shallow details of threads
+        for (int i = 0; i < actual.size(); i++) {
+            Thread exp = expected.get(i);
+            Thread act = actual.get(i);
+            Assert.assertEquals(exp.getFromUsername(), act.getFromUsername());
+            Assert.assertEquals(exp.getToUsername(), act.getToUsername());
+            Assert.assertEquals(exp.getContent(), act.getContent());
+            Assert.assertEquals(exp.isTagged(), act.isTagged());
+        }
+    }
+
+    @Test
     public void testSetComments() {
         List<Comment> expected = List.of(
             new Comment("britney", "How did you guys wake up so early??"),
