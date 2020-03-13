@@ -71,6 +71,7 @@ public class Thread {
     public void setContent(String content) {
         this.content = content;
     }
+    
     public List<User> getLikers() {
         return likers;
     }
@@ -107,6 +108,9 @@ public class Thread {
         return tagged;
     }
 
+    public void setTagged(boolean tagged) {
+        this.tagged = tagged;
+    }
 
     @Override
     public boolean equals(Object o) {

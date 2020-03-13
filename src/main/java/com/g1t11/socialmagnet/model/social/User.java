@@ -26,7 +26,7 @@ public class User {
         return fullname;
     }
 
-    public void setFullName(String fullname) {
+    public void setFullname(String fullname) {
         this.fullname = fullname;
     }
     @Override
