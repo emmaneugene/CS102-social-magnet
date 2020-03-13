@@ -49,12 +49,12 @@ public class TestThreadDAO {
             new Thread(5,  "charlie", "adam",    "Who are you talking to?",                            0)
         );
 
-        List<Thread> threads = threadDAO.getNewsFeedThreads(new User("elijah", "Elijah Wood"), 5);
+        List<Thread> actual = threadDAO.getNewsFeedThreads(new User("elijah", "Elijah Wood"), 5);
 
         // Assert only the shallow details of threads
-        for (int i = 0; i < expected.size(); i++) {
+        for (int i = 0; i < actual.size(); i++) {
             Thread exp = expected.get(i);
-            Thread act = threads.get(i);
+            Thread act = actual.get(i);
             Assert.assertEquals(exp.getFromUsername(), act.getFromUsername());
             Assert.assertEquals(exp.getToUsername(), act.getToUsername());
             Assert.assertEquals(exp.getContent(), act.getContent());
@@ -63,40 +63,43 @@ public class TestThreadDAO {
     }
 
     @Test
-    public void testGetComments() {
+    public void testSetComments() {
         List<Comment> expected = List.of(
             new Comment("britney", "How did you guys wake up so early??"),
             new Comment("adam",    "Early bird gets the worm!"),
             new Comment("elijah",  "Maybe you shouldn't stay out too late!")
         );
 
-        List<Comment> comments = threadDAO.getCommentsLatestLast(new Thread(7), 3);
+        Thread actual = new Thread(7);
+        threadDAO.setCommentsLatestLast(actual, 3);
 
-        Assert.assertEquals(expected, comments);
+        Assert.assertEquals(expected, actual.getComments());
     }
 
     @Test
-    public void testGetLikers() {
+    public void testSetLikers() {
         List<User> expected = List.of(
             new User("adam", "Adam Levine"),
             new User("britney", "Britney Spears")
         );
 
-        List<User> likers = threadDAO.getLikers(new Thread(3));
+        Thread actual = new Thread(3);
+        threadDAO.setLikers(actual);
 
-        Assert.assertEquals(expected, likers);
+        Assert.assertEquals(expected, actual.getLikers());
     }
 
     @Test
-    public void testGetDislikers() {
+    public void testSetDislikers() {
         List<User> expected = List.of(
             new User("adam", "Adam Levine"),
             new User("britney", "Britney Spears")
         );
 
-        List<User> dislikers = threadDAO.getDislikers(new Thread(4));
+        Thread actual = new Thread(4);
+        threadDAO.setDislikers(actual);
 
-        Assert.assertEquals(expected, dislikers);
+        Assert.assertEquals(expected, actual.getDislikers());
     }
 
     /**

@@ -24,11 +24,10 @@ public class ThreadDAO extends DAO {
      * @param user The user that is retrieving the thread.
      */
     public Thread getThread(int id, User user) {
-        ResultSet rs = null;
-        Thread thread = null;
-
         String queryString = "CALL get_thread(?, ?)";
 
+        ResultSet rs = null;
+        Thread thread = null;
         try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
             stmt.setInt(1, id);
             stmt.setString(2, user.getUsername());
@@ -43,10 +42,9 @@ public class ThreadDAO extends DAO {
                 rs.getString("content"),
                 rs.getInt("comment_count"),
                 rs.getBoolean("is_tagged"));
-
-            thread.setComments(getCommentsLatestLast(thread, 3));
-            thread.setLikers(getLikers(thread));
-            thread.setDislikers(getDislikers(thread));
+            setCommentsLatestLast(thread, 3);
+            setLikers(thread);
+            setDislikers(thread);
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
         } finally {
@@ -68,17 +66,15 @@ public class ThreadDAO extends DAO {
      * @return Posts to be displayed on the news feed
      */
     public List<Thread> getNewsFeedThreads(User user, int limit) {
+        String queryString = "CALL get_news_feed_threads(?, ?)";
+        
         ResultSet rs = null;
         List<Thread> threads = new ArrayList<>();
-
-        String queryString = "CALL get_news_feed_threads(?, ?)";
-
         try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
             stmt.setString(1, user.getUsername());
             stmt.setInt(2, limit);
 
             rs = stmt.executeQuery();
-
             while (rs.next()) {
                 Thread thread = new Thread(
                     rs.getInt("thread_id"),
@@ -87,10 +83,9 @@ public class ThreadDAO extends DAO {
                     rs.getString("content"),
                     rs.getInt("comment_count"),
                     rs.getBoolean("is_tagged"));
-
-                thread.setComments(getCommentsLatestLast(thread, 3));
-                thread.setLikers(getLikers(thread));
-                thread.setDislikers(getDislikers(thread));
+                setCommentsLatestLast(thread, 3);
+                setLikers(thread);
+                setDislikers(thread);
 
                 threads.add(thread);
             }
@@ -103,89 +98,79 @@ public class ThreadDAO extends DAO {
         return threads;
     }
 
-    public List<Comment> getCommentsLatestLast(Thread thread, int limit) {
-        ResultSet rs = null;
-        List<Comment> comments = new ArrayList<>();
-
+    public void setCommentsLatestLast(Thread thread, int limit) {
         String queryString = "CALL get_thread_comments_latest_last(?, ?)";
 
+        ResultSet rs = null;
         try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
             stmt.setInt(1, thread.getId());
             stmt.setInt(2, limit);
 
             rs = stmt.executeQuery();
+            thread.getComments().clear();
 
             while (rs.next()) {
                 Comment c = new Comment();
-
                 c.setUsername(rs.getString("commenter"));
                 c.setContent(rs.getString("content"));
 
-                comments.add(c);
+                thread.getComments().add(c);
             }
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
-
-        return comments;
     }
 
     /**
      * Returns all users who liked a thread in alphabetical order of their usernames
      */
-    public List<User> getLikers(Thread thread) {
-        ResultSet rs = null;
-        List<User> likers = new ArrayList<>();
-
+    public void setLikers(Thread thread) {
         String queryString = "CALL get_likers(?)";
 
+        ResultSet rs = null;
         try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
             stmt.setInt(1, thread.getId());
 
             rs = stmt.executeQuery();
+            thread.getLikers().clear();
 
             while (rs.next()) {
                 User u = new User(rs.getString("username"), rs.getString("fullname"));
 
-                likers.add(u);
+                thread.getLikers().add(u);
             }
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
-
-        return likers;
     }
 
     /**
      * Returns all users who disliked a thread in alphabetical order of their usernames
      */
-    public List<User> getDislikers(Thread thread) {
-        ResultSet rs = null;
-        List<User> dislikers = new ArrayList<>();
-
+    public void setDislikers(Thread thread) {
         String queryString = "CALL get_dislikers(?)";
 
+        ResultSet rs = null;
         try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
             stmt.setInt(1, thread.getId());
 
             rs = stmt.executeQuery();
+            thread.getDislikers().clear();
 
             while (rs.next()) {
                 User u = new User(rs.getString("username"), rs.getString("fullname"));
 
-                dislikers.add(u);
+                thread.getDislikers().add(u);
             }
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
-
-        return dislikers;
     }
 
     public void addTag(Thread thread, User user) {
