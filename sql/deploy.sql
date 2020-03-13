@@ -275,3 +275,21 @@ BEGIN
     WHERE username = _username;
 END$$
 DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER validate_tag BEFORE INSERT ON tag
+FOR EACH ROW BEGIN
+    DECLARE is_friend BOOLEAN;
+    SELECT COUNT(*) INTO is_friend FROM (
+        SELECT user_1 FROM friend WHERE user_2 = NEW.tagged_user
+        UNION
+        SELECT user_2 FROM friend WHERE user_1 = NEW.tagged_user
+    ) AS f
+    WHERE user_1 IN (
+        SELECT author FROM thread WHERE thread_id = NEW.thread_id
+    );
+    IF (is_friend = FALSE) THEN
+        SIGNAL SQLSTATE '45000' SET message_text = 'Cannot tag non-friends';
+    END IF;
+END$$
+DELIMITER ;

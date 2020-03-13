@@ -8,6 +8,14 @@ INSERT INTO user (username, fullname, pwd) VALUES
 ("elijah",  "Elijah Wood",    "mordor"),
 ("frank",   "Frank Sinatra",  "flymetothemoon");
 
+INSERT INTO friend (user_1, user_2) VALUES
+("adam",    "charlie"),
+("adam",    "elijah"),
+("britney", "charlie"),
+("britney", "elijah"),
+("charlie", "danny"),
+("danny",   "frank");
+
 INSERT INTO thread (author, recipient, posted_on, content) VALUES
 ("adam",    "adam",    "2019-03-02 08:30:00", "Hello, world!"),
 ("adam",    "adam",    "2019-05-02 10:30:00", "I'm going crazy!!"),
@@ -26,14 +34,6 @@ INSERT INTO tag (thread_id, tagged_user) VALUES
 (7, "adam"),
 (7, "britney"),
 (9, "elijah");
-
-INSERT INTO friend (user_1, user_2) VALUES
-("adam",    "charlie"),
-("adam",    "elijah"),
-("britney", "charlie"),
-("britney", "elijah"),
-("charlie", "danny"),
-("danny",   "frank");
 
 INSERT INTO comment (thread_id, commenter, commented_on, content) VALUES
 (1, "charlie", "2019-03-02 16:30:00", "Good job! You started programming."),
