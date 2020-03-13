@@ -45,6 +45,7 @@ public class ThreadDAO extends DAO {
             setCommentsLatestLast(thread, 3);
             setLikers(thread);
             setDislikers(thread);
+            thread.formatContentTags(getTaggedUsernames(thread));
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
         } finally {
@@ -86,6 +87,7 @@ public class ThreadDAO extends DAO {
                 setCommentsLatestLast(thread, 3);
                 setLikers(thread);
                 setDislikers(thread);
+                thread.formatContentTags(getTaggedUsernames(thread));
 
                 threads.add(thread);
             }
@@ -119,6 +121,7 @@ public class ThreadDAO extends DAO {
                 setCommentsLatestLast(thread, 3);
                 setLikers(thread);
                 setDislikers(thread);
+                thread.formatContentTags(getTaggedUsernames(thread));
 
                 threads.add(thread);
             }
@@ -156,9 +159,6 @@ public class ThreadDAO extends DAO {
         }
     }
 
-    /**
-     * Returns all users who liked a thread in alphabetical order of their usernames
-     */
     public void setLikers(Thread thread) {
         String queryString = "CALL get_likers(?)";
 
@@ -181,9 +181,6 @@ public class ThreadDAO extends DAO {
         }
     }
 
-    /**
-     * Returns all users who disliked a thread in alphabetical order of their usernames
-     */
     public void setDislikers(Thread thread) {
         String queryString = "CALL get_dislikers(?)";
 
@@ -204,6 +201,28 @@ public class ThreadDAO extends DAO {
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
+    }
+
+    public List<String> getTaggedUsernames(Thread thread) {
+        String queryString = "CALL get_tagged_usernames(?)";
+
+        ResultSet rs = null;
+        List<String> usernames = new ArrayList<>();
+        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+            stmt.setInt(1, thread.getId());
+
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                usernames.add(rs.getString("tagged_user"));
+            }
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        } finally {
+            try { if (rs != null) rs.close(); } catch (SQLException e) {}
+        }
+
+        return usernames;
     }
 
     public void addTag(Thread thread, User user) {
@@ -283,5 +302,9 @@ public class ThreadDAO extends DAO {
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
         }
+    }
+
+    public void newThread(Thread thread, User user) {
+
     }
 }

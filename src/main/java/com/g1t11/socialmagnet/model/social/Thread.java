@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.g1t11.socialmagnet.util.Painter;
+
 public class Thread {
     private int id;
 
@@ -110,6 +112,12 @@ public class Thread {
 
     public void setTagged(boolean tagged) {
         this.tagged = tagged;
+    }
+
+    public void formatContentTags(List<String> taggedUsernames) {
+        for (String tag : taggedUsernames) {
+            content = content.replaceFirst("@" + tag, Painter.paint(tag, Painter.Color.BLUE));
+        }
     }
 
     @Override

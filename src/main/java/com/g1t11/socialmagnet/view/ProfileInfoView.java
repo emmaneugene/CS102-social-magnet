@@ -11,7 +11,7 @@ public class ProfileInfoView implements View {
         String.join("\n",
             "About [{%s}]",
             "Full Name: %s",
-            "%s Farmer, %s richest\n\n"
+            "%s Farmer, %s richest\n\n\n"
         ),
         Painter.Color.BLUE
     );

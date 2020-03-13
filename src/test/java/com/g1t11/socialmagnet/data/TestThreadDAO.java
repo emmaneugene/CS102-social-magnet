@@ -124,6 +124,15 @@ public class TestThreadDAO {
         Assert.assertEquals(expected, actual.getDislikers());
     }
 
+    @Test
+    public void testGetTaggedUsernames() {
+        List<String> expected = List.of("adam", "britney");
+
+        List<String> actual = threadDAO.getTaggedUsernames(new Thread(7));
+
+        Assert.assertEquals(expected, actual);
+    }
+
     /**
      * When performing destructive tests on the database, be sure to not affect
      * records that are used for regular tests.

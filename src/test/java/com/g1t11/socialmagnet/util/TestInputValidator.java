@@ -13,7 +13,7 @@ public class TestInputValidator {
 
     @Test
     public void testIsAlphanumericInvalidChars() {
-        List<Character> invalidChars = List.of('_', '-', ' ', '.', '*');
+        List<Character> invalidChars = List.of('_', '-', ' ', '.', '*', '+');
         for (char c : invalidChars) {
             Assert.assertFalse(InputValidator.isAlphanumeric("gary" + c + "oldman"));
         }

@@ -230,6 +230,9 @@ CREATE PROCEDURE get_wall_threads(IN _username VARCHAR(255), IN _limit INT)
     ORDER BY posted_on DESC
     LIMIT _limit;
 
+CREATE PROCEDURE get_tagged_usernames(IN _thread_id INT)
+    SELECT tagged_user FROM tag WHERE thread_id = _thread_id;
+
 CREATE PROCEDURE add_tag(IN _thread_id INT, IN _username VARCHAR(255))
     INSERT INTO tag (thread_id, tagged_user) VALUES (_thread_id, _username);
 

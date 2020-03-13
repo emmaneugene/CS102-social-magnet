@@ -26,7 +26,7 @@ public class WallController extends Controller {
     @Override
     public void updateView() {
         me = farmerDAO.getFarmer(nav.session().currentUser());
-        wallThreads = threadDAO.getNewsFeedThreads(me, 5);
+        wallThreads = threadDAO.getWallThreads(me, 5);
         ((WallView) view).setFarmer(me);
         ((WallView) view).setThreads(wallThreads);
         view.render();
@@ -35,7 +35,23 @@ public class WallController extends Controller {
     @Override
     public void handleInput() {
         PromptInput input = new PromptInput(Painter.paintf("[[{M}]]ain | [[{T}]]hread | [[{A}]]ccept Gift | [[{P}]]ost", Painter.Color.YELLOW));
-        input.nextLine();
-        nav.pop();
+        String choice = input.nextLine();
+        if (choice.equals("M")) {
+            nav.pop();
+        } else if (wallThreads.size() > 0 && choice.matches(String.format("T[1-%d]", wallThreads.size()))) {
+            int index = Character.getNumericValue(choice.charAt(1));
+            nav.push(new ThreadController(conn, index, wallThreads.get(index - 1)));
+        } else if (choice.equals("A")) {
+            view.setStatus("Not ready yet...");
+        } else if (choice.equals("P")) {
+            handlePost();
+        } else if (choice.matches("T.*")) {
+        }
+    }
+
+    private void handlePost() {
+        updateView();
+        PromptInput input = new PromptInput("Enter your post");
+        String threadContent = input.nextLine();
     }
 }

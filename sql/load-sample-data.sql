@@ -16,10 +16,10 @@ INSERT INTO thread (author, recipient, posted_on, content) VALUES
 ("charlie", "adam",    "2019-09-04 09:30:00", "Who are you talking to?"),
 ("danny",   "frank",   "2019-09-02 15:30:00", "Look out, Fakebook! Social Magnet is going to get more users!"),
 # elijah and charlie are not friends, therefore the tag does not work.
-("elijah",  "elijah",  "2019-09-15 08:30:00", "Had a great night with adam, britney, and @charlie"),
+("elijah",  "elijah",  "2019-09-15 08:30:00", "Had a great night with @adam, @britney, and @charlie"),
 ("adam",    "elijah",  "2019-10-02 12:30:00", "Where did you go?"),
 # adam is spelt wrongly, therefore the tag does not work.
-("britney", "charlie", "2019-10-03 13:30:00", "We should meet up again! elijah @adsm"),
+("britney", "charlie", "2019-10-03 13:30:00", "We should meet up again! @elijah @adsm"),
 ("britney", "britney", "2019-10-04 14:30:00", "I'm so lonely...");
 
 INSERT INTO tag (thread_id, tagged_user) VALUES
