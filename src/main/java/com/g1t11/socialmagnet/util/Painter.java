@@ -53,13 +53,13 @@ public class Painter {
         int colorIndex = 0;
         int stackIndex = 0;
         
-        Color[] stack = new Color[colors.length];
-        String result = "";
-
         String[] tokens = formatText.split("(?=\\[\\{|\\}\\])|(?<=\\[\\{|\\}\\])");
+
+        Color[] stack = new Color[tokens.length];
+        String result = "";
         for (String token : tokens) {
             if (token.equals("[{")) {
-                stack[stackIndex++] = colors[colorIndex++];
+                stack[stackIndex++] = colors[Math.min(colorIndex++, colors.length - 1)];
             } else if (token.equals("}]")) {
                 stackIndex--;
                 result += map.get(Color.RESET);
@@ -76,6 +76,9 @@ public class Painter {
      * <p>
      * Chromatic colors will overwrite other chromatic colors below it on the
      * stack, but Color.BOLD will overlap as long as it exists on the stack.
+     * <p>
+     * If fewer colors are provided than there are regions, the last color will
+     * be used to paint the remaining regions.
      */
     private static String getMinifiedColorCodes(Color[] stack, int length) {
         boolean colored = false;
