@@ -8,8 +8,8 @@ SET time_zone = '+00:00';
 -- create tables
 CREATE TABLE user (
     username VARCHAR(255) NOT NULL,
-    fullname VARCHAR(128) NOT NULL,
-    pwd      VARCHAR(128) NOT NULL,
+    fullname VARCHAR(255) NOT NULL,
+    pwd      VARCHAR(255) NOT NULL,
     PRIMARY KEY (username)
 );
 
@@ -229,3 +229,12 @@ CREATE PROCEDURE like_thread(IN _thread_id INT, IN _username VARCHAR(255))
 
 CREATE PROCEDURE dislike_thread(IN _thread_id INT, IN _username VARCHAR(255))
     INSERT INTO disliker (username, thread_id) VALUES (_username, _thread_id);
+
+CREATE PROCEDURE verify_credentials(IN _username VARCHAR(255), IN _password VARCHAR(255))
+    SELECT IF(COUNT(*) = 0, FALSE, TRUE) AS is_valid FROM user WHERE username = _username AND pwd = _password;
+
+CREATE PROCEDURE user_exists(IN _username VARCHAR(255))
+    SELECT IF(COUNT(*) = 0, FALSE, TRUE) AS user_exists FROM user WHERE username = _username;
+
+CREATE PROCEDURE add_user(IN _username VARCHAR(255), IN _fullname VARCHAR(255), IN _pwd VARCHAR(255))
+    INSERT INTO user (username, fullname, pwd) VALUES (_username, _fullname, _pwd);
