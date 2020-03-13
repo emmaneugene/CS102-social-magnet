@@ -1,12 +1,13 @@
 package com.g1t11.socialmagnet.controller;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.g1t11.socialmagnet.data.Session;
 
 public class Navigation {
-    private Session session;
+    private Session sess;
 
     /**
      * Stack of <code>Controller</code> instances that represent the current
@@ -19,12 +20,12 @@ public class Navigation {
      */
     private List<Controller> navigationStack = new ArrayList<>();
 
-    public Navigation(Session session) {
-        this.session = session;
+    public Navigation(Connection conn) {
+        sess = new Session(conn);
     }
 
-    public Session getSession() {
-        return session;
+    public Session session() {
+        return sess;
     }
 
     private void initControllerNav(Controller controller) {
@@ -63,6 +64,12 @@ public class Navigation {
         navigationStack.remove(size - 1);
     }
 
+    public void pop(int count) {
+        for (int i = 0; i < count; i++) {
+            pop();
+        }
+    }
+
     /**
      * Prepare the next <code>Controller</code> to be loaded onto the navigation
      * stack.
@@ -71,7 +78,7 @@ public class Navigation {
      * 
      * @see Controller
      */
-    public void prepareForNavigation(Controller next) {
+    public void push(Controller next) {
         initControllerNav(next);
         navigationStack.add(next);
     }

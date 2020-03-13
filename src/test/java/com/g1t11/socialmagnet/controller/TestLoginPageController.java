@@ -22,7 +22,7 @@ public class TestLoginPageController extends TestApp {
 
     @Before
     public void initController() {
-        app.nav.setFirstController(new LoginPageController());
+        app.nav.setFirstController(new LoginPageController(app.db.connection()));
     }
 
     @Test
@@ -31,7 +31,7 @@ public class TestLoginPageController extends TestApp {
         app.nav.currentController().run();
         app.nav.currentController().updateView();
 
-        MainMenuController expected = new MainMenuController();
+        MainMenuController expected = new MainMenuController(app.db.connection());
         expected.setNavigation(app.nav);
         expected.updateView();
 

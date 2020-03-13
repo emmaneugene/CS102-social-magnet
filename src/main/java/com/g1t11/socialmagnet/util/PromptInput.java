@@ -16,6 +16,11 @@ public class PromptInput {
         this.prompt = prompt;
     }
 
+    /**
+     * Constructs a default prompt that displays:
+     * <p>
+     * <code>Enter your choice</code>
+     */
     public PromptInput() {
         this("Enter your choice");
     }

@@ -3,29 +3,25 @@ package com.g1t11.socialmagnet.view;
 import java.util.List;
 import java.util.Objects;
 
+import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.view.kit.*;
 
 public class MainMenuView extends PageView {
     private TextView greetingView;
 
-    String fullname;
+    private final List<TextView> actionViews = List.of(
+        new TextView(Painter.paintf("[{1.}] News Feed", Painter.Color.YELLOW)),
+        new TextView(Painter.paintf("[{2.}] My Wall", Painter.Color.YELLOW)),
+        new TextView(Painter.paintf("[{3.}] My Friends", Painter.Color.YELLOW)),
+        new TextView(Painter.paintf("[{4.}] City Farmers", Painter.Color.YELLOW)),
+        new TextView(Painter.paintf("[{5.}] Logout", Painter.Color.YELLOW))
+    );
 
-    private final ListView actionsView = new ListView(List.of(
-        new TextView("1. News Feed"),
-        new TextView("2. My Wall"),
-        new TextView("3. My Friends"),
-        new TextView("4. City Farmers"),
-        new TextView("5. Logout")
-    ));
+    String fullname;
 
     public MainMenuView() {
         super("Main Menu");
         greetingView = new TextView();
-    }
-
-    public void setFullname(String fullname) {
-        assert fullname != null;
-        this.fullname = fullname;
     }
 
     @Override
@@ -33,7 +29,14 @@ public class MainMenuView extends PageView {
         super.render();
         updateGreeting();
         greetingView.render();
-        actionsView.render();
+        for (TextView actionView : actionViews) {
+            actionView.render();
+        }
+    }
+
+    public void setFullname(String fullname) {
+        assert fullname != null;
+        this.fullname = fullname;
     }
 
     private void updateGreeting() {
@@ -45,15 +48,6 @@ public class MainMenuView extends PageView {
         if (!(o instanceof MainMenuView)) return false;
         MainMenuView other = (MainMenuView) o;
         return Objects.equals(greetingView, other.greetingView)
-            && Objects.equals(actionsView, other.actionsView);
-    }
-
-    @Override
-    public String toString() {
-        return String.join(System.lineSeparator(),
-            super.toString(),
-            greetingView.toString(),
-            actionsView.toString()
-        );
+            && Objects.deepEquals(actionViews, other.actionViews);
     }
 }

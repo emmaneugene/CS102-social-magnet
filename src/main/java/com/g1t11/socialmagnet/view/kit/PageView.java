@@ -2,6 +2,8 @@ package com.g1t11.socialmagnet.view.kit;
 
 import java.util.Objects;
 
+import com.g1t11.socialmagnet.util.Painter;
+
 /**
  * {@link PageView} is the base of all screens and menus.
  * <code>PageView</code> clears the entire console before rendering any
@@ -9,7 +11,7 @@ import java.util.Objects;
  * static views.
  * @see View
  */
-public class PageView extends View {
+public class PageView implements View {
     private String pageTitle;
 
     /**
@@ -18,7 +20,7 @@ public class PageView extends View {
      */
     private View status = null;
 
-    private final String headerTemplate = "== Social Magnet :: %s ==";
+    private final String headerTemplate = Painter.paint("== Social Magnet :: %s ==", Painter.Color.BOLD);
 
     public PageView(String pageTitle) {
         this.pageTitle = pageTitle;
@@ -42,6 +44,14 @@ public class PageView extends View {
 
     public void clearStatus() {
         this.status = null;
+    }
+
+    /**
+     * A system-independent method of clearing the console.
+     */
+    public void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 
     @Override

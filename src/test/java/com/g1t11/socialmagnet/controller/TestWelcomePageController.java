@@ -23,7 +23,7 @@ public class TestWelcomePageController extends TestApp {
 
     @Before
     public void initController() {
-        app.nav.setFirstController(new WelcomePageController());
+        app.nav.setFirstController(new WelcomePageController(app.db.connection()));
     }
 
     @Test
@@ -31,7 +31,7 @@ public class TestWelcomePageController extends TestApp {
         systemInMock.provideLines("2");
         app.nav.currentController().run();
 
-        LoginPageController expected = new LoginPageController();
+        LoginPageController expected = new LoginPageController(app.db.connection());
 
         Assert.assertEquals(expected, app.nav.currentController());
     }
@@ -44,7 +44,7 @@ public class TestWelcomePageController extends TestApp {
         systemInMock.provideLines("adam", "solocareer");
         app.nav.currentController().run();
 
-        WelcomePageController expected = new WelcomePageController();
+        WelcomePageController expected = new WelcomePageController(app.db.connection());
         expected.setNavigation(app.nav);
         expected.updateView();
 
@@ -56,10 +56,10 @@ public class TestWelcomePageController extends TestApp {
         systemInMock.provideLines("pass");
         app.nav.currentController().run();
 
-        WelcomePageController expected = new WelcomePageController();
+        WelcomePageController expected = new WelcomePageController(app.db.connection());
         expected.setNavigation(app.nav);
         expected.updateView();
-        expected.getView().setStatus(Painter.paint("Please enter a choice between 1 & 3!", Painter.Color.RED));
+        expected.view.setStatus(Painter.paint("Please enter a choice between 1 & 3!", Painter.Color.RED));
 
         Assert.assertEquals(expected, app.nav.currentController());
     }

@@ -1,50 +1,57 @@
 package com.g1t11.socialmagnet.data;
 
-import com.g1t11.socialmagnet.TestApp;
-
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
-public class TestSession extends TestApp {
+public class TestSession {
+    private Session session;
+
+    @Before
+    public void initSession() {
+        Database db = new Database();
+        session = new Session(db.connection());
+    }
+
     @Test
     public void testCheckCredentialsValid() {
-        boolean loginSuccessful = app.session.credentialsValid("adam", "maroon5");
+        boolean loginSuccessful = session.credentialsValid("adam", "maroon5");
 
         Assert.assertTrue(loginSuccessful);
     }
 
     @Test
     public void testCheckCredentialsInvalid() {
-        boolean loginSuccessful = app.session.credentialsValid("adam", "solocareer");
+        boolean loginSuccessful = session.credentialsValid("adam", "solocareer");
 
         Assert.assertFalse(loginSuccessful);
     }
 
     @Test
     public void testUserExists() {
-        boolean userExists = app.session.userExists("adam");
+        boolean userExists = session.userExists("adam");
 
         Assert.assertTrue(userExists);
     }
 
     @Test
     public void testUserDoesNotExist() {
-        boolean userExists = app.session.userExists("audrey");
+        boolean userExists = session.userExists("audrey");
 
         Assert.assertFalse(userExists);
     }
 
     @Test
     public void testAddUser() {
-        boolean registered = app.session.addUser("gary", "Gary Oldman", "dracula123");
+        boolean registered = session.addUser("gary", "Gary Oldman", "dracula123");
 
         Assert.assertTrue(registered);
-        Assert.assertTrue(app.session.userExists("gary"));
+        Assert.assertTrue(session.userExists("gary"));
     }
 
     @Test
     public void testAddExistingUser() {
-        boolean registered = app.session.addUser("adam", "Adam Sandler", "uncutgems");
+        boolean registered = session.addUser("adam", "Adam Sandler", "uncutgems");
 
         Assert.assertFalse(registered);
     }

@@ -4,19 +4,19 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
-import com.g1t11.socialmagnet.util.Greeting;
+import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.view.kit.*;
 
 public class WelcomePageView extends PageView {
     private TextView greetingView;
 
-    String username;
+    private final List<TextView> actionViews = List.of(
+        new TextView(Painter.paintf("[{1.}] Register", Painter.Color.YELLOW)),
+        new TextView(Painter.paintf("[{2.}] Login", Painter.Color.YELLOW)),
+        new TextView(Painter.paintf("[{3.}] Exit", Painter.Color.YELLOW))
+    );
 
-    private final ListView actionsView = new ListView(List.of(
-        new TextView("1. Register"),
-        new TextView("2. Login"),
-        new TextView("3. Exit")
-    ));
+    String username;
 
     Integer fixedHourOfDay = null;
 
@@ -30,17 +30,19 @@ public class WelcomePageView extends PageView {
         this.fixedHourOfDay = fixedHourOfDay;
     }
 
-    public void setUsername(String username) {
-        assert username != null;
-        this.username = username;
-    }
-
     @Override
     public void render() {
         super.render();
         updateGreeting();
         greetingView.render();
-        actionsView.render();
+        for (TextView actionView : actionViews) {
+            actionView.render();
+        }
+    }
+
+    public void setUsername(String username) {
+        assert username != null;
+        this.username = username;
     }
 
     /**
@@ -54,8 +56,8 @@ public class WelcomePageView extends PageView {
         } else {
             hour = fixedHourOfDay;
         }
-        String time = Greeting.basedOnHour(hour);
-        String greeting = String.format("Good %s, %s!", time, username);
+        String timeOfDay = basedOnHour(hour);
+        String greeting = String.format("Good %s, %s!", timeOfDay, username);
         greetingView.setText(greeting);
     }
 
@@ -64,16 +66,13 @@ public class WelcomePageView extends PageView {
         if (!(o instanceof WelcomePageView)) return false;
         WelcomePageView other = (WelcomePageView) o;
         return Objects.equals(greetingView, other.greetingView)
-            && Objects.equals(actionsView, other.actionsView)
+            && Objects.deepEquals(actionViews, other.actionViews)
             && Objects.equals(fixedHourOfDay, other.fixedHourOfDay);
     }
 
-    @Override
-    public String toString() {
-        return String.join(System.lineSeparator(),
-            super.toString(),
-            greetingView.toString(),
-            actionsView.toString()
-        );
+    public String basedOnHour(int hour) {
+        if (hour < 12) return "morning";
+        if (hour < 19) return "afternoon";
+        return "evening";
     }
 }

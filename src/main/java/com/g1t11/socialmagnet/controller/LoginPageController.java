@@ -1,5 +1,6 @@
 package com.g1t11.socialmagnet.controller;
 
+import java.sql.Connection;
 import java.util.Objects;
 
 import com.g1t11.socialmagnet.util.Painter;
@@ -7,7 +8,8 @@ import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.LoginPageView;
 
 public class LoginPageController extends Controller {
-    public LoginPageController() {
+    public LoginPageController(Connection conn) {
+        super(conn);
         view = new LoginPageView();
     }
 
@@ -24,12 +26,12 @@ public class LoginPageController extends Controller {
         input.setPrompt("Enter your password");
         String password = input.nextLine();
 
-        boolean loginSuccessful = nav.getSession().login(username, password);
+        boolean loginSuccessful = nav.session().login(username, password);
         if (loginSuccessful) {
-            nav.prepareForNavigation(new MainMenuController());
+            nav.push(new MainMenuController(conn));
         } else {
             nav.pop();
-            nav.currentController().getView().setStatus(Painter.paint("Login error! Please try again.", Painter.Color.RED));
+            nav.currentController().view.setStatus(Painter.paint("Login error! Please try again.", Painter.Color.RED));
         }
     }
 

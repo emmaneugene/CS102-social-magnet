@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import com.g1t11.socialmagnet.util.Painter;
 
-public class TextView extends View {
+public class TextView implements View {
     private String text;
 
     public TextView(String text, Painter.Color color) {
