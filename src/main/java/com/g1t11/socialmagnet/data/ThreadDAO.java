@@ -4,9 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.g1t11.socialmagnet.model.social.Comment;
@@ -29,30 +27,23 @@ public class ThreadDAO extends DAO {
         ResultSet rs = null;
         Thread thread = null;
 
-        String queryString = String.join(" ",
-            "SELECT post.post_id AS post_id, author, recipient, content,",
-            "IF(tag.tagged_user = ?, TRUE, FALSE) AS is_tagged",
-            "FROM post",
-            "LEFT JOIN tag ON tag.post_id = post.post_id AND tagged_user = ?",
-            "WHERE post.post_id = ?"
-        );
+        String queryString = "CALL get_thread(?, ?)";
 
         try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
-            stmt.setString(1, user.getUsername());
+            stmt.setInt(1, id);
             stmt.setString(2, user.getUsername());
-            stmt.setInt(3, id);
 
             rs = stmt.executeQuery();
             rs.next();
 
             thread = new Thread(
-                rs.getInt("post_id"),
+                rs.getInt("thread_id"),
                 rs.getString("author"),
                 rs.getString("recipient"),
                 rs.getString("content"),
-                rs.getBoolean("is_tagged"));    
+                rs.getInt("comment_count"),
+                rs.getBoolean("is_tagged"));
 
-            thread.setActualCommentsCount(getCommentsCount(thread));
             thread.setComments(getCommentsLatestLast(thread, 3));
             thread.setLikers(getLikers(thread));
             thread.setDislikers(getDislikers(thread));
@@ -80,47 +71,23 @@ public class ThreadDAO extends DAO {
         ResultSet rs = null;
         List<Thread> threads = new ArrayList<>();
 
-        /**
-         * Left join appends all tagging information onto each post before
-         * filtering based on the WHERE and IN conditions.
-         * Therefore, for every post record, we can check if the current
-         * user is tagged. If so, then we set `is_tagged` to TRUE.
-         */
-        String queryString = String.join(" ",
-            "SELECT post.post_id AS post_id, author, recipient, content,",
-            "IF(tag.tagged_user = ?, TRUE, FALSE) AS is_tagged",
-            "FROM post",
-            "LEFT JOIN tag ON tag.post_id = post.post_id AND tagged_user = ?",
-            "WHERE recipient = ?",
-            "OR recipient IN",
-            "(SELECT user_1 FROM friend WHERE user_2 = ?",
-            "UNION SELECT user_2 FROM friend WHERE user_1 = ?)",
-            "OR post.post_id IN",
-            "(SELECT post_id FROM tag WHERE tagged_user = ?)",
-            "ORDER BY posted_on DESC",
-            "LIMIT ?"
-        );
+        String queryString = "CALL get_news_feed_threads(?, ?)";
 
         try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
             stmt.setString(1, user.getUsername());
-            stmt.setString(2, user.getUsername());
-            stmt.setString(3, user.getUsername());
-            stmt.setString(4, user.getUsername());
-            stmt.setString(5, user.getUsername());
-            stmt.setString(6, user.getUsername());
-            stmt.setInt(7, limit);
+            stmt.setInt(2, limit);
 
             rs = stmt.executeQuery();
 
             while (rs.next()) {
                 Thread thread = new Thread(
-                    rs.getInt("post_id"),
+                    rs.getInt("thread_id"),
                     rs.getString("author"),
                     rs.getString("recipient"),
                     rs.getString("content"),
+                    rs.getInt("comment_count"),
                     rs.getBoolean("is_tagged"));
 
-                thread.setActualCommentsCount(getCommentsCount(thread));
                 thread.setComments(getCommentsLatestLast(thread, 3));
                 thread.setLikers(getLikers(thread));
                 thread.setDislikers(getDislikers(thread));
@@ -136,42 +103,11 @@ public class ThreadDAO extends DAO {
         return threads;
     }
 
-    public int getCommentsCount(Thread thread) {
-        ResultSet rs = null;
-        int commentCount = 0;
-
-        String queryString = String.join(" ",
-            "SELECT COUNT(*)",
-            "FROM comment",
-            "WHERE post_id = ?"
-        );
-
-        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
-            stmt.setInt(1, thread.getId());
-
-            rs = stmt.executeQuery();
-            rs.next();
-            commentCount = rs.getInt("COUNT(*)");
-        } catch (SQLException e) {
-            System.err.println("SQLException: " + e.getMessage());
-        } finally {
-            try { if (rs != null) rs.close(); } catch (SQLException e) {}
-        }
-
-        return commentCount;
-    }
-
     public List<Comment> getCommentsLatestLast(Thread thread, int limit) {
         ResultSet rs = null;
         List<Comment> comments = new ArrayList<>();
 
-        String queryString = String.join(" ",
-            "SELECT commenter, content FROM",
-            "(SELECT * FROM comment WHERE post_id = ?",
-            "ORDER BY commented_on DESC",
-            "LIMIT ?) AS c",
-            "ORDER BY commented_on"
-        );
+        String queryString = "CALL get_thread_comments_latest_last(?, ?)";
 
         try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
             stmt.setInt(1, thread.getId());
@@ -203,13 +139,7 @@ public class ThreadDAO extends DAO {
         ResultSet rs = null;
         List<User> likers = new ArrayList<>();
 
-        String queryString = String.join(" ",
-            "SELECT u.username AS username, fullname FROM",
-            "likes AS l JOIN user AS u",
-            "ON l.username = u.username",
-            "WHERE post_id = ?",
-            "ORDER BY username"
-        );
+        String queryString = "CALL get_likers(?)";
 
         try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
             stmt.setInt(1, thread.getId());
@@ -237,13 +167,7 @@ public class ThreadDAO extends DAO {
         ResultSet rs = null;
         List<User> dislikers = new ArrayList<>();
 
-        String queryString = String.join(" ",
-            "SELECT u.username AS username, fullname FROM",
-            "dislikes AS d JOIN user AS u",
-            "ON d.username = u.username",
-            "WHERE post_id = ?",
-            "ORDER BY username"
-        );
+        String queryString = "CALL get_dislikers(?)";
 
         try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
             stmt.setInt(1, thread.getId());
@@ -265,10 +189,7 @@ public class ThreadDAO extends DAO {
     }
 
     public void addTag(Thread thread, User user) {
-        String queryString = String.join(" ",
-            "INSERT INTO tag (post_id, tagged_user) VALUES",
-            "(?, ?)"
-        );
+        String queryString = "CALL add_tag(?, ?)";
 
         try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
             stmt.setInt(1, thread.getId());
@@ -281,10 +202,7 @@ public class ThreadDAO extends DAO {
     }
 
     public void removeTag(Thread thread, User user) {
-        String queryString = String.join(" ",
-            "DELETE FROM tag WHERE",
-            "post_id = ? AND tagged_user = ?"
-        );
+        String queryString = "CALL remove_tag(?, ?)";
 
         try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
             stmt.setInt(1, thread.getId());
@@ -297,15 +215,11 @@ public class ThreadDAO extends DAO {
     }
 
     public void deleteThread(Thread thread, User user) {
-        String queryString = String.join(" ",
-            "DELETE FROM post",
-            "WHERE post_id = ? AND (author = ? OR recipient = ?)"
-        );
+        String queryString = "CALL delete_thread(?, ?)";
 
         try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
             stmt.setInt(1, thread.getId());
             stmt.setString(2, user.getUsername());
-            stmt.setString(3, user.getUsername());
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -314,16 +228,12 @@ public class ThreadDAO extends DAO {
     }
 
     public void replyToThread(Thread thread, User user, String content) {
-        String queryString = String.join(" ",
-            "INSERT INTO comment (post_id, commenter, commented_on, content) VALUES",
-            "(?, ?, ?, ?)"
-        );
+        String queryString = "CALL reply_to_thread(?, ?, ?)";
 
         try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
             stmt.setInt(1, thread.getId());
             stmt.setString(2, user.getUsername());
-            stmt.setTimestamp(3, new Timestamp(new Date().getTime()));
-            stmt.setString(4, content);
+            stmt.setString(3, content);
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -332,14 +242,11 @@ public class ThreadDAO extends DAO {
     }
 
     public void likeThread(Thread thread, User user) {
-        String queryString = String.join(" ",
-            "INSERT INTO likes (username, post_id) VALUES",
-            "(?, ?)"
-        );
+        String queryString = "CALL like_thread(?, ?)";
 
         try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
-            stmt.setString(1, user.getUsername());
-            stmt.setInt(2, thread.getId());
+            stmt.setInt(1, thread.getId());
+            stmt.setString(2, user.getUsername());
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -348,14 +255,11 @@ public class ThreadDAO extends DAO {
     }
 
     public void dislikeThread(Thread thread, User user) {
-        String queryString = String.join(" ",
-            "INSERT INTO dislikes (username, post_id) VALUES",
-            "(?, ?)"
-        );
+        String queryString = "CALL dislike_thread(?, ?)";
 
         try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
-            stmt.setString(1, user.getUsername());
-            stmt.setInt(2, thread.getId());
+            stmt.setInt(1, thread.getId());
+            stmt.setString(2, user.getUsername());
 
             stmt.executeUpdate();
         } catch (SQLException e) {

@@ -19,11 +19,7 @@ public class UserDAO extends DAO {
         ResultSet rs = null;
         User u = new User();
 
-        String queryString = String.join(" ",
-            "SELECT username, fullname",
-            "FROM user",
-            "WHERE username = ?"
-        );
+        String queryString = "CALL get_user(?)";
 
         try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
             stmt.setString(1, username);
@@ -53,17 +49,10 @@ public class UserDAO extends DAO {
         ResultSet rs = null;
         List<User> friends = new ArrayList<>();
 
-        String queryString = String.join(" ",
-            "SELECT username, fullname FROM",
-            "(SELECT user_1 AS friend_name FROM friend WHERE user_2 = ?",
-            "UNION",
-            "SELECT user_2 FROM friend WHERE user_1 = ?) AS f",
-            "JOIN user ON friend_name = user.username;"
-        );
+        String queryString = "CALL get_friends(?)";
 
         try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
             stmt.setString(1, user.getUsername());
-            stmt.setString(2, user.getUsername());
 
             rs = stmt.executeQuery();
             while (rs.next()) {
