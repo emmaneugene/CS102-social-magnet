@@ -29,6 +29,8 @@ public class MainMenuController extends Controller {
                 nav.push(new NewsFeedController(conn));
                 break;
             case "2":
+                nav.push(new WallController(conn));
+                break;
             case "3":
             case "4":
             case "5":
