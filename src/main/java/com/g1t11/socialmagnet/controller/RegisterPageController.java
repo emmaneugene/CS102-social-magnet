@@ -1,7 +1,6 @@
 package com.g1t11.socialmagnet.controller;
 
 import java.sql.Connection;
-import java.util.Objects;
 
 import com.g1t11.socialmagnet.util.InputValidator;
 import com.g1t11.socialmagnet.util.Painter;

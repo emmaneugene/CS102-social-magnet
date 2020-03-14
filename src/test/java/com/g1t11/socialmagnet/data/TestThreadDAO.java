@@ -191,4 +191,9 @@ public class TestThreadDAO {
 
         threadDAO.dislikeThread(thread, user);
     }
+
+    @Test
+    public void testAddThread() {
+        threadDAO.addThread("adam", "elijah", "This is a cool test @charlie and @frank", List.of("charlie", "frank"));
+    }
 }

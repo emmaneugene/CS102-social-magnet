@@ -269,6 +269,14 @@ DELIMITER ;
 CREATE PROCEDURE remove_tag(IN _thread_id INT, IN _username VARCHAR(255))
     DELETE FROM tag WHERE thread_id = _thread_id AND tagged_user = _username;
 
+DELIMITER $$
+CREATE PROCEDURE add_thread_return_id(IN _author VARCHAR(255), IN _recipient VARCHAR(255), IN _content TEXT(65535))
+BEGIN
+    INSERT INTO thread (author, recipient, posted_on, content) VALUES (_author, _recipient, NOW(), _content);
+    SELECT LAST_INSERT_ID() AS new_id;
+END$$
+DELIMITER ;
+
 CREATE PROCEDURE delete_thread(IN _thread_id INT, IN _username VARCHAR(255))
     DELETE FROM thread WHERE thread_id = _thread_id AND (author = _username OR recipient = _username);
 

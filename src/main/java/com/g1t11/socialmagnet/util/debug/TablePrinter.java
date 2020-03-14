@@ -46,7 +46,7 @@ public class TablePrinter {
         return rs;
     }
 
-    private List<Column> getColumns(ResultSet rs) {
+    public List<Column> getColumns(ResultSet rs) {
         if (rs == null) return null;
 
         ResultSetMetaData rsmd = null;
@@ -87,7 +87,7 @@ public class TablePrinter {
         return columns;
     }
 
-    private void printColumns(List<Column> columns) {
+    public void printColumns(List<Column> columns) {
         if (columns == null) return;
 
         StringBuilder headerRow = new StringBuilder();

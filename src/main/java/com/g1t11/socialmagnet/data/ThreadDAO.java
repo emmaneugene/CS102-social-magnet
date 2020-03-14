@@ -238,11 +238,12 @@ public class ThreadDAO extends DAO {
         }
     }
 
-    public void addTags(Thread thread, List<String> usernames) {
+    public void addTags(int threadId, List<String> usernames) {
+        if (usernames == null || usernames.size() == 0) return;
         String queryString = "CALL add_tag(?, ?)";
         try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
             for (String username : usernames) {
-                stmt.setInt(1, thread.getId());
+                stmt.setInt(1, threadId);
                 stmt.setString(2, username);
                 stmt.addBatch();
             }
@@ -250,6 +251,10 @@ public class ThreadDAO extends DAO {
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
         }
+    }
+
+    public void addTags(Thread thread, List<String> usernames) {
+        addTags(thread.getId(), usernames);
     }
 
     public void removeTag(Thread thread, User user) {
@@ -318,7 +323,27 @@ public class ThreadDAO extends DAO {
         }
     }
 
-    public void newThread(Thread thread, User user) {
+    public void addThread(String fromUser, String toUser, String content, List<String> usernameTags) {
+        String queryString = "CALL add_thread_return_id(?, ?, ?)";
 
+        ResultSet rs = null;
+        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+            stmt.setString(1, fromUser);
+            stmt.setString(2, toUser);
+            stmt.setString(3, content);
+
+            rs = stmt.executeQuery();
+            rs.next();
+
+            System.out.println(rs.getInt("new_id"));
+            System.out.println(usernameTags);
+            addTags(rs.getInt("new_id"), usernameTags);
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        }
+    }
+
+    public void addThread(User fromUser, User toUser, String content, List<String> usernameTags) {
+        addThread(fromUser.getUsername(), toUser.getUsername(), content, usernameTags);
     }
 }

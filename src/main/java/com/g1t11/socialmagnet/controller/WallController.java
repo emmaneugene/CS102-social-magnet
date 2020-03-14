@@ -49,6 +49,9 @@ public class WallController extends Controller {
         } else if (choice.equals("P")) {
             handlePost();
         } else if (choice.matches("T.*")) {
+            view.setStatus(Painter.paint("Use T<id> to select a thread.", Painter.Color.RED));
+        } else {
+            view.setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
         }
     }
 
@@ -57,6 +60,12 @@ public class WallController extends Controller {
         PromptInput input = new PromptInput("Enter your post");
         String threadContent = input.nextLine();
         List<String> tags = getRawUserTags(threadContent);
+        threadDAO.addThread(
+            nav.session().currentUser().getUsername(),
+            nav.session().currentUser().getUsername(),
+            threadContent,
+            tags
+        );
     }
 
     private List<String> getRawUserTags(String content) {
@@ -65,7 +74,7 @@ public class WallController extends Controller {
 
         List<String> tags = new ArrayList<>();
         while (m.find()) { 
-            tags.add(m.group(0));
+            tags.add(m.group(1));
         }
         return tags;
     }
