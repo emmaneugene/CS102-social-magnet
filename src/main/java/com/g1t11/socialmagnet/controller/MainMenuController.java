@@ -1,23 +1,15 @@
 package com.g1t11.socialmagnet.controller;
 
-import java.sql.Connection;
-
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.PromptInput;
-import com.g1t11.socialmagnet.view.MainMenuView;
+import com.g1t11.socialmagnet.view.page.MainMenuPageView;
 
 public class MainMenuController extends Controller {
-    public MainMenuController(Connection conn) {
-        super(conn);
-        view = new MainMenuView();
-    }
-
-    @Override
-    public void updateView() {
+    public MainMenuController(Navigation nav) {
+        super(nav);
         // Inject an updated full name into the view
         String fullname = nav.session().currentUser().getFullname();
-        ((MainMenuView) view).setFullname(fullname);
-        view.render();
+        view = new MainMenuPageView(fullname);
     }
 
     @Override
@@ -25,16 +17,16 @@ public class MainMenuController extends Controller {
         PromptInput input = new PromptInput();
         switch (input.nextLine()) {
             case "1":
-                nav.push(new NewsFeedController(conn));
+                nav.push(new NewsFeedController(nav));
                 break;
             case "2":
-                nav.push(new WallController(conn));
+                nav.push(new WallController(nav));
                 break;
             case "3":
             case "4":
             case "5":
                 nav.session().logout();
-                nav.setFirstController(new WelcomePageController(conn));
+                nav.popToFirst();
                 break;
             default:
                 view.setStatus(Painter.paint("Please enter a choice between 1 & 3!", Painter.Color.RED));

@@ -1,8 +1,9 @@
-package com.g1t11.socialmagnet.view.kit;
+package com.g1t11.socialmagnet.view.page;
 
 import java.util.Objects;
 
 import com.g1t11.socialmagnet.util.Painter;
+import com.g1t11.socialmagnet.view.component.*;
 
 /**
  * {@link PageView} is the base of all screens and menus.
@@ -11,14 +12,14 @@ import com.g1t11.socialmagnet.util.Painter;
  * static views.
  * @see View
  */
-public class PageView implements View {
+public class PageView {
     private String pageTitle;
 
     /**
-     * A View injected from the previous {@link Controller} which allows us to
-     * render content after the screen is cleared by {@link PageView}.
+     * A Component injected from the previous {@link Controller} which allows 
+     * us to render content after the screen is cleared by {@link PageView}.
      */
-    private View status = null;
+    private Component status = null;
 
     private final String headerTemplate = Painter.paint("== Social Magnet :: %s ==", Painter.Color.BOLD);
 
@@ -34,12 +35,12 @@ public class PageView implements View {
         this.pageTitle = pageTitle;
     }
 
-    public void setStatus(View status) {
+    public void setStatus(Component status) {
         this.status = status;
     }
 
     public void setStatus(String statusText) {
-        this.status = new TextView(statusText);
+        this.status = new TextComponent(statusText);
     }
 
     public void clearStatus() {
@@ -54,8 +55,7 @@ public class PageView implements View {
         System.out.flush();
     }
 
-    @Override
-    public void render() {
+    public void display() {
         clearScreen();
         System.out.println(String.format(headerTemplate, pageTitle));
         if (status != null) {

@@ -1,21 +1,15 @@
-package com.g1t11.socialmagnet.view.kit;
+package com.g1t11.socialmagnet.view.component;
 
 import java.util.Objects;
 
-import com.g1t11.socialmagnet.util.Painter;
-
-public class TextView implements View {
+public class TextComponent implements Component {
     private String text;
 
-    public TextView(String text, Painter.Color color) {
-        this.text = Painter.paint(text, color);
-    }
-
-    public TextView(String text) {
+    public TextComponent(String text) {
         this.text = text;
     }
 
-    public TextView() {
+    public TextComponent() {
         this("");
     }
 
@@ -38,8 +32,8 @@ public class TextView implements View {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof TextView)) return false;
-        TextView other = (TextView) o;
+        if (!(o instanceof TextComponent)) return false;
+        TextComponent other = (TextComponent) o;
         return Objects.equals(text, other.text);
     }
 }

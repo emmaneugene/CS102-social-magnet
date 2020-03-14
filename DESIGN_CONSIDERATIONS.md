@@ -1,44 +1,116 @@
 # Object-Oriented Design Considerations
 
-## Design patterns used
+## Model-View-Controller
 
-When considering the complexity of the project and the need to navigate back and forth between pages, our team decided to adopt the model-view-controller (MVC) pattern with a navigation stack.
+`Models` supply `Views` with the data necessary for the UI.
 
-We also load our credentials through system environment variables stored outside the git repositry to minimise exposure of sensitive data.
+`Views` organise data to be presented on the UI.
 
-### Model-View-Controller
+`Controllers` handle state, load data into `Models` and inject those into `Views`, and handle user input to decide which `Controller` to navigate to next.
 
-With MVC, we can separate the control flow between different pages with `Controller` objects, and render the necessary UIs with `View` objects. All data loaded from our database is represented by our models, placed under `src/.../main/model/`.
+### Navigation and Controller
 
-### Navigation
+The `Navigation` object is used to implement the [state pattern](https://en.wikipedia.org/wiki/State_pattern), where the behaviour of our application depends on its current state/controller.
 
-To store the state of our pages and the order in which they were initially called, we used a stack of `Controller` objects managed by the `Navigation` object.
+The first controller on the base of the navigation stack represents our application's starting state, and the last controller on the top of the stack always represent the current state of our application.
 
-Currently, because the depth of navigation is not too large, we do not have to handle any cases where the stack gets too large. However, `Navigation` can be adapted to better manage and cache its stored `Controller` objects if necessary.
+As such, we can control the execution of our application with just one `while` loop, and depend on the state of our navigation stack to control behaviour.
+
+* This behaviour was chosen over managing multiple loops within multiple `Controllers`, and having to trace a navigation path from `Controller` to `Controller`.
 
 #### Two-way binding of Navigation and Controller
 
-When a controller is added to the navigation stack, we want to be able to access the `Navigation` object from within the controller such that we can add new `Controller` objects to the stack or pop the stack.
+All `Controllers` are initialised with a `Navigation` object, and `Navigation` pushes and pops `Controller` objects onto its stack.
 
-##### Arguments against creating and calling controllers from within other controllers
+```java
+public class Controller {
+    public Controller(Navigation nav) {
+        this.nav = nav;
+    }
+}
 
-This method was taken as opposed to creating and calling new `Controller` objects from within other `Controller` objects. 
+public class Navigation {
+    public void push(Controller next) {
+        navigationStack.add(next);
+    }
+}
+```
 
-Instead of having to trace the navigation path from `Controller` to `Controller`, we can always inspect the `Navigation` object to determine the order in which `Controller` instances were created, and figure out the navigation path that way.
+This creates a two-way binding between `Controllers` and `Navigation`, which is necessary for `Navigation` to maintain its stack of `Controllers`, and `Controllers` to decide the next `Controller` to push onto `Navigation`.
 
-In addition, navigating up back to previous controllers is simple and controlled from a single access point under `Navigation`. 
+#### Navigating to other controllers
 
-### One-way data flow
+To navigate to other controllers, instantiate the controller, then push it onto the stack.
 
-Initially, `App` existed as a singleton to better manage the state of the application i.e. user session tracking, maintaining a single database connection pool. However upon testing, the high binding between `App` and other classes resulted in difficult-to-set-up tests.
+```java
+// current controller: WelcomeController
+nav.push(new RegisterController(nav));
+// current controller: RegisterController
+nav.pop();
+// current controller: WelcomeController
+```
 
-Eventually, the application was refactored to pass only *necessary* information down into its children, with the exception of the `Navigation` and `Controller` relationship.
+#### Passing data between Controllers
 
-## Using stored procedures
+Data **must be** passed between controllers through their constructors.
 
-By implementing all database view logic on the database itself, we can minimise the amount of hard-coded SQL queries within the application itself, and reduce binding between the application and the database design. 
+### Views
 
-## Saving tagged user information
+There are two types of views:
+1. `PageView`, responsible for representing entire pages.
+2. `Component`, responsible for rendering a provided data model.
+
+`PageViews` **belong to** `Controllers`, and `PageViews` can contain zero or many `Components`.
+
+#### Principles
+
+`PageView` holds a reference to the model(s) that it should display, but **not model(s) that should be displayed by its `Components`**.
+
+```java
+public class ThreadPageView {
+    // Directly rendered by ThreadPageView.
+    private Thread thread;
+
+    // Comments are rendered by its Component, therefore ThreadPageView should not hold
+    // a reference to List<Comment>.
+    private List<CommentComponent> commentComps = ...
+    ...
+```
+
+##### Passing data into PageView
+
+For data that is **not expected to update** during the lifecycle of the `PageView`, data can be passed once through the `PageView` constructor and left as it is.
+* A `Controller` lifecycle is the period from its instantiation, to being popped off the navigation stack.
+
+If the data **is expected to change**, then it should not be passed through the constructor. Instead, the `Controller` must inject data into its `PageView` through supplied methods before it calls `PageView::display()`.
+
+When data is injected, the `PageView` will subsequently pass data into its `Components` as necessary.
+
+```java
+public class WallPageView {
+    // Not expected to update while WallPageController is on the navigation stack.
+    public WallPageView(String currentUsername) {}
+
+    // Will be updated when navigating back from ThreadController.
+    public void updateThreads(List<Thread> threads)
+    ...
+```
+
+##### Passing data into Component
+
+Similarly, data that is **not expected to change** for a given instance of `Component` should be passed in through its constructor, and data that is **dynamic** should be set through setter methods before `Component::render()`.
+
+## Database
+
+### Credentials
+
+We also load our credentials through system environment variables stored outside the git repositry to minimise exposure of sensitive data.
+
+### Using stored procedures
+
+By implementing all database-related logic on the database itself, we can minimise the amount of hard-coded SQL queries within the application, and reduce binding between the application and the database design. 
+
+### Saving tagged user information
 
 We wanted to remember which tags were valid at the time of post creation. In addition, we need to remember where our tag was created within the content so that we could highlight the tag appropriately.
 
@@ -54,5 +126,4 @@ While option 2 seemed simpler, it came with multiple disadvantages
 Instead, we adopted option 1, and represent the tagging relations with a table, while storing the original `@` tagging markers in the database.
 
 When we load content in, we run through the string for all occurences of `@`, and validate the tag against the relational data before formatting accordingly.
-
-> We assume that a user can only be tagged once in a post, and only the first valid tag is formatted.
+* We assume that a user can only be tagged once in a post, and only the first valid tag is formatted.

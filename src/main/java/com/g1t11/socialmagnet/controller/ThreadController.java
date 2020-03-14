@@ -1,34 +1,32 @@
 package com.g1t11.socialmagnet.controller;
 
-import java.sql.Connection;
-
 import com.g1t11.socialmagnet.data.ThreadDAO;
 import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.PromptInput;
-import com.g1t11.socialmagnet.view.ThreadView;
+import com.g1t11.socialmagnet.view.page.ThreadPageView;
 
 public class ThreadController extends Controller {
-    private ThreadDAO threadDAO = new ThreadDAO(conn);
+    private ThreadDAO threadDAO = new ThreadDAO(connection());
 
     private Thread thread;
 
-    public ThreadController(Connection conn) {
-        super(conn);
+    public ThreadController(Navigation nav) {
+        super(nav);
         thread = null;
-        view = new ThreadView(0, null);
+        view = new ThreadPageView(0, null);
     }
 
-    public ThreadController(Connection conn, int threadIndex, Thread thread) {
-        super(conn);
+    public ThreadController(Navigation nav, int threadIndex, Thread thread) {
+        super(nav);
         this.thread = thread;
-        view = new ThreadView(threadIndex, thread);
+        view = new ThreadPageView(threadIndex, thread);
     }
 
     @Override
     public void updateView() {
-        ((ThreadView) view).setThread(thread);
-        view.render();
+        ((ThreadPageView) view).setThread(thread);
+        view.display();
     }
     
     @Override

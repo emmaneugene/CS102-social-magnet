@@ -1,21 +1,14 @@
 package com.g1t11.socialmagnet.controller;
 
-import java.sql.Connection;
-
 import com.g1t11.socialmagnet.util.InputValidator;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.PromptInput;
-import com.g1t11.socialmagnet.view.RegisterPageView;
+import com.g1t11.socialmagnet.view.page.RegisterPageView;
 
-public class RegisterPageController extends Controller {
-    public RegisterPageController(Connection conn) {
-        super(conn);
+public class RegisterController extends Controller {
+    public RegisterController(Navigation nav) {
+        super(nav);
         view = new RegisterPageView();
-    }
-
-    @Override
-    public void updateView() {
-        view.render();
     }
 
     @Override
@@ -46,11 +39,10 @@ public class RegisterPageController extends Controller {
 
         boolean registerSuccessful = nav.session().register(username, fullName, password);
 
+        nav.pop();
         if (registerSuccessful) {
-            nav.pop();
             nav.currentController().view.setStatus(String.format(Painter.paint("Registered %s successfully!", Painter.Color.GREEN), username));
         } else {
-            nav.pop();
             nav.currentController().view.setStatus(String.format(Painter.paint("%s already exists. Choose another username.", Painter.Color.RED), username));
         }
     }

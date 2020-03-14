@@ -1,6 +1,6 @@
-package com.g1t11.socialmagnet.view.kit;
+package com.g1t11.socialmagnet.view.component;
 
-public interface View {
+public interface Component {
     /**
      * Render the main content of the <code>View</code>.
      */

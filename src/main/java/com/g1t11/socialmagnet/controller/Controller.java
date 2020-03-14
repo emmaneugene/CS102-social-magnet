@@ -2,17 +2,25 @@ package com.g1t11.socialmagnet.controller;
 
 import java.sql.Connection;
 
-import com.g1t11.socialmagnet.view.kit.*;
+import com.g1t11.socialmagnet.view.page.PageView;
 
 public abstract class Controller {
     protected Navigation nav;
 
-    protected PageView view;
-
     protected Connection conn;
 
-    public Controller(Connection conn) {
-        this.conn = conn;
+    protected PageView view;
+
+    public Controller(Navigation nav) {
+        this.nav = nav;
+    }
+
+    public void setNavigation(Navigation nav) {
+        this.nav = nav;
+    }
+
+    public Connection connection() {
+        return nav.connection();
     }
 
     /**
@@ -25,11 +33,10 @@ public abstract class Controller {
         handleInput();
     }
 
-    public abstract void updateView();
+    public void updateView() {
+        view.display();
+    }
 
     public abstract void handleInput();
 
-    public void setNavigation(Navigation nav) {
-        this.nav = nav;
-    }
 }

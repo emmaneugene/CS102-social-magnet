@@ -1,27 +1,26 @@
-package com.g1t11.socialmagnet.view;
+package com.g1t11.socialmagnet.view.component;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.util.Painter;
-import com.g1t11.socialmagnet.view.kit.*;
 
-public class SimpleThreadView implements View {
+public class SimpleThreadComponent implements Component {
     private final static int commentsToDisplay = 3;
 
     private int threadIndex;
 
     private Thread thread;
 
-    private LikeBarView likeBarView;
+    private LikeBarComponent likeBarView;
 
-    private List<CommentView> commentViews = new ArrayList<>(commentsToDisplay);
+    private List<CommentComponent> commentViews = new ArrayList<>(commentsToDisplay);
     
-    public SimpleThreadView(int threadIndex, Thread thread) {
+    public SimpleThreadComponent(int threadIndex, Thread thread) {
         this.threadIndex = threadIndex;
         this.thread = thread;
-        likeBarView = new LikeBarView(thread.getLikers().size(), thread.getDislikers().size());
+        likeBarView = new LikeBarComponent(thread.getLikers().size(), thread.getDislikers().size());
         setComments();
     }
 
@@ -34,7 +33,7 @@ public class SimpleThreadView implements View {
          */
         int offset = maxIndex > commentsToDisplay ? maxIndex - commentsToDisplay : 0;
         for (int i = 0; i < thread.getComments().size(); i++) {
-            commentViews.add(new CommentView(threadIndex, i + offset + 1, thread.getComments().get(i)));
+            commentViews.add(new CommentComponent(threadIndex, i + offset + 1, thread.getComments().get(i)));
         }
     }
 
@@ -51,7 +50,7 @@ public class SimpleThreadView implements View {
     }
 
     private void renderComments() {
-        for (CommentView commentView : commentViews) {
+        for (CommentComponent commentView : commentViews) {
             commentView.render();
         }
     }

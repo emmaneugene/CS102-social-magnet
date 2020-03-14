@@ -1,28 +1,24 @@
-package com.g1t11.socialmagnet.view;
+package com.g1t11.socialmagnet.view.page;
 
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
 import com.g1t11.socialmagnet.util.Painter;
-import com.g1t11.socialmagnet.view.kit.*;
 
 public class WelcomePageView extends PageView {
-    private TextView greetingView;
+    private String greeting = "";
 
-    private final List<TextView> actionViews = List.of(
-        new TextView(Painter.paintf("[{1.}] Register", Painter.Color.YELLOW)),
-        new TextView(Painter.paintf("[{2.}] Login", Painter.Color.YELLOW)),
-        new TextView(Painter.paintf("[{3.}] Exit", Painter.Color.YELLOW))
+    private final List<String> actions = List.of(
+        Painter.paintf("[{1.}] Register", Painter.Color.YELLOW),
+        Painter.paintf("[{2.}] Login", Painter.Color.YELLOW),
+        Painter.paintf("[{3.}] Exit", Painter.Color.YELLOW)
     );
-
-    String username;
 
     Integer fixedHourOfDay = null;
 
     public WelcomePageView() {
         super("Welcome");
-        greetingView = new TextView();
     }
 
     public WelcomePageView(int fixedHourOfDay) {
@@ -31,18 +27,13 @@ public class WelcomePageView extends PageView {
     }
 
     @Override
-    public void render() {
-        super.render();
+    public void display() {
+        super.display();
         updateGreeting();
-        greetingView.render();
-        for (TextView actionView : actionViews) {
-            actionView.render();
+        System.out.println(greeting);
+        for (String action : actions) {
+            System.out.println(action);
         }
-    }
-
-    public void setUsername(String username) {
-        assert username != null;
-        this.username = username;
     }
 
     /**
@@ -57,16 +48,16 @@ public class WelcomePageView extends PageView {
             hour = fixedHourOfDay;
         }
         String timeOfDay = basedOnHour(hour);
-        String greeting = String.format("Good %s, %s!", timeOfDay, username);
-        greetingView.setText(greeting);
+        String newGreeting = String.format("Good %s, anonymous!", timeOfDay);
+        greeting = newGreeting;
     }
 
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof WelcomePageView)) return false;
         WelcomePageView other = (WelcomePageView) o;
-        return Objects.equals(greetingView, other.greetingView)
-            && Objects.deepEquals(actionViews, other.actionViews)
+        return Objects.equals(greeting, other.greeting)
+            && Objects.deepEquals(actions, other.actions)
             && Objects.equals(fixedHourOfDay, other.fixedHourOfDay);
     }
 
