@@ -35,11 +35,9 @@ public class ThreadController extends Controller {
     public void handleInput() {
         String promptText;
         if (isRemovable() || thread.isTagged()) {
-            promptText = Painter.paintf("[[{M}]]ain | [[{K}]]ill | [[{R}]]eply | [[{L}]]ike | [[{D}]]islike",
-                Painter.Color.YELLOW, Painter.Color.YELLOW, Painter.Color.YELLOW, Painter.Color.YELLOW, Painter.Color.YELLOW);
+            promptText = Painter.paintf("[[{M}]]ain | [[{K}]]ill | [[{R}]]eply | [[{L}]]ike | [[{D}]]islike", Painter.Color.YELLOW); 
         } else {
-            promptText = Painter.paintf("[[{M}]]ain | [[{R}]]eply | [[{L}]]ike | [[{D}]]islike",
-                Painter.Color.YELLOW, Painter.Color.YELLOW, Painter.Color.YELLOW, Painter.Color.YELLOW);
+            promptText = Painter.paintf("[[{M}]]ain | [[{R}]]eply | [[{L}]]ike | [[{D}]]islike", Painter.Color.YELLOW); 
         }
         PromptInput input = new PromptInput(promptText);
         String choice = input.nextLine();

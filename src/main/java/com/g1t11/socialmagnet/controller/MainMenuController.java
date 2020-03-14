@@ -1,7 +1,6 @@
 package com.g1t11.socialmagnet.controller;
 
 import java.sql.Connection;
-import java.util.Objects;
 
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.PromptInput;
@@ -29,6 +28,8 @@ public class MainMenuController extends Controller {
                 nav.push(new NewsFeedController(conn));
                 break;
             case "2":
+                nav.push(new WallController(conn));
+                break;
             case "3":
             case "4":
             case "5":
@@ -39,12 +40,5 @@ public class MainMenuController extends Controller {
                 view.setStatus(Painter.paint("Please enter a choice between 1 & 3!", Painter.Color.RED));
                 break;
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof MainMenuController)) return false;
-        MainMenuController other = (MainMenuController) o;
-        return Objects.equals(view, other.view);
     }
 }

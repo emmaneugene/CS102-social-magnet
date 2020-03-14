@@ -1,7 +1,6 @@
 package com.g1t11.socialmagnet.controller;
 
 import java.sql.Connection;
-import java.util.Objects;
 
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.PromptInput;
@@ -39,12 +38,5 @@ public class WelcomePageController extends Controller {
                 view.setStatus(Painter.paint("Please enter a choice between 1 & 3!", Painter.Color.RED));
                 break;
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof WelcomePageController)) return false;
-        WelcomePageController other = (WelcomePageController) o;
-        return Objects.equals(view, other.view);
     }
 }

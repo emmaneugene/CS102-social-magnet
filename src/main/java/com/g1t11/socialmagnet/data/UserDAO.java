@@ -17,7 +17,7 @@ public class UserDAO extends DAO {
 
     public User getUser(String username) {
         ResultSet rs = null;
-        User u = new User();
+        User u = null;
 
         String queryString = "CALL get_user(?)";
 
@@ -29,8 +29,7 @@ public class UserDAO extends DAO {
 
             String fullname = rs.getString("fullname");
 
-            u.setUsername(username);
-            u.setFullName(fullname);
+            u = new User(username, fullname);
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
         } finally {
@@ -59,9 +58,7 @@ public class UserDAO extends DAO {
                 String username = rs.getString("username");
                 String fullname = rs.getString("fullname");
 
-                User u = new User();
-                u.setUsername(username);
-                u.setFullName(fullname);
+                User u = new User(username, fullname);
                 friends.add(u);
             }
         } catch (SQLException e) {

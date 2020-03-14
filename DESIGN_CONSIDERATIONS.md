@@ -33,3 +33,26 @@ In addition, navigating up back to previous controllers is simple and controlled
 Initially, `App` existed as a singleton to better manage the state of the application i.e. user session tracking, maintaining a single database connection pool. However upon testing, the high binding between `App` and other classes resulted in difficult-to-set-up tests.
 
 Eventually, the application was refactored to pass only *necessary* information down into its children, with the exception of the `Navigation` and `Controller` relationship.
+
+## Using stored procedures
+
+By implementing all database view logic on the database itself, we can minimise the amount of hard-coded SQL queries within the application itself, and reduce binding between the application and the database design. 
+
+## Saving tagged user information
+
+We wanted to remember which tags were valid at the time of post creation. In addition, we need to remember where our tag was created within the content so that we could highlight the tag appropriately.
+
+Given our requirements, we had two options of persisting that information:
+1. Store a relationship table that associates users tagged to posts, and store the index of the tag within the post.
+2. Mark valid user tags within the content using special format markers.
+
+While option 2 seemed simpler, it came with multiple disadvantages
+* Content on the database was littered with format markers, and the client application had to format it accordingly every time.
+* There was no relational representation of the tagging relationship
+* We would have to handle edge cases where content might contain our format markers
+
+Instead, we adopted option 1, and represent the tagging relations with a table, while storing the original `@` tagging markers in the database.
+
+When we load content in, we run through the string for all occurences of `@`, and validate the tag against the relational data before formatting accordingly.
+
+> We assume that a user can only be tagged once in a post, and only the first valid tag is formatted.

@@ -1,6 +1,5 @@
 package com.g1t11.socialmagnet.controller;
 import com.g1t11.socialmagnet.TestApp;
-import com.g1t11.socialmagnet.util.Painter;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -31,9 +30,7 @@ public class TestWelcomePageController extends TestApp {
         systemInMock.provideLines("2");
         app.nav.currentController().run();
 
-        LoginPageController expected = new LoginPageController(app.db.connection());
-
-        Assert.assertEquals(expected, app.nav.currentController());
+        Assert.assertTrue(app.nav.currentController() instanceof LoginPageController);
     }
 
     @Test
@@ -41,14 +38,12 @@ public class TestWelcomePageController extends TestApp {
         systemInMock.provideLines("2");
         app.nav.currentController().run();
 
+        Assert.assertTrue(app.nav.currentController() instanceof LoginPageController);
+
         systemInMock.provideLines("adam", "solocareer");
         app.nav.currentController().run();
 
-        WelcomePageController expected = new WelcomePageController(app.db.connection());
-        expected.setNavigation(app.nav);
-        expected.updateView();
-
-        Assert.assertEquals(expected, app.nav.currentController());
+        Assert.assertTrue(app.nav.currentController() instanceof WelcomePageController);
     }
 
     @Test
@@ -56,12 +51,7 @@ public class TestWelcomePageController extends TestApp {
         systemInMock.provideLines("pass");
         app.nav.currentController().run();
 
-        WelcomePageController expected = new WelcomePageController(app.db.connection());
-        expected.setNavigation(app.nav);
-        expected.updateView();
-        expected.view.setStatus(Painter.paint("Please enter a choice between 1 & 3!", Painter.Color.RED));
-
-        Assert.assertEquals(expected, app.nav.currentController());
+        Assert.assertTrue(app.nav.currentController() instanceof WelcomePageController);
     }
 
     @Test

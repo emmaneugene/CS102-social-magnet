@@ -23,12 +23,13 @@ public class TestThreadDAO {
     @Test
     public void testGetThread() {
         // Testing from the perspective of adam
-        Thread expected = new Thread(7, "elijah", "elijah", "Had a great night with adam, britney, and @charlie", 4, true);
+        Thread expected = new Thread(7, "elijah", "elijah",
+            "Had a great night with \u001b[34madam\u001b[0m, \u001b[34mbritney\u001b[0m, and @charlie", 4, true);
         expected.setActualCommentsCount(4);
         expected.setComments(List.of(
             new Comment("britney", "How did you guys wake up so early??"),
-            new Comment("adam", "Early bird gets the worm!"),
-            new Comment("elijah", "Maybe you shouldn't stay out too late!")
+            new Comment("adam",    "Early bird gets the worm!"),
+            new Comment("elijah",  "Maybe you shouldn't stay out too late!")
         ));
         expected.setLikers(List.of(
             new User("britney", "Britney Spears")
@@ -42,19 +43,21 @@ public class TestThreadDAO {
     @Test
     public void testGetNewsFeedThreads() {
         List<Thread> expected = List.of(
-            new Thread(10, "britney", "britney", "I'm so lonely...",                                   0),
-            new Thread(9,  "britney", "charlie", "We should meet up again! elijah @adsm",              0, true),
-            new Thread(8,  "adam",    "elijah",  "Where did you go?",                                  0),
-            new Thread(7,  "elijah",  "elijah",  "Had a great night with adam, britney, and @charlie", 4),
-            new Thread(5,  "charlie", "adam",    "Who are you talking to?",                            0)
+            new Thread(10, "britney", "britney", "I'm so lonely...",                                       0),
+            new Thread(9,  "britney", "charlie",
+                "We should meet up again! \u001b[34melijah\u001b[0m @adsm",                                0, true),
+            new Thread(8,  "adam",    "elijah",  "Where did you go?",                                      0),
+            new Thread(7,  "elijah",  "elijah",  
+                "Had a great night with \u001b[34madam\u001b[0m, \u001b[34mbritney\u001b[0m, and @charlie", 4),
+            new Thread(5,  "charlie", "adam",    "Who are you talking to?",                                0)
         );
 
-        List<Thread> threads = threadDAO.getNewsFeedThreads(new User("elijah", "Elijah Wood"), 5);
+        List<Thread> actual = threadDAO.getNewsFeedThreads(new User("elijah", "Elijah Wood"), 5);
 
         // Assert only the shallow details of threads
-        for (int i = 0; i < expected.size(); i++) {
+        for (int i = 0; i < actual.size(); i++) {
             Thread exp = expected.get(i);
-            Thread act = threads.get(i);
+            Thread act = actual.get(i);
             Assert.assertEquals(exp.getFromUsername(), act.getFromUsername());
             Assert.assertEquals(exp.getToUsername(), act.getToUsername());
             Assert.assertEquals(exp.getContent(), act.getContent());
@@ -63,40 +66,75 @@ public class TestThreadDAO {
     }
 
     @Test
-    public void testGetComments() {
+    public void testGetWallThreads() {
+        List<Thread> expected = List.of(
+            new Thread(7, "elijah",  "elijah",  
+                "Had a great night with \u001b[34madam\u001b[0m, \u001b[34mbritney\u001b[0m, and @charlie", 4, true),
+            new Thread(5, "charlie", "adam",   "Who are you talking to?",                                   0),
+            new Thread(2, "adam",    "adam",   "I'm going crazy!!",                                         1),
+            new Thread(1, "adam",    "adam",   "Hello, world!",                                             2)
+        );
+
+        List<Thread> actual = threadDAO.getWallThreads(new User("adam", "Adam Levine"), 5);
+
+        // Assert only the shallow details of threads
+        for (int i = 0; i < actual.size(); i++) {
+            Thread exp = expected.get(i);
+            Thread act = actual.get(i);
+            Assert.assertEquals(exp.getFromUsername(), act.getFromUsername());
+            Assert.assertEquals(exp.getToUsername(), act.getToUsername());
+            Assert.assertEquals(exp.getContent(), act.getContent());
+            Assert.assertEquals(exp.isTagged(), act.isTagged());
+        }
+    }
+
+    @Test
+    public void testSetComments() {
         List<Comment> expected = List.of(
             new Comment("britney", "How did you guys wake up so early??"),
             new Comment("adam",    "Early bird gets the worm!"),
             new Comment("elijah",  "Maybe you shouldn't stay out too late!")
         );
 
-        List<Comment> comments = threadDAO.getCommentsLatestLast(new Thread(7), 3);
+        Thread actual = new Thread(7);
+        threadDAO.setCommentsLatestLast(actual, 3);
 
-        Assert.assertEquals(expected, comments);
+        Assert.assertEquals(expected, actual.getComments());
     }
 
     @Test
-    public void testGetLikers() {
+    public void testSetLikers() {
         List<User> expected = List.of(
             new User("adam", "Adam Levine"),
             new User("britney", "Britney Spears")
         );
 
-        List<User> likers = threadDAO.getLikers(new Thread(3));
+        Thread actual = new Thread(3);
+        threadDAO.setLikers(actual);
 
-        Assert.assertEquals(expected, likers);
+        Assert.assertEquals(expected, actual.getLikers());
     }
 
     @Test
-    public void testGetDislikers() {
+    public void testSetDislikers() {
         List<User> expected = List.of(
             new User("adam", "Adam Levine"),
             new User("britney", "Britney Spears")
         );
 
-        List<User> dislikers = threadDAO.getDislikers(new Thread(4));
+        Thread actual = new Thread(4);
+        threadDAO.setDislikers(actual);
 
-        Assert.assertEquals(expected, dislikers);
+        Assert.assertEquals(expected, actual.getDislikers());
+    }
+
+    @Test
+    public void testGetTaggedUsernames() {
+        List<String> expected = List.of("adam", "britney");
+
+        List<String> actual = threadDAO.getTaggedUsernames(new Thread(7));
+
+        Assert.assertEquals(expected, actual);
     }
 
     /**
@@ -116,6 +154,19 @@ public class TestThreadDAO {
         threadDAO.removeTag(thread, user);
         retrieved = threadDAO.getThread(8, user);
         Assert.assertFalse(retrieved.isTagged());
+    }
+
+    @Test
+    public void testAddTags() {
+        Thread thread = new Thread(6);
+        threadDAO.addTags(thread, List.of("adam", "britney", "charlie", "danny", "elijah", "frank"));
+        Thread retrieved;
+
+        retrieved = threadDAO.getThread(6, new User("charlie", "Charlie Puth"));
+        Assert.assertTrue(retrieved.isTagged());
+
+        retrieved = threadDAO.getThread(6, new User("frank", "Frank Sinatra"));
+        Assert.assertTrue(retrieved.isTagged());
     }
 
     @Test
@@ -139,5 +190,10 @@ public class TestThreadDAO {
         User user = new User("adam", "Adam Levine");
 
         threadDAO.dislikeThread(thread, user);
+    }
+
+    @Test
+    public void testAddThread() {
+        threadDAO.addThread("adam", "elijah", "This is a cool test @charlie and @frank", List.of("charlie", "frank"));
     }
 }

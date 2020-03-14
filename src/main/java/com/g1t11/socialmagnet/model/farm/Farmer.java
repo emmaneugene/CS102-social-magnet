@@ -2,6 +2,7 @@ package com.g1t11.socialmagnet.model.farm;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.g1t11.socialmagnet.model.social.User;
 
@@ -22,27 +23,24 @@ public class Farmer extends User {
      */ 
     private int wealth = 50;
 
+    private int wealthRank = 0;
+
     private List<Plot> farmland = new ArrayList<>();
 
     private List<InventoryItem> inventory = new ArrayList<>();
 
-    /**
-     * Constructor for a brand new Farmer object
-     */
-    public Farmer(String username, String fullName) {
-        super(username, fullName);
-    }
-
-    /**
-     * Constructor for an existing Farmer (data from database) 
-     */
-    public Farmer(String username, String fullName, int XP, int wealth, List<Plot> farmland, List<InventoryItem> inventory) {
-        super(username, fullName);
+    public Farmer(String username, String fullname, int XP, int wealth, int wealthRank) {
+        super(username, fullname);
         this.XP = XP;
         this.wealth = wealth;
-        this.farmland = farmland;
-        this.inventory = inventory;
+        this.wealthRank = wealthRank;
     }
+
+    public Farmer(String username, String fullname) {
+        super(username, fullname);
+    }
+
+    public Farmer() {}
 
     public String getRank() {
         if (XP < 1000) {
@@ -59,7 +57,6 @@ public class Farmer extends User {
         }
         return "Legendary";
     }
-
 
     public int getXP() {
         return XP;
@@ -84,19 +81,31 @@ public class Farmer extends User {
         this.wealth -= wealth;
     }
 
-    public List<Plot> getFarmland() {
-        return farmland;
+    public int getWealthRank() {
+        return wealthRank;
     }
 
-    public void addPlot(Plot plot) {
-        farmland.add(plot);
+    public void setWealthRank(int wealthRank) {
+        this.wealthRank = wealthRank;
+    }
+
+    public List<Plot> getFarmland() {
+        return farmland;
     }
 
     public List<InventoryItem> getInventory() {
         return inventory;
     }
 
-    public void addInventoryItem(InventoryItem item) {
-        inventory.add(item);
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Farmer)) return false;
+        Farmer other = (Farmer) o;
+        return super.equals(other)
+        && Objects.equals(XP, other.XP)
+        && Objects.equals(wealth, other.wealth)
+        && Objects.equals(wealthRank, other.wealthRank)
+        && Objects.deepEquals(farmland, other.farmland)
+        && Objects.deepEquals(inventory, other.inventory);
     }
 }

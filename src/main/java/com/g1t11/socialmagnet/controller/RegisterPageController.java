@@ -1,7 +1,6 @@
 package com.g1t11.socialmagnet.controller;
 
 import java.sql.Connection;
-import java.util.Objects;
 
 import com.g1t11.socialmagnet.util.InputValidator;
 import com.g1t11.socialmagnet.util.Painter;
@@ -54,12 +53,5 @@ public class RegisterPageController extends Controller {
             nav.pop();
             nav.currentController().view.setStatus(String.format(Painter.paint("%s already exists. Choose another username.", Painter.Color.RED), username));
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof RegisterPageController)) return false;
-        RegisterPageController other = (RegisterPageController) o;
-        return Objects.equals(view, other.view);
     }
 }
