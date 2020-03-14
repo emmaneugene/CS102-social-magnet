@@ -1,10 +1,9 @@
-package com.g1t11.socialmagnet.view;
+package com.g1t11.socialmagnet.view.component;
 
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.util.Painter;
-import com.g1t11.socialmagnet.view.kit.View;
 
-public class ProfileInfoView implements View {
+public class ProfileInfoComponent implements Component {
     Farmer me;
 
     private static final String template = Painter.paintf(
@@ -16,7 +15,7 @@ public class ProfileInfoView implements View {
         Painter.Color.BLUE
     );
 
-    public ProfileInfoView(Farmer me) {
+    public ProfileInfoComponent(Farmer me) {
         this.me = me;
     }
 

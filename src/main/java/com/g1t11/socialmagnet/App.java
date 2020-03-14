@@ -1,7 +1,7 @@
 package com.g1t11.socialmagnet;
 
 import com.g1t11.socialmagnet.controller.Navigation;
-import com.g1t11.socialmagnet.controller.WelcomePageController;
+import com.g1t11.socialmagnet.controller.WelcomeController;
 import com.g1t11.socialmagnet.data.Database;
 
 public class App {
@@ -12,7 +12,7 @@ public class App {
     public App() {
         db = new Database();
         nav = new Navigation(db.connection());
-        nav.setFirstController(new WelcomePageController(db.connection()));
+        nav.setFirstController(new WelcomeController(nav));
     }
 
     /**

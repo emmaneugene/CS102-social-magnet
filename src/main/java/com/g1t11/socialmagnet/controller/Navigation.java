@@ -7,6 +7,8 @@ import java.util.List;
 import com.g1t11.socialmagnet.data.Session;
 
 public class Navigation {
+    private Connection conn;
+
     private Session sess;
 
     /**
@@ -21,15 +23,16 @@ public class Navigation {
     private List<Controller> navigationStack = new ArrayList<>();
 
     public Navigation(Connection conn) {
+        this.conn = conn;
         sess = new Session(conn);
+    }
+
+    public Connection connection() {
+        return conn;
     }
 
     public Session session() {
         return sess;
-    }
-
-    private void initControllerNav(Controller controller) {
-        controller.setNavigation(this);
     }
 
     /**
@@ -40,7 +43,6 @@ public class Navigation {
      * @see Controller
      */
     public void setFirstController(Controller first) {
-        initControllerNav(first);
         navigationStack.clear();
         navigationStack.add(first);
     }
@@ -70,6 +72,13 @@ public class Navigation {
         }
     }
 
+    public void popToFirst() {
+        int size = navigationStack.size();
+        for (int i = 0; i < size - 1; i++) {
+            pop();
+        }
+    }
+
     /**
      * Prepare the next <code>Controller</code> to be loaded onto the navigation
      * stack.
@@ -79,7 +88,6 @@ public class Navigation {
      * @see Controller
      */
     public void push(Controller next) {
-        initControllerNav(next);
         navigationStack.add(next);
     }
 }

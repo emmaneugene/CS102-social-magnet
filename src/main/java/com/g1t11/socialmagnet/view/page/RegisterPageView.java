@@ -1,6 +1,4 @@
-package com.g1t11.socialmagnet.view;
-
-import com.g1t11.socialmagnet.view.kit.*;
+package com.g1t11.socialmagnet.view.page;
 
 public class RegisterPageView extends PageView {
     public RegisterPageView() {
@@ -8,7 +6,7 @@ public class RegisterPageView extends PageView {
     }
 
     @Override
-    public void render() {
-        super.render();
+    public void display() {
+        super.display();
     }
 }

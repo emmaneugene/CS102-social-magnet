@@ -1,4 +1,4 @@
-package com.g1t11.socialmagnet.view;
+package com.g1t11.socialmagnet.view.page;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,21 +6,20 @@ import java.util.List;
 import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
-import com.g1t11.socialmagnet.view.kit.*;
+import com.g1t11.socialmagnet.view.component.CommentComponent;
 
-public class ThreadView extends PageView {
+public class ThreadPageView extends PageView {
     private final static int commentsToDisplay = 3;
 
     private int threadIndex;
 
-    protected Thread thread;
+    private Thread thread;
 
-    private List<CommentView> commentViews = new ArrayList<>(commentsToDisplay);
+    private List<CommentComponent> commentComps = new ArrayList<>(commentsToDisplay);
     
-    public ThreadView(int threadIndex, Thread thread) {
+    public ThreadPageView(int threadIndex, Thread thread) {
         super("View a Thread");
         this.threadIndex = threadIndex;
-        setThread(thread);
     }
 
     public void setThread(Thread thread) {
@@ -29,7 +28,7 @@ public class ThreadView extends PageView {
     }
 
     private void setComments() {
-        commentViews.clear();
+        commentComps.clear();
         int maxIndex = thread.getActualCommentsCount();
         /**
          * If we have more comments than we can display, we want to offset the
@@ -37,13 +36,13 @@ public class ThreadView extends PageView {
          */
         int offset = maxIndex > commentsToDisplay ? maxIndex - commentsToDisplay : 0;
         for (int i = 0; i < thread.getComments().size(); i++) {
-            commentViews.add(new CommentView(threadIndex, i + offset + 1, thread.getComments().get(i)));
+            commentComps.add(new CommentComponent(threadIndex, i + offset + 1, thread.getComments().get(i)));
         }
     }
 
     @Override
-    public void render() {
-        super.render();
+    public void display() {
+        super.display();
         renderContent();
         renderComments();
         System.out.println();
@@ -53,9 +52,15 @@ public class ThreadView extends PageView {
         System.out.println();
     }
 
-    protected void renderContent() {
+    private void renderContent() {
         String paintedTemplate = Painter.paintf("[{%d}] [{%s}]: %s\n", Painter.Color.YELLOW, Painter.Color.BLUE);
         System.out.printf(paintedTemplate, threadIndex, thread.getFromUsername(), thread.getContent());
+    }
+
+    private void renderComments() {
+        for (CommentComponent commentView : commentComps) {
+            commentView.render();
+        }
     }
 
     private void renderLikes() {
@@ -75,12 +80,6 @@ public class ThreadView extends PageView {
         String paintedTemplate = Painter.paintf("  %d. %s ([{%s}])\n", Painter.Color.BLUE);
         for (User disliker : thread.getDislikers()) {
             System.out.printf(paintedTemplate, index++, disliker.getFullname(), disliker.getUsername());
-        }
-    }
-
-    protected void renderComments() {
-        for (CommentView commentView : commentViews) {
-            commentView.render();
         }
     }
 }

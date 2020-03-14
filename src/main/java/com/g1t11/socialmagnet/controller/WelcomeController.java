@@ -1,23 +1,13 @@
 package com.g1t11.socialmagnet.controller;
 
-import java.sql.Connection;
-
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.PromptInput;
-import com.g1t11.socialmagnet.view.WelcomePageView;
+import com.g1t11.socialmagnet.view.page.WelcomePageView;
 
-public class WelcomePageController extends Controller {
-    public WelcomePageController(Connection conn) {
-        super(conn);
+public class WelcomeController extends Controller {
+    public WelcomeController(Navigation nav) {
+        super(nav);
         view = new WelcomePageView();
-    }
-
-    @Override
-    public void updateView() {
-        // Inject an updated username into the view
-        String username = nav.session().currentUser() == null ? "anonymous" : nav.session().currentUser().getUsername();
-        ((WelcomePageView) view).setUsername(username);
-        view.render();
     }
 
     @Override
@@ -25,10 +15,10 @@ public class WelcomePageController extends Controller {
         PromptInput input = new PromptInput();
         switch (input.nextLine()) {
             case "1":
-                nav.push(new RegisterPageController(conn));
+                nav.push(new RegisterController(nav));
                 break;
             case "2":
-                nav.push(new LoginPageController(conn));
+                nav.push(new LoginController(nav));
                 break;
             case "3":
                 System.out.println(Painter.paint("Goodbye!", Painter.Color.GREEN));

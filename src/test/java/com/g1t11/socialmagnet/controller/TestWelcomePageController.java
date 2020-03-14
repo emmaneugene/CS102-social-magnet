@@ -22,7 +22,7 @@ public class TestWelcomePageController extends TestApp {
 
     @Before
     public void initController() {
-        app.nav.setFirstController(new WelcomePageController(app.db.connection()));
+        app.nav.setFirstController(new WelcomeController(app.db.connection()));
     }
 
     @Test
@@ -30,7 +30,7 @@ public class TestWelcomePageController extends TestApp {
         systemInMock.provideLines("2");
         app.nav.currentController().run();
 
-        Assert.assertTrue(app.nav.currentController() instanceof LoginPageController);
+        Assert.assertTrue(app.nav.currentController() instanceof LoginController);
     }
 
     @Test
@@ -38,12 +38,12 @@ public class TestWelcomePageController extends TestApp {
         systemInMock.provideLines("2");
         app.nav.currentController().run();
 
-        Assert.assertTrue(app.nav.currentController() instanceof LoginPageController);
+        Assert.assertTrue(app.nav.currentController() instanceof LoginController);
 
         systemInMock.provideLines("adam", "solocareer");
         app.nav.currentController().run();
 
-        Assert.assertTrue(app.nav.currentController() instanceof WelcomePageController);
+        Assert.assertTrue(app.nav.currentController() instanceof WelcomeController);
     }
 
     @Test
@@ -51,7 +51,7 @@ public class TestWelcomePageController extends TestApp {
         systemInMock.provideLines("pass");
         app.nav.currentController().run();
 
-        Assert.assertTrue(app.nav.currentController() instanceof WelcomePageController);
+        Assert.assertTrue(app.nav.currentController() instanceof WelcomeController);
     }
 
     @Test

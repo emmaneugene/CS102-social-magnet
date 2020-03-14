@@ -1,6 +1,5 @@
 package com.g1t11.socialmagnet.controller;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -12,27 +11,26 @@ import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.PromptInput;
-import com.g1t11.socialmagnet.view.WallView;
+import com.g1t11.socialmagnet.view.page.WallPageView;
 
 public class WallController extends Controller {
-    private FarmerDAO farmerDAO = new FarmerDAO(conn);
-    private ThreadDAO threadDAO = new ThreadDAO(conn);
+    private FarmerDAO farmerDAO = new FarmerDAO(connection());
+    private ThreadDAO threadDAO = new ThreadDAO(connection());
     
-    private Farmer me;
+    private Farmer currentFarmer;
     private List<Thread> wallThreads;
 
-    public WallController(Connection conn) {
-        super(conn);
-        view = new WallView();
+    public WallController(Navigation nav) {
+        super(nav);
+        currentFarmer = farmerDAO.getFarmer(nav.session().currentUser());
+        view = new WallPageView(currentFarmer);
     }
 
     @Override
     public void updateView() {
-        me = farmerDAO.getFarmer(nav.session().currentUser());
-        wallThreads = threadDAO.getWallThreads(me, 5);
-        ((WallView) view).setFarmer(me);
-        ((WallView) view).setThreads(wallThreads);
-        view.render();
+        wallThreads = threadDAO.getWallThreads(currentFarmer, 5);
+        ((WallPageView) view).setThreads(wallThreads);
+        view.display();
     }
 
     @Override
@@ -43,7 +41,7 @@ public class WallController extends Controller {
             nav.pop();
         } else if (wallThreads.size() > 0 && choice.matches(String.format("T[1-%d]", wallThreads.size()))) {
             int index = Character.getNumericValue(choice.charAt(1));
-            nav.push(new ThreadController(conn, index, wallThreads.get(index - 1)));
+            nav.push(new ThreadController(nav, index, wallThreads.get(index - 1)));
         } else if (choice.equals("A")) {
             view.setStatus("Not ready yet...");
         } else if (choice.equals("P")) {
