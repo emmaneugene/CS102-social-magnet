@@ -335,8 +335,6 @@ public class ThreadDAO extends DAO {
             rs = stmt.executeQuery();
             rs.next();
 
-            System.out.println(rs.getInt("new_id"));
-            System.out.println(usernameTags);
             addTags(rs.getInt("new_id"), usernameTags);
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());

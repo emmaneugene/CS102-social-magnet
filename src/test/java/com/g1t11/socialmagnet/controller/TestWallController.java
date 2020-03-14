@@ -22,9 +22,9 @@ public class TestWallController extends TestApp {
 
     @Before
     public void initController() {
-        app.nav.setFirstController(new MainMenuController(app.db.connection()));
-        app.nav.push(new WallController(app.db.connection()));
         app.nav.session().login("adam", "maroon5");
+        app.nav.setFirstController(new MainMenuController(app.nav));
+        app.nav.push(new WallController(app.nav));
     }
 
     @Test

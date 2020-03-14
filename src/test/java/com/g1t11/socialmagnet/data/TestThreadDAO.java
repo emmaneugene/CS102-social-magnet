@@ -171,7 +171,7 @@ public class TestThreadDAO {
 
     @Test
     public void testDeletePost() {
-        Thread thread = new Thread(8);
+        Thread thread = new Thread(9);
         User user = new User("adam", "Adam Levine");
         threadDAO.deleteThread(thread, user);
     }

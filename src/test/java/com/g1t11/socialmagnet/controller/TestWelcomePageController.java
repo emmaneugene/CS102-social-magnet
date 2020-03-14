@@ -22,7 +22,7 @@ public class TestWelcomePageController extends TestApp {
 
     @Before
     public void initController() {
-        app.nav.setFirstController(new WelcomeController(app.db.connection()));
+        app.nav.setFirstController(new WelcomeController(app.nav));
     }
 
     @Test
