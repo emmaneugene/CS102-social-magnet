@@ -238,6 +238,20 @@ public class ThreadDAO extends DAO {
         }
     }
 
+    public void addTags(Thread thread, List<String> usernames) {
+        String queryString = "CALL add_tag(?, ?)";
+        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+            for (String username : usernames) {
+                stmt.setInt(1, thread.getId());
+                stmt.setString(2, username);
+                stmt.addBatch();
+            }
+            stmt.executeBatch();
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        }
+    }
+
     public void removeTag(Thread thread, User user) {
         String queryString = "CALL remove_tag(?, ?)";
 

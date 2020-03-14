@@ -233,8 +233,38 @@ CREATE PROCEDURE get_wall_threads(IN _username VARCHAR(255), IN _limit INT)
 CREATE PROCEDURE get_tagged_usernames(IN _thread_id INT)
     SELECT tagged_user FROM tag WHERE thread_id = _thread_id;
 
+DELIMITER $$
+CREATE TRIGGER validate_tag BEFORE INSERT ON tag
+FOR EACH ROW BEGIN
+    DECLARE is_friend BOOLEAN;
+    SELECT COUNT(*) INTO is_friend FROM (
+        SELECT user_1 FROM friend WHERE user_2 = NEW.tagged_user
+        UNION
+        SELECT user_2 FROM friend WHERE user_1 = NEW.tagged_user
+    ) AS f
+    WHERE user_1 IN (
+        SELECT author FROM thread WHERE thread_id = NEW.thread_id
+    );
+    IF (is_friend = FALSE) THEN
+        SIGNAL SQLSTATE '45000' SET message_text = 'Cannot tag non-friends';
+    END IF;
+END$$
 CREATE PROCEDURE add_tag(IN _thread_id INT, IN _username VARCHAR(255))
-    INSERT INTO tag (thread_id, tagged_user) VALUES (_thread_id, _username);
+BEGIN
+    DECLARE is_friend BOOLEAN;
+    SELECT COUNT(*) INTO is_friend FROM (
+        SELECT user_1 FROM friend WHERE user_2 = _username
+        UNION
+        SELECT user_2 FROM friend WHERE user_1 = _username
+    ) AS f
+    WHERE user_1 IN (
+        SELECT author FROM thread WHERE thread_id = _thread_id
+    );
+    IF (is_friend = TRUE) THEN
+        INSERT INTO tag (thread_id, tagged_user) VALUES (_thread_id, _username);
+    END IF;
+END$$
+DELIMITER ;
 
 CREATE PROCEDURE remove_tag(IN _thread_id INT, IN _username VARCHAR(255))
     DELETE FROM tag WHERE thread_id = _thread_id AND tagged_user = _username;
@@ -252,10 +282,10 @@ CREATE PROCEDURE dislike_thread(IN _thread_id INT, IN _username VARCHAR(255))
     INSERT INTO disliker (username, thread_id) VALUES (_username, _thread_id);
 
 CREATE PROCEDURE verify_credentials(IN _username VARCHAR(255), IN _password VARCHAR(255))
-    SELECT IF(COUNT(*) = 0, FALSE, TRUE) AS is_valid FROM user WHERE username = _username AND pwd = _password;
+    SELECT COUNT(*) AS is_valid FROM user WHERE username = _username AND pwd = _password;
 
 CREATE PROCEDURE user_exists(IN _username VARCHAR(255))
-    SELECT IF(COUNT(*) = 0, FALSE, TRUE) AS user_exists FROM user WHERE username = _username;
+    SELECT COUNT(*) AS user_exists FROM user WHERE username = _username;
 
 CREATE PROCEDURE add_user(IN _username VARCHAR(255), IN _fullname VARCHAR(255), IN _pwd VARCHAR(255))
     INSERT INTO user (username, fullname, pwd) VALUES (_username, _fullname, _pwd);
@@ -273,23 +303,5 @@ BEGIN
         ORDER BY wealth DESC
     ) AS r ON farmer.wealth = r.wealth
     WHERE username = _username;
-END$$
-DELIMITER ;
-
-DELIMITER $$
-CREATE TRIGGER validate_tag BEFORE INSERT ON tag
-FOR EACH ROW BEGIN
-    DECLARE is_friend BOOLEAN;
-    SELECT COUNT(*) INTO is_friend FROM (
-        SELECT user_1 FROM friend WHERE user_2 = NEW.tagged_user
-        UNION
-        SELECT user_2 FROM friend WHERE user_1 = NEW.tagged_user
-    ) AS f
-    WHERE user_1 IN (
-        SELECT author FROM thread WHERE thread_id = NEW.thread_id
-    );
-    IF (is_friend = FALSE) THEN
-        SIGNAL SQLSTATE '45000' SET message_text = 'Cannot tag non-friends';
-    END IF;
 END$$
 DELIMITER ;

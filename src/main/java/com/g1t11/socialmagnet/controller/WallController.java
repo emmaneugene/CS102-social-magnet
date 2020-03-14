@@ -1,7 +1,10 @@
 package com.g1t11.socialmagnet.controller;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.g1t11.socialmagnet.data.FarmerDAO;
 import com.g1t11.socialmagnet.data.ThreadDAO;
@@ -53,5 +56,17 @@ public class WallController extends Controller {
         updateView();
         PromptInput input = new PromptInput("Enter your post");
         String threadContent = input.nextLine();
+        List<String> tags = getRawUserTags(threadContent);
+    }
+
+    private List<String> getRawUserTags(String content) {
+        Pattern p = Pattern.compile("@([A-Za-z0-9]+)");
+        Matcher m = p.matcher(content);
+
+        List<String> tags = new ArrayList<>();
+        while (m.find()) { 
+            tags.add(m.group(0));
+        }
+        return tags;
     }
 }
