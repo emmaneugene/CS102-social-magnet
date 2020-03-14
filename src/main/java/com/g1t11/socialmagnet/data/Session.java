@@ -56,18 +56,15 @@ public class Session {
     public boolean credentialsValid(String username, String password) {
         ResultSet rs = null;
 
-        String queryString = String.join(" ",
-            "SELECT username",
-            "FROM user",
-            "WHERE username = ? AND pwd = ?"
-        );
+        String queryString = "CALL verify_credentials(?, ?)";
 
         try ( PreparedStatement stmt = conn.prepareStatement(queryString); ) {
             stmt.setString(1, username);
             stmt.setString(2, password);
 
             rs = stmt.executeQuery();
-            return rs.next();
+            rs.next();
+            return rs.getBoolean("is_valid");
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
         } finally {
@@ -80,17 +77,14 @@ public class Session {
     public boolean userExists(String username) {
         ResultSet rs = null;
 
-        String queryString = String.join(" ",
-            "SELECT username",
-            "FROM user",
-            "WHERE username = ?"
-        );
+        String queryString = "CALL user_exists(?)";
 
         try ( PreparedStatement stmt = conn.prepareStatement(queryString); ) {
             stmt.setString(1, username);
 
             rs = stmt.executeQuery();
-            return rs.next();
+            rs.next();
+            return rs.getBoolean("user_exists");
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
         } finally {
@@ -106,10 +100,7 @@ public class Session {
      * @return True if the user was added successfullly.
      */
     public boolean addUser(String username, String fullname, String pwd) {
-        String queryString = String.join(" ",
-            "INSERT INTO user (username, fullname, pwd) VALUES",
-            "(?, ?, ?)"
-        );
+        String queryString = "CALL add_user(?, ?, ?)";
 
         try ( PreparedStatement stmt = conn.prepareStatement(queryString); ) {
             stmt.setString(1, username);

@@ -23,7 +23,7 @@ public class TestThreadDAO {
     @Test
     public void testGetThread() {
         // Testing from the perspective of adam
-        Thread expected = new Thread(7, "elijah", "elijah", "Had a great night with adam, britney, and @charlie", true);
+        Thread expected = new Thread(7, "elijah", "elijah", "Had a great night with adam, britney, and @charlie", 4, true);
         expected.setActualCommentsCount(4);
         expected.setComments(List.of(
             new Comment("britney", "How did you guys wake up so early??"),
@@ -42,11 +42,11 @@ public class TestThreadDAO {
     @Test
     public void testGetNewsFeedThreads() {
         List<Thread> expected = List.of(
-            new Thread(10, "britney", "britney", "I'm so lonely..."),
-            new Thread(9,  "britney", "charlie", "We should meet up again! elijah @adsm", true),
-            new Thread(8,  "adam",    "elijah",  "Where did you go?"),
-            new Thread(7,  "elijah",  "elijah",  "Had a great night with adam, britney, and @charlie"),
-            new Thread(5,  "charlie", "adam",    "Who are you talking to?")
+            new Thread(10, "britney", "britney", "I'm so lonely...",                                   0),
+            new Thread(9,  "britney", "charlie", "We should meet up again! elijah @adsm",              0, true),
+            new Thread(8,  "adam",    "elijah",  "Where did you go?",                                  0),
+            new Thread(7,  "elijah",  "elijah",  "Had a great night with adam, britney, and @charlie", 4),
+            new Thread(5,  "charlie", "adam",    "Who are you talking to?",                            0)
         );
 
         List<Thread> threads = threadDAO.getNewsFeedThreads(new User("elijah", "Elijah Wood"), 5);
@@ -60,11 +60,6 @@ public class TestThreadDAO {
             Assert.assertEquals(exp.getContent(), act.getContent());
             Assert.assertEquals(exp.isTagged(), act.isTagged());
         }
-    }
-
-    @Test
-    public void testGetCommentsCount() {
-        Assert.assertEquals(4, threadDAO.getCommentsCount(new Thread(7)));
     }
 
     @Test

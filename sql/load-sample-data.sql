@@ -8,7 +8,7 @@ INSERT INTO user (username, fullname, pwd) VALUES
 ("elijah",  "Elijah Wood",    "mordor"),
 ("frank",   "Frank Sinatra",  "flymetothemoon");
 
-INSERT INTO post (author, recipient, posted_on, content) VALUES
+INSERT INTO thread (author, recipient, posted_on, content) VALUES
 ("adam",    "adam",    "2019-03-02 08:30:00", "Hello, world!"),
 ("adam",    "adam",    "2019-05-02 10:30:00", "I'm going crazy!!"),
 ("britney", "elijah",  "2019-05-15 20:30:00", "Don't know what you're talking about"),
@@ -22,7 +22,7 @@ INSERT INTO post (author, recipient, posted_on, content) VALUES
 ("britney", "charlie", "2019-10-03 13:30:00", "We should meet up again! elijah @adsm"),
 ("britney", "britney", "2019-10-04 14:30:00", "I'm so lonely...");
 
-INSERT INTO tag (post_id, tagged_user) VALUES
+INSERT INTO tag (thread_id, tagged_user) VALUES
 (7, "adam"),
 (7, "britney"),
 (9, "elijah");
@@ -35,7 +35,7 @@ INSERT INTO friend (user_1, user_2) VALUES
 ("charlie", "danny"),
 ("danny",   "frank");
 
-INSERT INTO comment (post_id, commenter, commented_on, content) VALUES
+INSERT INTO comment (thread_id, commenter, commented_on, content) VALUES
 (1, "charlie", "2019-03-02 16:30:00", "Good job! You started programming."),
 (1, "elijah",  "2019-03-04 12:15:00", "Bye!"),
 (2, "charlie", "2019-05-02 10:32:00", "Same!!! Too many things to do!"),
@@ -49,7 +49,7 @@ INSERT INTO comment (post_id, commenter, commented_on, content) VALUES
 (7, "elijah",  "2019-09-15 16:30:00", "Maybe you shouldn't stay out too late!");
 
 
-INSERT INTO likes (username, post_id) VALUES
+INSERT INTO liker (username, thread_id) VALUES
 ("adam",    3),
 ("britney", 3),
 ("britney", 7),
@@ -58,7 +58,7 @@ INSERT INTO likes (username, post_id) VALUES
 ("danny",   4),
 ("elijah",  2);
 
-INSERT INTO dislikes (username, post_id) VALUES
+INSERT INTO disliker (username, thread_id) VALUES
 ("adam",    3),
 ("adam",    4),
 ("britney", 4),

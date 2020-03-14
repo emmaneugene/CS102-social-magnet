@@ -13,8 +13,6 @@ public class Thread {
 
     private String content = null;
 
-    private boolean tagged = false;
-
     /**
      * Stores a shallow list of User (only username and fullname) who like and dislike a post
      */
@@ -27,20 +25,23 @@ public class Thread {
     private List<Comment> comments = new ArrayList<>(3);
     private int actualCommentsCount = 0;
 
+    private boolean tagged = false;
+
     public Thread(int id) {
         this.id = id;
     }
 
-    public Thread(int id, String fromUsername, String toUsername, String content, boolean tagged) {
+    public Thread(int id, String fromUsername, String toUsername, String content, int commentCount, boolean tagged) {
         this(id);
         this.fromUsername = fromUsername;
         this.toUsername = toUsername;
         this.content = content;
+        this.actualCommentsCount = commentCount;
         this.tagged = tagged;
     }
 
-    public Thread(int id, String fromUsername, String toUsername, String content) {
-        this(id, fromUsername, toUsername, content, false);
+    public Thread(int id, String fromUsername, String toUsername, String content, int commentCount) {
+        this(id, fromUsername, toUsername, content, commentCount, false);
     }
 
     public int getId() {
@@ -70,11 +71,6 @@ public class Thread {
     public void setContent(String content) {
         this.content = content;
     }
-
-    public boolean isTagged() {
-        return tagged;
-    }
-
     public List<User> getLikers() {
         return likers;
     }
@@ -106,6 +102,11 @@ public class Thread {
     public void setActualCommentsCount(int actualCommentsCount) {
         this.actualCommentsCount = actualCommentsCount;
     }
+
+    public boolean isTagged() {
+        return tagged;
+    }
+
 
     @Override
     public boolean equals(Object o) {
