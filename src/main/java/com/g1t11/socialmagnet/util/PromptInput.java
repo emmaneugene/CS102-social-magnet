@@ -1,11 +1,13 @@
 package com.g1t11.socialmagnet.util;
 
+import java.io.Console;
 import java.util.Scanner;
 
 /**
  * A wrapper around <code>Scanner</code> that presents a prompt first.
  */
 public class PromptInput {
+    private final Console secure_sc = System.console();
     private final Scanner sc = new Scanner(System.in);
 
     private String prompt;
@@ -27,6 +29,11 @@ public class PromptInput {
 
     public void setPrompt(String prompt) {
         this.prompt = prompt;
+    }
+
+    public String readPassword() {
+        char[] pwd = secure_sc.readPassword(String.format("%s %s ", prompt, promptIndicator));
+        return String.copyValueOf(pwd);
     }
 
     public String nextLine() {
