@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.g1t11.socialmagnet.model.social.RequestExistingFriendException;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.model.social.UserNotFoundException;
 
@@ -68,5 +69,71 @@ public class UserDAO extends DAO {
         }
 
         return friends;
+    }
+
+    public List<String> getRequestUsernames(User user) {
+        ResultSet rs = null;
+        List<String> requestUsernames = new ArrayList<>();
+
+        String queryString = "CALL get_requests(?)";
+
+        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+            stmt.setString(1, user.getUsername());
+
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                requestUsernames.add(rs.getString("sender"));
+            }
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        } finally {
+            try { if (rs != null) rs.close(); } catch (SQLException e) {}
+        }
+
+        return requestUsernames;
+    }
+
+    public void makeRequest(User sender, String recipient) {
+        String queryString = "CALL make_request(?, ?)";
+
+        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+            stmt.setString(1, sender.getUsername());
+            stmt.setString(2, recipient);
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            if (e.getMessage().contains("Cannot request existing friend")) {
+                throw new RequestExistingFriendException();
+            } else if (e.getMessage().contains("User not found")) {
+                throw new UserNotFoundException();
+            }
+            System.err.println("SQLException: " + e.getMessage());
+        }
+    }
+
+    public void acceptRequest(String sender, User recipient) {
+        String queryString = "CALL accept_request(?, ?)";
+
+        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+            stmt.setString(1, sender);
+            stmt.setString(2, recipient.getUsername());
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        }
+    }
+
+    public void rejectRequest(String sender, User recipient) {
+        String queryString = "CALL reject_request(?, ?)";
+
+        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+            stmt.setString(1, sender);
+            stmt.setString(2, recipient.getUsername());
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        }
     }
 }

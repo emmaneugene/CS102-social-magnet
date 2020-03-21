@@ -246,9 +246,12 @@ FOR EACH ROW BEGIN
         SELECT author FROM thread WHERE thread_id = NEW.thread_id
     );
     IF (is_friend = FALSE) THEN
-        SIGNAL SQLSTATE '45000' SET message_text = 'Cannot tag non-friends';
+        SIGNAL SQLSTATE '45000' SET message_text = 'Cannot tag non-friends.';
     END IF;
 END$$
+DELIMITER ;
+
+DELIMITER $$
 CREATE PROCEDURE add_tag(IN _thread_id INT, IN _username VARCHAR(255))
 BEGIN
     DECLARE is_friend BOOLEAN;
@@ -313,3 +316,39 @@ BEGIN
     WHERE username = _username;
 END$$
 DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER validate_request BEFORE INSERT ON request
+FOR EACH ROW BEGIN
+    DECLARE is_friend BOOLEAN;
+    SELECT COUNT(*) INTO is_friend FROM (
+        SELECT user_1 FROM friend WHERE user_1 = NEW.sender AND user_2 = NEW.recipient
+        UNION
+        SELECT user_2 FROM friend WHERE user_2 = NEW.sender AND user_1 = NEW.recipient
+    ) AS f;
+    IF (is_friend = TRUE) THEN
+        SIGNAL SQLSTATE '45000' SET message_text = 'Cannot request existing friend.';
+    END IF;
+END $$
+DELIMITER ;
+
+CREATE PROCEDURE make_request(IN _sender VARCHAR(255), IN _recipient VARCHAR(255))
+    INSERT INTO request (sender, recipient) VALUES (_sender, _recipient);
+
+CREATE PROCEDURE get_requests(IN _recipient VARCHAR(255))
+    SELECT sender FROM request WHERE recipient = _recipient;
+
+DELIMITER $$
+CREATE PROCEDURE accept_request(IN _sender VARCHAR(255), IN _recipient VARCHAR(255))
+BEGIN
+    IF _sender < _recipient THEN
+        INSERT INTO friend (user_1, user_2) VALUES (_sender, _recipient);
+    ELSE
+        INSERT INTO friend (user_1, user_2) VALUES (_recipient, _sender);
+    END IF;
+    DELETE FROM request WHERE sender = _sender AND recipient = _recipient;
+END$$
+DELIMITER ;
+
+CREATE PROCEDURE reject_request(IN _sender VARCHAR(255), IN _recipient VARCHAR(255))
+    DELETE FROM request WHERE sender = _sender AND recipient = _recipient;

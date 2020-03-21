@@ -32,13 +32,23 @@ public class NewsFeedController extends Controller {
         String choice = input.nextLine();
         if (choice.equals("M")) {
             nav.pop();
-        } else if (threads.size() > 0 && choice.matches(String.format("T[1-%d]", threads.size()))) {
-            int index = Character.getNumericValue(choice.charAt(1));
-            nav.push(new ThreadController(nav, index, threads.get(index - 1)));
-        } else if (choice.matches("T.*")) {
-            view.setStatus(Painter.paint("Use T<id> to select a thread.", Painter.Color.RED));
+        } else if (choice.charAt(0) == 'T') {
+            handleThread(choice);
         } else {
             view.setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
+        }
+    }
+
+    private void handleThread(String choice) {
+        try {
+            int index = Integer.parseInt(choice.substring(1));
+            if (index <= 0 || index > threads.size()) {
+                view.setStatus(Painter.paint("Index out of range.", Painter.Color.RED));
+            } else {
+                nav.push(new ThreadController(nav, index, threads.get(index - 1)));
+            }
+        } catch (NumberFormatException e) {
+            view.setStatus(Painter.paint("Use T<id> to select a thread.", Painter.Color.RED));
         }
     }
 }

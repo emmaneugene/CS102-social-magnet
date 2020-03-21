@@ -23,6 +23,8 @@ public class MainMenuController extends Controller {
                 nav.push(new WallController(nav));
                 break;
             case "3":
+                nav.push(new FriendsController(nav));
+                break;
             case "4":
             case "5":
                 nav.session().logout();
