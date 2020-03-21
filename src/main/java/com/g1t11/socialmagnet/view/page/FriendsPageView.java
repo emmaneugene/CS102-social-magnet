@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.g1t11.socialmagnet.model.social.User;
+import com.g1t11.socialmagnet.util.Painter;
 
 public class FriendsPageView extends PageView {
     private User currentUser;
@@ -34,13 +35,13 @@ public class FriendsPageView extends PageView {
         System.out.println("My Friends:");
         int index = 1;
         for (User friend : friends) {
-            System.out.printf("%d. %s\n", index++, friend.getUsername());
+            System.out.printf(Painter.paintf("[{%d}]. [{%s}]\n", Painter.Color.YELLOW, Painter.Color.BLUE), index++, friend.getUsername());
         }
 
         System.out.println();
         System.out.println("My Requests:");
         for (String requestUsername : requestUsernames) {
-            System.out.printf("%d. %s\n", index++, requestUsername);
+            System.out.printf(Painter.paintf("[{%d}]. [{%s}]\n", Painter.Color.YELLOW, Painter.Color.BLUE), index++, requestUsername);
         }
     }
 }

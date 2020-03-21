@@ -104,7 +104,7 @@ public class UserDAO extends DAO {
         } catch (SQLException e) {
             if (e.getMessage().contains("Cannot request existing friend")) {
                 throw new RequestExistingFriendException();
-            } else if (e.getMessage().contains("User not found")) {
+            } else if (e.getErrorCode() == 1452) {
                 throw new UserNotFoundException();
             }
             System.err.println("SQLException: " + e.getMessage());
