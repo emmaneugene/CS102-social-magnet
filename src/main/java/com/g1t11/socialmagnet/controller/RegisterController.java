@@ -1,6 +1,5 @@
 package com.g1t11.socialmagnet.controller;
 
-import com.g1t11.socialmagnet.data.NoConnectionException;
 import com.g1t11.socialmagnet.util.InputValidator;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.PromptInput;
@@ -38,17 +37,12 @@ public class RegisterController extends Controller {
             return;
         }
 
-        try {
-            boolean registerSuccessful = nav.session().register(username, fullName, password);
-            nav.pop();
-            if (registerSuccessful) {
-                nav.currentController().view.setStatus(String.format(Painter.paint("Registered %s successfully!", Painter.Color.GREEN), username));
-            } else {
-                nav.currentController().view.setStatus(String.format(Painter.paint("%s already exists. Choose another username.", Painter.Color.RED), username));
-            }
-        } catch (NoConnectionException e) {
-            nav.pop();
-            throw new NoConnectionException();
+        boolean registerSuccessful = nav.session().register(username, fullName, password);
+        nav.pop();
+        if (registerSuccessful) {
+            nav.currentController().view.setStatus(String.format(Painter.paint("Registered %s successfully!", Painter.Color.GREEN), username));
+        } else {
+            nav.currentController().view.setStatus(String.format(Painter.paint("%s already exists. Choose another username.", Painter.Color.RED), username));
         }
     }
 }

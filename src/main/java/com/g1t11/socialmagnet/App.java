@@ -3,7 +3,7 @@ package com.g1t11.socialmagnet;
 import com.g1t11.socialmagnet.controller.Navigation;
 import com.g1t11.socialmagnet.controller.WelcomeController;
 import com.g1t11.socialmagnet.data.Database;
-import com.g1t11.socialmagnet.data.NoConnectionException;
+import com.g1t11.socialmagnet.data.ConnectionFailureException;
 import com.g1t11.socialmagnet.util.Painter;
 
 public class App {
@@ -25,7 +25,8 @@ public class App {
         while (true) {
             try {
                 nav.currentController().run();
-            } catch (NoConnectionException e) {
+            } catch (ConnectionFailureException e) {
+                nav.popToFirst();
                 nav.currentController().view.setStatus(Painter.paint("Failed to connect to database.", Painter.Color.RED));
                 db.establishConnection();
             }

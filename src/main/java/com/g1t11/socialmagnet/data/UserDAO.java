@@ -33,6 +33,7 @@ public class UserDAO extends DAO {
             u = new User(username, fullname);
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
+            throw new ConnectionFailureException();
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
@@ -64,6 +65,7 @@ public class UserDAO extends DAO {
             }
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
+            throw new ConnectionFailureException();
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
@@ -103,6 +105,7 @@ public class UserDAO extends DAO {
             }
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
+            throw new ConnectionFailureException();
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
@@ -120,6 +123,7 @@ public class UserDAO extends DAO {
             stmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
+            throw new ConnectionFailureException();
         }
     }
 
@@ -138,6 +142,7 @@ public class UserDAO extends DAO {
             }
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
+            throw new ConnectionFailureException();
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
@@ -160,6 +165,7 @@ public class UserDAO extends DAO {
                 throw new UserNotFoundException();
             }
             System.err.println("SQLException: " + e.getMessage());
+            throw new ConnectionFailureException();
         }
     }
 
@@ -173,6 +179,7 @@ public class UserDAO extends DAO {
             stmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
+            throw new ConnectionFailureException();
         }
     }
 
@@ -186,6 +193,7 @@ public class UserDAO extends DAO {
             stmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
+            throw new ConnectionFailureException();
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.g1t11.socialmagnet.controller;
 
-import com.g1t11.socialmagnet.data.NoConnectionException;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.LoginPageView;
@@ -19,17 +18,12 @@ public class LoginController extends Controller {
         input.setPrompt("Enter your password");
         String password = input.readPassword();
 
-        try {
-            boolean loginSuccessful = nav.session().login(username, password);
-            nav.pop();
-            if (loginSuccessful) {
-                nav.push(new MainMenuController(nav));
-            } else {
-                nav.currentController().view.setStatus(Painter.paint("Login error! Please try again.", Painter.Color.RED));
-            }
-        } catch (NoConnectionException e) {
-            nav.pop();
-            throw new NoConnectionException();
+        boolean loginSuccessful = nav.session().login(username, password);
+        nav.pop();
+        if (loginSuccessful) {
+            nav.push(new MainMenuController(nav));
+        } else {
+            nav.currentController().view.setStatus(Painter.paint("Login error! Please try again.", Painter.Color.RED));
         }
     }
 }

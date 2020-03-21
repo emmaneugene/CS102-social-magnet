@@ -47,6 +47,7 @@ public class ThreadDAO extends DAO {
             thread.formatContentTags(getTaggedUsernames(thread));
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
+            throw new ConnectionFailureException();
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
@@ -92,6 +93,7 @@ public class ThreadDAO extends DAO {
             }
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
+            throw new ConnectionFailureException();
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
@@ -126,6 +128,7 @@ public class ThreadDAO extends DAO {
             }
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
+            throw new ConnectionFailureException();
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
@@ -153,6 +156,7 @@ public class ThreadDAO extends DAO {
             }
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
+            throw new ConnectionFailureException();
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
@@ -175,6 +179,7 @@ public class ThreadDAO extends DAO {
             }
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
+            throw new ConnectionFailureException();
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
@@ -197,6 +202,7 @@ public class ThreadDAO extends DAO {
             }
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
+            throw new ConnectionFailureException();
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
@@ -217,6 +223,7 @@ public class ThreadDAO extends DAO {
             }
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
+            throw new ConnectionFailureException();
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
@@ -234,6 +241,7 @@ public class ThreadDAO extends DAO {
             stmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
+            throw new ConnectionFailureException();
         }
     }
 
@@ -249,6 +257,7 @@ public class ThreadDAO extends DAO {
             stmt.executeBatch();
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
+            throw new ConnectionFailureException();
         }
     }
 
@@ -266,6 +275,7 @@ public class ThreadDAO extends DAO {
             stmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
+            throw new ConnectionFailureException();
         }
     }
 
@@ -279,6 +289,7 @@ public class ThreadDAO extends DAO {
             stmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
+            throw new ConnectionFailureException();
         }
     }
 
@@ -293,6 +304,7 @@ public class ThreadDAO extends DAO {
             stmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
+            throw new ConnectionFailureException();
         }
     }
 
@@ -306,6 +318,7 @@ public class ThreadDAO extends DAO {
             stmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
+            throw new ConnectionFailureException();
         }
     }
 
@@ -319,6 +332,7 @@ public class ThreadDAO extends DAO {
             stmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
+            throw new ConnectionFailureException();
         }
     }
 
@@ -337,6 +351,7 @@ public class ThreadDAO extends DAO {
             addTags(rs.getInt("new_id"), usernameTags);
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
+            throw new ConnectionFailureException();
         }
     }
 
