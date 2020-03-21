@@ -1,6 +1,5 @@
 package com.g1t11.socialmagnet.data;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,8 +12,8 @@ import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.model.social.UserNotFoundException;
 
 public class UserDAO extends DAO {
-    public UserDAO(Connection conn) {
-        super(conn);
+    public UserDAO(Database db) {
+        super(db);
     }
 
     public User getUser(String username) {
@@ -23,7 +22,7 @@ public class UserDAO extends DAO {
 
         String queryString = "CALL get_user(?)";
 
-        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setString(1, username);
 
             rs = stmt.executeQuery();
@@ -52,7 +51,7 @@ public class UserDAO extends DAO {
 
         String queryString = "CALL get_friends(?)";
 
-        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setString(1, user.getUsername());
 
             rs = stmt.executeQuery();
@@ -84,7 +83,7 @@ public class UserDAO extends DAO {
 
         String queryString = "CALL get_friends_of_friend_with_common(?, ?)";
 
-        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setString(1, user.getUsername());
             stmt.setString(2, friend.getUsername());
 
@@ -114,7 +113,7 @@ public class UserDAO extends DAO {
     public void unfriend(User user, String toUnfriend) {
         String queryString = "CALL unfriend(?, ?)";
 
-        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setString(1, user.getUsername());
             stmt.setString(2, toUnfriend);
 
@@ -130,7 +129,7 @@ public class UserDAO extends DAO {
 
         String queryString = "CALL get_requests(?)";
 
-        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setString(1, user.getUsername());
 
             rs = stmt.executeQuery();
@@ -149,7 +148,7 @@ public class UserDAO extends DAO {
     public void makeRequest(User sender, String recipient) {
         String queryString = "CALL make_request(?, ?)";
 
-        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setString(1, sender.getUsername());
             stmt.setString(2, recipient);
 
@@ -167,7 +166,7 @@ public class UserDAO extends DAO {
     public void acceptRequest(String sender, User recipient) {
         String queryString = "CALL accept_request(?, ?)";
 
-        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setString(1, sender);
             stmt.setString(2, recipient.getUsername());
 
@@ -180,7 +179,7 @@ public class UserDAO extends DAO {
     public void rejectRequest(String sender, User recipient) {
         String queryString = "CALL reject_request(?, ?)";
 
-        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setString(1, sender);
             stmt.setString(2, recipient.getUsername());
 

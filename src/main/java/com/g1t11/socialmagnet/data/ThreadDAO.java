@@ -1,6 +1,5 @@
 package com.g1t11.socialmagnet.data;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,8 +11,8 @@ import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.model.social.User;
 
 public class ThreadDAO extends DAO {
-    public ThreadDAO(Connection conn) {
-        super(conn);
+    public ThreadDAO(Database db) {
+        super(db);
     }
 
     /**
@@ -28,7 +27,7 @@ public class ThreadDAO extends DAO {
 
         ResultSet rs = null;
         Thread thread = null;
-        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setInt(1, id);
             stmt.setString(2, user.getUsername());
 
@@ -71,7 +70,7 @@ public class ThreadDAO extends DAO {
         
         ResultSet rs = null;
         List<Thread> threads = new ArrayList<>();
-        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setString(1, user.getUsername());
             stmt.setInt(2, limit);
 
@@ -105,7 +104,7 @@ public class ThreadDAO extends DAO {
         
         ResultSet rs = null;
         List<Thread> threads = new ArrayList<>();
-        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setString(1, user.getUsername());
             stmt.setInt(2, limit);
 
@@ -138,7 +137,7 @@ public class ThreadDAO extends DAO {
         String queryString = "CALL get_thread_comments_latest_last(?, ?)";
 
         ResultSet rs = null;
-        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setInt(1, thread.getId());
             stmt.setInt(2, limit);
 
@@ -163,7 +162,7 @@ public class ThreadDAO extends DAO {
         String queryString = "CALL get_likers(?)";
 
         ResultSet rs = null;
-        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setInt(1, thread.getId());
 
             rs = stmt.executeQuery();
@@ -185,7 +184,7 @@ public class ThreadDAO extends DAO {
         String queryString = "CALL get_dislikers(?)";
 
         ResultSet rs = null;
-        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setInt(1, thread.getId());
 
             rs = stmt.executeQuery();
@@ -208,7 +207,7 @@ public class ThreadDAO extends DAO {
 
         ResultSet rs = null;
         List<String> usernames = new ArrayList<>();
-        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setInt(1, thread.getId());
 
             rs = stmt.executeQuery();
@@ -228,7 +227,7 @@ public class ThreadDAO extends DAO {
     public void addTag(Thread thread, User user) {
         String queryString = "CALL add_tag(?, ?)";
 
-        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setInt(1, thread.getId());
             stmt.setString(2, user.getUsername());
 
@@ -241,7 +240,7 @@ public class ThreadDAO extends DAO {
     public void addTags(int threadId, List<String> usernames) {
         if (usernames == null || usernames.size() == 0) return;
         String queryString = "CALL add_tag(?, ?)";
-        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             for (String username : usernames) {
                 stmt.setInt(1, threadId);
                 stmt.setString(2, username);
@@ -260,7 +259,7 @@ public class ThreadDAO extends DAO {
     public void removeTag(Thread thread, User user) {
         String queryString = "CALL remove_tag(?, ?)";
 
-        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setInt(1, thread.getId());
             stmt.setString(2, user.getUsername());
 
@@ -273,7 +272,7 @@ public class ThreadDAO extends DAO {
     public void deleteThread(Thread thread, User user) {
         String queryString = "CALL delete_thread(?, ?)";
 
-        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setInt(1, thread.getId());
             stmt.setString(2, user.getUsername());
 
@@ -286,7 +285,7 @@ public class ThreadDAO extends DAO {
     public void replyToThread(Thread thread, User user, String content) {
         String queryString = "CALL reply_to_thread(?, ?, ?)";
 
-        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setInt(1, thread.getId());
             stmt.setString(2, user.getUsername());
             stmt.setString(3, content);
@@ -300,7 +299,7 @@ public class ThreadDAO extends DAO {
     public void likeThread(Thread thread, User user) {
         String queryString = "CALL like_thread(?, ?)";
 
-        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setInt(1, thread.getId());
             stmt.setString(2, user.getUsername());
 
@@ -313,7 +312,7 @@ public class ThreadDAO extends DAO {
     public void dislikeThread(Thread thread, User user) {
         String queryString = "CALL dislike_thread(?, ?)";
 
-        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setInt(1, thread.getId());
             stmt.setString(2, user.getUsername());
 
@@ -327,7 +326,7 @@ public class ThreadDAO extends DAO {
         String queryString = "CALL add_thread_return_id(?, ?, ?)";
 
         ResultSet rs = null;
-        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setString(1, fromUser);
             stmt.setString(2, toUser);
             stmt.setString(3, content);

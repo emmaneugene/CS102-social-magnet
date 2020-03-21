@@ -14,8 +14,8 @@ import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.WallPageView;
 
 public class WallController extends Controller {
-    protected FarmerDAO farmerDAO = new FarmerDAO(connection());
-    protected ThreadDAO threadDAO = new ThreadDAO(connection());
+    protected FarmerDAO farmerDAO = new FarmerDAO(database());
+    protected ThreadDAO threadDAO = new ThreadDAO(database());
     
     protected Farmer farmerToDisplay;
     protected List<Thread> wallThreads;

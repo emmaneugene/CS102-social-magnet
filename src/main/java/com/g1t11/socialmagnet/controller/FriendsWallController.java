@@ -7,7 +7,7 @@ import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.FriendsWallPageView;
 
 public class FriendsWallController extends WallController {
-    private UserDAO userDAO = new UserDAO(connection());
+    private UserDAO userDAO = new UserDAO(database());
 
     public FriendsWallController(Navigation nav, User friend) {
         super(nav);

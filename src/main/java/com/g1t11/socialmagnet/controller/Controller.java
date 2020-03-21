@@ -1,15 +1,12 @@
 package com.g1t11.socialmagnet.controller;
 
-import java.sql.Connection;
-
+import com.g1t11.socialmagnet.data.Database;
 import com.g1t11.socialmagnet.view.page.PageView;
 
 public abstract class Controller {
-    protected Navigation nav;
+    public Navigation nav;
 
-    protected Connection conn;
-
-    protected PageView view;
+    public PageView view;
 
     public Controller(Navigation nav) {
         this.nav = nav;
@@ -19,8 +16,8 @@ public abstract class Controller {
         this.nav = nav;
     }
 
-    public Connection connection() {
-        return nav.connection();
+    public Database database() {
+        return nav.database(); 
     }
 
     /**

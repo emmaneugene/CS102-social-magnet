@@ -1,6 +1,5 @@
 package com.g1t11.socialmagnet.data;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,9 +9,7 @@ import com.g1t11.socialmagnet.model.social.User;
 /**
  * Handles user authentication and session management.
  */
-public class Session {
-    private Connection conn;
-
+public class Session extends DAO {
     private UserDAO userDAO;
 
     /**
@@ -20,9 +17,9 @@ public class Session {
      */
     private User user = null;
 
-    public Session(Connection conn) {
-        this.conn = conn;
-        userDAO = new UserDAO(conn);
+    public Session(Database db) {
+        super(db);
+        userDAO = new UserDAO(db);
     }
 
     /**
@@ -58,7 +55,7 @@ public class Session {
 
         String queryString = "CALL verify_credentials(?, ?)";
 
-        try ( PreparedStatement stmt = conn.prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setString(1, username);
             stmt.setString(2, password);
 
@@ -79,7 +76,7 @@ public class Session {
 
         String queryString = "CALL user_exists(?)";
 
-        try ( PreparedStatement stmt = conn.prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setString(1, username);
 
             rs = stmt.executeQuery();
@@ -102,7 +99,7 @@ public class Session {
     public boolean addUser(String username, String fullname, String pwd) {
         String queryString = "CALL add_user(?, ?, ?)";
 
-        try ( PreparedStatement stmt = conn.prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setString(1, username);
             stmt.setString(2, fullname);
             stmt.setString(3, pwd);

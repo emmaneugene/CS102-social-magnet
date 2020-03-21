@@ -1,13 +1,13 @@
 package com.g1t11.socialmagnet.controller;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.g1t11.socialmagnet.data.Database;
 import com.g1t11.socialmagnet.data.Session;
 
 public class Navigation {
-    private Connection conn;
+    private Database db;
 
     private Session sess;
 
@@ -22,13 +22,13 @@ public class Navigation {
      */
     private List<Controller> navigationStack = new ArrayList<>();
 
-    public Navigation(Connection conn) {
-        this.conn = conn;
-        sess = new Session(conn);
+    public Navigation(Database db) {
+        this.db = db;
+        sess = new Session(db);
     }
 
-    public Connection connection() {
-        return conn;
+    public Database database() {
+        return db;
     }
 
     public Session session() {

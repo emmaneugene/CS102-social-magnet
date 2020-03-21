@@ -1,6 +1,5 @@
 package com.g1t11.socialmagnet.data;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,8 +8,8 @@ import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.social.User;
 
 public class FarmerDAO extends UserDAO {
-    public FarmerDAO(Connection conn) {
-        super(conn);
+    public FarmerDAO(Database db) {
+        super(db);
     }
 
     public Farmer getFarmer(User user) {
@@ -19,7 +18,7 @@ public class FarmerDAO extends UserDAO {
 
         String queryString = "CALL get_farmer_detail(?)";
 
-        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setString(1, user.getUsername());
 
             rs = stmt.executeQuery();
