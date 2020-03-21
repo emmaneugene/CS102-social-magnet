@@ -19,7 +19,7 @@ public class PageView {
      * A Component injected from the previous {@link Controller} which allows 
      * us to render content after the screen is cleared by {@link PageView}.
      */
-    private Component status = null;
+    private CompoundComponent status = new CompoundComponent();
 
     private final String headerTemplate = Painter.paint("== Social Magnet :: %s ==", Painter.Color.BOLD);
 
@@ -36,15 +36,20 @@ public class PageView {
     }
 
     public void setStatus(Component status) {
-        this.status = status;
+        this.status.clear();
+        this.status.add(status);
     }
 
     public void setStatus(String statusText) {
-        this.status = new TextComponent(statusText);
+        setStatus(new TextComponent(statusText));
+    }
+
+    public CompoundComponent getStatus() {
+        return status;
     }
 
     public void clearStatus() {
-        this.status = null;
+        status.clear();
     }
 
     /**

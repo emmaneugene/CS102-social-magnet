@@ -23,13 +23,15 @@ public class MainMenuController extends Controller {
                 nav.push(new WallController(nav));
                 break;
             case "3":
+                nav.push(new FriendsController(nav));
+                break;
             case "4":
             case "5":
                 nav.session().logout();
                 nav.popToFirst();
                 break;
             default:
-                view.setStatus(Painter.paint("Please enter a choice between 1 & 3!", Painter.Color.RED));
+                view.setStatus(Painter.paint("Please enter a choice between 1 & 5!", Painter.Color.RED));
                 break;
         }
     }

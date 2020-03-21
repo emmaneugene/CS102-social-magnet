@@ -5,7 +5,11 @@ CREATE DATABASE magnet;
 USE magnet;
 SET time_zone = '+00:00';
 
--- create tables
+/*
+ * |---------------|
+ * | Create Tables |
+ * |---------------|
+ */
 CREATE TABLE user (
     username VARCHAR(255) NOT NULL,
     fullname VARCHAR(255) NOT NULL,
@@ -135,7 +139,15 @@ CREATE TABLE gift (
     FOREIGN KEY (crop_name) REFERENCES crop (crop_name)
 );
 
--- create stored procedures
+/*
+ * |-------------------|
+ * | Stored Procedures |
+ * |-------------------|
+ */
+
+/*
+ * LOADING USERS
+ */
 CREATE PROCEDURE get_user(IN _username VARCHAR(255))
     SELECT username, fullname
     FROM user
@@ -149,12 +161,95 @@ CREATE PROCEDURE get_friends(IN _username VARCHAR(255))
     ) AS f
     JOIN user ON friend_name = user.username;
 
+CREATE PROCEDURE get_friends_of_friend_with_common(IN _me VARCHAR(255), IN _friend VARCHAR(255))
+    SELECT f_friends.friend_name, fullname, NOT ISNULL(my_friends.friend_name) mutual FROM (
+        SELECT user_1 AS friend_name FROM friend WHERE user_2 = _friend
+        UNION
+        SELECT user_2 FROM friend WHERE user_1 = _friend
+    ) AS f_friends LEFT JOIN (
+        SELECT user_1 AS friend_name FROM friend WHERE user_2 = _me
+        UNION
+        SELECT user_2 FROM friend WHERE user_1 = _me
+    ) AS my_friends ON f_friends.friend_name = my_friends.friend_name
+    LEFT JOIN user u ON f_friends.friend_name = u.username
+    WHERE f_friends.friend_name <> _me;
+
+DELIMITER $$
+CREATE PROCEDURE get_farmer_detail(IN _username VARCHAR(255))
+BEGIN
+    SET @rank := 0;
+    SELECT username, xp, r.wealth, r.wealth_rank
+    FROM farmer JOIN (
+        SELECT (@rank := @rank + 1) AS wealth_rank, wealth
+        FROM (
+            SELECT DISTINCT wealth FROM farmer
+        ) AS w
+        ORDER BY wealth DESC
+    ) AS r ON farmer.wealth = r.wealth
+    WHERE username = _username;
+END$$
+DELIMITER ;
+
 /*
-* Left join appends all tagging information onto each post before
-* filtering based on the WHERE and IN conditions.
-* Therefore, for every post record, we can check if the current
-* user is tagged. If so, then we set `is_tagged` to TRUE.
-*/
+ * CREDENTIALS
+ */
+CREATE PROCEDURE verify_credentials(IN _username VARCHAR(255), IN _password VARCHAR(255))
+    SELECT COUNT(*) AS is_valid FROM user WHERE username = _username AND pwd = _password;
+
+CREATE PROCEDURE user_exists(IN _username VARCHAR(255))
+    SELECT COUNT(*) AS user_exists FROM user WHERE username = _username;
+
+/*
+ * UPDATING USERS
+ */
+CREATE PROCEDURE add_user(IN _username VARCHAR(255), IN _fullname VARCHAR(255), IN _pwd VARCHAR(255))
+    INSERT INTO user (username, fullname, pwd) VALUES (_username, _fullname, _pwd);
+
+CREATE PROCEDURE unfriend(IN _current_user VARCHAR(255), IN _to_remove VARCHAR(255))
+    DELETE FROM friend WHERE (user_1 = _current_user AND user_2 = _to_remove) OR (user_2 = _current_user AND user_1 = _to_remove);
+
+/*
+ * REQUESTS
+ */
+DELIMITER $$
+CREATE TRIGGER validate_request BEFORE INSERT ON request
+FOR EACH ROW BEGIN
+    DECLARE is_friend BOOLEAN;
+    SELECT COUNT(*) INTO is_friend FROM (
+        SELECT user_1 FROM friend WHERE user_1 = NEW.sender AND user_2 = NEW.recipient
+        UNION
+        SELECT user_2 FROM friend WHERE user_2 = NEW.sender AND user_1 = NEW.recipient
+    ) AS f;
+    IF (is_friend = TRUE) THEN
+        SIGNAL SQLSTATE '45000' SET message_text = 'Cannot request existing friend.';
+    END IF;
+END $$
+DELIMITER ;
+
+CREATE PROCEDURE make_request(IN _sender VARCHAR(255), IN _recipient VARCHAR(255))
+    INSERT INTO request (sender, recipient) VALUES (_sender, _recipient);
+
+CREATE PROCEDURE get_requests(IN _recipient VARCHAR(255))
+    SELECT sender FROM request WHERE recipient = _recipient;
+
+DELIMITER $$
+CREATE PROCEDURE accept_request(IN _sender VARCHAR(255), IN _recipient VARCHAR(255))
+BEGIN
+    IF _sender < _recipient THEN
+        INSERT INTO friend (user_1, user_2) VALUES (_sender, _recipient);
+    ELSE
+        INSERT INTO friend (user_1, user_2) VALUES (_recipient, _sender);
+    END IF;
+    DELETE FROM request WHERE sender = _sender AND recipient = _recipient;
+END$$
+DELIMITER ;
+
+CREATE PROCEDURE reject_request(IN _sender VARCHAR(255), IN _recipient VARCHAR(255))
+    DELETE FROM request WHERE sender = _sender AND recipient = _recipient;
+
+/*
+ * LOADING THREADS
+ */
 CREATE PROCEDURE get_thread(IN _thread_id INT, IN _username VARCHAR(255))
     SELECT th.thread_id AS thread_id, author, recipient, content, comment_count,
            IF(ta.tagged_user = _username, TRUE, FALSE) AS is_tagged
@@ -233,42 +328,9 @@ CREATE PROCEDURE get_wall_threads(IN _username VARCHAR(255), IN _limit INT)
 CREATE PROCEDURE get_tagged_usernames(IN _thread_id INT)
     SELECT tagged_user FROM tag WHERE thread_id = _thread_id;
 
-DELIMITER $$
-CREATE TRIGGER validate_tag BEFORE INSERT ON tag
-FOR EACH ROW BEGIN
-    DECLARE is_friend BOOLEAN;
-    SELECT COUNT(*) INTO is_friend FROM (
-        SELECT user_1 FROM friend WHERE user_2 = NEW.tagged_user
-        UNION
-        SELECT user_2 FROM friend WHERE user_1 = NEW.tagged_user
-    ) AS f
-    WHERE user_1 IN (
-        SELECT author FROM thread WHERE thread_id = NEW.thread_id
-    );
-    IF (is_friend = FALSE) THEN
-        SIGNAL SQLSTATE '45000' SET message_text = 'Cannot tag non-friends';
-    END IF;
-END$$
-CREATE PROCEDURE add_tag(IN _thread_id INT, IN _username VARCHAR(255))
-BEGIN
-    DECLARE is_friend BOOLEAN;
-    SELECT COUNT(*) INTO is_friend FROM (
-        SELECT user_1 FROM friend WHERE user_2 = _username
-        UNION
-        SELECT user_2 FROM friend WHERE user_1 = _username
-    ) AS f
-    WHERE user_1 IN (
-        SELECT author FROM thread WHERE thread_id = _thread_id
-    );
-    IF (is_friend = TRUE) THEN
-        INSERT INTO tag (thread_id, tagged_user) VALUES (_thread_id, _username);
-    END IF;
-END$$
-DELIMITER ;
-
-CREATE PROCEDURE remove_tag(IN _thread_id INT, IN _username VARCHAR(255))
-    DELETE FROM tag WHERE thread_id = _thread_id AND tagged_user = _username;
-
+/*
+ * UPDATING THREADS
+ */
 DELIMITER $$
 CREATE PROCEDURE add_thread_return_id(IN _author VARCHAR(255), IN _recipient VARCHAR(255), IN _content TEXT(65535))
 BEGIN
@@ -289,27 +351,44 @@ CREATE PROCEDURE like_thread(IN _thread_id INT, IN _username VARCHAR(255))
 CREATE PROCEDURE dislike_thread(IN _thread_id INT, IN _username VARCHAR(255))
     INSERT INTO disliker (username, thread_id) VALUES (_username, _thread_id);
 
-CREATE PROCEDURE verify_credentials(IN _username VARCHAR(255), IN _password VARCHAR(255))
-    SELECT COUNT(*) AS is_valid FROM user WHERE username = _username AND pwd = _password;
-
-CREATE PROCEDURE user_exists(IN _username VARCHAR(255))
-    SELECT COUNT(*) AS user_exists FROM user WHERE username = _username;
-
-CREATE PROCEDURE add_user(IN _username VARCHAR(255), IN _fullname VARCHAR(255), IN _pwd VARCHAR(255))
-    INSERT INTO user (username, fullname, pwd) VALUES (_username, _fullname, _pwd);
-
+/*
+ * TAGGING THREADS
+ */
 DELIMITER $$
-CREATE PROCEDURE get_farmer_detail(IN _username VARCHAR(255))
-BEGIN
-    SET @rank := 0;
-    SELECT username, xp, r.wealth, r.wealth_rank
-    FROM farmer JOIN (
-        SELECT (@rank := @rank + 1) AS wealth_rank, wealth
-        FROM (
-            SELECT DISTINCT wealth FROM farmer
-        ) AS w
-        ORDER BY wealth DESC
-    ) AS r ON farmer.wealth = r.wealth
-    WHERE username = _username;
+CREATE TRIGGER validate_tag BEFORE INSERT ON tag
+FOR EACH ROW BEGIN
+    DECLARE is_friend BOOLEAN;
+    SELECT COUNT(*) INTO is_friend FROM (
+        SELECT user_1 FROM friend WHERE user_2 = NEW.tagged_user
+        UNION
+        SELECT user_2 FROM friend WHERE user_1 = NEW.tagged_user
+    ) AS f
+    WHERE user_1 IN (
+        SELECT author FROM thread WHERE thread_id = NEW.thread_id
+    );
+    IF (is_friend = FALSE) THEN
+        SIGNAL SQLSTATE '45000' SET message_text = 'Cannot tag non-friends.';
+    END IF;
 END$$
 DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE add_tag(IN _thread_id INT, IN _username VARCHAR(255))
+BEGIN
+    DECLARE is_friend BOOLEAN;
+    SELECT COUNT(*) INTO is_friend FROM (
+        SELECT user_1 FROM friend WHERE user_2 = _username
+        UNION
+        SELECT user_2 FROM friend WHERE user_1 = _username
+    ) AS f
+    WHERE user_1 IN (
+        SELECT author FROM thread WHERE thread_id = _thread_id
+    );
+    IF (is_friend = TRUE) THEN
+        INSERT INTO tag (thread_id, tagged_user) VALUES (_thread_id, _username);
+    END IF;
+END$$
+DELIMITER ;
+
+CREATE PROCEDURE remove_tag(IN _thread_id INT, IN _username VARCHAR(255))
+    DELETE FROM tag WHERE thread_id = _thread_id AND tagged_user = _username;

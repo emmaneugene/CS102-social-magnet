@@ -14,21 +14,21 @@ import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.WallPageView;
 
 public class WallController extends Controller {
-    private FarmerDAO farmerDAO = new FarmerDAO(connection());
-    private ThreadDAO threadDAO = new ThreadDAO(connection());
+    protected FarmerDAO farmerDAO = new FarmerDAO(connection());
+    protected ThreadDAO threadDAO = new ThreadDAO(connection());
     
-    private Farmer currentFarmer;
-    private List<Thread> wallThreads;
+    protected Farmer farmerToDisplay;
+    protected List<Thread> wallThreads;
 
     public WallController(Navigation nav) {
         super(nav);
-        currentFarmer = farmerDAO.getFarmer(nav.session().currentUser());
-        view = new WallPageView(currentFarmer);
+        farmerToDisplay = farmerDAO.getFarmer(nav.session().currentUser());
+        view = new WallPageView(farmerToDisplay);
     }
 
     @Override
     public void updateView() {
-        wallThreads = threadDAO.getWallThreads(currentFarmer, 5);
+        wallThreads = threadDAO.getWallThreads(farmerToDisplay, 5);
         ((WallPageView) view).setThreads(wallThreads);
         view.display();
     }
@@ -37,30 +37,42 @@ public class WallController extends Controller {
     public void handleInput() {
         PromptInput input = new PromptInput(Painter.paintf("[[{M}]]ain | [[{T}]]hread | [[{A}]]ccept Gift | [[{P}]]ost", Painter.Color.YELLOW));
         String choice = input.nextLine();
-        if (choice.equals("M")) {
-            nav.pop();
-        } else if (wallThreads.size() > 0 && choice.matches(String.format("T[1-%d]", wallThreads.size()))) {
-            int index = Character.getNumericValue(choice.charAt(1));
-            nav.push(new ThreadController(nav, index, wallThreads.get(index - 1)));
+        if (choice.length() == 0) {
+            view.setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
+        } else if (choice.equals("M")) {
+            nav.popTo(MainMenuController.class);
+        } else if (choice.charAt(0) == 'T') {
+            handleThread(choice);
         } else if (choice.equals("A")) {
             view.setStatus("Not ready yet...");
         } else if (choice.equals("P")) {
             handlePost();
-        } else if (choice.matches("T.*")) {
-            view.setStatus(Painter.paint("Use T<id> to select a thread.", Painter.Color.RED));
         } else {
             view.setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
         }
     }
 
-    private void handlePost() {
+    protected void handleThread(String choice) {
+        try {
+            int index = Integer.parseInt(choice.substring(1));
+            if (index <= 0 || index > wallThreads.size()) {
+                view.setStatus(Painter.paint("Index out of range.", Painter.Color.RED));
+            } else {
+                nav.push(new ThreadController(nav, index, wallThreads.get(index - 1)));
+            }
+        } catch (NumberFormatException e) {
+            view.setStatus(Painter.paint("Use T<id> to select a thread.", Painter.Color.RED));
+        }
+    }
+
+    protected void handlePost() {
         updateView();
         PromptInput input = new PromptInput("Enter your post");
         String threadContent = input.nextLine();
         List<String> tags = getRawUserTags(threadContent);
         threadDAO.addThread(
             nav.session().currentUser().getUsername(),
-            nav.session().currentUser().getUsername(),
+            farmerToDisplay.getUsername(),
             threadContent,
             tags
         );

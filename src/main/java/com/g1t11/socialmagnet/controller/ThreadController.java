@@ -41,7 +41,7 @@ public class ThreadController extends Controller {
         String choice = input.nextLine();
         switch (choice) {
             case "M":
-                nav.pop(2);
+                nav.popTo(MainMenuController.class);
                 break;
             case "K":
                 handleKill();

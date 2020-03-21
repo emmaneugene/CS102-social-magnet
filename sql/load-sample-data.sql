@@ -14,6 +14,7 @@ INSERT INTO friend (user_1, user_2) VALUES
 ("britney", "charlie"),
 ("britney", "elijah"),
 ("charlie", "danny"),
+("charlie", "frank"),
 ("danny",   "frank");
 
 INSERT INTO thread (author, recipient, posted_on, content) VALUES
