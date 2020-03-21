@@ -1,0 +1,51 @@
+title User:Display Welcome Menu
+
+participant User
+participant ":App" as App
+participant ":Database" as DB
+participant ":Navigation" as Nav
+participant ":WelcomeController" as WC
+participant ":WelcomeView" as WV
+participant ":PromptInput" as Input
+participant ":Component" as Status
+
+activate App
+App-->DB:<<create>>\nDatabase()
+activate DB
+deactivateafter DB
+
+App-->Nav:<<create>>\nNavigation(connection)
+activate Nav
+deactivateafter Nav
+
+App-->WC:<<create>\nWelcomeController(navigation)
+activate WC
+WC->WV:<<create>>\nWelcomeView()
+activate WV
+deactivateafter WV
+deactivateafter WC
+
+App->Nav:setFirstController(welcomeController)
+activate Nav
+deactivateafter Nav
+
+App->WC:run()
+deactivateafter App
+
+activate WC
+WC->WV:display()
+activate WV
+activate WV
+WV->WV:clearScreen()
+deactivateafter WV
+WV-->User:Display Menu Items
+WV->Status:render()
+activate Status
+deactivateafter Status
+WV-->User:Display Status
+deactivateafter WV
+
+WC->Input:handleInput()
+activate Input
+Input-->User:Prompt Option Input
+deactivateafter Input
