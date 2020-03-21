@@ -13,6 +13,7 @@ public class App {
 
     public App() {
         db = new Database();
+        db.establishConnection();
         nav = new Navigation(db);
         nav.setFirstController(new WelcomeController(nav));
     }
