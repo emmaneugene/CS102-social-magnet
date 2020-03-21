@@ -55,7 +55,20 @@ public class FriendsController extends Controller {
     }
 
     private void handleUnfriend(String choice) {
-        
+        try {
+            int index = Integer.parseInt(choice.substring(1));
+            if (index <= 0 || index > friends.size()) {
+                view.setStatus(Painter.paint("Index out of range.", Painter.Color.RED));
+            } else {
+                String toUnfriend = friends.get(index - 1).getUsername();
+                userDAO.unfriend(currentUser, toUnfriend);
+                view.setStatus(Painter.paintf(
+                    String.format("[{Unfriended [{%s}]}]!", toUnfriend), Painter.Color.GREEN, Painter.Color.BLUE
+                ));
+            }
+        } catch (NumberFormatException e) {
+            view.setStatus(Painter.paint("Use U<id> to select a friend.", Painter.Color.RED));
+        }
     }
 
     private void handleRequest() {
@@ -64,8 +77,13 @@ public class FriendsController extends Controller {
         String requested = input.nextLine();
         try {
             userDAO.makeRequest(currentUser, requested);
+            view.setStatus(Painter.paintf(
+                String.format("[{Sent [{%s}] a friend request!}]", requested), Painter.Color.GREEN, Painter.Color.BLUE
+            ));
         } catch (UserNotFoundException e) {
-            view.setStatus(Painter.paint("User not found.", Painter.Color.RED));
+            view.setStatus(Painter.paintf(
+                String.format("[{User [{%s}] not found.}]", requested), Painter.Color.RED, Painter.Color.BLUE
+            ));
         } catch (RequestExistingFriendException e) {
             view.setStatus(Painter.paint("Cannot request existing friend.", Painter.Color.RED));
         }
@@ -74,14 +92,16 @@ public class FriendsController extends Controller {
     private void handleAccept(String choice) {
         try {
             int index = Integer.parseInt(choice.substring(1));
-            if (index <= friends.size()) {
-                view.setStatus(Painter.paint("Cannot accept existing friend.", Painter.Color.RED));
-            } else if (index > friends.size() + requestUsernames.size()) {
+            if (index <= 0 || index > friends.size() + requestUsernames.size()) {
                 view.setStatus(Painter.paint("Index out of range.", Painter.Color.RED));
+            } else if (index <= friends.size()) {
+                view.setStatus(Painter.paint("Cannot accept existing friend.", Painter.Color.RED));
             } else {
                 String requestUsername = requestUsernames.get(index - friends.size() - 1);
                 userDAO.acceptRequest(requestUsername, currentUser);
-                view.setStatus(Painter.paint(String.format("Accepted %s!", requestUsername), Painter.Color.GREEN));
+                view.setStatus(Painter.paintf(
+                    String.format("[{Accepted [{%s}]!}]", requestUsername), Painter.Color.GREEN, Painter.Color.BLUE
+                ));
             }
         } catch (NumberFormatException e) {
             view.setStatus(Painter.paint("Use A<id> to select a request.", Painter.Color.RED));
@@ -91,14 +111,16 @@ public class FriendsController extends Controller {
     private void handleReject(String choice) {
         try {
             int index = Integer.parseInt(choice.substring(1));
-            if (index <= friends.size()) {
-                view.setStatus(Painter.paint("Cannot reject existing friend.", Painter.Color.RED));
-            } else if (index > friends.size() + requestUsernames.size()) {
+            if (index <= 0 || index > friends.size() + requestUsernames.size()) {
                 view.setStatus(Painter.paint("Index out of range.", Painter.Color.RED));
+            } else if (index <= friends.size()) {
+                view.setStatus(Painter.paint("Cannot reject existing friend.", Painter.Color.RED));
             } else {
                 String requestUsername = requestUsernames.get(index - friends.size() - 1);
                 userDAO.rejectRequest(requestUsername, currentUser);
-                view.setStatus(Painter.paint(String.format("Rejected %s!", requestUsername), Painter.Color.GREEN));
+                view.setStatus(Painter.paintf(
+                    String.format("[{Rejected [{%s}]!}]", requestUsername), Painter.Color.GREEN, Painter.Color.BLUE
+                ));
             }
         } catch (NumberFormatException e) {
             view.setStatus(Painter.paint("Use R<id> to select a request.", Painter.Color.RED));

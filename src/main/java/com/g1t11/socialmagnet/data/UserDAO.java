@@ -71,6 +71,19 @@ public class UserDAO extends DAO {
         return friends;
     }
 
+    public void unfriend(User user, String toUnfriend) {
+        String queryString = "CALL unfriend(?, ?)";
+
+        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+            stmt.setString(1, user.getUsername());
+            stmt.setString(2, toUnfriend);
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        }
+    }
+
     public List<String> getRequestUsernames(User user) {
         ResultSet rs = null;
         List<String> requestUsernames = new ArrayList<>();
