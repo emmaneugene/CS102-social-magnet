@@ -16,7 +16,7 @@ public class LoginController extends Controller {
         String username = input.nextLine();
 
         input.setPrompt("Enter your password");
-        String password = input.nextLine();
+        String password = input.readPassword();
 
         boolean loginSuccessful = nav.session().login(username, password);
         nav.pop();

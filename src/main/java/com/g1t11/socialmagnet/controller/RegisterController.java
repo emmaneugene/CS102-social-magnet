@@ -26,10 +26,10 @@ public class RegisterController extends Controller {
         String fullName = input.nextLine();
 
         input.setPrompt("Enter your password");
-        String password = input.nextLine();
+        String password = input.readPassword();
 
         input.setPrompt("Confirm your password");
-        String passwordCheck = input.nextLine();
+        String passwordCheck = input.readPassword();
 
         if (!password.equals(passwordCheck)) {
             nav.pop();
