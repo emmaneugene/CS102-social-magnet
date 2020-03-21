@@ -37,7 +37,9 @@ public class WallController extends Controller {
     public void handleInput() {
         PromptInput input = new PromptInput(Painter.paintf("[[{M}]]ain | [[{T}]]hread | [[{A}]]ccept Gift | [[{P}]]ost", Painter.Color.YELLOW));
         String choice = input.nextLine();
-        if (choice.equals("M")) {
+        if (choice.length() == 0) {
+            view.setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
+        } else if (choice.equals("M")) {
             nav.popTo(MainMenuController.class);
         } else if (choice.charAt(0) == 'T') {
             handleThread(choice);

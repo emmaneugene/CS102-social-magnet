@@ -41,7 +41,9 @@ public class FriendsController extends Controller {
             Painter.Color.YELLOW
         ));
         String choice = input.nextLine();
-        if (choice.equals("M")) {
+        if (choice.length() == 0) {
+            view.setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
+        } else if (choice.equals("M")) {
             nav.pop();
         } else if (choice.charAt(0) == 'U') {
             handleUnfriend(choice);
