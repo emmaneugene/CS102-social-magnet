@@ -14,21 +14,21 @@ import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.WallPageView;
 
 public class WallController extends Controller {
-    private FarmerDAO farmerDAO = new FarmerDAO(connection());
-    private ThreadDAO threadDAO = new ThreadDAO(connection());
+    protected FarmerDAO farmerDAO = new FarmerDAO(connection());
+    protected ThreadDAO threadDAO = new ThreadDAO(connection());
     
-    private Farmer currentFarmer;
-    private List<Thread> wallThreads;
+    protected Farmer farmerToDisplay;
+    protected List<Thread> wallThreads;
 
     public WallController(Navigation nav) {
         super(nav);
-        currentFarmer = farmerDAO.getFarmer(nav.session().currentUser());
-        view = new WallPageView(currentFarmer);
+        farmerToDisplay = farmerDAO.getFarmer(nav.session().currentUser());
+        view = new WallPageView(farmerToDisplay);
     }
 
     @Override
     public void updateView() {
-        wallThreads = threadDAO.getWallThreads(currentFarmer, 5);
+        wallThreads = threadDAO.getWallThreads(farmerToDisplay, 5);
         ((WallPageView) view).setThreads(wallThreads);
         view.display();
     }
@@ -38,7 +38,7 @@ public class WallController extends Controller {
         PromptInput input = new PromptInput(Painter.paintf("[[{M}]]ain | [[{T}]]hread | [[{A}]]ccept Gift | [[{P}]]ost", Painter.Color.YELLOW));
         String choice = input.nextLine();
         if (choice.equals("M")) {
-            nav.pop();
+            nav.popTo(MainMenuController.class);
         } else if (choice.charAt(0) == 'T') {
             handleThread(choice);
         } else if (choice.equals("A")) {
@@ -50,7 +50,7 @@ public class WallController extends Controller {
         }
     }
 
-    private void handleThread(String choice) {
+    protected void handleThread(String choice) {
         try {
             int index = Integer.parseInt(choice.substring(1));
             if (index <= 0 || index > wallThreads.size()) {
@@ -63,14 +63,14 @@ public class WallController extends Controller {
         }
     }
 
-    private void handlePost() {
+    protected void handlePost() {
         updateView();
         PromptInput input = new PromptInput("Enter your post");
         String threadContent = input.nextLine();
         List<String> tags = getRawUserTags(threadContent);
         threadDAO.addThread(
             nav.session().currentUser().getUsername(),
-            nav.session().currentUser().getUsername(),
+            farmerToDisplay.getUsername(),
             threadContent,
             tags
         );

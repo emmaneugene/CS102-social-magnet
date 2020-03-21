@@ -9,20 +9,25 @@ import com.g1t11.socialmagnet.view.component.ProfileInfoComponent;
 import com.g1t11.socialmagnet.view.component.SimpleThreadComponent;
 
 public class WallPageView extends PageView {
-    private ProfileInfoComponent profileView;
+    private ProfileInfoComponent profileComp;
     private List<SimpleThreadComponent> threadComps = new ArrayList<>(5);
 
     public WallPageView(Farmer me) {
         super("My Wall");
-        this.profileView = new ProfileInfoComponent(me);
+        this.profileComp = new ProfileInfoComponent(me);
+    }
+
+    protected WallPageView(Farmer me, String title) {
+        super(title);
+        this.profileComp = new ProfileInfoComponent(me);
     }
 
     @Override
     public void display() {
         super.display();
-        profileView.render();
-        for (SimpleThreadComponent threadView : threadComps) {
-            threadView.render();
+        profileComp.render();
+        for (SimpleThreadComponent threadComp : threadComps) {
+            threadComp.render();
             System.out.println();
         }
     }

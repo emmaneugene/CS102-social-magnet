@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.g1t11.socialmagnet.model.social.CommonFriend;
 import com.g1t11.socialmagnet.model.social.RequestExistingFriendException;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.model.social.UserNotFoundException;
@@ -41,7 +42,7 @@ public class UserDAO extends DAO {
     }
 
     /**
-     * Only loads usernames and full names of friends.
+     * Loads usernames and full names of friends.
      * 
      * @param user The user whose friends to get
      */
@@ -61,6 +62,45 @@ public class UserDAO extends DAO {
 
                 User u = new User(username, fullname);
                 friends.add(u);
+            }
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        } finally {
+            try { if (rs != null) rs.close(); } catch (SQLException e) {}
+        }
+
+        return friends;
+    }
+
+    /**
+     * Load the friends of a friend.
+     * If a friend is a mutual friend, load as {@link CommonFriend}.
+     * 
+     * @param user The user whose friends to get
+     */
+    public List<User> getFriendsOfFriendWithCommon(User user, User friend) {
+        ResultSet rs = null;
+        List<User> friends = new ArrayList<>();
+
+        String queryString = "CALL get_friends_of_friend_with_common(?, ?)";
+
+        try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
+            stmt.setString(1, user.getUsername());
+            stmt.setString(2, friend.getUsername());
+
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                String username = rs.getString("friend_name");
+                String fullname = rs.getString("fullname");
+                boolean isMutual = rs.getBoolean("mutual");
+
+                if (isMutual) {
+                    CommonFriend f = new CommonFriend(username, fullname);
+                    friends.add(f);
+                } else {
+                    User u = new User(username, fullname);
+                    friends.add(u);
+                }
             }
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());

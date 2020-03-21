@@ -71,12 +71,23 @@ public class Navigation {
             pop();
         }
     }
-
-    public void popToFirst() {
-        int size = navigationStack.size();
-        for (int i = 0; i < size - 1; i++) {
+    
+    /**
+     * Pop the navigation stack until a Controller of classToFind is found, or until
+     * one controller is left on the stack.
+     * 
+     * @param classToFind The class of the type of controller to find.
+     */
+    public <T extends Controller> void popTo(Class<T> classToFind) {
+        while (navigationStack.size() > 1 && !currentController().getClass().equals(classToFind)) {
             pop();
         }
+    }
+
+    public void popToFirst() {
+        Controller firstController = navigationStack.get(0);
+        navigationStack.clear();
+        navigationStack.add(firstController);
     }
 
     /**

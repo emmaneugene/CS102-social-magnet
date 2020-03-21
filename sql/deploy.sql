@@ -161,6 +161,19 @@ CREATE PROCEDURE get_friends(IN _username VARCHAR(255))
     ) AS f
     JOIN user ON friend_name = user.username;
 
+CREATE PROCEDURE get_friends_of_friend_with_common(IN _me VARCHAR(255), IN _friend VARCHAR(255))
+    SELECT f_friends.friend_name, fullname, NOT ISNULL(my_friends.friend_name) mutual FROM (
+        SELECT user_1 AS friend_name FROM friend WHERE user_2 = _friend
+        UNION
+        SELECT user_2 FROM friend WHERE user_1 = _friend
+    ) AS f_friends LEFT JOIN (
+        SELECT user_1 AS friend_name FROM friend WHERE user_2 = _me
+        UNION
+        SELECT user_2 FROM friend WHERE user_1 = _me
+    ) AS my_friends ON f_friends.friend_name = my_friends.friend_name
+    LEFT JOIN user u ON f_friends.friend_name = u.username
+    WHERE f_friends.friend_name <> _me;
+
 DELIMITER $$
 CREATE PROCEDURE get_farmer_detail(IN _username VARCHAR(255))
 BEGIN

@@ -31,7 +31,7 @@ public class MainMenuController extends Controller {
                 nav.popToFirst();
                 break;
             default:
-                view.setStatus(Painter.paint("Please enter a choice between 1 & 3!", Painter.Color.RED));
+                view.setStatus(Painter.paint("Please enter a choice between 1 & 5!", Painter.Color.RED));
                 break;
         }
     }
