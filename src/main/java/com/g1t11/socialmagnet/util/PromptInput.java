@@ -7,8 +7,8 @@ import java.util.Scanner;
  * A wrapper around <code>Scanner</code> that presents a prompt first.
  */
 public class PromptInput {
-    // private final Console secure_sc = System.console();
-    private final Console secure_sc = null;
+    // private final Console secure_sc = null;
+    private final Console secure_sc = System.console();
     private final Scanner sc = new Scanner(System.in);
 
     private String prompt;
