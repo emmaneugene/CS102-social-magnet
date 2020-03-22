@@ -194,10 +194,10 @@ DELIMITER ;
  * CREDENTIALS
  */
 CREATE PROCEDURE verify_credentials(IN _username VARCHAR(255), IN _password VARCHAR(255))
-    SELECT COUNT(*) AS is_valid FROM user WHERE username = _username AND pwd = _password;
+    SELECT COUNT(*) AS is_valid FROM user WHERE BINARY username = _username and BINARY pwd = _password;
 
 CREATE PROCEDURE user_exists(IN _username VARCHAR(255))
-    SELECT COUNT(*) AS user_exists FROM user WHERE username = _username;
+    SELECT COUNT(*) AS user_exists FROM user WHERE BINARY username = _username;
 
 /*
  * UPDATING USERS
