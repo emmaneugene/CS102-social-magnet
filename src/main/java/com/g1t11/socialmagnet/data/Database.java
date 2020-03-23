@@ -28,7 +28,7 @@ public class Database {
              * through .env file.
              */
             String dbName = System.getenv("DB_NAME");
-            String dbUrl  = "jdbc:mysql://localhost/" + dbName;
+            String dbUrl  = "jdbc:mysql://localhost/" + dbName + "?serverTimezone=UTC";
             String dbUser = System.getenv("DB_USER");
             String dbPass = System.getenv("DB_PASS");
 
