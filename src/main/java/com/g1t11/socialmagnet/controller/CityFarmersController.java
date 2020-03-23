@@ -30,6 +30,7 @@ public class CityFarmersController extends Controller {
         switch (choice) {
             case "1":
                 nav.push(new FarmlandController(nav));
+                break;
             case "2":
             case "3":
             case "4":
