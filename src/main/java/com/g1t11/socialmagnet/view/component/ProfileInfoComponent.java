@@ -21,7 +21,7 @@ public class ProfileInfoComponent implements Component {
 
     @Override
     public void render() {
-        System.out.printf(template, me.getUsername(), me.getFullname(), me.getRank(), prettyRank(me.getWealthRank()));
+        System.out.printf(template, me.getUsername(), me.getFullname(), me.getRank(), prettyRank(me.getWealthRankAmongFriends()));
     }
 
     private String prettyRank(int i) {

@@ -7,9 +7,8 @@ import com.g1t11.socialmagnet.view.page.MainMenuPageView;
 public class MainMenuController extends Controller {
     public MainMenuController(Navigation nav) {
         super(nav);
-        // Inject an updated full name into the view
-        String fullname = nav.session().currentUser().getFullname();
-        view = new MainMenuPageView(fullname);
+        // Inject the user into the view
+        view = new MainMenuPageView(nav.session().currentUser());
     }
 
     @Override
@@ -26,6 +25,8 @@ public class MainMenuController extends Controller {
                 nav.push(new FriendsController(nav));
                 break;
             case "4":
+                nav.push(new CityFarmersController(nav));
+                break;
             case "5":
                 nav.session().logout();
                 nav.popToFirst();

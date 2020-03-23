@@ -10,6 +10,10 @@ SET time_zone = '+00:00';
  * | Create Tables |
  * |---------------|
  */
+
+/*
+ * Social Magnet
+ */
 CREATE TABLE user (
     username VARCHAR(255) BINARY NOT NULL,
     fullname VARCHAR(255)        NOT NULL,
@@ -79,6 +83,9 @@ CREATE TABLE request (
     FOREIGN KEY (recipient) REFERENCES user (username)
 );
 
+/*
+ * City Farmer
+ */
 CREATE TABLE farmer (
     username VARCHAR(255) BINARY NOT NULL,
     xp       INT                 NOT NULL,
@@ -88,13 +95,13 @@ CREATE TABLE farmer (
 );
 
 CREATE TABLE crop (
-    crop_name  VARCHAR(255) NOT NULL,
-    cost       INT          NOT NULL,
-    crop_time  INT          NOT NULL,
-    xp         INT          NOT NULL,
-    min_yield  INT          NOT NULL,
-    max_yield  INT          NOT NULL,
-    sale_price INT          NOT NULL,
+    crop_name        VARCHAR(255) NOT NULL,
+    cost             INT          NOT NULL,
+    time_to_harvest  INT          NOT NULL,
+    xp               INT          NOT NULL,
+    min_yield        INT          NOT NULL,
+    max_yield        INT          NOT NULL,
+    sale_price       INT          NOT NULL,
     PRIMARY KEY (crop_name)
 );
 
@@ -138,6 +145,18 @@ CREATE TABLE gift (
     FOREIGN KEY (giftee)    REFERENCES farmer (username),
     FOREIGN KEY (crop_name) REFERENCES crop (crop_name)
 );
+
+/*
+ * |-----------------------|
+ * | Load City Farmer Data |
+ * |-----------------------|
+ */
+
+INSERT INTO crop (crop_name, cost, time_to_harvest, xp, min_yield, max_yield, sale_price) VALUES
+("Papaya",     20, 30,  8,  75, 100, 15),
+("Pumpkin",    30, 60,  5,  5,  200, 20),
+("Sunflower",  40, 120, 20, 15, 20,  40),
+("Watermelon", 50, 240, 1,  5,  800, 10);
 
 /*
  * |-------------------|

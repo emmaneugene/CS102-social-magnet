@@ -16,6 +16,24 @@ import com.g1t11.socialmagnet.model.social.User;
  * + getRank() : String
  */
 public class Farmer extends User {
+    public enum Rank {
+        NOVICE("Novice"),
+        APPRENTICE("Apprentice"),
+        JOURNEYMAN("Journeyman"),
+        GRANDMASTER("Grandmaster"),
+        LEGENDARY("Legendary");
+
+        private String value;
+
+        public String getValue() {
+            return value;
+        }
+
+        private Rank(String value) {
+            this.value = value;
+        }
+    }
+
     private int XP = 0;
 
     /** 
@@ -23,7 +41,7 @@ public class Farmer extends User {
      */ 
     private int wealth = 50;
 
-    private int wealthRank = 0;
+    private int wealthRankAmongFriends = 0;
 
     private List<Plot> farmland = new ArrayList<>();
 
@@ -33,7 +51,7 @@ public class Farmer extends User {
         super(username, fullname);
         this.XP = XP;
         this.wealth = wealth;
-        this.wealthRank = wealthRank;
+        this.wealthRankAmongFriends = wealthRank;
     }
 
     public Farmer(String username, String fullname) {
@@ -42,20 +60,35 @@ public class Farmer extends User {
 
     public Farmer() {}
 
-    public String getRank() {
+    public Rank getRank() {
         if (XP < 1000) {
-            return "Novice";
+            return Rank.NOVICE;
         }
         if (XP < 2500) {
-            return "Apprentice";
+            return Rank.APPRENTICE;
         }
         if (XP < 5000) {
-            return "Journeyman";
+            return Rank.JOURNEYMAN;
         }
         if (XP < 12000) {
-            return "Grandmaster";
+            return Rank.GRANDMASTER;
         }
-        return "Legendary";
+        return Rank.LEGENDARY;
+    }
+
+    public int getMaxPlotCount() {
+        switch (getRank()) {
+            case NOVICE:
+                return 5;
+            case APPRENTICE:
+                return 6;
+            case JOURNEYMAN:
+                return 7;
+            case GRANDMASTER:
+                return 8;
+            default:
+                return 9;
+        }
     }
 
     public int getXP() {
@@ -81,12 +114,12 @@ public class Farmer extends User {
         this.wealth -= wealth;
     }
 
-    public int getWealthRank() {
-        return wealthRank;
+    public int getWealthRankAmongFriends() {
+        return wealthRankAmongFriends;
     }
 
-    public void setWealthRank(int wealthRank) {
-        this.wealthRank = wealthRank;
+    public void setWealthRankAmongFriends(int wealthRank) {
+        this.wealthRankAmongFriends = wealthRank;
     }
 
     public List<Plot> getFarmland() {
@@ -104,7 +137,7 @@ public class Farmer extends User {
         return super.equals(other)
         && Objects.equals(XP, other.XP)
         && Objects.equals(wealth, other.wealth)
-        && Objects.equals(wealthRank, other.wealthRank)
+        && Objects.equals(wealthRankAmongFriends, other.wealthRankAmongFriends)
         && Objects.deepEquals(farmland, other.farmland)
         && Objects.deepEquals(inventory, other.inventory);
     }
