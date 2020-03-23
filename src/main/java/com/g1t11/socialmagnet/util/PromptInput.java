@@ -7,6 +7,7 @@ import java.util.Scanner;
  * A wrapper around <code>Scanner</code> that presents a prompt first.
  */
 public class PromptInput {
+    // private final Console secure_sc = null;
     private final Console secure_sc = System.console();
     private final Scanner sc = new Scanner(System.in);
 
@@ -32,6 +33,9 @@ public class PromptInput {
     }
 
     public String readPassword() {
+        if (secure_sc == null) {
+            return nextLine();
+        }
         char[] pwd = secure_sc.readPassword(String.format("%s %s ", prompt, promptIndicator));
         return String.copyValueOf(pwd);
     }

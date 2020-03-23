@@ -298,7 +298,7 @@ public class ThreadDAO extends DAO {
     }
 
     public void likeThread(Thread thread, User user) {
-        String queryString = "CALL like_thread(?, ?)";
+        String queryString = "CALL toggle_like_thread(?, ?)";
 
         try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
             stmt.setInt(1, thread.getId());
@@ -311,7 +311,7 @@ public class ThreadDAO extends DAO {
     }
 
     public void dislikeThread(Thread thread, User user) {
-        String queryString = "CALL dislike_thread(?, ?)";
+        String queryString = "CALL toggle_dislike_thread(?, ?)";
 
         try ( PreparedStatement stmt = getConnection().prepareStatement(queryString); ) {
             stmt.setInt(1, thread.getId());
