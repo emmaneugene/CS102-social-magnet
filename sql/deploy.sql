@@ -457,3 +457,10 @@ BEGIN
     WHERE username = _username;
 END$$
 DELIMITER ;
+
+CREATE PROCEDURE get_plots(IN _username VARCHAR(255))
+    SELECT plot_num, p.crop_name, time_planted, yield_of_crop, percent_stolen,
+    cost, minutes_to_harvest, xp, min_yield, max_yield, sale_price
+    FROM plot p
+    JOIN crop c ON p.crop_name = c.crop_name
+    WHERE owner = _username;

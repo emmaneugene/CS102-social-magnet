@@ -1,9 +1,7 @@
 package com.g1t11.socialmagnet.model.farm;
 
 import java.util.Date;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.Objects;
 
 /**
  * Plot
@@ -21,17 +19,20 @@ public class Plot {
 
     private Date timePlanted;
 
-    /**
-     * Random float between 0 to 1 used to determine the percentage of yield, 
-     * with 0 representing min yield, and 1 representing max yield.
-     */
-    private double yield;
-
-    private int percentStolen;
-
-    public Plot(Crop crop, Date timePlanted, int yield, int percentStolen, List<String> robberNames) {
+    public Plot(Crop crop, Date timePlanted) {
         this.crop = crop;
         this.timePlanted = timePlanted;
+    }
+
+    public Plot(Crop crop) {
+        this(crop, new Date());
+    }
+
+    /**
+     * An empty plot.
+     */
+    public Plot() {
+        this(null, null);
     }
 
     public Crop getCrop() {
@@ -42,18 +43,10 @@ public class Plot {
         return timePlanted;
     }
 
-    public double getYield() {
-        return yield;
-    }
-
-    public int getPercentStolen() {
-        return percentStolen;
-    }
-
     public boolean readyToHarvest() {
         Date now = new Date();
         int minutesElapsed = (int) (now.getTime() - timePlanted.getTime()) / (1000 * 60);
-        if (minutesElapsed >= 2 * crop.getTimeToHarvest() || minutesElapsed < crop.getTimeToHarvest()) {
+        if (minutesElapsed >= 2 * crop.getMinutesToHarvest() || minutesElapsed < crop.getMinutesToHarvest()) {
             return false;
         }
         return true;
@@ -62,7 +55,7 @@ public class Plot {
     public boolean isWilted() {
         Date now = new Date();
         int minutesElapsed = (int) (now.getTime() - timePlanted.getTime()) / (1000 * 60);
-        if (minutesElapsed >= 2 * crop.getTimeToHarvest()) {
+        if (minutesElapsed >= 2 * crop.getMinutesToHarvest()) {
             return true;
         }
         return false;
@@ -71,6 +64,13 @@ public class Plot {
     public int getPercentProgress() {
         Date now = new Date();
         int minutesElapsed = (int) (now.getTime() - timePlanted.getTime()) / (1000 * 60);
-        return minutesElapsed * 100 / crop.getTimeToHarvest();
+        return minutesElapsed * 100 / crop.getMinutesToHarvest();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Plot)) return false;
+        Plot other = (Plot) o;
+        return Objects.equals(crop, other.crop);
     }
 }
