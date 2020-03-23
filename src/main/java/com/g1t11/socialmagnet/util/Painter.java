@@ -1,40 +1,27 @@
 package com.g1t11.socialmagnet.util;
 
-import java.util.Map;
-import java.util.HashMap;
-
 public class Painter {
     public enum Color {
-        RESET,
-        BOLD,
-        BLACK,
-        RED,
-        GREEN,
-        YELLOW,
-        BLUE,
-        PURPLE,
-        CYAN,
-        WHITE
+        RESET("\u001b[0m"),
+        BOLD("\u001b[1m"),
+        BLACK("\u001b[30m"),
+        RED("\u001b[31m"),
+        GREEN("\u001b[32m"),
+        YELLOW("\u001b[33m"),
+        BLUE("\u001b[34m"),
+        PURPLE("\u001b[35m"),
+        CYAN("\u001b[36m"),
+        WHITE("\u001b[37m");
+
+        public String code;
+
+        private Color(String code) {
+            this.code = code;
+        }
     }
 
-    protected static final Map<Color, String> map = new HashMap<Color, String>() {
-        private static final long serialVersionUID = 1L;
-        {
-            put(Color.RESET, "\u001b[0m");
-            put(Color.BOLD, "\u001b[1m");
-            put(Color.BLACK, "\u001b[30m");
-            put(Color.RED, "\u001b[31m");
-            put(Color.GREEN, "\u001b[32m");
-            put(Color.YELLOW, "\u001b[33m");
-            put(Color.BLUE, "\u001b[34m");
-            put(Color.PURPLE, "\u001b[35m");
-            put(Color.CYAN, "\u001b[36m");
-            put(Color.WHITE, "\u001b[37m");
-        }
-    };
-
     public static String paint(String text, Color color) {
-        return map.get(color) + text + map.get(Color.RESET);
+        return color.code + text + Color.RESET.code;
     }
 
     /**
@@ -62,7 +49,7 @@ public class Painter {
                 stack[stackIndex++] = colors[Math.min(colorIndex++, colors.length - 1)];
             } else if (token.equals("}]")) {
                 stackIndex--;
-                result += map.get(Color.RESET);
+                result += Color.RESET.code;
             } else {
                 result += getMinifiedColorCodes(stack, stackIndex);
                 result += token;
@@ -86,10 +73,10 @@ public class Painter {
         String result = "";
         for (int i = length - 1; i >= 0; i--) {
             if (!bolded && stack[i] == Color.BOLD) {
-                result += map.get(Color.BOLD);
+                result += Color.BOLD.code;
                 bolded = true;
             } else if (!colored) {
-                result += map.get(stack[i]);
+                result += stack[i].code;
                 colored = true;
             }
         }
