@@ -23,11 +23,7 @@ public class Farmer extends User {
         GRANDMASTER("Grandmaster"),
         LEGENDARY("Legendary");
 
-        private String value;
-
-        public String getValue() {
-            return value;
-        }
+        public String value;
 
         private Rank(String value) {
             this.value = value;

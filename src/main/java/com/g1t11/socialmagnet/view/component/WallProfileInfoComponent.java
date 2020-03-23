@@ -3,25 +3,26 @@ package com.g1t11.socialmagnet.view.component;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.util.Painter;
 
-public class ProfileInfoComponent implements Component {
+public class WallProfileInfoComponent implements Component {
     Farmer me;
 
     private static final String template = Painter.paintf(
-        String.join("\n",
+        String.join(System.lineSeparator(),
             "About [{%s}]",
             "Full Name: %s",
-            "%s Farmer, %s richest\n\n\n"
+            "%s Farmer, %s richest",
+            ""
         ),
         Painter.Color.BLUE
     );
 
-    public ProfileInfoComponent(Farmer me) {
+    public WallProfileInfoComponent(Farmer me) {
         this.me = me;
     }
 
     @Override
     public void render() {
-        System.out.printf(template, me.getUsername(), me.getFullname(), me.getRank(), prettyRank(me.getWealthRankAmongFriends()));
+        System.out.printf(template, me.getUsername(), me.getFullname(), me.getRank().value, prettyRank(me.getWealthRankAmongFriends()));
     }
 
     private String prettyRank(int i) {
