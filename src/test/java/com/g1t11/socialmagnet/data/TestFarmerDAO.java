@@ -13,7 +13,7 @@ public class TestFarmerDAO {
     @Before
     public void initDAO() {
         Database db = new Database();
-        farmerDAO = new FarmerDAO(db.connection());
+        farmerDAO = new FarmerDAO(db);
     }
 
     @Test

@@ -14,7 +14,7 @@ public class TestUserDAO {
     @Before
     public void initDAO() {
         Database db = new Database();
-        userDAO = new UserDAO(db.connection());
+        userDAO = new UserDAO(db);
     }
 
     @Test

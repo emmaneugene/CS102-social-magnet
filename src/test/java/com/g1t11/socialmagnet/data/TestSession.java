@@ -10,7 +10,7 @@ public class TestSession {
     @Before
     public void initSession() {
         Database db = new Database();
-        session = new Session(db.connection());
+        session = new Session(db);
     }
 
     @Test
