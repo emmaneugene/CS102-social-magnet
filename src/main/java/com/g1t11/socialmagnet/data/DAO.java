@@ -1,15 +1,19 @@
 package com.g1t11.socialmagnet.data;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 public class DAO {
-    private Connection conn;
+    private Database db;
 
-    public DAO(Connection conn) {
-        this.conn = conn;
+    public DAO(Database db) {
+        this.db = db;
     }
 
-    public Connection getConnection() {
-        return conn;
+    public Connection connection() {
+        if (db.connection() == null) {
+            throw new DatabaseException(new SQLException("Connection not established", "08S01", 0));
+        }
+        return db.connection();
     }
 } 

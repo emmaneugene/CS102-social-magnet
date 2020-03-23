@@ -11,7 +11,7 @@ import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.FriendsPageView;
 
 public class FriendsController extends Controller {
-    private UserDAO userDAO = new UserDAO(connection());
+    private UserDAO userDAO = new UserDAO(database());
 
     private User currentUser;
 

@@ -1,6 +1,5 @@
 package com.g1t11.socialmagnet.data;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,9 +9,7 @@ import com.g1t11.socialmagnet.model.social.User;
 /**
  * Handles user authentication and session management.
  */
-public class Session {
-    private Connection conn;
-
+public class Session extends DAO {
     private UserDAO userDAO;
 
     /**
@@ -20,9 +17,9 @@ public class Session {
      */
     private User user = null;
 
-    public Session(Connection conn) {
-        this.conn = conn;
-        userDAO = new UserDAO(conn);
+    public Session(Database db) {
+        super(db);
+        userDAO = new UserDAO(db);
     }
 
     /**
@@ -58,7 +55,7 @@ public class Session {
 
         String queryString = "CALL verify_credentials(?, ?)";
 
-        try ( PreparedStatement stmt = conn.prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setString(1, username);
             stmt.setString(2, password);
 
@@ -67,11 +64,10 @@ public class Session {
             return rs.getBoolean("is_valid");
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
+            throw new DatabaseException(e);
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
-
-        return false;
     }
 
     public boolean userExists(String username) {
@@ -79,7 +75,7 @@ public class Session {
 
         String queryString = "CALL user_exists(?)";
 
-        try ( PreparedStatement stmt = conn.prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setString(1, username);
 
             rs = stmt.executeQuery();
@@ -87,10 +83,10 @@ public class Session {
             return rs.getBoolean("user_exists");
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
+            throw new DatabaseException(e);
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
-        return false;
     }
 
     /**
@@ -102,7 +98,7 @@ public class Session {
     public boolean addUser(String username, String fullname, String pwd) {
         String queryString = "CALL add_user(?, ?, ?)";
 
-        try ( PreparedStatement stmt = conn.prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setString(1, username);
             stmt.setString(2, fullname);
             stmt.setString(3, pwd);
@@ -111,10 +107,9 @@ public class Session {
         } catch (SQLException e) {
             // 1062 represents a duplicate primary key entry.
             if (e.getErrorCode() == 1062) return false;
-
             System.err.println("SQLException: " + e.getMessage());
+            throw new DatabaseException(e);
         }
-
         return true;
     }
 }

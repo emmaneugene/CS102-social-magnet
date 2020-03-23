@@ -10,7 +10,7 @@ import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.NewsFeedPageView;
 
 public class NewsFeedController extends Controller {
-    private ThreadDAO threadDAO = new ThreadDAO(connection());
+    private ThreadDAO threadDAO = new ThreadDAO(database());
 
     private List<Thread> threads = new ArrayList<>();
 

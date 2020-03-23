@@ -38,7 +38,6 @@ public class RegisterController extends Controller {
         }
 
         boolean registerSuccessful = nav.session().register(username, fullName, password);
-
         nav.pop();
         if (registerSuccessful) {
             nav.currentController().view.setStatus(String.format(Painter.paint("Registered %s successfully!", Painter.Color.GREEN), username));

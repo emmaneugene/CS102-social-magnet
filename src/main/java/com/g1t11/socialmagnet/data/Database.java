@@ -22,7 +22,15 @@ public class Database {
         // JDBC Driver must be instantiated before we can use DriverManager.
         try {
             new Driver();
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+            System.err.println("SQLState: " + e.getSQLState());
+            System.err.println("VendorError: " + e.getErrorCode());
+        }
+    }
 
+    public void establishConnection() {
+        try {
             /*
              * Get credentials from environment variables that were loaded
              * through .env file.
@@ -34,9 +42,10 @@ public class Database {
 
             conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
         } catch (SQLException e) {
-            System.err.println("SQLException: " + e.getMessage());
-            System.err.println("SQLState: " + e.getSQLState());
-            System.err.println("VendorError: " + e.getErrorCode());
+            // System.err.println("SQLException: " + e.getMessage());
+            // System.err.println("SQLState: " + e.getSQLState());
+            // System.err.println("VendorError: " + e.getErrorCode());
+            throw new DatabaseException(e);
         }
     }
 
