@@ -15,7 +15,7 @@ public class Crop {
 
     private int cost = 0;
 
-    private int time = 0;
+    private int timeToHarvest = 0;
 
     private int XP = 0;
 
@@ -25,10 +25,10 @@ public class Crop {
 
     private int salePrice = 0;
 
-    public Crop(String name, int cost, int time, int XP, int minYield, int maxYield, int salePrice) {
+    public Crop(String name, int cost, int timeToHarvest, int XP, int minYield, int maxYield, int salePrice) {
         this.name = name;
         this.cost = cost;
-        this.time = time;
+        this.timeToHarvest = timeToHarvest;
         this.XP = XP;
         this.minYield = minYield;
         this.maxYield = maxYield;
@@ -43,8 +43,8 @@ public class Crop {
         return cost;
     }
 
-    public int getTime() {
-        return time;
+    public int getTimeToHarvest() {
+        return timeToHarvest;
     }
 
     public int getXP() {

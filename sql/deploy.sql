@@ -95,35 +95,35 @@ CREATE TABLE farmer (
 );
 
 CREATE TABLE crop (
-    crop_name        VARCHAR(255) NOT NULL,
-    cost             INT          NOT NULL,
-    time_to_harvest  INT          NOT NULL,
-    xp               INT          NOT NULL,
-    min_yield        INT          NOT NULL,
-    max_yield        INT          NOT NULL,
-    sale_price       INT          NOT NULL,
+    crop_name           VARCHAR(255) NOT NULL,
+    cost                INT          NOT NULL,
+    minutes_to_harvest  INT          NOT NULL,
+    xp                  INT          NOT NULL,
+    min_yield           INT          NOT NULL,
+    max_yield           INT          NOT NULL,
+    sale_price          INT          NOT NULL,
     PRIMARY KEY (crop_name)
 );
 
 CREATE TABLE plot (
     owner          VARCHAR(255) BINARY NOT NULL,
-    plot_id        INT                 NOT NULL,
-    crop_name      VARCHAR(255),
-    time_planted   DATETIME,
-    yield          INT,
-    percent_stolen INT,
-    PRIMARY KEY (owner, plot_id),
+    plot_num       INT                 NOT NULL,
+    crop_name      VARCHAR(255)        NOT NULL,
+    time_planted   DATETIME            NOT NULL,
+    yield_of_crop  INT                 NOT NULL,
+    percent_stolen INT                 NOT NULL,
+    PRIMARY KEY (owner, plot_num),
     FOREIGN KEY (owner)     REFERENCES farmer (username),
     FOREIGN KEY (crop_name) REFERENCES crop (crop_name)
 );
 
 CREATE TABLE stealing (
-    victim         VARCHAR(255) BINARY NOT NULL,
-    stolen_plot_id INT                 NOT NULL,
-    stealer        VARCHAR(255) BINARY NOT NULL,
-    PRIMARY KEY (victim, stolen_plot_id, stealer),
-    FOREIGN KEY (victim, stolen_plot_id) REFERENCES plot (owner, plot_id),
-    FOREIGN KEY (stealer)                REFERENCES farmer (username)
+    victim          VARCHAR(255) BINARY NOT NULL,
+    stolen_plot_num INT                 NOT NULL,
+    stealer         VARCHAR(255) BINARY NOT NULL,
+    PRIMARY KEY (victim, stolen_plot_num, stealer),
+    FOREIGN KEY (victim, stolen_plot_num) REFERENCES plot (owner, plot_num) ON DELETE CASCADE,
+    FOREIGN KEY (stealer)                 REFERENCES farmer (username)
 );
 
 CREATE TABLE inventory (
@@ -152,7 +152,7 @@ CREATE TABLE gift (
  * |-----------------------|
  */
 
-INSERT INTO crop (crop_name, cost, time_to_harvest, xp, min_yield, max_yield, sale_price) VALUES
+INSERT INTO crop (crop_name, cost, minutes_to_harvest, xp, min_yield, max_yield, sale_price) VALUES
 ("Papaya",     20, 30,  8,  75, 100, 15),
 ("Pumpkin",    30, 60,  5,  5,  200, 20),
 ("Sunflower",  40, 120, 20, 15, 20,  40),
@@ -192,22 +192,6 @@ CREATE PROCEDURE get_friends_of_friend_with_common(IN _me VARCHAR(255), IN _frie
     ) AS my_friends ON f_friends.friend_name = my_friends.friend_name
     LEFT JOIN user u ON f_friends.friend_name = u.username
     WHERE f_friends.friend_name <> _me;
-
-DELIMITER $$
-CREATE PROCEDURE get_farmer_detail(IN _username VARCHAR(255))
-BEGIN
-    SET @rank := 0;
-    SELECT username, xp, r.wealth, r.wealth_rank
-    FROM farmer JOIN (
-        SELECT (@rank := @rank + 1) AS wealth_rank, wealth
-        FROM (
-            SELECT DISTINCT wealth FROM farmer
-        ) AS w
-        ORDER BY wealth DESC
-    ) AS r ON farmer.wealth = r.wealth
-    WHERE username = _username;
-END$$
-DELIMITER ;
 
 /*
  * CREDENTIALS
@@ -454,3 +438,22 @@ DELIMITER ;
 
 CREATE PROCEDURE remove_tag(IN _thread_id INT, IN _username VARCHAR(255))
     DELETE FROM tag WHERE thread_id = _thread_id AND tagged_user = _username;
+
+/*
+ * FARMING
+ */
+DELIMITER $$
+CREATE PROCEDURE get_farmer_detail(IN _username VARCHAR(255))
+BEGIN
+    SET @rank := 0;
+    SELECT username, xp, r.wealth, r.wealth_rank
+    FROM farmer JOIN (
+        SELECT (@rank := @rank + 1) AS wealth_rank, wealth
+        FROM (
+            SELECT DISTINCT wealth FROM farmer
+        ) AS w
+        ORDER BY wealth DESC
+    ) AS r ON farmer.wealth = r.wealth
+    WHERE username = _username;
+END$$
+DELIMITER ;
