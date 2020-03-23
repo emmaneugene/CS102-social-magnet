@@ -1,5 +1,6 @@
 package com.g1t11.socialmagnet.controller;
 
+import com.g1t11.socialmagnet.controller.cityfarmers.CityFarmersMainMenuController;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.MainMenuPageView;
@@ -25,7 +26,7 @@ public class MainMenuController extends Controller {
                 nav.push(new FriendsController(nav));
                 break;
             case "4":
-                nav.push(new CityFarmersController(nav));
+                nav.push(new CityFarmersMainMenuController(nav));
                 break;
             case "5":
                 nav.session().logout();

@@ -12,7 +12,7 @@ import com.g1t11.socialmagnet.view.component.*;
  * static views.
  * @see View
  */
-public class PageView {
+public abstract class PageView {
     private String[] pageTitles;
 
     /**

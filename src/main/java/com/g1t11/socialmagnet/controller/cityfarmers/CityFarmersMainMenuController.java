@@ -1,18 +1,22 @@
-package com.g1t11.socialmagnet.controller;
+package com.g1t11.socialmagnet.controller.cityfarmers;
 
+import com.g1t11.socialmagnet.controller.Controller;
+import com.g1t11.socialmagnet.controller.Navigation;
 import com.g1t11.socialmagnet.data.FarmerDAO;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.PromptInput;
-import com.g1t11.socialmagnet.view.page.CityFarmersPageView;
+import com.g1t11.socialmagnet.view.page.cityfarmers.CityFarmersMainMenuPageView;
 
-public class CityFarmersController extends Controller {
+public class CityFarmersMainMenuController extends Controller {
     FarmerDAO farmerDAO = new FarmerDAO(nav.database());
 
-    public CityFarmersController(Navigation nav) {
+    Farmer me;
+
+    public CityFarmersMainMenuController(Navigation nav) {
         super(nav);
-        Farmer me = farmerDAO.getFarmer(nav.session().currentUser());
-        view = new CityFarmersPageView(me);
+        me = farmerDAO.getFarmer(nav.session().currentUser());
+        view = new CityFarmersMainMenuPageView(me);
     }
 
     @Override
@@ -29,7 +33,7 @@ public class CityFarmersController extends Controller {
         String choice = input.nextLine();
         switch (choice) {
             case "1":
-                nav.push(new FarmlandController(nav));
+                nav.push(new FarmlandController(nav, me));
                 break;
             case "2":
             case "3":
