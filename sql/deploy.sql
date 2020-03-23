@@ -346,7 +346,7 @@ CREATE PROCEDURE reply_to_thread(IN _thread_id INT, IN _username VARCHAR(255), I
     INSERT INTO comment (thread_id, commenter, commented_on, content) VALUES (_thread_id, _username, NOW(), _content);
 
 DELIMITER $$
-CREATE PROCEDURE like_thread(IN _thread_id INT, IN _username VARCHAR(255))
+CREATE PROCEDURE toggle_like_thread(IN _thread_id INT, IN _username VARCHAR(255))
 BEGIN
     DECLARE liked INT;
 	SET liked = (
@@ -361,8 +361,10 @@ BEGIN
 	    DELETE FROM liker WHERE username = _username AND thread_id = _thread_id;
    	END IF;
 END$$
+DELIMITER ;
 
-CREATE PROCEDURE dislike_thread(IN _thread_id INT, IN _username VARCHAR(255))
+DELIMITER $$
+CREATE PROCEDURE toggle_dislike_thread(IN _thread_id INT, IN _username VARCHAR(255))
 BEGIN
     DECLARE disliked INT;
 	SET disliked = (
