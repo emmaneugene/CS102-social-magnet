@@ -12,7 +12,7 @@ SET time_zone = '+00:00';
  */
 
 /*
- * Social Magnet
+ * SOCIAL MAGNET
  */
 CREATE TABLE user (
     username VARCHAR(255) BINARY NOT NULL,
@@ -49,12 +49,12 @@ CREATE TABLE friend (
 );
 
 CREATE TABLE comment (
-    comment_id     INT                 NOT NULL AUTO_INCREMENT,
+    comment_num    INT                 NOT NULL,
     thread_id      INT                 NOT NULL,
     commenter      VARCHAR(255) BINARY NOT NULL,
     commented_on   DATETIME            NOT NULL,
     content        TEXT(65535)         NOT NULL,
-    PRIMARY KEY (comment_id),
+    PRIMARY KEY (comment_num, thread_id),
     FOREIGN KEY (thread_id) REFERENCES thread (thread_id) ON DELETE CASCADE,
     FOREIGN KEY (commenter) REFERENCES user (username)
 );
@@ -84,7 +84,7 @@ CREATE TABLE request (
 );
 
 /*
- * City Farmer
+ * CITY FARMER
  */
 CREATE TABLE farmer (
     username VARCHAR(255) BINARY NOT NULL,
@@ -106,14 +106,14 @@ CREATE TABLE crop (
 );
 
 CREATE TABLE plot (
-    farmer         VARCHAR(255) BINARY NOT NULL,
+    owner          VARCHAR(255) BINARY NOT NULL,
     plot_id        INT                 NOT NULL,
     crop_name      VARCHAR(255),
     time_planted   DATETIME,
     yield          INT,
     percent_stolen INT,
-    PRIMARY KEY (farmer, plot_id),
-    FOREIGN KEY (farmer)    REFERENCES farmer (username),
+    PRIMARY KEY (owner, plot_id),
+    FOREIGN KEY (owner)     REFERENCES farmer (username),
     FOREIGN KEY (crop_name) REFERENCES crop (crop_name)
 );
 
@@ -122,16 +122,16 @@ CREATE TABLE stealing (
     stolen_plot_id INT                 NOT NULL,
     stealer        VARCHAR(255) BINARY NOT NULL,
     PRIMARY KEY (victim, stolen_plot_id, stealer),
-    FOREIGN KEY (victim, stolen_plot_id) REFERENCES plot (farmer, plot_id),
+    FOREIGN KEY (victim, stolen_plot_id) REFERENCES plot (owner, plot_id),
     FOREIGN KEY (stealer)                REFERENCES farmer (username)
 );
 
 CREATE TABLE inventory (
-    username  VARCHAR(255) BINARY NOT NULL,
+    owner     VARCHAR(255) BINARY NOT NULL,
     crop_name VARCHAR(255)        NOT NULL,
     quantity  INT                 NOT NULL,
-    PRIMARY KEY (username, crop_name),
-    FOREIGN KEY (username)  REFERENCES farmer (username),
+    PRIMARY KEY (owner, crop_name),
+    FOREIGN KEY (owner)     REFERENCES farmer (username),
     FOREIGN KEY (crop_name) REFERENCES crop (crop_name)
 );
 
@@ -361,8 +361,17 @@ DELIMITER ;
 CREATE PROCEDURE delete_thread(IN _thread_id INT, IN _username VARCHAR(255))
     DELETE FROM thread WHERE thread_id = _thread_id AND (author = _username OR recipient = _username);
 
+DELIMITER $$
 CREATE PROCEDURE reply_to_thread(IN _thread_id INT, IN _username VARCHAR(255), IN _content TEXT(65535))
-    INSERT INTO comment (thread_id, commenter, commented_on, content) VALUES (_thread_id, _username, NOW(), _content);
+BEGIN
+    DECLARE next_num INT;
+    SET next_num = (
+        SELECT MAX(comment_num) + 1 FROM comment
+        WHERE thread_id = _thread_id
+    );
+    INSERT INTO comment (comment_num, thread_id, commenter, commented_on, content) VALUES (next_num, _thread_id, _username, NOW(), _content);
+END$$
+DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE toggle_like_thread(IN _thread_id INT, IN _username VARCHAR(255))
@@ -407,13 +416,15 @@ DELIMITER $$
 CREATE TRIGGER validate_tag BEFORE INSERT ON tag
 FOR EACH ROW BEGIN
     DECLARE is_friend BOOLEAN;
-    SELECT COUNT(*) INTO is_friend FROM (
-        SELECT user_1 FROM friend WHERE user_2 = NEW.tagged_user
-        UNION
-        SELECT user_2 FROM friend WHERE user_1 = NEW.tagged_user
-    ) AS f
-    WHERE user_1 IN (
-        SELECT author FROM thread WHERE thread_id = NEW.thread_id
+    SET is_friend = (
+        SELECT COUNT(*) FROM (
+            SELECT user_1 FROM friend WHERE user_2 = NEW.tagged_user
+            UNION
+            SELECT user_2 FROM friend WHERE user_1 = NEW.tagged_user
+        ) AS f
+        WHERE user_1 IN (
+            SELECT author FROM thread WHERE thread_id = NEW.thread_id
+        )
     );
     IF (is_friend = FALSE) THEN
         SIGNAL SQLSTATE '45000' SET message_text = 'Cannot tag non-friends.';
@@ -425,13 +436,15 @@ DELIMITER $$
 CREATE PROCEDURE add_tag(IN _thread_id INT, IN _username VARCHAR(255))
 BEGIN
     DECLARE is_friend BOOLEAN;
-    SELECT COUNT(*) INTO is_friend FROM (
-        SELECT user_1 FROM friend WHERE user_2 = _username
-        UNION
-        SELECT user_2 FROM friend WHERE user_1 = _username
-    ) AS f
-    WHERE user_1 IN (
-        SELECT author FROM thread WHERE thread_id = _thread_id
+    SET is_friend = (
+        SELECT COUNT(*) FROM (
+            SELECT user_1 FROM friend WHERE user_2 = NEW.tagged_user
+            UNION
+            SELECT user_2 FROM friend WHERE user_1 = NEW.tagged_user
+        ) AS f
+        WHERE user_1 IN (
+            SELECT author FROM thread WHERE thread_id = NEW.thread_id
+        )
     );
     IF (is_friend = TRUE) THEN
         INSERT INTO tag (thread_id, tagged_user) VALUES (_thread_id, _username);
