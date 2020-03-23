@@ -1,6 +1,7 @@
 package com.g1t11.socialmagnet.view.component;
 
 import com.g1t11.socialmagnet.model.farm.Plot;
+import com.g1t11.socialmagnet.util.Painter;
 
 public class PlotComponent implements Component {
     private Plot plot;
@@ -17,7 +18,7 @@ public class PlotComponent implements Component {
 
     @Override
     public void render() {
-        System.out.printf("%d. ", index);
+        System.out.printf(Painter.paint("%d. ", Painter.Color.YELLOW), index);
         if (plot.getCrop() == null) {
             System.out.println("<empty>");
             return;
@@ -28,15 +29,19 @@ public class PlotComponent implements Component {
         System.out.printf(" %d%%\n", plot.getPercentProgress());
     }
 
+    private static final String progressBarTemplate 
+        = Painter.paintf("[[{%s}]%s]", Painter.Color.GREEN);
+
     private void renderProgressBar() {
-        System.out.print("[");
         int fillCount = plot.getPercentProgress() / 10;
+        StringBuilder filledBuilder = new StringBuilder();
         for (int i = 0; i < fillCount; i++) {
-            System.out.print("#");
+            filledBuilder.append("#");
         }
+        StringBuilder unfilledBuilder = new StringBuilder();
         for (int i = 10; i > fillCount; i--) {
-            System.out.print("-");
+            unfilledBuilder.append("-");
         }
-        System.out.print("]");
+        System.out.printf(progressBarTemplate, filledBuilder, unfilledBuilder);
     }
 }

@@ -67,7 +67,7 @@ public class FarmerDAO extends DAO {
                     rs.getInt("max_yield"),
                     rs.getInt("sale_price")
                 );
-                Plot p = new Plot(c, rs.getDate("time_planted"));
+                Plot p = new Plot(c, rs.getTimestamp("time_planted"));
                 int index = rs.getInt("plot_num") - 1;
                 plots.set(index, p);
             }
