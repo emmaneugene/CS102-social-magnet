@@ -345,11 +345,39 @@ CREATE PROCEDURE delete_thread(IN _thread_id INT, IN _username VARCHAR(255))
 CREATE PROCEDURE reply_to_thread(IN _thread_id INT, IN _username VARCHAR(255), IN _content TEXT(65535))
     INSERT INTO comment (thread_id, commenter, commented_on, content) VALUES (_thread_id, _username, NOW(), _content);
 
+DELIMITER $$
 CREATE PROCEDURE like_thread(IN _thread_id INT, IN _username VARCHAR(255))
-    INSERT INTO liker (username, thread_id) VALUES (_username, _thread_id);
+BEGIN
+    DECLARE liked INT;
+	SET liked = (
+        SELECT COUNT(*)
+	    FROM liker l NATURAL JOIN user u
+	    WHERE l.thread_id = _thread_id
+	    AND l.username = _username
+    );
+	IF (liked = 0) THEN
+		INSERT INTO liker (username, thread_id) VALUES (_username, _thread_id);
+	ELSE
+	    DELETE FROM liker WHERE username = _username AND thread_id = _thread_id;
+   	END IF;
+END$$
 
 CREATE PROCEDURE dislike_thread(IN _thread_id INT, IN _username VARCHAR(255))
-    INSERT INTO disliker (username, thread_id) VALUES (_username, _thread_id);
+BEGIN
+    DECLARE disliked INT;
+	SET disliked = (
+        SELECT COUNT(*)
+	    FROM disliker l NATURAL JOIN user u
+	    WHERE l.thread_id = _thread_id
+	    AND l.username = _username
+    );
+	IF (disliked = 0) THEN
+		INSERT INTO disliker (username, thread_id) VALUES (_username, _thread_id);
+	ELSE
+	    DELETE FROM disliker WHERE username = _username AND thread_id = _thread_id;
+   	END IF;
+END$$
+DELIMITER ;
 
 /*
  * TAGGING THREADS
