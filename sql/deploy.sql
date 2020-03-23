@@ -11,78 +11,78 @@ SET time_zone = '+00:00';
  * |---------------|
  */
 CREATE TABLE user (
-    username VARCHAR(255) NOT NULL,
-    fullname VARCHAR(255) NOT NULL,
-    pwd      VARCHAR(255) NOT NULL,
+    username VARCHAR(255) BINARY NOT NULL,
+    fullname VARCHAR(255)        NOT NULL,
+    pwd      VARCHAR(255) BINARY NOT NULL,
     PRIMARY KEY (username)
 );
 
 CREATE TABLE thread (
-    thread_id   INT          NOT NULL AUTO_INCREMENT,
-    author      VARCHAR(255) NOT NULL,
-    recipient   VARCHAR(255) NOT NULL,
-    posted_on   DATETIME     NOT NULL,
-    content     TEXT(65535)  NOT NULL,
+    thread_id   INT                 NOT NULL AUTO_INCREMENT,
+    author      VARCHAR(255) BINARY NOT NULL,
+    recipient   VARCHAR(255) BINARY NOT NULL,
+    posted_on   DATETIME            NOT NULL,
+    content     TEXT(65535)         NOT NULL,
     PRIMARY KEY (thread_id),
     FOREIGN KEY (author)    REFERENCES user (username),
     FOREIGN KEY (recipient) REFERENCES user (username)
 );
 
 CREATE TABLE tag (
-    thread_id     INT          NOT NULL,
-    tagged_user   VARCHAR(255) NOT NULL,
+    thread_id     INT                 NOT NULL,
+    tagged_user   VARCHAR(255) BINARY NOT NULL,
     PRIMARY KEY (thread_id, tagged_user),
     FOREIGN KEY (thread_id)   REFERENCES thread (thread_id) ON DELETE CASCADE,
     FOREIGN KEY (tagged_user) REFERENCES user (username)
 );
 
 CREATE TABLE friend (
-    user_1 VARCHAR(255) NOT NULL,
-    user_2 VARCHAR(255) NOT NULL,
+    user_1 VARCHAR(255) BINARY NOT NULL,
+    user_2 VARCHAR(255) BINARY NOT NULL,
     PRIMARY KEY (user_1, user_2),
     FOREIGN KEY (user_1) REFERENCES user (username),
     FOREIGN KEY (user_2) REFERENCES user (username)
 );
 
 CREATE TABLE comment (
-    comment_id     INT          NOT NULL AUTO_INCREMENT,
-    thread_id      INT          NOT NULL,
-    commenter      VARCHAR(255) NOT NULL,
-    commented_on   DATETIME     NOT NULL,
-    content        TEXT(65535)  NOT NULL,
+    comment_id     INT                 NOT NULL AUTO_INCREMENT,
+    thread_id      INT                 NOT NULL,
+    commenter      VARCHAR(255) BINARY NOT NULL,
+    commented_on   DATETIME            NOT NULL,
+    content        TEXT(65535)         NOT NULL,
     PRIMARY KEY (comment_id),
     FOREIGN KEY (thread_id) REFERENCES thread (thread_id) ON DELETE CASCADE,
     FOREIGN KEY (commenter) REFERENCES user (username)
 );
 
 CREATE TABLE liker (
-    username   VARCHAR(128) NOT NULL,
-    thread_id  INT          NOT NULL,
+    username   VARCHAR(128) BINARY NOT NULL,
+    thread_id  INT                 NOT NULL,
     PRIMARY KEY (username, thread_id),
     FOREIGN KEY (username)  REFERENCES user (username),
     FOREIGN KEY (thread_id) REFERENCES thread (thread_id) ON DELETE CASCADE
 );
 
 CREATE TABLE disliker (
-    username   VARCHAR(128) NOT NULL,
-    thread_id  INT          NOT NULL,
+    username   VARCHAR(128) BINARY NOT NULL,
+    thread_id  INT                 NOT NULL,
     PRIMARY KEY (username, thread_id),
     FOREIGN KEY (username)  REFERENCES user (username),
     FOREIGN KEY (thread_id) REFERENCES thread (thread_id) ON DELETE CASCADE
 );
 
 CREATE TABLE request (
-    sender    VARCHAR(255) NOT NULL,
-    recipient VARCHAR(255) NOT NULL,
+    sender    VARCHAR(255) BINARY NOT NULL,
+    recipient VARCHAR(255) BINARY NOT NULL,
     PRIMARY KEY (sender, recipient),
     FOREIGN KEY (sender)    REFERENCES user (username),
     FOREIGN KEY (recipient) REFERENCES user (username)
 );
 
 CREATE TABLE farmer (
-    username VARCHAR(255) NOT NULL,
-    xp       INT          NOT NULL,
-    wealth   INT          NOT NULL,
+    username VARCHAR(255) BINARY NOT NULL,
+    xp       INT                 NOT NULL,
+    wealth   INT                 NOT NULL,
     PRIMARY KEY (username),
     FOREIGN KEY (username) REFERENCES user (username)
 );
@@ -99,40 +99,40 @@ CREATE TABLE crop (
 );
 
 CREATE TABLE plot (
-    farmer         VARCHAR(255) NOT NULL,
-    plot_id        INT          NOT NULL,
-    crop_name      VARCHAR(255) NULL,
-    time_planted   DATETIME     NULL,
-    yield          INT          NULL,
-    percent_stolen INT          NULL,
+    farmer         VARCHAR(255) BINARY NOT NULL,
+    plot_id        INT                 NOT NULL,
+    crop_name      VARCHAR(255),
+    time_planted   DATETIME,
+    yield          INT,
+    percent_stolen INT,
     PRIMARY KEY (farmer, plot_id),
     FOREIGN KEY (farmer)    REFERENCES farmer (username),
     FOREIGN KEY (crop_name) REFERENCES crop (crop_name)
 );
 
 CREATE TABLE stealing (
-    victim         VARCHAR(255) NOT NULL,
-    stolen_plot_id INT          NOT NULL,
-    stealer        VARCHAR(255) NOT NULL,
+    victim         VARCHAR(255) BINARY NOT NULL,
+    stolen_plot_id INT                 NOT NULL,
+    stealer        VARCHAR(255) BINARY NOT NULL,
     PRIMARY KEY (victim, stolen_plot_id, stealer),
     FOREIGN KEY (victim, stolen_plot_id) REFERENCES plot (farmer, plot_id),
     FOREIGN KEY (stealer)                REFERENCES farmer (username)
 );
 
 CREATE TABLE inventory (
-    username  VARCHAR(255) NOT NULL,
-    crop_name VARCHAR(255) NOT NULL,
-    quantity  INT          NOT NULL,
+    username  VARCHAR(255) BINARY NOT NULL,
+    crop_name VARCHAR(255)        NOT NULL,
+    quantity  INT                 NOT NULL,
     PRIMARY KEY (username, crop_name),
     FOREIGN KEY (username)  REFERENCES farmer (username),
     FOREIGN KEY (crop_name) REFERENCES crop (crop_name)
 );
 
 CREATE TABLE gift (
-    gifter    VARCHAR(255) NOT NULL,
-    giftee    VARCHAR(255) NOT NULL,
-    crop_name VARCHAR(255) NOT NULL,
-    gifted_on DATETIME     NOT NULL,
+    gifter    VARCHAR(255) BINARY NOT NULL,
+    giftee    VARCHAR(255) BINARY NOT NULL,
+    crop_name VARCHAR(255)        NOT NULL,
+    gifted_on DATETIME            NOT NULL,
     PRIMARY KEY (gifter, giftee, crop_name, gifted_on),
     FOREIGN KEY (gifter)    REFERENCES farmer (username),
     FOREIGN KEY (giftee)    REFERENCES farmer (username),
@@ -194,7 +194,7 @@ DELIMITER ;
  * CREDENTIALS
  */
 CREATE PROCEDURE verify_credentials(IN _username VARCHAR(255), IN _password VARCHAR(255))
-    SELECT COUNT(*) AS is_valid FROM user WHERE username = _username AND pwd = _password;
+    SELECT COUNT(*) AS is_valid FROM user WHERE username = _username and pwd = _password;
 
 CREATE PROCEDURE user_exists(IN _username VARCHAR(255))
     SELECT COUNT(*) AS user_exists FROM user WHERE username = _username;
@@ -209,7 +209,7 @@ CREATE PROCEDURE unfriend(IN _current_user VARCHAR(255), IN _to_remove VARCHAR(2
     DELETE FROM friend WHERE (user_1 = _current_user AND user_2 = _to_remove) OR (user_2 = _current_user AND user_1 = _to_remove);
 
 /*
- * REQUESTS
+ * FRIEND REQUESTS
  */
 DELIMITER $$
 CREATE TRIGGER validate_request BEFORE INSERT ON request
@@ -259,7 +259,7 @@ CREATE PROCEDURE get_thread(IN _thread_id INT, IN _username VARCHAR(255))
         SELECT thread_id, COUNT(*) AS comment_count
         FROM comment WHERE thread_id = _thread_id
     ) AS c ON th.thread_id = c.thread_id
-    WHERE th.thread_id = _thread_id;
+    WHERE th.thread_id = _thread_id ;
 
 CREATE PROCEDURE get_thread_comments_latest_last(IN _thread_id INT, IN _limit INT)
     SELECT commenter, content
