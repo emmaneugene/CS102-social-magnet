@@ -64,7 +64,7 @@ public class Plot {
     public int getPercentProgress() {
         Date now = new Date();
         int minutesElapsed = (int) (now.getTime() - timePlanted.getTime()) / (1000 * 60);
-        return minutesElapsed * 100 / crop.getMinutesToHarvest();
+        return Math.min(minutesElapsed * 100 / crop.getMinutesToHarvest(), 100);
     }
 
     @Override
