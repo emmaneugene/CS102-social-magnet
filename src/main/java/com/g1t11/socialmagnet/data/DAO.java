@@ -1,6 +1,7 @@
 package com.g1t11.socialmagnet.data;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 public class DAO {
     private Database db;
@@ -11,7 +12,7 @@ public class DAO {
 
     public Connection connection() {
         if (db.connection() == null) {
-            throw new ConnectionFailureException();
+            throw new DatabaseException(new SQLException("Connection not established", "08S01", 0));
         }
         return db.connection();
     }

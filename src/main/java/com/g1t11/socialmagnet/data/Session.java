@@ -64,7 +64,7 @@ public class Session extends DAO {
             return rs.getBoolean("is_valid");
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
-            throw new ConnectionFailureException();
+            throw new DatabaseException(e);
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
@@ -83,7 +83,7 @@ public class Session extends DAO {
             return rs.getBoolean("user_exists");
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
-            throw new ConnectionFailureException();
+            throw new DatabaseException(e);
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
@@ -108,7 +108,7 @@ public class Session extends DAO {
             // 1062 represents a duplicate primary key entry.
             if (e.getErrorCode() == 1062) return false;
             System.err.println("SQLException: " + e.getMessage());
-            throw new ConnectionFailureException();
+            throw new DatabaseException(e);
         }
         return true;
     }

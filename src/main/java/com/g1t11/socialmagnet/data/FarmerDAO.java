@@ -32,7 +32,7 @@ public class FarmerDAO extends UserDAO {
                 rs.getInt("wealth_rank"));
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
-            throw new ConnectionFailureException();
+            throw new DatabaseException(e);
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }

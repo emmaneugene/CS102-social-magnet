@@ -42,9 +42,10 @@ public class Database {
 
             conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
         } catch (SQLException e) {
-            System.err.println("SQLException: " + e.getMessage());
-            System.err.println("SQLState: " + e.getSQLState());
-            System.err.println("VendorError: " + e.getErrorCode());
+            // System.err.println("SQLException: " + e.getMessage());
+            // System.err.println("SQLState: " + e.getSQLState());
+            // System.err.println("VendorError: " + e.getErrorCode());
+            throw new DatabaseException(e);
         }
     }
 
