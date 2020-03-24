@@ -119,7 +119,7 @@ CREATE TABLE plot (
     crop_name      VARCHAR(255)        NOT NULL,
     time_planted   TIMESTAMP           NOT NULL,
     yield_of_crop  INT                 NOT NULL,
-    percent_stolen INT                 NOT NULL,
+    yield_stolen   INT                 NOT NULL,
     PRIMARY KEY (owner, plot_num),
     FOREIGN KEY (owner)     REFERENCES farmer (username),
     FOREIGN KEY (crop_name) REFERENCES crop (crop_name)
@@ -470,7 +470,7 @@ END$$
 DELIMITER ;
 
 CREATE PROCEDURE get_plots(IN _username VARCHAR(255))
-    SELECT plot_num, p.crop_name, time_planted, yield_of_crop, percent_stolen,
+    SELECT plot_num, p.crop_name, time_planted, yield_of_crop, yield_stolen,
     cost, minutes_to_harvest, xp, min_yield, max_yield, sale_price
     FROM plot p
     JOIN crop c ON p.crop_name = c.crop_name
@@ -521,7 +521,7 @@ BEGIN
     SET @max_yield_of_crop := ( SELECT max_yield FROM crop WHERE crop_name = _crop_name );
     SET @random_yield := FLOOR(RAND() * (@max_yield_of_crop - @min_yield_of_crop + 1)) + @min_yield_of_crop;
     -- Update plot
-    INSERT INTO plot (owner, plot_num, crop_name, time_planted, yield_of_crop, percent_stolen) VALUES 
+    INSERT INTO plot (owner, plot_num, crop_name, time_planted, yield_of_crop, yield_stolen) VALUES 
     (_username, _plot_num, _crop_name, NOW(), @random_yield, 0);
     -- Update inventory
     SET @new_quantity := ( SELECT quantity - 1 FROM inventory WHERE owner = _username AND crop_name = _crop_name );
@@ -533,9 +533,55 @@ BEGIN
 END$$
 DELIMITER ;
 
+DELIMITER $$
 CREATE PROCEDURE plant_crop(IN _username VARCHAR(255), IN _plot_num INT, IN _crop_name VARCHAR(255), IN _yield INT)
-    INSERT INTO plot (owner, plot_num, crop_name, time_planted, yield_of_crop, percent_stolen) VALUES 
+BEGIN
+    -- Update plot
+    INSERT INTO plot (owner, plot_num, crop_name, time_planted, yield_of_crop, yield_stolen) VALUES 
     (_username, _plot_num, _crop_name, NOW(), _yield, 0);
+    -- Update inventory
+    SET @new_quantity := ( SELECT quantity - 1 FROM inventory WHERE owner = _username AND crop_name = _crop_name );
+    IF (@new_quantity = 0) THEN
+        DELETE FROM inventory WHERE owner = _username AND crop_name = _crop_name;
+    ELSE
+        UPDATE inventory SET quantity = @new_quantity WHERE owner = _username AND crop_name = _crop_name;
+    END IF;
+END$$
+DELIMITER ;
 
 CREATE PROCEDURE clear_plot(IN _username VARCHAR(255), IN _plot_num INT)
     DELETE FROM plot WHERE owner = _username AND plot_num = _plot_num;
+
+DELIMITER $$
+CREATE PROCEDURE harvest(IN _username VARCHAR(255))
+BEGIN
+    -- get total sale price and xp gained
+    SELECT SUM(sale_price * (yield_of_crop - yield_stolen)),
+    SUM(xp * (yield_of_crop - yield_stolen)) total_xp INTO @total_sale, @total_xp FROM (
+        SELECT plot_num FROM plot p
+        JOIN crop c ON p.crop_name = c.crop_name
+        WHERE owner = _username
+        -- check if ready to harvest
+        AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) >= minutes_to_harvest
+        -- check if wilted
+        AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) < minutes_to_harvest * 2
+    ) AS h JOIN plot p ON h.plot_num = p.plot_num AND p.owner = _username
+    JOIN crop c ON p.crop_name = c.crop_name;
+
+    -- clear plots that were harvested
+    DELETE p FROM plot p
+    JOIN (
+        SELECT plot_num FROM plot p
+        JOIN crop c ON p.crop_name = c.crop_name
+        WHERE owner = _username
+        -- check if ready to harvest
+        AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) >= minutes_to_harvest
+        -- check if wilted
+        AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) < minutes_to_harvest * 2
+    ) AS h ON p.plot_num = h.plot_num AND p.owner = _username
+
+    -- add sale and xp to user account
+    UPDATE farmer SET wealth = wealth + @total_sale, xp = xp + @total_xp
+    WHERE username = _username;
+END$$
+DELIMITER ;
