@@ -18,7 +18,7 @@ public class FarmlandPageView extends CityFarmersPageView {
         this.me = me;
     }
 
-    public void setPlotComps(List<Plot> plots) {
+    public void setPlots(List<Plot> plots) {
         plotComps.clear();
         int index = 1;
         int maxCropNameLength = getMaxCropNameLength(plots);

@@ -1,10 +1,15 @@
 package com.g1t11.socialmagnet.controller.cityfarmers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.g1t11.socialmagnet.controller.Controller;
 import com.g1t11.socialmagnet.controller.MainMenuController;
 import com.g1t11.socialmagnet.controller.Navigation;
 import com.g1t11.socialmagnet.data.FarmerDAO;
+import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
+import com.g1t11.socialmagnet.model.farm.Plot;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.cityfarmers.FarmlandPageView;
@@ -14,6 +19,8 @@ public class FarmlandController extends Controller {
 
     Farmer me;
 
+    List<Plot> plots = new ArrayList<>();
+
     public FarmlandController(Navigation nav, Farmer me) {
         super(nav);
         this.me = me;
@@ -22,7 +29,8 @@ public class FarmlandController extends Controller {
 
     @Override
     public void updateView() {
-        ((FarmlandPageView) view).setPlotComps(farmerDAO.getPlots(me));
+        plots = farmerDAO.getPlots(me);
+        ((FarmlandPageView) view).setPlots(plots);
         view.display();
     }
 
@@ -33,12 +41,28 @@ public class FarmlandController extends Controller {
             Painter.Color.YELLOW
         ));
         String choice = input.nextLine();
-        if (choice.equals("M")) {
+        if (choice.length() == 0) {
+            view.setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
+        } else if (choice.equals("M")) {
             nav.popTo(MainMenuController.class);
         } else if (choice.equals("F")) {
             nav.popTo(CityFarmersMainMenuController.class);
+        } else if (choice.charAt(0) == 'P') {
+            handlePlant(choice);
         } else {
             view.setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
+        }
+    }
+
+    private void handlePlant(String choice) {
+        try {
+            int index = Integer.parseInt(choice.substring(1));
+            if (index <= 0 || index > plots.size()) {
+                view.setStatus(Painter.paint("Index out of range.", Painter.Color.RED));
+            }
+            farmerDAO.plantCrop(me, index, new Crop("Papaya", 14, 30, 4, 80, 75, 100, 30));
+        } catch (NumberFormatException e) {
+            view.setStatus(Painter.paint("Use P<id> to select a plot.", Painter.Color.RED));
         }
     }
 }
