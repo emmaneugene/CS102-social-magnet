@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
-import com.g1t11.socialmagnet.model.farm.Inventory;
 import com.g1t11.socialmagnet.model.farm.Plot;
 import com.g1t11.socialmagnet.model.social.User;
 
@@ -15,6 +14,8 @@ import org.junit.Test;
 
 public class TestFarmerDAO {
     private FarmerDAO farmerDAO;
+
+    Farmer me = new Farmer("adam", "Adam Levine", 1500, 1300, 3);
 
     Crop papaya =     new Crop("Papaya",     20, 30,  8, 75, 100, 15);
     Crop pumpkin =    new Crop("Pumpkin",    30, 60,  5, 5,  200, 20);
@@ -56,34 +57,17 @@ public class TestFarmerDAO {
 
     @Test(expected = DatabaseException.class)
     public void testPlantCrop() {
-        Farmer me = farmerDAO.getFarmer(new User("adam", "Adam Levine"));
-        farmerDAO.plantCrop(me, 6, papaya);
+        farmerDAO.plantCrop(me, 6, "Papaya");
         // Duplicate entry
-        farmerDAO.plantCrop(me, 6, papaya);
+        farmerDAO.plantCrop(me, 6, "Papaya");
     }
 
     @Test(expected = DatabaseException.class)
     public void testPlantCropInvalidPlot() {
-        Farmer me = farmerDAO.getFarmer(new User("adam", "Adam Levine"));
-        farmerDAO.plantCrop(me, 9, papaya);
+        farmerDAO.plantCrop(me, 9, "Papaya");
     }
 
-    @Test(expected = DatabaseException.class)
-    public void testPlantCropInvalidYield() {
-        Farmer me = farmerDAO.getFarmer(new User("adam", "Adam Levine"));
-        Crop GMOPapaya = new Crop("Papaya", 20, 30, 8, 750, 1000, 15);
-        farmerDAO.plantCrop(me, 4, GMOPapaya);
-    }
-
-    @Test
-    public void testSetInventory() {
-        Inventory expected = new Inventory();
-        expected.addCrop(papaya, 1);
-        expected.addCrop(watermelon, 2);
-
-        Farmer me = farmerDAO.getFarmer(new User("adam", "Adam Levine"));
-        farmerDAO.setInventory(me);
-
-        Assert.assertEquals(expected, me.getInventory());
+    public void testGetInventoryCropNames() {
+        farmerDAO.getInventoryCropNames(me);
     }
 }
