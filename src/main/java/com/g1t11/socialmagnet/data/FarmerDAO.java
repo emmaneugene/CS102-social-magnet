@@ -49,7 +49,7 @@ public class FarmerDAO extends DAO {
         ResultSet rs = null;
         List<String> invCropNames = new ArrayList<>();
 
-        String queryString = "CALL get_inventory_crop_names(?)";
+        String queryString = "CALL get_inventory(?)";
 
         try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setString(1, farmer.getUsername());

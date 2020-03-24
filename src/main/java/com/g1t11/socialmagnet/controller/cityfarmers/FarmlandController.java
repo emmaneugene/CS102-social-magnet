@@ -58,10 +58,18 @@ public class FarmlandController extends Controller {
     }
 
     private void handlePlant(String choice) {
+        if (invCropNames.size() == 0) {
+            view.setStatus(Painter.paint("No seeds in your inventory!", Painter.Color.RED));
+            return;
+        }
         try {
             int index = Integer.parseInt(choice.substring(1));
             if (index <= 0 || index > plots.size()) {
                 view.setStatus(Painter.paint("Index out of range.", Painter.Color.RED));
+                return;
+            }
+            if (plots.get(index - 1).getCrop() != null) {
+                view.setStatus(Painter.paint("Cannot plant on an existing crop.", Painter.Color.RED));
                 return;
             }
 

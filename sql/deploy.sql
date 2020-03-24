@@ -232,13 +232,14 @@ CREATE PROCEDURE unfriend(IN _current_user VARCHAR(255), IN _to_remove VARCHAR(2
 DELIMITER $$
 CREATE TRIGGER validate_request BEFORE INSERT ON request
 FOR EACH ROW BEGIN
-    DECLARE is_friend BOOLEAN;
-    SELECT COUNT(*) INTO is_friend FROM (
-        SELECT user_1 FROM friend WHERE user_1 = NEW.sender AND user_2 = NEW.recipient
-        UNION
-        SELECT user_2 FROM friend WHERE user_2 = NEW.sender AND user_1 = NEW.recipient
-    ) AS f;
-    IF (is_friend = TRUE) THEN
+    SET @is_friend := (
+        SELECT COUNT(*) FROM (
+            SELECT user_1 FROM friend WHERE user_1 = NEW.sender AND user_2 = NEW.recipient
+            UNION
+            SELECT user_2 FROM friend WHERE user_2 = NEW.sender AND user_1 = NEW.recipient
+        ) AS f
+    );
+    IF (@is_friend = TRUE) THEN
         SIGNAL SQLSTATE '45000' SET message_text = 'Cannot request existing friend.';
     END IF;
 END$$
@@ -363,26 +364,24 @@ CREATE PROCEDURE delete_thread(IN _thread_id INT, IN _username VARCHAR(255))
 DELIMITER $$
 CREATE PROCEDURE reply_to_thread(IN _thread_id INT, IN _username VARCHAR(255), IN _content TEXT(65535))
 BEGIN
-    DECLARE next_num INT;
-    SET next_num = (
+    SET @next_num = (
         SELECT MAX(comment_num) + 1 FROM comment
         WHERE thread_id = _thread_id
     );
-    INSERT INTO comment (comment_num, thread_id, commenter, commented_on, content) VALUES (next_num, _thread_id, _username, NOW(), _content);
+    INSERT INTO comment (comment_num, thread_id, commenter, commented_on, content) VALUES (@next_num, _thread_id, _username, NOW(), _content);
 END$$
 DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE toggle_like_thread(IN _thread_id INT, IN _username VARCHAR(255))
 BEGIN
-    DECLARE liked INT;
-	SET liked = (
+	SET @liked := (
         SELECT COUNT(*)
 	    FROM liker l NATURAL JOIN user u
 	    WHERE l.thread_id = _thread_id
 	    AND l.username = _username
     );
-	IF (liked = 0) THEN
+	IF (@liked = 0) THEN
 		INSERT INTO liker (username, thread_id) VALUES (_username, _thread_id);
 	ELSE
 	    DELETE FROM liker WHERE username = _username AND thread_id = _thread_id;
@@ -393,14 +392,13 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE toggle_dislike_thread(IN _thread_id INT, IN _username VARCHAR(255))
 BEGIN
-    DECLARE disliked INT;
-	SET disliked = (
+	SET @disliked := (
         SELECT COUNT(*)
 	    FROM disliker l NATURAL JOIN user u
 	    WHERE l.thread_id = _thread_id
 	    AND l.username = _username
     );
-	IF (disliked = 0) THEN
+	IF (@disliked = 0) THEN
 		INSERT INTO disliker (username, thread_id) VALUES (_username, _thread_id);
 	ELSE
 	    DELETE FROM disliker WHERE username = _username AND thread_id = _thread_id;
@@ -414,8 +412,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE TRIGGER validate_tag BEFORE INSERT ON tag
 FOR EACH ROW BEGIN
-    DECLARE is_friend BOOLEAN;
-    SET is_friend = (
+    SET @is_friend := (
         SELECT COUNT(*) FROM (
             SELECT user_1 FROM friend WHERE user_2 = NEW.tagged_user
             UNION
@@ -425,7 +422,7 @@ FOR EACH ROW BEGIN
             SELECT author FROM thread WHERE thread_id = NEW.thread_id
         )
     );
-    IF (is_friend = FALSE) THEN
+    IF (@is_friend = FALSE) THEN
         SIGNAL SQLSTATE '45000' SET message_text = 'Cannot tag non-friends.';
     END IF;
 END$$
@@ -434,8 +431,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE add_tag(IN _thread_id INT, IN _username VARCHAR(255))
 BEGIN
-    DECLARE is_friend BOOLEAN;
-    SET is_friend = (
+    SET @is_friend = (
         SELECT COUNT(*) FROM (
             SELECT user_1 FROM friend WHERE user_2 = NEW.tagged_user
             UNION
@@ -445,7 +441,7 @@ BEGIN
             SELECT author FROM thread WHERE thread_id = NEW.thread_id
         )
     );
-    IF (is_friend = TRUE) THEN
+    IF (@is_friend = TRUE) THEN
         INSERT INTO tag (thread_id, tagged_user) VALUES (_thread_id, _username);
     END IF;
 END$$
@@ -480,8 +476,8 @@ CREATE PROCEDURE get_plots(IN _username VARCHAR(255))
     JOIN crop c ON p.crop_name = c.crop_name
     WHERE owner = _username;
 
-CREATE PROCEDURE get_inventory_crop_names(IN _username VARCHAR(255))
-    SELECT crop_name FROM inventory
+CREATE PROCEDURE get_inventory(IN _username VARCHAR(255))
+    SELECT crop_name, quantity FROM inventory
     WHERE owner = _username
     ORDER BY crop_name;
 
@@ -491,8 +487,7 @@ CREATE PROCEDURE get_inventory_crop_names(IN _username VARCHAR(255))
 DELIMITER $$
 CREATE TRIGGER verify_crop_num BEFORE INSERT ON plot
 FOR EACH ROW BEGIN
-    DECLARE max_plots INT;
-    SET max_plots = (
+    SET @max_plots := (
         SELECT num_plots FROM (
             SELECT MAX(rank_level) max_rank_level FROM ranking
             WHERE rank_min_xp < (
@@ -501,7 +496,7 @@ FOR EACH ROW BEGIN
         ) AS r1 JOIN ranking r2
         ON r1.max_rank_level = r2.rank_level
     );
-    IF (NEW.plot_num > max_plots) THEN
+    IF (NEW.plot_num > @max_plots) THEN
         SIGNAL SQLSTATE '45000' SET message_text = 'You do not have access to so many plots.';
     END IF;
 END$$
@@ -510,11 +505,9 @@ DELIMITER ;
 DELIMITER $$
 CREATE TRIGGER verify_crop_yield BEFORE INSERT ON plot
 FOR EACH ROW BEGIN
-    DECLARE min_yield_of_crop INT;
-    DECLARE max_yield_of_crop INT;
-    SET min_yield_of_crop = ( SELECT min_yield FROM crop WHERE crop_name = NEW.crop_name);
-    SET max_yield_of_crop = ( SELECT max_yield FROM crop WHERE crop_name = NEW.crop_name);
-    IF (NEW.yield_of_crop > max_yield_of_crop OR NEW.yield_of_crop < min_yield_of_crop) THEN
+    SET @min_yield_of_crop := ( SELECT min_yield FROM crop WHERE crop_name = NEW.crop_name);
+    SET @max_yield_of_crop := ( SELECT max_yield FROM crop WHERE crop_name = NEW.crop_name);
+    IF (NEW.yield_of_crop > @max_yield_of_crop OR NEW.yield_of_crop < @min_yield_of_crop) THEN
         SIGNAL SQLSTATE '45000' SET message_text = 'Invalid crop yield.';
     END IF;
 END$$
@@ -523,15 +516,20 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE plant_crop_auto_yield(IN _username VARCHAR(255), IN _plot_num INT, IN _crop_name VARCHAR(255))
 BEGIN
-    DECLARE random_yield INT;
-    DECLARE min_yield_of_crop INT;
-    DECLARE max_yield_of_crop INT;
-    SET min_yield_of_crop = ( SELECT min_yield FROM crop WHERE crop_name = _crop_name);
-    SET max_yield_of_crop = ( SELECT max_yield FROM crop WHERE crop_name = _crop_name);
-    SET random_yield = FLOOR(RAND() * (max_yield_of_crop - min_yield_of_crop + 1)) + min_yield_of_crop;
+    -- Generate random yield
+    SET @min_yield_of_crop := ( SELECT min_yield FROM crop WHERE crop_name = _crop_name );
+    SET @max_yield_of_crop := ( SELECT max_yield FROM crop WHERE crop_name = _crop_name );
+    SET @random_yield := FLOOR(RAND() * (@max_yield_of_crop - @min_yield_of_crop + 1)) + @min_yield_of_crop;
+    -- Update plot
     INSERT INTO plot (owner, plot_num, crop_name, time_planted, yield_of_crop, percent_stolen) VALUES 
-    (_username, _plot_num, _crop_name, NOW(), random_yield, 0);
-    SELECT random_yield;
+    (_username, _plot_num, _crop_name, NOW(), @random_yield, 0);
+    -- Update inventory
+    SET @new_quantity := ( SELECT quantity - 1 FROM inventory WHERE owner = _username AND crop_name = _crop_name );
+    IF (@new_quantity = 0) THEN
+        DELETE FROM inventory WHERE owner = _username AND crop_name = _crop_name;
+    ELSE
+        UPDATE inventory SET quantity = @new_quantity WHERE owner = _username AND crop_name = _crop_name;
+    END IF;
 END$$
 DELIMITER ;
 
