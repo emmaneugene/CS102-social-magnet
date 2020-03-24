@@ -1,23 +1,23 @@
 package com.g1t11.socialmagnet.view.component;
 
-import com.g1t11.socialmagnet.model.farm.Crop;
-import com.g1t11.socialmagnet.model.farm.Inventory;
+import java.util.List;
+
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.view.component.Component;
 
 public class InventoryComponent implements Component {
-    Inventory inv;
+    List<String> invCropNames;
 
-    public InventoryComponent(Inventory inv) {
-        this.inv = inv;
+    public InventoryComponent(List<String> invCropNames) {
+        this.invCropNames = invCropNames;
     }
 
     @Override
     public void render() {
         int index = 1;
-        for (Crop crop : inv.availableCrops()) {
+        for (String invCropName : invCropNames) {
             System.out.printf(Painter.paintf("[{%d.}] %s\n", Painter.Color.YELLOW), 
-                index++, crop.getName());
+                index++, invCropName);
         }
     }
 }

@@ -13,14 +13,13 @@ import com.g1t11.socialmagnet.view.component.PlotComponent;
 public class FarmlandPageView extends CityFarmersPageView {
     Farmer me;
 
-    InventoryComponent invComp;
-
     List<PlotComponent> plotComps = new ArrayList<>();
+
+    InventoryComponent invComp;
 
     public FarmlandPageView(Farmer me) {
         super(me, "My Farmland");
         this.me = me;
-        invComp = new InventoryComponent(me.getInventory());
     }
 
     public void setPlots(List<Plot> plots) {
@@ -30,6 +29,10 @@ public class FarmlandPageView extends CityFarmersPageView {
         for (Plot plot : plots) {
             plotComps.add(new PlotComponent(plot, index++, maxCropNameLength));
         }
+    }
+
+    public void setInventoryCropNames(List<String> invCropNames) {
+        invComp = new InventoryComponent(invCropNames);
     }
 
     private int getMaxCropNameLength(List<Plot> plots) {
