@@ -25,8 +25,17 @@ public class PlotComponent implements Component {
         }
         // Left pad crop name
         System.out.printf("%-" + (maxCropNameLength + 2) + "s", plot.getCrop().getName());
-        renderProgressBar();
-        System.out.printf(" %d%%\n", plot.getPercentProgress());
+        if (plot.isWilted()) {
+            renderWilted();
+        } else {
+            renderProgressBar();
+            System.out.printf(" %d%%", plot.getPercentProgress());
+        }
+        System.out.println();
+    }
+
+    private void renderWilted() {
+        System.out.print(Painter.paintf("[  [{wilted}]  ]", Painter.Color.RED));
     }
 
     private static final String progressBarTemplate 
