@@ -556,8 +556,8 @@ DELIMITER $$
 CREATE PROCEDURE harvest(IN _username VARCHAR(255))
 BEGIN
     -- get total sale price and xp gained
-    SELECT SUM(sale_price * (yield_of_crop - yield_stolen)),
-    SUM(xp * (yield_of_crop - yield_stolen)) total_xp INTO @total_sale, @total_xp FROM (
+    SELECT IFNULL(SUM(sale_price * (yield_of_crop - yield_stolen)), 0),
+    IFNULL(SUM(xp * (yield_of_crop - yield_stolen)), 0) INTO @total_sale, @total_xp FROM (
         SELECT plot_num FROM plot p
         JOIN crop c ON p.crop_name = c.crop_name
         WHERE owner = _username
@@ -578,7 +578,7 @@ BEGIN
         AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) >= minutes_to_harvest
         -- check if wilted
         AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) < minutes_to_harvest * 2
-    ) AS h ON p.plot_num = h.plot_num AND p.owner = _username
+    ) AS h ON p.plot_num = h.plot_num AND p.owner = _username;
 
     -- add sale and xp to user account
     UPDATE farmer SET wealth = wealth + @total_sale, xp = xp + @total_xp
