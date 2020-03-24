@@ -94,6 +94,14 @@ CREATE TABLE farmer (
     FOREIGN KEY (username) REFERENCES user (username)
 );
 
+CREATE TABLE ranking (
+    rank_level  INT          NOT NULL AUTO_INCREMENT,
+    rank_min_xp INT          NOT NULL,
+    rank_name   VARCHAR(255) NOT NULL,
+    num_plots   INT          NOT NULL,
+    PRIMARY KEY (rank_level)
+);
+
 CREATE TABLE crop (
     crop_name           VARCHAR(255) NOT NULL,
     cost                INT          NOT NULL,
@@ -157,6 +165,13 @@ INSERT INTO crop (crop_name, cost, minutes_to_harvest, xp, min_yield, max_yield,
 ("Pumpkin",    30, 60,  5,  5,  200, 20),
 ("Sunflower",  40, 120, 20, 15, 20,  40),
 ("Watermelon", 50, 240, 1,  5,  800, 10);
+
+INSERT INTO ranking (rank_min_xp, rank_name, num_plots) VALUES
+(0,     "Novice",      5),
+(1000,  "Apprentice",  6),
+(2500,  "Journeyman",  7),
+(5000,  "Grandmaster", 8),
+(12000, "Legendary",   9);
 
 /*
  * |-------------------|
@@ -226,7 +241,7 @@ FOR EACH ROW BEGIN
     IF (is_friend = TRUE) THEN
         SIGNAL SQLSTATE '45000' SET message_text = 'Cannot request existing friend.';
     END IF;
-END $$
+END$$
 DELIMITER ;
 
 CREATE PROCEDURE make_request(IN _sender VARCHAR(255), IN _recipient VARCHAR(255))
@@ -440,7 +455,7 @@ CREATE PROCEDURE remove_tag(IN _thread_id INT, IN _username VARCHAR(255))
     DELETE FROM tag WHERE thread_id = _thread_id AND tagged_user = _username;
 
 /*
- * FARMING
+ * LOADING FARM DETAILS
  */
 DELIMITER $$
 CREATE PROCEDURE get_farmer_detail(IN _username VARCHAR(255))
@@ -464,3 +479,42 @@ CREATE PROCEDURE get_plots(IN _username VARCHAR(255))
     FROM plot p
     JOIN crop c ON p.crop_name = c.crop_name
     WHERE owner = _username;
+
+/*
+ * UPDATING FARM DETAILS
+ */
+DELIMITER $$
+CREATE TRIGGER verify_crop_num BEFORE INSERT ON plot
+FOR EACH ROW BEGIN
+    DECLARE max_plots INT;
+    SET max_plots = (
+        SELECT num_plots FROM (
+            SELECT MAX(rank_level) max_rank_level FROM ranking
+            WHERE rank_min_xp < (
+                SELECT xp FROM farmer WHERE username = NEW.owner
+            )
+        ) AS r1 JOIN ranking r2
+        ON r1.max_rank_level = r2.rank_level
+    );
+    IF (NEW.plot_num > max_plots) THEN
+        SIGNAL SQLSTATE '45000' SET message_text = 'You do not have access to so many plots.';
+    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER verify_crop_yield BEFORE INSERT ON plot
+FOR EACH ROW BEGIN
+    DECLARE min_yield_of_crop INT;
+    DECLARE max_yield_of_crop INT;
+    SET min_yield_of_crop = ( SELECT min_yield FROM crop WHERE crop_name = NEW.crop_name);
+    SET max_yield_of_crop = ( SELECT max_yield FROM crop WHERE crop_name = NEW.crop_name);
+    IF (NEW.yield_of_crop > max_yield_of_crop OR NEW.yield_of_crop < min_yield_of_crop) THEN
+        SIGNAL SQLSTATE '45000' SET message_text = 'Invalid crop yield.';
+    END IF;
+END$$
+DELIMITER ;
+
+CREATE PROCEDURE plant_crop(IN _username VARCHAR(255), IN _plot_num INT, IN _crop_name VARCHAR(255), IN _yield INT)
+    INSERT INTO plot (owner, plot_num, crop_name, time_planted, yield_of_crop, percent_stolen) VALUES 
+    (_username, _plot_num, _crop_name, NOW(), _yield, 0);

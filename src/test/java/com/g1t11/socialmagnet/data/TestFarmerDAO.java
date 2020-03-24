@@ -27,7 +27,7 @@ public class TestFarmerDAO {
     }
 
     @Test
-    public void testGetUser() {
+    public void testGetFarmer() {
         Farmer expected = new Farmer("adam", "Adam Levine", 1500, 1300, 3);
 
         Farmer actual = farmerDAO.getFarmer(new User("adam", "Adam Levine"));
@@ -46,10 +46,31 @@ public class TestFarmerDAO {
             new Plot()
         ));
 
-        List<Plot> actual = farmerDAO.getPlots(new Farmer("adam", "Adam Levine"));
+        List<Plot> actual = farmerDAO.getPlots(new Farmer("britney", "Britney Spears"));
 
         for (int i = 0; i < actual.size(); i++) {
             Assert.assertEquals(expected.get(i), actual.get(i));
         }
+    }
+
+    @Test(expected = DatabaseException.class)
+    public void testPlantCrop() {
+        Farmer me = farmerDAO.getFarmer(new User("adam", "Adam Levine"));
+        farmerDAO.plantCrop(me, 6, papaya);
+        // Duplicate entry
+        farmerDAO.plantCrop(me, 6, papaya);
+    }
+
+    @Test(expected = DatabaseException.class)
+    public void testPlantCropInvalidPlot() {
+        Farmer me = farmerDAO.getFarmer(new User("adam", "Adam Levine"));
+        farmerDAO.plantCrop(me, 9, papaya);
+    }
+
+    @Test(expected = DatabaseException.class)
+    public void testPlantCropInvalidYield() {
+        Farmer me = farmerDAO.getFarmer(new User("adam", "Adam Levine"));
+        Crop GMOPapaya = new Crop("Papaya", 20, 30, 8, 750, 1000, 15);
+        farmerDAO.plantCrop(me, 4, GMOPapaya);
     }
 }

@@ -80,4 +80,20 @@ public class FarmerDAO extends DAO {
 
         return plots;
     }
+
+    public void plantCrop(Farmer farmer, int plotNumber, Crop crop) {
+        String queryString = "CALL plant_crop(?, ?, ?, ?)";
+
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+            stmt.setString(1, farmer.getUsername());
+            stmt.setInt(2, plotNumber);
+            stmt.setString(3, crop.getName());
+            stmt.setInt(4, crop.getRandomYield());
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+            throw new DatabaseException(e);
+        }
+    }
 }

@@ -21,20 +21,27 @@ public class Crop {
 
     private int perUnitXP;
 
+    private Integer yield;
+
     private int minYield;
 
     private int maxYield;
 
     private int salePrice;
 
-    public Crop(String name, int cost, int minutesToHarvest, int perUnitXP, int minYield, int maxYield, int salePrice) {
+    public Crop(String name, int cost, int minutesToHarvest, int perUnitXP, Integer yield, int minYield, int maxYield, int salePrice) {
         this.name = name;
         this.cost = cost;
         this.minutesToHarvest = minutesToHarvest;
         this.perUnitXP = perUnitXP;
+        this.yield = yield;
         this.minYield = minYield;
         this.maxYield = maxYield;
         this.salePrice = salePrice;
+    }
+
+    public Crop(String name, int cost, int minutesToHarvest, int perUnitXP, int minYield, int maxYield, int salePrice) {
+        this(name, cost, minutesToHarvest, perUnitXP, null, minYield, maxYield, salePrice);
     }
 
     public String getName() {
@@ -59,6 +66,11 @@ public class Crop {
 
     public int getMaxYield() {
         return maxYield;
+    }
+
+    public int getRandomYield() {
+        if (yield == null) yield = (int) (minYield + Math.random() * (maxYield - minYield));
+        return yield;
     }
 
     public int getSalePrice() {
