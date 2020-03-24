@@ -35,13 +35,10 @@ public class Database {
              * Get credentials from environment variables that were loaded
              * through .env file.
              */
-            // String dbName = System.getenv("DB_NAME");
-            // String dbUrl  = "jdbc:mysql://localhost/" + dbName;
-            // String dbUser = System.getenv("DB_USER");
-            // String dbPass = System.getenv("DB_PASS");
-            String dbUrl = "jdbc:mysql://localhost/magnet";
-            String dbUser = "***REMOVED***";
-            String dbPass = "***REMOVED***";
+            String dbName = System.getenv("DB_NAME");
+            String dbUrl  = "jdbc:mysql://localhost/" + dbName;
+            String dbUser = System.getenv("DB_USER");
+            String dbPass = System.getenv("DB_PASS");
 
             conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
         } catch (SQLException e) {
