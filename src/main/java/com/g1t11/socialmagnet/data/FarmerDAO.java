@@ -36,6 +36,7 @@ public class FarmerDAO extends DAO {
                 rs.getInt("xp"),
                 rs.getInt("wealth"),
                 rs.getInt("wealth_rank"));
+            setInventory(f);
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
             throw new DatabaseException(e);

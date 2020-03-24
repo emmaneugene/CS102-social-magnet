@@ -7,15 +7,20 @@ import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.farm.Plot;
 import com.g1t11.socialmagnet.util.TextUtils;
+import com.g1t11.socialmagnet.view.component.InventoryComponent;
 import com.g1t11.socialmagnet.view.component.PlotComponent;
 
 public class FarmlandPageView extends CityFarmersPageView {
     Farmer me;
 
+    InventoryComponent invComp;
+
     List<PlotComponent> plotComps = new ArrayList<>();
+
     public FarmlandPageView(Farmer me) {
         super(me, "My Farmland");
         this.me = me;
+        invComp = new InventoryComponent(me.getInventory());
     }
 
     public void setPlots(List<Plot> plots) {
@@ -50,5 +55,12 @@ public class FarmlandPageView extends CityFarmersPageView {
         for (PlotComponent plotComp : plotComps) {
             plotComp.render();
         }
+    }
+
+    public void displayInvMenu() {
+        System.out.println();
+        System.out.println();
+        System.out.println("Select the crop:");
+        invComp.render();
     }
 }

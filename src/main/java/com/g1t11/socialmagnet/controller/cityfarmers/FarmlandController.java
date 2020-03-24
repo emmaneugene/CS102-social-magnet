@@ -2,6 +2,8 @@ package com.g1t11.socialmagnet.controller.cityfarmers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.g1t11.socialmagnet.controller.Controller;
 import com.g1t11.socialmagnet.controller.MainMenuController;
@@ -59,10 +61,35 @@ public class FarmlandController extends Controller {
             int index = Integer.parseInt(choice.substring(1));
             if (index <= 0 || index > plots.size()) {
                 view.setStatus(Painter.paint("Index out of range.", Painter.Color.RED));
+                return;
             }
-            farmerDAO.plantCrop(me, index, new Crop("Papaya", 14, 30, 4, 80, 75, 100, 30));
+            Crop toPlant = handleSelectCrop();
+            if (toPlant == null) return;
+            System.out.println(toPlant.getName());
+            farmerDAO.plantCrop(me, index, toPlant);
         } catch (NumberFormatException e) {
             view.setStatus(Painter.paint("Use P<id> to select a plot.", Painter.Color.RED));
         }
+    }
+
+    private Crop handleSelectCrop() {
+        ((FarmlandPageView) view).displayInvMenu();
+        PromptInput input = new PromptInput(Painter.paintf(
+            "[[{M}]]ain | City [[{F}]]armers",
+            Painter.Color.YELLOW
+        ));
+        String choice = input.nextLine();
+        try {
+            int index = Integer.parseInt(choice);
+            List<Crop> crops = me.getInventory().availableCrops();
+            if (index <= 0 || index > crops.size()) {
+                view.setStatus(Painter.paint("Index out of range.", Painter.Color.RED));
+                return null;
+            }
+            return crops.get(index - 1);
+        } catch (NumberFormatException e) {
+            view.setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
+        }
+        return null;
     }
 }
