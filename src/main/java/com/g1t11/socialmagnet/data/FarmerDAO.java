@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
+import com.g1t11.socialmagnet.model.farm.Inventory;
 import com.g1t11.socialmagnet.model.farm.Plot;
 import com.g1t11.socialmagnet.model.social.User;
 
@@ -43,6 +44,38 @@ public class FarmerDAO extends DAO {
         }
 
         return f;
+    }
+
+    public void setInventory(Farmer farmer) {
+        ResultSet rs = null;
+        Inventory inv = new Inventory();
+
+        String queryString = "CALL get_inventory(?)";
+
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+            stmt.setString(1, farmer.getUsername());
+
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                Crop c = new Crop(
+                    rs.getString("crop_name"),
+                    rs.getInt("cost"),
+                    rs.getInt("minutes_to_harvest"),
+                    rs.getInt("xp"),
+                    rs.getInt("min_yield"),
+                    rs.getInt("max_yield"),
+                    rs.getInt("sale_price")
+                );
+                inv.addCrop(c, rs.getInt("quantity"));
+            }
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+            throw new DatabaseException(e);
+        } finally {
+            try { if (rs != null) rs.close(); } catch (SQLException e) {}
+        }
+
+        farmer.setInventory(inv);
     }
 
     public List<Plot> getPlots(Farmer farmer) {

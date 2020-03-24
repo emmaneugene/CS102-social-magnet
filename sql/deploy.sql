@@ -480,6 +480,11 @@ CREATE PROCEDURE get_plots(IN _username VARCHAR(255))
     JOIN crop c ON p.crop_name = c.crop_name
     WHERE owner = _username;
 
+CREATE PROCEDURE get_inventory(IN _username VARCHAR(255))
+    SELECT i.crop_name, quantity, cost, minutes_to_harvest, xp, min_yield, max_yield, sale_price
+    FROM inventory i JOIN crop c ON i.crop_name = c.crop_name
+    WHERE owner = _username;
+
 /*
  * UPDATING FARM DETAILS
  */

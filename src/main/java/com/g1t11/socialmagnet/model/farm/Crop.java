@@ -76,6 +76,11 @@ public class Crop {
     public int getSalePrice() {
         return salePrice;
     }
+    
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
 
     @Override
     public boolean equals(Object o) {

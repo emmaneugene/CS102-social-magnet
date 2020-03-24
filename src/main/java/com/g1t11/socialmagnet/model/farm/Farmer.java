@@ -41,7 +41,7 @@ public class Farmer extends User {
 
     private List<Plot> farmland = new ArrayList<>();
 
-    private List<InventoryItem> inventory = new ArrayList<>();
+    private Inventory inventory = new Inventory();
 
     public Farmer(String username, String fullname, int XP, int wealth, int wealthRank) {
         super(username, fullname);
@@ -122,8 +122,12 @@ public class Farmer extends User {
         return farmland;
     }
 
-    public List<InventoryItem> getInventory() {
+    public Inventory getInventory() {
         return inventory;
+    }
+
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
     }
 
     @Override
