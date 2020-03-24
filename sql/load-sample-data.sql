@@ -83,6 +83,7 @@ INSERT INTO plot (owner, plot_num, crop_name, time_planted, yield_of_crop, yield
 ("adam", 2, "Pumpkin",       DATE_SUB(NOW(), INTERVAL  29 MINUTE), 100, 20),
 ("adam", 3, "Watermelon",    DATE_SUB(NOW(), INTERVAL 480 MINUTE), 400, 20),
 ("adam", 4, "Papaya",        DATE_SUB(NOW(), INTERVAL  30 MINUTE), 75,  13),
+("adam", 6, "Watermelon",    DATE_SUB(NOW(), INTERVAL 250 MINUTE), 400, 20),
 ("britney", 1, "Papaya",     DATE_SUB(NOW(), INTERVAL  29 MINUTE), 75,  13),
 ("britney", 2, "Pumpkin",    DATE_SUB(NOW(), INTERVAL  29 MINUTE), 100, 20),
 ("britney", 3, "Watermelon", DATE_SUB(NOW(), INTERVAL  29 MINUTE), 400, 20);

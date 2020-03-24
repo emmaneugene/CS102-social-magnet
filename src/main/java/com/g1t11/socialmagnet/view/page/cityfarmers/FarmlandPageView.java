@@ -11,15 +11,12 @@ import com.g1t11.socialmagnet.view.component.InventoryComponent;
 import com.g1t11.socialmagnet.view.component.PlotComponent;
 
 public class FarmlandPageView extends CityFarmersPageView {
-    Farmer me;
-
     List<PlotComponent> plotComps = new ArrayList<>();
 
     InventoryComponent invComp;
 
     public FarmlandPageView(Farmer me) {
         super(me, "My Farmland");
-        this.me = me;
     }
 
     public void setPlots(List<Plot> plots) {
@@ -53,7 +50,7 @@ public class FarmlandPageView extends CityFarmersPageView {
         System.out.println();
 
         System.out.printf("You have %s of land.\n", 
-            TextUtils.countedWord(me.getMaxPlotCount(), "plot", "plots"));
+            TextUtils.countedWord(getMe().getMaxPlotCount(), "plot", "plots"));
 
         for (PlotComponent plotComp : plotComps) {
             plotComp.render();

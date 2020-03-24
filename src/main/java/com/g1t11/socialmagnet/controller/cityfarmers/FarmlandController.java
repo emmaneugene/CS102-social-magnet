@@ -30,9 +30,12 @@ public class FarmlandController extends Controller {
 
     @Override
     public void updateView() {
+        // Refresh the current user's information
+        me = farmerDAO.getFarmer(me);
+        ((FarmlandPageView) view).setFarmer(me);
         plots = farmerDAO.getPlots(me);
-        invCropNames = farmerDAO.getInventoryCropNames(me);
         ((FarmlandPageView) view).setPlots(plots);
+        invCropNames = farmerDAO.getInventoryCropNames(me);
         ((FarmlandPageView) view).setInventoryCropNames(invCropNames);
         view.display();
     }
@@ -54,6 +57,8 @@ public class FarmlandController extends Controller {
             handlePlant(choice);
         } else if (choice.charAt(0) == 'C') {
             handleClear(choice);
+        } else if (choice.equals("H")) {
+            handleHarvest();
         } else {
             view.setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
         }
@@ -141,5 +146,9 @@ public class FarmlandController extends Controller {
         } catch (NumberFormatException e) {
             view.setStatus(Painter.paint("Use C<id> to select a plot.", Painter.Color.RED));
         }
+    }
+
+    private void handleHarvest() {
+        farmerDAO.harvest(me);
     }
 }

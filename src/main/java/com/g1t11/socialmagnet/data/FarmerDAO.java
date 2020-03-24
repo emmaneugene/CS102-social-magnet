@@ -133,4 +133,17 @@ public class FarmerDAO extends DAO {
             throw new DatabaseException(e);
         }
     }
+
+    public void harvest(Farmer farmer) {
+        String queryString = "CALL harvest(?)";
+
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+            stmt.setString(1, farmer.getUsername());
+
+            stmt.execute();
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+            throw new DatabaseException(e);
+        }
+    }
 }
