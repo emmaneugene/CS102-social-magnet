@@ -1,2 +1,3 @@
-source .env;
-mvn test;
+call reset-db.bat
+
+mvn clean && mvn test
