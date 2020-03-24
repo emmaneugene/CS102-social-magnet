@@ -536,3 +536,6 @@ DELIMITER ;
 CREATE PROCEDURE plant_crop(IN _username VARCHAR(255), IN _plot_num INT, IN _crop_name VARCHAR(255), IN _yield INT)
     INSERT INTO plot (owner, plot_num, crop_name, time_planted, yield_of_crop, percent_stolen) VALUES 
     (_username, _plot_num, _crop_name, NOW(), _yield, 0);
+
+CREATE PROCEDURE clear_plot(IN _username VARCHAR(255), IN _plot_num INT)
+    DELETE FROM plot WHERE owner = _username AND plot_num = _plot_num;

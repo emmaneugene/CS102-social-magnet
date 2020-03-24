@@ -52,6 +52,8 @@ public class FarmlandController extends Controller {
             nav.popTo(CityFarmersMainMenuController.class);
         } else if (choice.charAt(0) == 'P') {
             handlePlant(choice);
+        } else if (choice.charAt(0) == 'C') {
+            handleClear(choice);
         } else {
             view.setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
         }
@@ -72,11 +74,13 @@ public class FarmlandController extends Controller {
                 view.setStatus(Painter.paint("Cannot plant on an existing crop.", Painter.Color.RED));
                 return;
             }
-
             String toPlant = handleInventory();
             if (toPlant == null) return;
             farmerDAO.plantCrop(me, index, toPlant);
-
+            view.setStatus(String.format(
+                Painter.paint("Planted %s in plot %d!", Painter.Color.GREEN),
+                toPlant, index
+            ));
         } catch (NumberFormatException e) {
             view.setStatus(Painter.paint("Use P<id> to select a plot.", Painter.Color.RED));
         }
@@ -116,5 +120,26 @@ public class FarmlandController extends Controller {
             view.setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
         }
         return null;
+    }
+
+    private void handleClear(String choice) {
+        try {
+            int index = Integer.parseInt(choice.substring(1));
+            if (index <= 0 || index > plots.size()) {
+                view.setStatus(Painter.paint("Index out of range.", Painter.Color.RED));
+                return;
+            }
+            if (plots.get(index - 1).getCrop() == null) {
+                view.setStatus(Painter.paint("Cannot clear empty plot.", Painter.Color.RED));
+                return;
+            }
+            farmerDAO.clearPlot(me, index);
+            view.setStatus(String.format(
+                Painter.paint("Cleared plot %d!", Painter.Color.GREEN),
+                index
+            ));
+        } catch (NumberFormatException e) {
+            view.setStatus(Painter.paint("Use C<id> to select a plot.", Painter.Color.RED));
+        }
     }
 }

@@ -119,4 +119,18 @@ public class FarmerDAO extends DAO {
             throw new DatabaseException(e);
         }
     }
+
+    public void clearPlot(Farmer farmer, int plotNumber) {
+        String queryString = "CALL clear_plot(?, ?)";
+
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+            stmt.setString(1, farmer.getUsername());
+            stmt.setInt(2, plotNumber);
+
+            stmt.execute();
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+            throw new DatabaseException(e);
+        }
+    }
 }
