@@ -36,18 +36,18 @@ INSERT INTO tag (thread_id, tagged_user) VALUES
 (7, "britney"),
 (9, "elijah");
 
-INSERT INTO comment (thread_id, commenter, commented_on, content) VALUES
-(1, "charlie", "2019-03-02 16:30:00", "Good job! You started programming."),
-(1, "elijah",  "2019-03-04 12:15:00", "Bye!"),
-(2, "charlie", "2019-05-02 10:32:00", "Same!!! Too many things to do!"),
-(3, "elijah",  "2019-05-15 21:00:00", "Same here."),
-(4, "danny",   "2019-09-03 20:35:00", "I can't find it too!"),
-(6, "frank",   "2019-09-03 16:30:00", "Not sure about that."),
+INSERT INTO comment (comment_num, thread_id, commenter, commented_on, content) VALUES
+(1, 1, "charlie", "2019-03-02 16:30:00", "Good job! You started programming."),
+(2, 1, "elijah",  "2019-03-04 12:15:00", "Bye!"),
+(1, 2, "charlie", "2019-05-02 10:32:00", "Same!!! Too many things to do!"),
+(1, 3, "elijah",  "2019-05-15 21:00:00", "Same here."),
+(1, 4, "danny",   "2019-09-03 20:35:00", "I can't find it too!"),
+(1, 6, "frank",   "2019-09-03 16:30:00", "Not sure about that."),
 # More than 3 comments on one post
-(7, "adam",    "2019-09-15 10:00:00", "You were a blast!"),
-(7, "britney", "2019-09-15 15:00:00", "How did you guys wake up so early??"),
-(7, "adam",    "2019-09-15 16:15:00", "Early bird gets the worm!"),
-(7, "elijah",  "2019-09-15 16:30:00", "Maybe you shouldn't stay out too late!");
+(1, 7, "adam",    "2019-09-15 10:00:00", "You were a blast!"),
+(2, 7, "britney", "2019-09-15 15:00:00", "How did you guys wake up so early??"),
+(3, 7, "adam",    "2019-09-15 16:15:00", "Early bird gets the worm!"),
+(4, 7, "elijah",  "2019-09-15 16:30:00", "Maybe you shouldn't stay out too late!");
 
 
 INSERT INTO liker (username, thread_id) VALUES
@@ -71,9 +71,11 @@ INSERT INTO request (sender, recipient) VALUES
 ("danny",   "britney");
 
 INSERT INTO farmer (username, xp, wealth) VALUES
-("adam", 1500, 1300),
-("britney", 2000, 1500),
-("charlie", 4000, 1500),
-("danny", 13000, 15000),
-("elijah", 10, 1000),
-("frank", 20, 500);
+("adam",    1500,  1300),
+("britney", 2000,  1500),
+("charlie", 4000,  1500),
+("danny",   13000, 15000),
+("elijah",  100,   1000),
+("frank",   200,   500);
+
+INSERT INTO plot (farmer_name, plot_id, crop_name, time_planted, )
