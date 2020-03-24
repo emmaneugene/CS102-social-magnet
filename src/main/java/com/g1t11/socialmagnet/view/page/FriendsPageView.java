@@ -43,5 +43,7 @@ public class FriendsPageView extends PageView {
         for (String requestUsername : requestUsernames) {
             System.out.printf(Painter.paintf("[{%d}]. [{%s}]\n", Painter.Color.YELLOW, Painter.Color.BLUE), index++, requestUsername);
         }
+
+        System.out.println();
     }
 }

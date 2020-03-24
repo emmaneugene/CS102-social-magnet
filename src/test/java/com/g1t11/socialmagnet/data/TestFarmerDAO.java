@@ -1,6 +1,11 @@
 package com.g1t11.socialmagnet.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
+import com.g1t11.socialmagnet.model.farm.Plot;
 import com.g1t11.socialmagnet.model.social.User;
 
 import org.junit.Assert;
@@ -10,10 +15,15 @@ import org.junit.Test;
 public class TestFarmerDAO {
     private FarmerDAO farmerDAO;
 
+    Crop papaya =     new Crop("Papaya",     20, 30,  8, 75, 100, 15);
+    Crop pumpkin =    new Crop("Pumpkin",    30, 60,  5, 5,  200, 20);
+    Crop watermelon = new Crop("Watermelon", 50, 240, 1, 5,  800, 10);
+
     @Before
     public void initDAO() {
         Database db = new Database();
-        farmerDAO = new FarmerDAO(db.connection());
+        db.establishConnection();
+        farmerDAO = new FarmerDAO(db);
     }
 
     @Test
@@ -24,5 +34,22 @@ public class TestFarmerDAO {
 
         Assert.assertNotNull(actual);
         Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testGetPlots() {
+        List<Plot> expected = new ArrayList<>(List.of(
+            new Plot(papaya),
+            new Plot(pumpkin),
+            new Plot(watermelon),
+            new Plot(),
+            new Plot()
+        ));
+
+        List<Plot> actual = farmerDAO.getPlots(new Farmer("adam", "Adam Levine"));
+
+        for (int i = 0; i < actual.size(); i++) {
+            Assert.assertEquals(expected.get(i), actual.get(i));
+        }
     }
 }

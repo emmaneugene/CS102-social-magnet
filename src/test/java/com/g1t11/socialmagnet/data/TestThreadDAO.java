@@ -17,7 +17,7 @@ public class TestThreadDAO {
     @Before
     public void initDAO() {
         Database db = new Database();
-        threadDAO = new ThreadDAO(db.connection());
+        threadDAO = new ThreadDAO(db);
     }
 
     @Test
