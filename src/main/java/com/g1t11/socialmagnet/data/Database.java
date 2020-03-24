@@ -57,9 +57,6 @@ public class Database {
                 dbPass = input.readPassword();
             }
 
-            System.out.println("DB user: " + System.getenv("DB_USER"));
-            System.out.println("DB name: " + System.getenv("DB_NAME"));
-            System.out.println("DB pass: " + System.getenv("DB_PASS"));
             conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
         } catch (SQLException e) {
             // System.err.println("SQLException: " + e.getMessage());
