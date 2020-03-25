@@ -1,5 +1,7 @@
 package com.g1t11.socialmagnet.model.farm;
 
+import java.util.Objects;
+
 /**
  * Crop
  * - name : String
@@ -11,25 +13,25 @@ package com.g1t11.socialmagnet.model.farm;
  * - salePrice : int
  */
 public class Crop {
-    private String name = null;
+    private String name;
 
-    private int cost = 0;
+    private int cost;
 
-    private int time = 0;
+    private int minutesToHarvest;
 
-    private int XP = 0;
+    private int perUnitXP;
 
-    private int minYield = 0;
+    private int minYield;
 
-    private int maxYield = 0;
+    private int maxYield;
 
-    private int salePrice = 0;
+    private int salePrice;
 
-    public Crop(String name, int cost, int time, int XP, int minYield, int maxYield, int salePrice) {
+    public Crop(String name, int cost, int minutesToHarvest, int perUnitXP, int minYield, int maxYield, int salePrice) {
         this.name = name;
         this.cost = cost;
-        this.time = time;
-        this.XP = XP;
+        this.minutesToHarvest = minutesToHarvest;
+        this.perUnitXP = perUnitXP;
         this.minYield = minYield;
         this.maxYield = maxYield;
         this.salePrice = salePrice;
@@ -43,12 +45,12 @@ public class Crop {
         return cost;
     }
 
-    public int getTime() {
-        return time;
+    public int getMinutesToHarvest() {
+        return minutesToHarvest;
     }
 
-    public int getXP() {
-        return XP;
+    public int getPerUnitXP() {
+        return perUnitXP;
     }
 
     public int getMinYield() {
@@ -61,5 +63,18 @@ public class Crop {
 
     public int getSalePrice() {
         return salePrice;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Crop)) return false;
+        Crop other = (Crop) o;
+        return Objects.equals(name, other.name)
+            && Objects.equals(cost, other.cost)
+            && Objects.equals(minutesToHarvest, other.minutesToHarvest)
+            && Objects.equals(perUnitXP, other.perUnitXP)
+            && Objects.equals(minYield, other.minYield)
+            && Objects.equals(maxYield, other.maxYield)
+            && Objects.equals(salePrice, other.salePrice);
     }
 }

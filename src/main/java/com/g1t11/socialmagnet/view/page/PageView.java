@@ -12,8 +12,8 @@ import com.g1t11.socialmagnet.view.component.*;
  * static views.
  * @see View
  */
-public class PageView {
-    private String pageTitle;
+public abstract class PageView {
+    private String[] pageTitles;
 
     /**
      * A Component injected from the previous {@link Controller} which allows 
@@ -21,18 +21,12 @@ public class PageView {
      */
     private CompoundComponent status = new CompoundComponent();
 
-    private final String headerTemplate = Painter.paint("== Social Magnet :: %s ==", Painter.Color.BOLD);
-
-    public PageView(String pageTitle) {
-        this.pageTitle = pageTitle;
+    public PageView(String ...pageTitles) {
+        setPageTitle(pageTitles);
     }
 
-    public String getPageTitle() {
-        return pageTitle;
-    }
-
-    public void setPageTitle(String pageTitle) {
-        this.pageTitle = pageTitle;
+    public void setPageTitle(String ...pageTitles) {
+        this.pageTitles = pageTitles;
     }
 
     public void setStatus(Component status) {
@@ -62,7 +56,13 @@ public class PageView {
 
     public void display() {
         clearScreen();
-        System.out.println(String.format(headerTemplate, pageTitle));
+        StringBuilder headerBuilder = new StringBuilder("== Social Magnet");
+        for (String title : pageTitles) {
+            headerBuilder.append(" :: ");
+            headerBuilder.append(title);
+        }
+        headerBuilder.append(" ==");
+        System.out.println(Painter.paint(headerBuilder.toString(), Painter.Color.BOLD));
         if (status != null) {
             status.render();
             clearStatus();
@@ -73,7 +73,7 @@ public class PageView {
     public boolean equals(Object o) {
         if (!(o instanceof PageView)) return false;
         PageView other = (PageView) o;
-        return Objects.equals(pageTitle, other.pageTitle)
+        return Objects.deepEquals(pageTitles, other.pageTitles)
             && Objects.equals(status, other.status);
     }
 }

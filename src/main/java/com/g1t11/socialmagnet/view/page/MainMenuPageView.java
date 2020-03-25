@@ -3,6 +3,7 @@ package com.g1t11.socialmagnet.view.page;
 import java.util.List;
 import java.util.Objects;
 
+import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
 
 public class MainMenuPageView extends PageView {
@@ -16,9 +17,9 @@ public class MainMenuPageView extends PageView {
         Painter.paintf("[{5.}] Logout", Painter.Color.YELLOW)
     );
 
-    public MainMenuPageView(String fullname) {
+    public MainMenuPageView(User currentUser) {
         super("Main Menu");
-        greeting = String.format("Welcome, %s!", fullname);
+        greeting = String.format("Welcome, %s!", currentUser.getFullname());
     }
 
     @Override

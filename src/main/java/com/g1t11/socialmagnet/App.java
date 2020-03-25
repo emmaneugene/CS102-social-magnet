@@ -8,7 +8,6 @@ import com.g1t11.socialmagnet.data.Database;
 import com.g1t11.socialmagnet.data.DatabaseException;
 import com.g1t11.socialmagnet.util.Painter;
 import com.mysql.cj.jdbc.exceptions.CommunicationsException;
-import com.g1t11.socialmagnet.data.SQLErrorCode;
 
 public class App {
     public Database db = null;
@@ -65,7 +64,7 @@ public class App {
     private void handleSQLException(SQLException sqlE) {
         System.out.println(sqlE.getMessage());
         System.out.println(sqlE.getErrorCode());
-        if (sqlE.getErrorCode() == SQLErrorCode.noConnection) {
+        if (sqlE.getErrorCode() == DatabaseException.SQLErrorCode.NO_CONNECTION.code) {
             nav.popToFirst();
             nav.currentController().view.setStatus(Painter.paint("Failed to connect to database. Retrying...", Painter.Color.RED));
             try {

@@ -5,27 +5,29 @@ import java.util.List;
 
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.social.Thread;
-import com.g1t11.socialmagnet.view.component.ProfileInfoComponent;
+import com.g1t11.socialmagnet.view.component.WallProfileInfoComponent;
 import com.g1t11.socialmagnet.view.component.SimpleThreadComponent;
 
 public class WallPageView extends PageView {
-    private ProfileInfoComponent profileComp;
+    private WallProfileInfoComponent profileComp;
     private List<SimpleThreadComponent> threadComps = new ArrayList<>(5);
 
     public WallPageView(Farmer me) {
         super("My Wall");
-        this.profileComp = new ProfileInfoComponent(me);
+        this.profileComp = new WallProfileInfoComponent(me);
     }
 
     protected WallPageView(Farmer me, String title) {
         super(title);
-        this.profileComp = new ProfileInfoComponent(me);
+        this.profileComp = new WallProfileInfoComponent(me);
     }
 
     @Override
     public void display() {
         super.display();
         profileComp.render();
+        System.out.println();
+        System.out.println();
         for (SimpleThreadComponent threadComp : threadComps) {
             threadComp.render();
             System.out.println();

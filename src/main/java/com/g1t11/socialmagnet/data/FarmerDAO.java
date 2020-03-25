@@ -3,11 +3,16 @@ package com.g1t11.socialmagnet.data;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
+import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
+import com.g1t11.socialmagnet.model.farm.Plot;
 import com.g1t11.socialmagnet.model.social.User;
 
-public class FarmerDAO extends UserDAO {
+public class FarmerDAO extends DAO {
     public FarmerDAO(Database db) {
         super(db);
     }
@@ -38,5 +43,41 @@ public class FarmerDAO extends UserDAO {
         }
 
         return f;
+    }
+
+    public List<Plot> getPlots(Farmer farmer) {
+        ResultSet rs = null;
+        Plot[] emptyPlots = new Plot[farmer.getMaxPlotCount()];
+        Arrays.fill(emptyPlots, new Plot());
+        List<Plot> plots = new ArrayList<>(Arrays.asList(emptyPlots));
+
+        String queryString = "CALL get_plots(?)";
+
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+            stmt.setString(1, farmer.getUsername());
+
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                Crop c = new Crop(
+                    rs.getString("crop_name"),
+                    rs.getInt("cost"),
+                    rs.getInt("minutes_to_harvest"),
+                    rs.getInt("xp"),
+                    rs.getInt("min_yield"),
+                    rs.getInt("max_yield"),
+                    rs.getInt("sale_price")
+                );
+                Plot p = new Plot(c, rs.getTimestamp("time_planted"));
+                int index = rs.getInt("plot_num") - 1;
+                plots.set(index, p);
+            }
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+            throw new DatabaseException(e);
+        } finally {
+            try { if (rs != null) rs.close(); } catch (SQLException e) {}
+        }
+
+        return plots;
     }
 }
