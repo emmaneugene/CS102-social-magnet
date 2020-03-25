@@ -71,7 +71,7 @@ INSERT INTO request (sender, recipient) VALUES
 ("danny",   "britney");
 
 INSERT INTO farmer (username, xp, wealth) VALUES
-("adam",    1500,  1300),
+("adam",    1500,  3),
 ("britney", 2000,  1500),
 ("charlie", 4000,  1500),
 ("danny",   13000, 15000),

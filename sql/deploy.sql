@@ -549,8 +549,30 @@ BEGIN
 END$$
 DELIMITER ;
 
-CREATE PROCEDURE clear_plot(IN _username VARCHAR(255), IN _plot_num INT)
-    DELETE FROM plot WHERE owner = _username AND plot_num = _plot_num;
+DELIMITER $$
+CREATE PROCEDURE clear_plot_update_wealth(IN _username VARCHAR(255), IN _plot_num INT)
+BEGIN
+    SET @is_wilted := (
+        SELECT COUNT(*) FROM plot p
+        JOIN crop c ON p.crop_name = c.crop_name
+        WHERE owner = _username AND plot_num = _plot_num
+        AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) >= minutes_to_harvest * 2
+    );
+    SET @farmer_wealth := (
+        SELECT wealth FROM farmer WHERE username = _username
+    );
+    IF @is_wilted THEN 
+        IF @farmer_wealth < 5 THEN
+            SIGNAL SQLSTATE '45000' SET message_text = 'Insufficient funds to clear wilted crop.';
+        ELSE
+            UPDATE farmer SET wealth = @farmer_wealth - 5 WHERE username = _username;
+            DELETE FROM plot WHERE owner = _username AND plot_num = _plot_num;
+        END IF;
+    ELSE
+        DELETE FROM plot WHERE owner = _username AND plot_num = _plot_num;
+    END IF;
+END$$
+DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE harvest(IN _username VARCHAR(255))

@@ -22,6 +22,8 @@ public class FarmlandController extends Controller {
 
     List<String> invCropNames = new ArrayList<>();
 
+    private static final int costToClearWilted = 5;
+
     public FarmlandController(Navigation nav, Farmer me) {
         super(nav);
         this.me = me;
@@ -138,13 +140,34 @@ public class FarmlandController extends Controller {
                 view.setStatus(Painter.paint("Cannot clear empty plot.", Painter.Color.RED));
                 return;
             }
-            farmerDAO.clearPlot(me, index);
+            Plot toClear = plots.get(index - 1);
+            if (toClear.isWilted()) {
+                if (me.getWealth() < costToClearWilted) {
+                    view.setStatus(Painter.paint("Insufficient funds to clear wilted crop.", Painter.Color.RED));
+                    return;
+                }
+                farmerDAO.clearPlotUpdateWealth(me, index);
+                view.setStatus(String.format(
+                    Painter.paint("Cleared plot %d for %d gold!", Painter.Color.GREEN),
+                    index,
+                    costToClearWilted
+                ));
+                return;
+            }
+            confirmClearHealthy(index);
+        } catch (NumberFormatException e) {
+            view.setStatus(Painter.paint("Use C<id> to select a plot.", Painter.Color.RED));
+        }
+    }
+
+    private void confirmClearHealthy(int index) {
+        PromptInput input = new PromptInput("Confirm clearing healthy crop? (Y/n)");
+        if (input.nextLine().equals("Y")) {
+            farmerDAO.clearPlotUpdateWealth(me, index);
             view.setStatus(String.format(
                 Painter.paint("Cleared plot %d!", Painter.Color.GREEN),
                 index
             ));
-        } catch (NumberFormatException e) {
-            view.setStatus(Painter.paint("Use C<id> to select a plot.", Painter.Color.RED));
         }
     }
 

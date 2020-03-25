@@ -120,8 +120,8 @@ public class FarmerDAO extends DAO {
         }
     }
 
-    public void clearPlot(Farmer farmer, int plotNumber) {
-        String queryString = "CALL clear_plot(?, ?)";
+    public void clearPlotUpdateWealth(Farmer farmer, int plotNumber) {
+        String queryString = "CALL clear_plot_update_wealth(?, ?)";
 
         try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setString(1, farmer.getUsername());
