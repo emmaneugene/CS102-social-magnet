@@ -77,5 +77,3 @@ INSERT INTO farmer (username, xp, wealth) VALUES
 ("danny",   13000, 15000),
 ("elijah",  100,   1000),
 ("frank",   200,   500);
-
-INSERT INTO plot (farmer_name, plot_id, crop_name, time_planted, )
