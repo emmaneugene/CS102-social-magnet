@@ -43,7 +43,7 @@ public class Database {
                 dbName = input.nextLine();
             }
 
-            String dbUrl  = "jdbc:mysql://localhost/" + dbName + "?serverTimezone=UTC";
+            String dbUrl  = "jdbc:mysql://localhost/" + dbName;
 
             String dbUser = System.getenv("DB_USER");
             if (dbUser == null) {
