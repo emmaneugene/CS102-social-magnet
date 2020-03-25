@@ -45,8 +45,32 @@ public class FarmerDAO extends DAO {
         return f;
     }
 
+    public List<String> getInventoryCropNames(Farmer farmer) {
+        ResultSet rs = null;
+        List<String> invCropNames = new ArrayList<>();
+
+        String queryString = "CALL get_inventory(?)";
+
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+            stmt.setString(1, farmer.getUsername());
+
+            rs = stmt.executeQuery();
+            while(rs.next()) {
+                invCropNames.add(rs.getString("crop_name"));
+            }
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+            throw new DatabaseException(e);
+        } finally {
+            try { if (rs != null) rs.close(); } catch (SQLException e) {}
+        }
+
+        return invCropNames;
+    }
+
     public List<Plot> getPlots(Farmer farmer) {
         ResultSet rs = null;
+
         Plot[] emptyPlots = new Plot[farmer.getMaxPlotCount()];
         Arrays.fill(emptyPlots, new Plot());
         List<Plot> plots = new ArrayList<>(Arrays.asList(emptyPlots));
@@ -79,5 +103,47 @@ public class FarmerDAO extends DAO {
         }
 
         return plots;
+    }
+
+    public void plantCrop(Farmer farmer, int plotNumber, String cropName) {
+        String queryString = "CALL plant_crop_auto_yield(?, ?, ?)";
+
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+            stmt.setString(1, farmer.getUsername());
+            stmt.setInt(2, plotNumber);
+            stmt.setString(3, cropName);
+
+            stmt.execute();
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+            throw new DatabaseException(e);
+        }
+    }
+
+    public void clearPlotUpdateWealth(Farmer farmer, int plotNumber) {
+        String queryString = "CALL clear_plot_update_wealth(?, ?)";
+
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+            stmt.setString(1, farmer.getUsername());
+            stmt.setInt(2, plotNumber);
+
+            stmt.execute();
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+            throw new DatabaseException(e);
+        }
+    }
+
+    public void harvest(Farmer farmer) {
+        String queryString = "CALL harvest(?)";
+
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+            stmt.setString(1, farmer.getUsername());
+
+            stmt.execute();
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+            throw new DatabaseException(e);
+        }
     }
 }

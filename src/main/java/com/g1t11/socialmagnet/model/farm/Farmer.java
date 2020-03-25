@@ -41,8 +41,6 @@ public class Farmer extends User {
 
     private List<Plot> farmland = new ArrayList<>();
 
-    private List<InventoryItem> inventory = new ArrayList<>();
-
     public Farmer(String username, String fullname, int XP, int wealth, int wealthRank) {
         super(username, fullname);
         this.XP = XP;
@@ -122,10 +120,6 @@ public class Farmer extends User {
         return farmland;
     }
 
-    public List<InventoryItem> getInventory() {
-        return inventory;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Farmer)) return false;
@@ -134,7 +128,6 @@ public class Farmer extends User {
         && Objects.equals(XP, other.XP)
         && Objects.equals(wealth, other.wealth)
         && Objects.equals(wealthRankAmongFriends, other.wealthRankAmongFriends)
-        && Objects.deepEquals(farmland, other.farmland)
-        && Objects.deepEquals(inventory, other.inventory);
+        && Objects.deepEquals(farmland, other.farmland);
     }
 }

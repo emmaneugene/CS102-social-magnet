@@ -15,6 +15,8 @@ import org.junit.Test;
 public class TestFarmerDAO {
     private FarmerDAO farmerDAO;
 
+    Farmer me = new Farmer("adam", "Adam Levine", 1500, 1300, 3);
+
     Crop papaya =     new Crop("Papaya",     20, 30,  8, 75, 100, 15);
     Crop pumpkin =    new Crop("Pumpkin",    30, 60,  5, 5,  200, 20);
     Crop watermelon = new Crop("Watermelon", 50, 240, 1, 5,  800, 10);
@@ -27,7 +29,7 @@ public class TestFarmerDAO {
     }
 
     @Test
-    public void testGetUser() {
+    public void testGetFarmer() {
         Farmer expected = new Farmer("adam", "Adam Levine", 1500, 1300, 3);
 
         Farmer actual = farmerDAO.getFarmer(new User("adam", "Adam Levine"));
@@ -46,10 +48,26 @@ public class TestFarmerDAO {
             new Plot()
         ));
 
-        List<Plot> actual = farmerDAO.getPlots(new Farmer("adam", "Adam Levine"));
+        List<Plot> actual = farmerDAO.getPlots(new Farmer("britney", "Britney Spears"));
 
         for (int i = 0; i < actual.size(); i++) {
             Assert.assertEquals(expected.get(i), actual.get(i));
         }
+    }
+
+    @Test(expected = DatabaseException.class)
+    public void testPlantCrop() {
+        farmerDAO.plantCrop(me, 6, "Papaya");
+        // Duplicate entry
+        farmerDAO.plantCrop(me, 6, "Papaya");
+    }
+
+    @Test(expected = DatabaseException.class)
+    public void testPlantCropInvalidPlot() {
+        farmerDAO.plantCrop(me, 9, "Papaya");
+    }
+
+    public void testGetInventoryCropNames() {
+        farmerDAO.getInventoryCropNames(me);
     }
 }

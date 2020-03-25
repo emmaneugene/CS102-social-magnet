@@ -3,7 +3,7 @@ DROP DATABASE IF EXISTS magnet;
 CREATE DATABASE magnet;
 
 USE magnet;
-SET time_zone = '+00:00';
+SET GLOBAL time_zone = '+00:00';
 
 /*
  * |---------------|
@@ -94,6 +94,14 @@ CREATE TABLE farmer (
     FOREIGN KEY (username) REFERENCES user (username)
 );
 
+CREATE TABLE ranking (
+    rank_level  INT          NOT NULL AUTO_INCREMENT,
+    rank_min_xp INT          NOT NULL,
+    rank_name   VARCHAR(255) NOT NULL,
+    num_plots   INT          NOT NULL,
+    PRIMARY KEY (rank_level)
+);
+
 CREATE TABLE crop (
     crop_name           VARCHAR(255) NOT NULL,
     cost                INT          NOT NULL,
@@ -111,7 +119,7 @@ CREATE TABLE plot (
     crop_name      VARCHAR(255)        NOT NULL,
     time_planted   TIMESTAMP           NOT NULL,
     yield_of_crop  INT                 NOT NULL,
-    percent_stolen INT                 NOT NULL,
+    yield_stolen   INT                 NOT NULL,
     PRIMARY KEY (owner, plot_num),
     FOREIGN KEY (owner)     REFERENCES farmer (username),
     FOREIGN KEY (crop_name) REFERENCES crop (crop_name)
@@ -157,6 +165,13 @@ INSERT INTO crop (crop_name, cost, minutes_to_harvest, xp, min_yield, max_yield,
 ("Pumpkin",    30, 60,  5,  5,  200, 20),
 ("Sunflower",  40, 120, 20, 15, 20,  40),
 ("Watermelon", 50, 240, 1,  5,  800, 10);
+
+INSERT INTO ranking (rank_min_xp, rank_name, num_plots) VALUES
+(0,     "Novice",      5),
+(1000,  "Apprentice",  6),
+(2500,  "Journeyman",  7),
+(5000,  "Grandmaster", 8),
+(12000, "Legendary",   9);
 
 /*
  * |-------------------|
@@ -217,16 +232,17 @@ CREATE PROCEDURE unfriend(IN _current_user VARCHAR(255), IN _to_remove VARCHAR(2
 DELIMITER $$
 CREATE TRIGGER validate_request BEFORE INSERT ON request
 FOR EACH ROW BEGIN
-    DECLARE is_friend BOOLEAN;
-    SELECT COUNT(*) INTO is_friend FROM (
-        SELECT user_1 FROM friend WHERE user_1 = NEW.sender AND user_2 = NEW.recipient
-        UNION
-        SELECT user_2 FROM friend WHERE user_2 = NEW.sender AND user_1 = NEW.recipient
-    ) AS f;
-    IF (is_friend = TRUE) THEN
+    SET @is_friend := (
+        SELECT COUNT(*) FROM (
+            SELECT user_1 FROM friend WHERE user_1 = NEW.sender AND user_2 = NEW.recipient
+            UNION
+            SELECT user_2 FROM friend WHERE user_2 = NEW.sender AND user_1 = NEW.recipient
+        ) AS f
+    );
+    IF (@is_friend = TRUE) THEN
         SIGNAL SQLSTATE '45000' SET message_text = 'Cannot request existing friend.';
     END IF;
-END $$
+END$$
 DELIMITER ;
 
 CREATE PROCEDURE make_request(IN _sender VARCHAR(255), IN _recipient VARCHAR(255))
@@ -348,26 +364,24 @@ CREATE PROCEDURE delete_thread(IN _thread_id INT, IN _username VARCHAR(255))
 DELIMITER $$
 CREATE PROCEDURE reply_to_thread(IN _thread_id INT, IN _username VARCHAR(255), IN _content TEXT(65535))
 BEGIN
-    DECLARE next_num INT;
-    SET next_num = (
+    SET @next_num = (
         SELECT MAX(comment_num) + 1 FROM comment
         WHERE thread_id = _thread_id
     );
-    INSERT INTO comment (comment_num, thread_id, commenter, commented_on, content) VALUES (next_num, _thread_id, _username, NOW(), _content);
+    INSERT INTO comment (comment_num, thread_id, commenter, commented_on, content) VALUES (@next_num, _thread_id, _username, NOW(), _content);
 END$$
 DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE toggle_like_thread(IN _thread_id INT, IN _username VARCHAR(255))
 BEGIN
-    DECLARE liked INT;
-	SET liked = (
+	SET @liked := (
         SELECT COUNT(*)
 	    FROM liker l NATURAL JOIN user u
 	    WHERE l.thread_id = _thread_id
 	    AND l.username = _username
     );
-	IF (liked = 0) THEN
+	IF (@liked = 0) THEN
 		INSERT INTO liker (username, thread_id) VALUES (_username, _thread_id);
 	ELSE
 	    DELETE FROM liker WHERE username = _username AND thread_id = _thread_id;
@@ -378,14 +392,13 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE toggle_dislike_thread(IN _thread_id INT, IN _username VARCHAR(255))
 BEGIN
-    DECLARE disliked INT;
-	SET disliked = (
+	SET @disliked := (
         SELECT COUNT(*)
 	    FROM disliker l NATURAL JOIN user u
 	    WHERE l.thread_id = _thread_id
 	    AND l.username = _username
     );
-	IF (disliked = 0) THEN
+	IF (@disliked = 0) THEN
 		INSERT INTO disliker (username, thread_id) VALUES (_username, _thread_id);
 	ELSE
 	    DELETE FROM disliker WHERE username = _username AND thread_id = _thread_id;
@@ -399,8 +412,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE TRIGGER validate_tag BEFORE INSERT ON tag
 FOR EACH ROW BEGIN
-    DECLARE is_friend BOOLEAN;
-    SET is_friend = (
+    SET @is_friend := (
         SELECT COUNT(*) FROM (
             SELECT user_1 FROM friend WHERE user_2 = NEW.tagged_user
             UNION
@@ -410,7 +422,7 @@ FOR EACH ROW BEGIN
             SELECT author FROM thread WHERE thread_id = NEW.thread_id
         )
     );
-    IF (is_friend = FALSE) THEN
+    IF (@is_friend = FALSE) THEN
         SIGNAL SQLSTATE '45000' SET message_text = 'Cannot tag non-friends.';
     END IF;
 END$$
@@ -419,8 +431,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE add_tag(IN _thread_id INT, IN _username VARCHAR(255))
 BEGIN
-    DECLARE is_friend BOOLEAN;
-    SET is_friend = (
+    SET @is_friend = (
         SELECT COUNT(*) FROM (
             SELECT user_1 FROM friend WHERE user_2 = _username
             UNION
@@ -430,7 +441,7 @@ BEGIN
             SELECT author FROM thread WHERE thread_id = _thread_id
         )
     );
-    IF (is_friend = TRUE) THEN
+    IF (@is_friend = TRUE) THEN
         INSERT INTO tag (thread_id, tagged_user) VALUES (_thread_id, _username);
     END IF;
 END$$
@@ -440,7 +451,7 @@ CREATE PROCEDURE remove_tag(IN _thread_id INT, IN _username VARCHAR(255))
     DELETE FROM tag WHERE thread_id = _thread_id AND tagged_user = _username;
 
 /*
- * FARMING
+ * LOADING FARM DETAILS
  */
 DELIMITER $$
 CREATE PROCEDURE get_farmer_detail(IN _username VARCHAR(255))
@@ -459,8 +470,140 @@ END$$
 DELIMITER ;
 
 CREATE PROCEDURE get_plots(IN _username VARCHAR(255))
-    SELECT plot_num, p.crop_name, time_planted, yield_of_crop, percent_stolen,
+    SELECT plot_num, p.crop_name, time_planted, yield_of_crop, yield_stolen,
     cost, minutes_to_harvest, xp, min_yield, max_yield, sale_price
     FROM plot p
     JOIN crop c ON p.crop_name = c.crop_name
     WHERE owner = _username;
+
+CREATE PROCEDURE get_inventory(IN _username VARCHAR(255))
+    SELECT crop_name, quantity FROM inventory
+    WHERE owner = _username
+    ORDER BY crop_name;
+
+/*
+ * UPDATING FARM DETAILS
+ */
+DELIMITER $$
+CREATE TRIGGER verify_crop_num BEFORE INSERT ON plot
+FOR EACH ROW BEGIN
+    SET @max_plots := (
+        SELECT num_plots FROM (
+            SELECT MAX(rank_level) max_rank_level FROM ranking
+            WHERE rank_min_xp < (
+                SELECT xp FROM farmer WHERE username = NEW.owner
+            )
+        ) AS r1 JOIN ranking r2
+        ON r1.max_rank_level = r2.rank_level
+    );
+    IF (NEW.plot_num > @max_plots) THEN
+        SIGNAL SQLSTATE '45000' SET message_text = 'You do not have access to so many plots.';
+    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER verify_crop_yield BEFORE INSERT ON plot
+FOR EACH ROW BEGIN
+    SET @min_yield_of_crop := ( SELECT min_yield FROM crop WHERE crop_name = NEW.crop_name);
+    SET @max_yield_of_crop := ( SELECT max_yield FROM crop WHERE crop_name = NEW.crop_name);
+    IF (NEW.yield_of_crop > @max_yield_of_crop OR NEW.yield_of_crop < @min_yield_of_crop) THEN
+        SIGNAL SQLSTATE '45000' SET message_text = 'Invalid crop yield.';
+    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE plant_crop_auto_yield(IN _username VARCHAR(255), IN _plot_num INT, IN _crop_name VARCHAR(255))
+BEGIN
+    -- Generate random yield
+    SET @min_yield_of_crop := ( SELECT min_yield FROM crop WHERE crop_name = _crop_name );
+    SET @max_yield_of_crop := ( SELECT max_yield FROM crop WHERE crop_name = _crop_name );
+    SET @random_yield := FLOOR(RAND() * (@max_yield_of_crop - @min_yield_of_crop + 1)) + @min_yield_of_crop;
+    -- Update plot
+    INSERT INTO plot (owner, plot_num, crop_name, time_planted, yield_of_crop, yield_stolen) VALUES 
+    (_username, _plot_num, _crop_name, NOW(), @random_yield, 0);
+    -- Update inventory
+    SET @new_quantity := ( SELECT quantity - 1 FROM inventory WHERE owner = _username AND crop_name = _crop_name );
+    IF (@new_quantity = 0) THEN
+        DELETE FROM inventory WHERE owner = _username AND crop_name = _crop_name;
+    ELSE
+        UPDATE inventory SET quantity = @new_quantity WHERE owner = _username AND crop_name = _crop_name;
+    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE plant_crop(IN _username VARCHAR(255), IN _plot_num INT, IN _crop_name VARCHAR(255), IN _yield INT)
+BEGIN
+    -- Update plot
+    INSERT INTO plot (owner, plot_num, crop_name, time_planted, yield_of_crop, yield_stolen) VALUES 
+    (_username, _plot_num, _crop_name, NOW(), _yield, 0);
+    -- Update inventory
+    SET @new_quantity := ( SELECT quantity - 1 FROM inventory WHERE owner = _username AND crop_name = _crop_name );
+    IF (@new_quantity = 0) THEN
+        DELETE FROM inventory WHERE owner = _username AND crop_name = _crop_name;
+    ELSE
+        UPDATE inventory SET quantity = @new_quantity WHERE owner = _username AND crop_name = _crop_name;
+    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE clear_plot_update_wealth(IN _username VARCHAR(255), IN _plot_num INT)
+BEGIN
+    SET @is_wilted := (
+        SELECT COUNT(*) FROM plot p
+        JOIN crop c ON p.crop_name = c.crop_name
+        WHERE owner = _username AND plot_num = _plot_num
+        AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) >= minutes_to_harvest * 2
+    );
+    SET @farmer_wealth := (
+        SELECT wealth FROM farmer WHERE username = _username
+    );
+    IF @is_wilted THEN 
+        IF @farmer_wealth < 5 THEN
+            SIGNAL SQLSTATE '45000' SET message_text = 'Insufficient funds to clear wilted crop.';
+        ELSE
+            UPDATE farmer SET wealth = @farmer_wealth - 5 WHERE username = _username;
+            DELETE FROM plot WHERE owner = _username AND plot_num = _plot_num;
+        END IF;
+    ELSE
+        DELETE FROM plot WHERE owner = _username AND plot_num = _plot_num;
+    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE harvest(IN _username VARCHAR(255))
+BEGIN
+    -- get total sale price and xp gained
+    SELECT IFNULL(SUM(sale_price * (yield_of_crop - yield_stolen)), 0),
+    IFNULL(SUM(xp * (yield_of_crop - yield_stolen)), 0) INTO @total_sale, @total_xp FROM (
+        SELECT plot_num FROM plot p
+        JOIN crop c ON p.crop_name = c.crop_name
+        WHERE owner = _username
+        -- check if ready to harvest
+        AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) >= minutes_to_harvest
+        -- check if wilted
+        AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) < minutes_to_harvest * 2
+    ) AS h JOIN plot p ON h.plot_num = p.plot_num AND p.owner = _username
+    JOIN crop c ON p.crop_name = c.crop_name;
+
+    -- clear plots that were harvested
+    DELETE p FROM plot p
+    JOIN (
+        SELECT plot_num FROM plot p
+        JOIN crop c ON p.crop_name = c.crop_name
+        WHERE owner = _username
+        -- check if ready to harvest
+        AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) >= minutes_to_harvest
+        -- check if wilted
+        AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) < minutes_to_harvest * 2
+    ) AS h ON p.plot_num = h.plot_num AND p.owner = _username;
+
+    -- add sale and xp to user account
+    UPDATE farmer SET wealth = wealth + @total_sale, xp = xp + @total_xp
+    WHERE username = _username;
+END$$
+DELIMITER ;

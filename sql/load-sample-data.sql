@@ -71,17 +71,22 @@ INSERT INTO request (sender, recipient) VALUES
 ("danny",   "britney");
 
 INSERT INTO farmer (username, xp, wealth) VALUES
-("adam",    1500,  1300),
+("adam",    1500,  3),
 ("britney", 2000,  1500),
 ("charlie", 4000,  1500),
 ("danny",   13000, 15000),
 ("elijah",  100,   1000),
 ("frank",   200,   500);
 
-INSERT INTO plot (owner, plot_num, crop_name, time_planted, yield_of_crop, percent_stolen) VALUES
-("adam", 1, "Papaya",     DATE_SUB(NOW(), INTERVAL 29 MINUTE), 75, 17),
-("adam", 2, "Pumpkin",    DATE_SUB(NOW(), INTERVAL 29 MINUTE), 100, 20),
-("adam", 3, "Watermelon", DATE_SUB(NOW(), INTERVAL 29 MINUTE), 400, 5);
+INSERT INTO plot (owner, plot_num, crop_name, time_planted, yield_of_crop, yield_stolen) VALUES
+("adam", 1, "Papaya",        DATE_SUB(NOW(), INTERVAL  30 MINUTE), 75,  13),
+("adam", 2, "Pumpkin",       DATE_SUB(NOW(), INTERVAL  29 MINUTE), 100, 20),
+("adam", 3, "Watermelon",    DATE_SUB(NOW(), INTERVAL 480 MINUTE), 400, 20),
+("adam", 4, "Papaya",        DATE_SUB(NOW(), INTERVAL  30 MINUTE), 75,  13),
+("adam", 6, "Watermelon",    DATE_SUB(NOW(), INTERVAL 250 MINUTE), 400, 20),
+("britney", 1, "Papaya",     DATE_SUB(NOW(), INTERVAL  29 MINUTE), 75,  13),
+("britney", 2, "Pumpkin",    DATE_SUB(NOW(), INTERVAL  29 MINUTE), 100, 20),
+("britney", 3, "Watermelon", DATE_SUB(NOW(), INTERVAL  29 MINUTE), 400, 20);
 
 INSERT INTO stealing (victim, stolen_plot_num, stealer) VALUES
 ("adam", 1, "britney"),
