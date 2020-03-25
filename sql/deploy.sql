@@ -3,7 +3,7 @@ DROP DATABASE IF EXISTS magnet;
 CREATE DATABASE magnet;
 
 USE magnet;
-/* SET time_zone = '+00:00'; */
+SET GLOBAL time_zone = '+00:00';
 
 /*
  * |---------------|
