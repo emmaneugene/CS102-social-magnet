@@ -433,12 +433,12 @@ CREATE PROCEDURE add_tag(IN _thread_id INT, IN _username VARCHAR(255))
 BEGIN
     SET @is_friend = (
         SELECT COUNT(*) FROM (
-            SELECT user_1 FROM friend WHERE user_2 = NEW.tagged_user
+            SELECT user_1 FROM friend WHERE user_2 = _username
             UNION
-            SELECT user_2 FROM friend WHERE user_1 = NEW.tagged_user
+            SELECT user_2 FROM friend WHERE user_1 = _username
         ) AS f
         WHERE user_1 IN (
-            SELECT author FROM thread WHERE thread_id = NEW.thread_id
+            SELECT author FROM thread WHERE thread_id = _thread_id
         )
     );
     IF (@is_friend = TRUE) THEN
