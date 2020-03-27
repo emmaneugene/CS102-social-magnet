@@ -212,7 +212,7 @@ CREATE PROCEDURE get_friends_of_friend_with_common(IN _me VARCHAR(255), IN _frie
  * CREDENTIALS
  */
 CREATE PROCEDURE verify_credentials(IN _username VARCHAR(255), IN _password VARCHAR(255))
-    SELECT COUNT(*) AS is_valid FROM user WHERE username = _username and pwd = _password;
+    SELECT COUNT(*) AS is_valid FROM user WHERE username = _username and pwd = sha1(_password);
 
 CREATE PROCEDURE user_exists(IN _username VARCHAR(255))
     SELECT COUNT(*) AS user_exists FROM user WHERE username = _username;
@@ -221,7 +221,7 @@ CREATE PROCEDURE user_exists(IN _username VARCHAR(255))
  * UPDATING USERS
  */
 CREATE PROCEDURE add_user(IN _username VARCHAR(255), IN _fullname VARCHAR(255), IN _pwd VARCHAR(255))
-    INSERT INTO user (username, fullname, pwd) VALUES (_username, _fullname, _pwd);
+    INSERT INTO user (username, fullname, pwd) VALUES (_username, _fullname, sha1(_pwd));
 
 CREATE PROCEDURE unfriend(IN _current_user VARCHAR(255), IN _to_remove VARCHAR(255))
     DELETE FROM friend WHERE (user_1 = _current_user AND user_2 = _to_remove) OR (user_2 = _current_user AND user_1 = _to_remove);

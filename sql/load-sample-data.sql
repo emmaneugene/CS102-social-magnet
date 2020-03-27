@@ -1,12 +1,12 @@
 USE magnet;
 
 INSERT INTO user (username, fullname, pwd) VALUES
-("adam",    "Adam Levine",    "maroon5"),
-("britney", "Britney Spears", "itsbritney"),
-("charlie", "Charlie Puth",   "attention"),
-("danny",   "Danny DeVito",   "iasip"),
-("elijah",  "Elijah Wood",    "mordor"),
-("frank",   "Frank Sinatra",  "flymetothemoon");
+("adam",    "Adam Levine",    sha1("maroon5")),
+("britney", "Britney Spears", sha1("itsbritney")),
+("charlie", "Charlie Puth",   sha1("attention")),
+("danny",   "Danny DeVito",   sha1("iasip")),
+("elijah",  "Elijah Wood",    sha1("mordor")),
+("frank",   "Frank Sinatra",  sha1("flymetothemoon"));
 
 INSERT INTO friend (user_1, user_2) VALUES
 ("adam",    "charlie"),
