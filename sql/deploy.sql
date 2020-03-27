@@ -220,8 +220,13 @@ CREATE PROCEDURE user_exists(IN _username VARCHAR(255))
 /*
  * UPDATING USERS
  */
+DELIMITER $$
 CREATE PROCEDURE add_user(IN _username VARCHAR(255), IN _fullname VARCHAR(255), IN _pwd VARCHAR(255))
+BEGIN
     INSERT INTO user (username, fullname, pwd) VALUES (_username, _fullname, sha1(_pwd));
+    INSERT INTO farmer (username, xp, wealth) VALUES (_username, 0, 50);
+END$$
+DELIMITER ;
 
 CREATE PROCEDURE unfriend(IN _current_user VARCHAR(255), IN _to_remove VARCHAR(255))
     DELETE FROM friend WHERE (user_1 = _current_user AND user_2 = _to_remove) OR (user_2 = _current_user AND user_1 = _to_remove);
