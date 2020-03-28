@@ -126,9 +126,9 @@ CREATE TABLE plot (
 );
 
 CREATE TABLE stealing (
+    stealer         VARCHAR(255) BINARY NOT NULL,
     victim          VARCHAR(255) BINARY NOT NULL,
     stolen_plot_num INT                 NOT NULL,
-    stealer         VARCHAR(255) BINARY NOT NULL,
     PRIMARY KEY (victim, stolen_plot_num, stealer),
     FOREIGN KEY (victim, stolen_plot_num) REFERENCES plot (owner, plot_num) ON DELETE CASCADE,
     FOREIGN KEY (stealer)                 REFERENCES farmer (username)
@@ -577,34 +577,90 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE harvest(IN _username VARCHAR(255))
 BEGIN
-    -- get total sale price and xp gained
+    -- Get total sale price and xp gained
     SELECT IFNULL(SUM(sale_price * (yield_of_crop - yield_stolen)), 0),
     IFNULL(SUM(xp * (yield_of_crop - yield_stolen)), 0) INTO @total_sale, @total_xp FROM (
         SELECT plot_num FROM plot p
         JOIN crop c ON p.crop_name = c.crop_name
         WHERE owner = _username
-        -- check if ready to harvest
+        -- Check if ready to harvest
         AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) >= minutes_to_harvest
-        -- check if wilted
+        -- Check if wilted
         AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) < minutes_to_harvest * 2
     ) AS h JOIN plot p ON h.plot_num = p.plot_num AND p.owner = _username
     JOIN crop c ON p.crop_name = c.crop_name;
 
-    -- clear plots that were harvested
+    -- Clear plots that were harvested
     DELETE p FROM plot p
     JOIN (
         SELECT plot_num FROM plot p
         JOIN crop c ON p.crop_name = c.crop_name
         WHERE owner = _username
-        -- check if ready to harvest
+        -- Check if ready to harvest
         AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) >= minutes_to_harvest
-        -- check if wilted
+        -- Check if wilted
         AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) < minutes_to_harvest * 2
     ) AS h ON p.plot_num = h.plot_num AND p.owner = _username;
 
-    -- add sale and xp to user account
+    -- Remove stealer records from harvested plots
+    DELETE s FROM stealing s
+    JOIN (
+        SELECT plot_num FROM plot p
+        JOIN crop c ON p.crop_name = c.crop_name
+        WHERE owner = _username
+        -- Check if ready to harvest
+        AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) >= minutes_to_harvest
+        -- Check if wilted
+        AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) < minutes_to_harvest * 2
+    ) AS h ON s.plot_num = h.plot_num AND s.victim = _username;
+
+    -- Add sale and xp to user account
     UPDATE farmer SET wealth = wealth + @total_sale, xp = xp + @total_xp
     WHERE username = _username;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE steal(IN _stealer VARCHAR(255), IN _victim VARCHAR(255), IN _plot_num INT)
+BEGIN
+    -- Check if this plot had been stolen from before
+    SELECT COUNT(*) INTO @stolen FROM stealing
+    WHERE victim = _victim AND stealer = _stealer AND stolen_plot_num = _plot_num;
+
+    IF @stolen THEN
+        SET @yield_stolen := 0;
+        SET @xp_gained := 0;
+        SET @gold_gained := 0;
+        SET @crop_name := NULL;
+    ELSE
+        -- Generate random quantity to steal
+        SELECT LEAST(
+            -- Limited by yield remaining to steal
+            FLOOR(yield_of_crop * 0.2) - yield_stolen,
+            -- From 1% to 5%
+            FLOOR((FLOOR(RAND() * 5) + 1) * yield_of_crop / 100)
+        ) yield_stolen,
+        @yield_stolen * c.xp xp_gained,
+        @yield_stolen * c.sale_price sale_price,
+        c.crop_name
+        INTO @yield_stolen, @xp_gained, @gold_gained, @crop_name
+        FROM plot p
+        JOIN crop c ON p.crop_name = c.crop_name
+        WHERE owner = _victim AND plot_num = _plot_num;
+
+        -- Update stealing table
+        INSERT INTO stealing (stealer, victim, stolen_plot_num) VALUES (_stealer, _victim, _plot_num);
+    END IF;
+
+    UPDATE farmer
+    SET wealth = wealth + @gold_gained
+    WHERE username = _stealer;
+
+    UPDATE plot
+    SET yield_stolen = yield_stolen + @yield_stolen
+    WHERE owner = _victim AND plot_num = _plot_num;
+
+    SELECT @crop_name, @yield_stolen, @xp_gained, @gold_gained;
 END$$
 DELIMITER ;
 
