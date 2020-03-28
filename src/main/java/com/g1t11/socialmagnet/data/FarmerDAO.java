@@ -5,7 +5,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
@@ -45,9 +47,13 @@ public class FarmerDAO extends DAO {
         return f;
     }
 
-    public List<String> getInventoryCropNames(Farmer farmer) {
+    /**
+     * @param farmer The farmer whose inventory to access.
+     * @return A sorted map of the names of crops in an inventory with its corresponding quantities.
+     */
+    public Map<String, Integer> getInventoryCrops(Farmer farmer) {
         ResultSet rs = null;
-        List<String> invCropNames = new ArrayList<>();
+        Map<String, Integer> invCrops = new LinkedHashMap<>();
 
         String queryString = "CALL get_inventory(?)";
 
@@ -56,7 +62,7 @@ public class FarmerDAO extends DAO {
 
             rs = stmt.executeQuery();
             while(rs.next()) {
-                invCropNames.add(rs.getString("crop_name"));
+                invCrops.put(rs.getString("crop_name"), rs.getInt("quantity"));
             }
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
@@ -65,7 +71,7 @@ public class FarmerDAO extends DAO {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
 
-        return invCropNames;
+        return invCrops;
     }
 
     public List<Plot> getPlots(Farmer farmer) {

@@ -67,7 +67,7 @@ public class TestFarmerDAO {
         farmerDAO.plantCrop(me, 9, "Papaya");
     }
 
-    public void testGetInventoryCropNames() {
-        farmerDAO.getInventoryCropNames(me);
+    public void testGetInventoryCrops() {
+        farmerDAO.getInventoryCrops(me);
     }
 }
