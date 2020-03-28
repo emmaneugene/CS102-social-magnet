@@ -612,7 +612,7 @@ BEGIN
         AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) >= minutes_to_harvest
         -- Check if wilted
         AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) < minutes_to_harvest * 2
-    ) AS h ON s.plot_num = h.plot_num AND s.victim = _username;
+    ) AS h ON s.stolen_plot_num = h.plot_num AND s.victim = _username;
 
     -- Add sale and xp to user account
     UPDATE farmer SET wealth = wealth + @total_sale, xp = xp + @total_xp
