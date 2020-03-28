@@ -612,17 +612,13 @@ DELIMITER ;
  * STORE
  */
 
-CREATE PROCEDURE get_store_item()
+CREATE PROCEDURE get_store_items()
     SELECT * 
     FROM crop
     ORDER BY crop_name;
 
-CREATE PROCEDURE get_store_item_size()
-    SELECT count(*)
-    FROM crop;
-
 DELIMITER $$
-CREATE PROCEDURE purchaseCrop (IN _username VARCHAR(255), IN _crop_name VARCHAR(255), IN amount INT)
+CREATE PROCEDURE purchase_crop(IN _username VARCHAR(255), IN _crop_name VARCHAR(255), IN amount INT)
 BEGIN
     IF amount <= 0 THEN
         SIGNAL SQLSTATE '45000' SET message_text = 'Please choose a quantity bigger than 0.';
@@ -637,7 +633,7 @@ BEGIN
 	);
     
     IF @farmer_wealth < @purchase_cost THEN
-		SIGNAL SQLSTATE '45000' SET message_text = 'Insufficient funds to purchase crop.';
+        SELECT FALSE AS purchase_success;
 	ELSE
 		UPDATE farmer SET wealth = wealth - @purchase_cost WHERE username = _username;
         SET @crop_exist := (
@@ -649,6 +645,7 @@ BEGIN
 			INSERT INTO inventory (owner, crop_name, quantity) VALUES 
 			(_username, _crop_name, amount);
 		END IF;
+        SELECT TRUE AS purchase_success;
 	END IF;
 END$$
 DELIMITER ;

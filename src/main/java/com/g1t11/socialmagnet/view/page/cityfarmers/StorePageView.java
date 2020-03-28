@@ -26,13 +26,13 @@ public class StorePageView extends CityFarmersPageView {
     @Override
     public void display() {
         super.display();
-        System.out.println();
 
-        System.out.printf("Seeds vailable: \r\n");
+        System.out.println("Seeds available:");
 
         for (StoreComponent cropComp : cropComps) {
             cropComp.render();
         }
+        System.out.println();
     }
 
     private int getMaxCropNameLength(List<Crop> crops) {

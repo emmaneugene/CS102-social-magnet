@@ -33,7 +33,7 @@ public class StoreController extends Controller {
         // Refresh the current user's information
         me = farmerDAO.getFarmer(me);
         ((StorePageView) view).setFarmer(me);
-        storeItem = storeDAO.getStoreItem();
+        storeItem = storeDAO.getStoreItems();
         ((StorePageView) view).setCrops(storeItem);
         view.display();
     }
@@ -41,7 +41,7 @@ public class StoreController extends Controller {
     @Override
     public void handleInput() {
         PromptInput input = new PromptInput(Painter.paintf(
-            "[[{M}]]ain | City [[{F}]]armers | Select Choice ", 
+            "[[{M}]]ain | City [[{F}]]armers | Select Choice", 
             Painter.Color.YELLOW
         ));
         
@@ -73,23 +73,24 @@ public class StoreController extends Controller {
     }
 
     private void handleBuyQuantity(int index) {
-        PromptInput input = new PromptInput(Painter.paintf("Enter quantity ", Painter.Color.YELLOW));
+        PromptInput input = new PromptInput(Painter.paintf("Enter quantity", Painter.Color.YELLOW));
         try {
             int amount = Integer.parseInt(input.nextLine());
 
             if (amount <= 0) {
-                view.setStatus(String.format(Painter.paint("Please choose a quantity bigger than 0", Painter.Color.RED)));
+                view.setStatus(String.format(Painter.paint("Please choose a quantity bigger than 0.", Painter.Color.RED)));
                 return;
             }
 
-            Crop crop = storeDAO.getStoreCrop(index);
-            
+            Crop crop = storeItem.get(index - 1);
+
             if (storeDAO.purchaseCrop(me, crop, amount)) {
-                view.setStatus(
-                    String.format(Painter.paint("%s bags of seeds purchased for %d gold", Painter.Color.GREEN),
-                    amount, amount * crop.getCost()));
+                view.setStatus(String.format(
+                    Painter.paint("%s bags of seeds purchased for %d gold.", Painter.Color.GREEN),
+                    amount, amount * crop.getCost()
+                ));
             } else {
-                view.setStatus(String.format(Painter.paint("Insufficient funds to purchase crop", Painter.Color.RED)));
+                view.setStatus(String.format(Painter.paint("Insufficient funds to purchase crop.", Painter.Color.RED)));
             }
         } catch (NumberFormatException e) {
             view.setStatus(Painter.paint("Please input a valid amount to purchase.", Painter.Color.RED));

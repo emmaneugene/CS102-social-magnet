@@ -15,86 +15,58 @@ public class StoreDAO extends DAO {
         super(db);
     }
 
-    public List<Crop> getStoreItem() {
+    public List<Crop> getStoreItems() {
         ResultSet rs = null;
 
-        Crop[] emptyCrops = new Crop[this.getStoreItemSize()];
-        Arrays.fill(emptyCrops, new Crop());
-        List<Crop> storeItem = new ArrayList<>(Arrays.asList(emptyCrops));
+        List<Crop> storeItems = new ArrayList<>();
 
-        String queryString = "CALL get_store_item()";
+        String queryString = "CALL get_store_items()";
 
         try (PreparedStatement stmt = connection().prepareStatement(queryString);) {
             rs = stmt.executeQuery();
-            int index = 0;
+
             while (rs.next()) {
-                Crop c = new Crop(rs.getString("crop_name"), rs.getInt("cost"), rs.getInt("minutes_to_harvest"),
-                        rs.getInt("xp"), rs.getInt("min_yield"), rs.getInt("max_yield"), rs.getInt("sale_price"));
-                storeItem.set(index, c);
-                index++;
+                Crop c = new Crop(
+                    rs.getString("crop_name"),
+                    rs.getInt("cost"),
+                    rs.getInt("minutes_to_harvest"),
+                    rs.getInt("xp"),
+                    rs.getInt("min_yield"),
+                    rs.getInt("max_yield"),
+                    rs.getInt("sale_price"));
+                storeItems.add(c);
             }
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
             throw new DatabaseException(e);
         } finally {
-            try {
-                if (rs != null)
-                    rs.close();
-            } catch (SQLException e) {
-            }
+            try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
 
-        return storeItem;
-    }
-
-    public int getStoreItemSize() {
-        ResultSet rs = null;
-
-        int size = 0;
-        String queryString = "CALL get_store_item_size()";
-
-        try (PreparedStatement stmt = connection().prepareStatement(queryString);) {
-            rs = stmt.executeQuery();
-            while (rs.next()) {
-                size = rs.getInt("count(*)");
-            }
-        } catch (SQLException e) {
-            System.err.println("SQLException: " + e.getMessage());
-            throw new DatabaseException(e);
-        } finally {
-            try {
-                if (rs != null)
-                    rs.close();
-            } catch (SQLException e) {
-
-            }
-        }
-        return size;
-    }
-
-    public Crop getStoreCrop(int index) {
-        List<Crop> cropList = this.getStoreItem();
-        Object[] cropArray = cropList.toArray();
-        Crop crop = (Crop) cropArray[index - 1];
-        return crop;
+        return storeItems;
     }
 
     public boolean purchaseCrop(Farmer me, Crop crop, int amount) {
-        boolean result = false;
-        String queryString = "CALL purchaseCrop(?, ?, ?)";
+        ResultSet rs = null;
+
+        boolean isSuccessful = false;
+
+        String queryString = "CALL purchase_crop(?, ?, ?)";
         try (PreparedStatement stmt = connection().prepareStatement(queryString);) {
             stmt.setString(1, me.getUsername());
             stmt.setString(2, crop.getName());
             stmt.setInt(3, amount);
 
-            stmt.execute();
-            result = true;
+            rs = stmt.executeQuery();
+            rs.next();
+
+            isSuccessful = rs.getBoolean("purchase_success");
         } catch (SQLException e) {
-            result = false;
             System.err.println("SQLException: " + e.getMessage());
             throw new DatabaseException(e);
         } finally {
-            return result;
+            try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
+        return isSuccessful;
     }
 }
