@@ -77,6 +77,11 @@ public class StoreController extends Controller {
         try {
             int amount = Integer.parseInt(input.nextLine());
 
+            if (amount <= 0) {
+                view.setStatus(String.format(Painter.paint("Please choose a quantity bigger than 0", Painter.Color.RED)));
+                return;
+            }
+
             Crop crop = storeDAO.getStoreCrop(index);
             
             if (storeDAO.purchaseCrop(me, crop, amount)) {

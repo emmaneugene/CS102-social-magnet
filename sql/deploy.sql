@@ -624,6 +624,10 @@ CREATE PROCEDURE get_store_item_size()
 DELIMITER $$
 CREATE PROCEDURE purchaseCrop (IN _username VARCHAR(255), IN _crop_name VARCHAR(255), IN amount INT)
 BEGIN
+    IF amount <= 0 THEN
+        SIGNAL SQLSTATE '45000' SET message_text = 'Please choose a quantity bigger than 0.';
+    END IF;
+
 	SET @farmer_wealth := (
         SELECT wealth FROM farmer WHERE username = _username
     );
