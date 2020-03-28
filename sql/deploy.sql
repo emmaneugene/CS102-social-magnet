@@ -621,21 +621,30 @@ CREATE PROCEDURE get_store_item_size()
     SELECT count(*)
     FROM crop;
 
-CREATE PROCEDURE update_wealth_after_purchase(IN _username VARCHAR(255), IN amount INT)
-    UPDATE farmer SET wealth = wealth - amount WHERE username = _username;
-    
 DELIMITER $$
-CREATE PROCEDURE update_inventory (IN _username VARCHAR(255), IN _crop_name VARCHAR(255), IN amount INT)
+CREATE PROCEDURE purchaseCrop (IN _username VARCHAR(255), IN _crop_name VARCHAR(255), IN amount INT)
 BEGIN
-	SET @crop_exist := (
-        SELECT count(*) FROM inventory WHERE owner = _username AND crop_name = _crop_name
+	SET @farmer_wealth := (
+        SELECT wealth FROM farmer WHERE username = _username
     );
-    IF @crop_exist THEN 
-        UPDATE inventory SET quantity = quantity + amount WHERE owner = _username;
-        
+    
+    SET @purchase_cost := (
+		SELECT cost * amount FROM crop WHERE crop_name = _crop_name
+	);
+    
+    IF @farmer_wealth < @purchase_cost THEN
+		SIGNAL SQLSTATE '45000' SET message_text = 'Insufficient funds to purchase crop.';
 	ELSE
-		INSERT INTO inventory (owner, crop_name, quantity) VALUES 
-        (_username, _crop_name, amount);
+		UPDATE farmer SET wealth = wealth - @purchase_cost WHERE username = _username;
+        SET @crop_exist := (
+			SELECT count(*) FROM inventory WHERE owner = _username AND crop_name = _crop_name
+		);
+		IF @crop_exist THEN 
+			UPDATE inventory SET quantity = quantity + amount WHERE owner = _username;
+        ELSE
+			INSERT INTO inventory (owner, crop_name, quantity) VALUES 
+			(_username, _crop_name, amount);
+		END IF;
 	END IF;
 END$$
 DELIMITER ;

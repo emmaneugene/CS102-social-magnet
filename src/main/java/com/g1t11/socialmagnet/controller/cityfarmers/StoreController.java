@@ -6,6 +6,7 @@ import java.util.List;
 import com.g1t11.socialmagnet.controller.Controller;
 import com.g1t11.socialmagnet.controller.MainMenuController;
 import com.g1t11.socialmagnet.controller.Navigation;
+import com.g1t11.socialmagnet.data.FarmerDAO;
 import com.g1t11.socialmagnet.data.StoreDAO;
 import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
@@ -14,6 +15,7 @@ import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.cityfarmers.StorePageView;
 
 public class StoreController extends Controller {
+    FarmerDAO farmerDAO = new FarmerDAO(nav.database());
     StoreDAO storeDAO = new StoreDAO(nav.database());
 
     Farmer me;
@@ -29,7 +31,7 @@ public class StoreController extends Controller {
     @Override
     public void updateView() {
         // Refresh the current user's information
-        me = storeDAO.getFarmer(me);
+        me = farmerDAO.getFarmer(me);
         ((StorePageView) view).setFarmer(me);
         storeItem = storeDAO.getStoreItem();
         ((StorePageView) view).setCrops(storeItem);
@@ -76,15 +78,13 @@ public class StoreController extends Controller {
             int amount = Integer.parseInt(input.nextLine());
 
             Crop crop = storeDAO.getStoreCrop(index);
-
-            if (storeDAO.isAbleToPurchase(me, crop, amount)) {
-                storeDAO.purchaseCrop(me, crop, amount);
-                storeDAO.updateInventory(me, crop, amount);
+            
+            if (storeDAO.purchaseCrop(me, crop, amount)) {
                 view.setStatus(
                     String.format(Painter.paint("%s bags of seeds purchased for %d gold", Painter.Color.GREEN),
                     amount, amount * crop.getCost()));
             } else {
-                view.setStatus(String.format(Painter.paint("Unable to purchase", Painter.Color.RED)));
+                view.setStatus(String.format(Painter.paint("Insufficient funds to purchase crop", Painter.Color.RED)));
             }
         } catch (NumberFormatException e) {
             view.setStatus(Painter.paint("Please input a valid amount to purchase.", Painter.Color.RED));
