@@ -42,6 +42,8 @@ public class CityFarmersMainMenuController extends Controller {
                 nav.push(new InventoryController(nav, me));
                 break;
             case "4":
+                nav.push(new VisitFriendController(nav, me));
+                break;
             case "5":
             case "M":
                 nav.pop();
