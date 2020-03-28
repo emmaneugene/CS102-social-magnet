@@ -607,3 +607,35 @@ BEGIN
     WHERE username = _username;
 END$$
 DELIMITER ;
+
+/*
+ * STORE
+ */
+
+CREATE PROCEDURE get_store_item()
+    SELECT * 
+    FROM crop
+    ORDER BY crop_name;
+
+CREATE PROCEDURE get_store_item_size()
+    SELECT count(*)
+    FROM crop;
+
+CREATE PROCEDURE update_wealth_after_purchase(IN _username VARCHAR(255), IN amount INT)
+    UPDATE farmer SET wealth = wealth - amount WHERE username = _username;
+    
+DELIMITER $$
+CREATE PROCEDURE update_inventory (IN _username VARCHAR(255), IN _crop_name VARCHAR(255), IN amount INT)
+BEGIN
+	SET @crop_exist := (
+        SELECT count(*) FROM inventory WHERE owner = _username AND crop_name = _crop_name
+    );
+    IF @crop_exist THEN 
+        UPDATE inventory SET quantity = quantity + amount WHERE owner = _username;
+        
+	ELSE
+		INSERT INTO inventory (owner, crop_name, quantity) VALUES 
+        (_username, _crop_name, amount);
+	END IF;
+END$$
+DELIMITER ;

@@ -40,6 +40,18 @@ public class Crop {
         this.salePrice = salePrice;
     }
 
+    // Empty Crop
+    public Crop() {
+        this.name = "empty crop";
+        this.cost = 0;
+        this.minutesToHarvest = 0;
+        this.perUnitXP = 0;
+        this.yield = 0;
+        this.minYield = 0;
+        this.maxYield = 0;
+        this.salePrice = 0;
+    }
+
     public Crop(String name, int cost, int minutesToHarvest, int perUnitXP, int minYield, int maxYield, int salePrice) {
         this(name, cost, minutesToHarvest, perUnitXP, null, minYield, maxYield, salePrice);
     }
