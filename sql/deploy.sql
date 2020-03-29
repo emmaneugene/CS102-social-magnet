@@ -612,3 +612,45 @@ BEGIN
     WHERE username = _username;
 END$$
 DELIMITER ;
+
+/*
+ * STORE
+ */
+
+CREATE PROCEDURE get_store_items()
+    SELECT * 
+    FROM crop
+    ORDER BY crop_name;
+
+DELIMITER $$
+CREATE PROCEDURE purchase_crop(IN _username VARCHAR(255), IN _crop_name VARCHAR(255), IN amount INT)
+BEGIN
+    IF amount <= 0 THEN
+        SIGNAL SQLSTATE '45000' SET message_text = 'Please choose a quantity bigger than 0.';
+    END IF;
+
+	SET @farmer_wealth := (
+        SELECT wealth FROM farmer WHERE username = _username
+    );
+    
+    SET @purchase_cost := (
+		SELECT cost * amount FROM crop WHERE crop_name = _crop_name
+	);
+    
+    IF @farmer_wealth < @purchase_cost THEN
+        SELECT FALSE AS purchase_success;
+	ELSE
+		UPDATE farmer SET wealth = wealth - @purchase_cost WHERE username = _username;
+        SET @crop_exist := (
+			SELECT count(*) FROM inventory WHERE owner = _username AND crop_name = _crop_name
+		);
+		IF @crop_exist THEN 
+			UPDATE inventory SET quantity = quantity + amount WHERE owner = _username;
+        ELSE
+			INSERT INTO inventory (owner, crop_name, quantity) VALUES 
+			(_username, _crop_name, amount);
+		END IF;
+        SELECT TRUE AS purchase_success;
+	END IF;
+END$$
+DELIMITER ;
