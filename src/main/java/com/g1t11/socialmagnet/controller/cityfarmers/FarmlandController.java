@@ -1,7 +1,9 @@
 package com.g1t11.socialmagnet.controller.cityfarmers;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.g1t11.socialmagnet.controller.Controller;
 import com.g1t11.socialmagnet.controller.MainMenuController;
@@ -20,7 +22,7 @@ public class FarmlandController extends Controller {
 
     List<Plot> plots = new ArrayList<>();
 
-    List<String> invCropNames = new ArrayList<>();
+    Map<String, Integer> invCrops = new LinkedHashMap<>();
 
     private static final int costToClearWilted = 5;
 
@@ -37,7 +39,8 @@ public class FarmlandController extends Controller {
         ((FarmlandPageView) view).setFarmer(me);
         plots = farmerDAO.getPlots(me);
         ((FarmlandPageView) view).setPlots(plots);
-        invCropNames = farmerDAO.getInventoryCropNames(me);
+        invCrops = farmerDAO.getInventoryCrops(me);
+        List<String> invCropNames = List.of(invCrops.keySet().toArray(new String[0]));
         ((FarmlandPageView) view).setInventoryCropNames(invCropNames);
         view.display();
     }
@@ -67,7 +70,7 @@ public class FarmlandController extends Controller {
     }
 
     private void handlePlant(String choice) {
-        if (invCropNames.size() == 0) {
+        if (invCrops.size() == 0) {
             view.setStatus(Painter.paint("No seeds in your inventory!", Painter.Color.RED));
             return;
         }
@@ -81,7 +84,7 @@ public class FarmlandController extends Controller {
                 view.setStatus(Painter.paint("Cannot plant on an existing crop.", Painter.Color.RED));
                 return;
             }
-            String toPlant = handleInventory();
+            String toPlant = getCropNameFromInventory();
             if (toPlant == null) return;
             farmerDAO.plantCrop(me, index, toPlant);
             view.setStatus(String.format(
@@ -93,7 +96,7 @@ public class FarmlandController extends Controller {
         }
     }
 
-    private String handleInventory() {
+    private String getCropNameFromInventory() {
         ((FarmlandPageView) view).displayInvMenu();
         PromptInput input = new PromptInput(Painter.paintf(
             "[[{M}]]ain | City [[{F}]]armers",
@@ -110,19 +113,18 @@ public class FarmlandController extends Controller {
             nav.popTo(CityFarmersMainMenuController.class);
             return null;
         } else {
-            return handleSelectCrop(choice);
+            return selectCropName(choice);
         }
     }
 
-    private String handleSelectCrop(String choice) {
+    private String selectCropName(String choice) {
         try {
             int index = Integer.parseInt(choice);
-            List<String> cropNames = farmerDAO.getInventoryCropNames(me);
-            if (index <= 0 || index > cropNames.size()) {
+            if (index <= 0 || index > invCrops.size()) {
                 view.setStatus(Painter.paint("Index out of range.", Painter.Color.RED));
                 return null;
             }
-            return cropNames.get(index - 1);
+            return invCrops.keySet().toArray(new String[0])[index - 1];
         } catch (NumberFormatException e) {
             view.setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
         }

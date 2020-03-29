@@ -12,6 +12,7 @@ import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.PromptInput;
+import com.g1t11.socialmagnet.util.TextUtils;
 import com.g1t11.socialmagnet.view.page.cityfarmers.StorePageView;
 
 public class StoreController extends Controller {
@@ -86,8 +87,8 @@ public class StoreController extends Controller {
 
             if (storeDAO.purchaseCrop(me, crop, amount)) {
                 view.setStatus(String.format(
-                    Painter.paint("%s bags of seeds purchased for %d gold.", Painter.Color.GREEN),
-                    amount, amount * crop.getCost()
+                    Painter.paint("%s of seeds purchased for %d gold.", Painter.Color.GREEN),
+                    TextUtils.countedWord(amount, "bag", "bags"), amount * crop.getCost()
                 ));
             } else {
                 view.setStatus(String.format(Painter.paint("Insufficient funds to purchase crop.", Painter.Color.RED)));
