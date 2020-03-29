@@ -88,7 +88,7 @@ INSERT INTO plot (owner, plot_num, crop_name, time_planted, yield_of_crop, yield
 ("britney", 2, "Pumpkin",    DATE_SUB(NOW(), INTERVAL  29 MINUTE), 100, 20),
 ("britney", 3, "Watermelon", DATE_SUB(NOW(), INTERVAL  29 MINUTE), 400, 20);
 
-INSERT INTO stealing (stealer, victim, stolen_plot_num) VALUES
+INSERT INTO stealing (stealer, victim, plot_num) VALUES
 ("britney", "adam", 1),
 ("charlie", "adam", 1),
 ("danny",   "adam", 1),

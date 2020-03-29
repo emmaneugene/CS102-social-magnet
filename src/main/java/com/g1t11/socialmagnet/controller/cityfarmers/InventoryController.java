@@ -20,7 +20,7 @@ public class InventoryController extends Controller {
     @Override
     public void handleInput() {
         PromptInput input = new PromptInput(Painter.paintf(
-            "[[{M}]]ain | City [[{F}]]armers | Select choice",
+            "[[{M}]]ain | City [[{F}]]armers",
             Painter.Color.YELLOW
         ));
 
