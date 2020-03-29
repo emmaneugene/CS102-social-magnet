@@ -36,6 +36,6 @@ public class FriendsWallPageView extends WallPageView {
     }
 
     private void injectGreeting() {
-        setStatus(getStatus() + String.format("Welcome, %s!\n", me.getFullname()));
+        appendStatus(String.format("Welcome, %s!\n", me.getFullname()));
     }
 }

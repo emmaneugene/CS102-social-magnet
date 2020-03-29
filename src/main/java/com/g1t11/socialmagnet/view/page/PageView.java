@@ -29,11 +29,15 @@ public abstract class PageView {
     }
 
     public void setStatus(String status) {
-        this.status = status;
+        this.status = status + "\n";
     }
 
-    public String getStatus() {
-        return status;
+    public void appendStatus(String status) {
+        if (this.status == null) {
+            setStatus(status);
+            return;
+        }
+        this.status += status + "\n";
     }
 
     public void clearStatus() {
@@ -52,7 +56,7 @@ public abstract class PageView {
         clearScreen();
         displayHeader();
         if (status != null) {
-            System.out.println(status);
+            System.out.print(status);
             clearStatus();
         }
     }
