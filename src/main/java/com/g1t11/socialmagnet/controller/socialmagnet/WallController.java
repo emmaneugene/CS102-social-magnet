@@ -1,28 +1,30 @@
-package com.g1t11.socialmagnet.controller;
+package com.g1t11.socialmagnet.controller.socialmagnet;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.g1t11.socialmagnet.controller.Navigation;
 import com.g1t11.socialmagnet.data.FarmerDAO;
 import com.g1t11.socialmagnet.data.ThreadDAO;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.social.Thread;
+import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.PromptInput;
-import com.g1t11.socialmagnet.view.page.WallPageView;
+import com.g1t11.socialmagnet.view.page.socialmagnet.WallPageView;
 
-public class WallController extends Controller {
+public class WallController extends SocialMagnetController {
     protected FarmerDAO farmerDAO = new FarmerDAO(database());
     protected ThreadDAO threadDAO = new ThreadDAO(database());
     
     protected Farmer farmerToDisplay;
     protected List<Thread> wallThreads;
 
-    public WallController(Navigation nav) {
-        super(nav);
-        farmerToDisplay = farmerDAO.getFarmer(nav.session().currentUser());
+    public WallController(Navigation nav, User me) {
+        super(nav, me);
+        farmerToDisplay = farmerDAO.getFarmer(me);
         view = new WallPageView(farmerToDisplay);
     }
 
@@ -57,7 +59,7 @@ public class WallController extends Controller {
             if (index <= 0 || index > wallThreads.size()) {
                 view.setStatus(Painter.paint("Index out of range.", Painter.Color.RED));
             } else {
-                nav.push(new ThreadController(nav, index, wallThreads.get(index - 1)));
+                nav.push(new ThreadController(nav, me, index, wallThreads.get(index - 1)));
             }
         } catch (NumberFormatException e) {
             view.setStatus(Painter.paint("Use T<id> to select a thread.", Painter.Color.RED));
@@ -70,7 +72,7 @@ public class WallController extends Controller {
         String threadContent = input.nextLine();
         List<String> tags = getRawUserTags(threadContent);
         threadDAO.addThread(
-            nav.session().currentUser().getUsername(),
+            me.getUsername(),
             farmerToDisplay.getUsername(),
             threadContent,
             tags

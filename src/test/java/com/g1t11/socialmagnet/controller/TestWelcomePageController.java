@@ -1,4 +1,5 @@
 package com.g1t11.socialmagnet.controller;
+
 import com.g1t11.socialmagnet.TestApp;
 
 import org.junit.Assert;

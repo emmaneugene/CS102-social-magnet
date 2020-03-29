@@ -1,6 +1,7 @@
 package com.g1t11.socialmagnet.controller;
 
 import com.g1t11.socialmagnet.TestApp;
+import com.g1t11.socialmagnet.controller.socialmagnet.MainMenuController;
 
 import org.junit.Assert;
 import org.junit.Before;

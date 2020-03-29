@@ -1,4 +1,4 @@
-package com.g1t11.socialmagnet.view.page;
+package com.g1t11.socialmagnet.view.page.socialmagnet;
 
 import java.util.List;
 

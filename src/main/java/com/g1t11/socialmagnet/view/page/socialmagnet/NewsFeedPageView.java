@@ -1,10 +1,11 @@
-package com.g1t11.socialmagnet.view.page;
+package com.g1t11.socialmagnet.view.page.socialmagnet;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.view.component.SimpleThreadComponent;
+import com.g1t11.socialmagnet.view.page.PageView;
 
 public class NewsFeedPageView extends PageView {
     private List<SimpleThreadComponent> threadComps = new ArrayList<>(5);

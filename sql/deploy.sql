@@ -211,19 +211,17 @@ CREATE PROCEDURE get_friends_of_friend_with_common(IN _me VARCHAR(255), IN _frie
 /*
  * CREDENTIALS
  */
-CREATE PROCEDURE verify_credentials(IN _username VARCHAR(255), IN _password VARCHAR(255))
-    SELECT COUNT(*) AS is_valid FROM user WHERE username = _username and pwd = sha1(_password);
-
 CREATE PROCEDURE user_exists(IN _username VARCHAR(255))
-    SELECT COUNT(*) AS user_exists FROM user WHERE username = _username;
+    SELECT COUNT(*) user_exists FROM user WHERE username = _username;
 
-/*
- * UPDATING USERS
- */
+CREATE PROCEDURE login(IN _username VARCHAR(255), IN _pwd VARCHAR(255))
+    SELECT username, fullname FROM user
+    WHERE username = _username AND pwd = SHA1(_pwd);
+
 DELIMITER $$
-CREATE PROCEDURE add_user(IN _username VARCHAR(255), IN _fullname VARCHAR(255), IN _pwd VARCHAR(255))
+CREATE PROCEDURE register(IN _username VARCHAR(255), IN _fullname VARCHAR(255), IN _pwd VARCHAR(255))
 BEGIN
-    INSERT INTO user (username, fullname, pwd) VALUES (_username, _fullname, sha1(_pwd));
+    INSERT INTO user (username, fullname, pwd) VALUES (_username, _fullname, SHA1(_pwd));
     INSERT INTO farmer (username, xp, wealth) VALUES (_username, 0, 50);
 END$$
 DELIMITER ;

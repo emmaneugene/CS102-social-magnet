@@ -1,7 +1,7 @@
 package com.g1t11.socialmagnet.controller.cityfarmers;
 
-import com.g1t11.socialmagnet.controller.MainMenuController;
 import com.g1t11.socialmagnet.controller.Navigation;
+import com.g1t11.socialmagnet.controller.socialmagnet.MainMenuController;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.PromptInput;
