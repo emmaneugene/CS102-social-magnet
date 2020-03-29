@@ -378,34 +378,34 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE toggle_like_thread(IN _thread_id INT, IN _username VARCHAR(255))
 BEGIN
-	SET @liked := (
+    SET @liked := (
         SELECT COUNT(*)
-	    FROM liker l NATURAL JOIN user u
-	    WHERE l.thread_id = _thread_id
-	    AND l.username = _username
+        FROM liker l NATURAL JOIN user u
+        WHERE l.thread_id = _thread_id
+        AND l.username = _username
     );
-	IF (@liked = 0) THEN
-		INSERT INTO liker (username, thread_id) VALUES (_username, _thread_id);
-	ELSE
-	    DELETE FROM liker WHERE username = _username AND thread_id = _thread_id;
-   	END IF;
+    IF (@liked = 0) THEN
+        INSERT INTO liker (username, thread_id) VALUES (_username, _thread_id);
+    ELSE
+        DELETE FROM liker WHERE username = _username AND thread_id = _thread_id;
+    END IF;
 END$$
 DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE toggle_dislike_thread(IN _thread_id INT, IN _username VARCHAR(255))
 BEGIN
-	SET @disliked := (
+    SET @disliked := (
         SELECT COUNT(*)
-	    FROM disliker l NATURAL JOIN user u
-	    WHERE l.thread_id = _thread_id
-	    AND l.username = _username
+        FROM disliker l NATURAL JOIN user u
+        WHERE l.thread_id = _thread_id
+        AND l.username = _username
     );
-	IF (@disliked = 0) THEN
-		INSERT INTO disliker (username, thread_id) VALUES (_username, _thread_id);
-	ELSE
-	    DELETE FROM disliker WHERE username = _username AND thread_id = _thread_id;
-   	END IF;
+    IF (@disliked = 0) THEN
+        INSERT INTO disliker (username, thread_id) VALUES (_username, _thread_id);
+    ELSE
+        DELETE FROM disliker WHERE username = _username AND thread_id = _thread_id;
+    END IF;
 END$$
 DELIMITER ;
 
@@ -697,28 +697,28 @@ BEGIN
         SIGNAL SQLSTATE '45000' SET message_text = 'Please choose a quantity bigger than 0.';
     END IF;
 
-	SET @farmer_wealth := (
+    SET @farmer_wealth := (
         SELECT wealth FROM farmer WHERE username = _username
     );
     
     SET @purchase_cost := (
-		SELECT cost * _amount FROM crop WHERE crop_name = _crop_name
-	);
+        SELECT cost * _amount FROM crop WHERE crop_name = _crop_name
+    );
     
     IF @farmer_wealth < @purchase_cost THEN
         SELECT FALSE AS purchase_success;
-	ELSE
-		UPDATE farmer SET wealth = wealth - @purchase_cost WHERE username = _username;
+    ELSE
+        UPDATE farmer SET wealth = wealth - @purchase_cost WHERE username = _username;
         SET @crop_exist := (
-			SELECT count(*) FROM inventory WHERE owner = _username AND crop_name = _crop_name
-		);
-		IF @crop_exist THEN 
-			UPDATE inventory SET quantity = quantity + _amount WHERE owner = _username;
+            SELECT count(*) FROM inventory WHERE owner = _username AND crop_name = _crop_name
+        );
+        IF @crop_exist THEN 
+            UPDATE inventory SET quantity = quantity + _amount WHERE owner = _username;
         ELSE
-			INSERT INTO inventory (owner, crop_name, quantity) VALUES 
-			(_username, _crop_name, _amount);
-		END IF;
+            INSERT INTO inventory (owner, crop_name, quantity) VALUES 
+            (_username, _crop_name, _amount);
+        END IF;
         SELECT TRUE AS purchase_success;
-	END IF;
+    END IF;
 END$$
 DELIMITER ;
