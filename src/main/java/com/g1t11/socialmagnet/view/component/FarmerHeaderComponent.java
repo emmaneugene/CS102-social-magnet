@@ -15,7 +15,7 @@ public class FarmerHeaderComponent implements Component {
         Painter.Color.BLUE
     );
 
-    public FarmerHeaderComponent(Farmer me) {
+    public void setFarmer(Farmer me) {
         this.me = me;
     }
 

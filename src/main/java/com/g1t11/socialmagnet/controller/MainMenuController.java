@@ -26,7 +26,7 @@ public class MainMenuController extends Controller {
                 nav.push(new FriendsController(nav));
                 break;
             case "4":
-                nav.push(new CityFarmersMainMenuController(nav));
+                nav.push(new CityFarmersMainMenuController(nav, nav.session().currentUser()));
                 break;
             case "5":
                 nav.session().logout();

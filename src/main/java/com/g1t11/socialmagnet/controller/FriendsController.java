@@ -31,7 +31,6 @@ public class FriendsController extends Controller {
         requestUsernames = userDAO.getRequestUsernames(currentUser);
         ((FriendsPageView) view).setFriends(friends);
         ((FriendsPageView) view).setRequestUsernames(requestUsernames);
-        view.display();
     }
 
     @Override

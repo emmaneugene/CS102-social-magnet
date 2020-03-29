@@ -88,16 +88,16 @@ INSERT INTO plot (owner, plot_num, crop_name, time_planted, yield_of_crop, yield
 ("britney", 2, "Pumpkin",    DATE_SUB(NOW(), INTERVAL  29 MINUTE), 100, 20),
 ("britney", 3, "Watermelon", DATE_SUB(NOW(), INTERVAL  29 MINUTE), 400, 20);
 
-INSERT INTO stealing (victim, stolen_plot_num, stealer) VALUES
-("adam", 1, "britney"),
-("adam", 1, "charlie"),
-("adam", 1, "danny"),
-("adam", 2, "britney"),
-("adam", 2, "charlie"),
-("adam", 2, "danny"),
-("adam", 2, "elijah"),
-("adam", 3, "britney"),
-("adam", 3, "charlie");
+INSERT INTO stealing (stealer, victim, plot_num) VALUES
+("britney", "adam", 1),
+("charlie", "adam", 1),
+("danny",   "adam", 1),
+("britney", "adam", 2),
+("charlie", "adam", 2),
+("danny",   "adam", 2),
+("elijah",  "adam", 2),
+("britney", "adam", 3),
+("charlie", "adam", 3);
 
 INSERT INTO inventory (owner, crop_name, quantity) VALUES
 ("adam", "Papaya", 1),

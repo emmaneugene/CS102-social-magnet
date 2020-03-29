@@ -126,11 +126,11 @@ CREATE TABLE plot (
 );
 
 CREATE TABLE stealing (
-    victim          VARCHAR(255) BINARY NOT NULL,
-    stolen_plot_num INT                 NOT NULL,
     stealer         VARCHAR(255) BINARY NOT NULL,
-    PRIMARY KEY (victim, stolen_plot_num, stealer),
-    FOREIGN KEY (victim, stolen_plot_num) REFERENCES plot (owner, plot_num) ON DELETE CASCADE,
+    victim          VARCHAR(255) BINARY NOT NULL,
+    plot_num INT                 NOT NULL,
+    PRIMARY KEY (victim, plot_num, stealer),
+    FOREIGN KEY (victim, plot_num) REFERENCES plot (owner, plot_num) ON DELETE CASCADE,
     FOREIGN KEY (stealer)                 REFERENCES farmer (username)
 );
 
@@ -518,6 +518,17 @@ FOR EACH ROW BEGIN
 END$$
 DELIMITER ;
 
+/*
+ * Ensures stealing records for a given plot are reset when the plot is cleared.
+ */
+DELIMITER $$
+CREATE TRIGGER clear_steal_record BEFORE DELETE ON plot
+FOR EACH ROW BEGIN
+    DELETE FROM stealing
+    WHERE victim = OLD.owner AND plot_num = OLD.plot_num;
+END$$
+DELIMITER ;
+
 DELIMITER $$
 CREATE PROCEDURE plant_crop_auto_yield(IN _username VARCHAR(255), IN _plot_num INT, IN _crop_name VARCHAR(255))
 BEGIN
@@ -555,7 +566,7 @@ END$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE clear_plot_update_wealth(IN _username VARCHAR(255), IN _plot_num INT)
+CREATE PROCEDURE clear_plot(IN _username VARCHAR(255), IN _plot_num INT)
 BEGIN
     SET @is_wilted := (
         SELECT COUNT(*) FROM plot p
@@ -582,34 +593,93 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE harvest(IN _username VARCHAR(255))
 BEGIN
-    -- get total sale price and xp gained
+    DROP TEMPORARY TABLE IF EXISTS harvested_crop;
+
+    CREATE TEMPORARY TABLE harvested_crop
+    SELECT plot_num FROM plot p
+    JOIN crop c ON p.crop_name = c.crop_name
+    WHERE owner = _username
+    -- Check if ready to harvest
+    AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) >= minutes_to_harvest
+    -- Check if wilted
+    AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) < minutes_to_harvest * 2;
+
+    -- Get total sale price and xp gained
     SELECT IFNULL(SUM(sale_price * (yield_of_crop - yield_stolen)), 0),
-    IFNULL(SUM(xp * (yield_of_crop - yield_stolen)), 0) INTO @total_sale, @total_xp FROM (
-        SELECT plot_num FROM plot p
-        JOIN crop c ON p.crop_name = c.crop_name
-        WHERE owner = _username
-        -- check if ready to harvest
-        AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) >= minutes_to_harvest
-        -- check if wilted
-        AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) < minutes_to_harvest * 2
-    ) AS h JOIN plot p ON h.plot_num = p.plot_num AND p.owner = _username
+    IFNULL(SUM(xp * (yield_of_crop - yield_stolen)), 0) INTO @total_sale, @total_xp
+    FROM harvested_crop h
+    JOIN plot p ON h.plot_num = p.plot_num AND p.owner = _username
     JOIN crop c ON p.crop_name = c.crop_name;
 
-    -- clear plots that were harvested
+    -- Clear plots that were harvested
     DELETE p FROM plot p
-    JOIN (
-        SELECT plot_num FROM plot p
-        JOIN crop c ON p.crop_name = c.crop_name
-        WHERE owner = _username
-        -- check if ready to harvest
-        AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) >= minutes_to_harvest
-        -- check if wilted
-        AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) < minutes_to_harvest * 2
-    ) AS h ON p.plot_num = h.plot_num AND p.owner = _username;
+    JOIN harvested_crop h ON p.plot_num = h.plot_num AND p.owner = _username;
 
-    -- add sale and xp to user account
+    -- Add sale and xp to user account
     UPDATE farmer SET wealth = wealth + @total_sale, xp = xp + @total_xp
     WHERE username = _username;
+
+    DROP TEMPORARY TABLE harvested_crop;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE steal(IN _stealer VARCHAR(255), IN _victim VARCHAR(255))
+BEGIN
+    DROP TEMPORARY TABLE IF EXISTS stolen_crop;
+
+    CREATE TEMPORARY TABLE stolen_crop
+    -- Generate random quantity of stolen crops
+    SELECT @yield_stolen := LEAST(
+        -- Limit stolen yield to the remaining yield available
+        FLOOR(yield_of_crop * 0.2) - yield_stolen,
+        -- Random int percentage between 1-5% inclusive
+        FLOOR((FLOOR(RAND() * 5) + 1) * yield_of_crop / 100)
+    ) yield_stolen,
+    -- Get the XP gained from yield stolen
+    @yield_stolen * c.xp xp_gained,
+    -- Get the wealth gained from yield stolen
+    @yield_stolen * c.sale_price wealth_gained,
+    p.plot_num, c.crop_name FROM (
+        -- Set of harvestable crops
+        SELECT plot_num FROM plot p
+        JOIN crop c ON p.crop_name = c.crop_name
+        WHERE owner = _victim
+        -- Check if ready to harvest
+        AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) >= minutes_to_harvest
+        -- Check if wilted
+        AND TIMESTAMPDIFF(MINUTE, p.time_planted, NOW()) < minutes_to_harvest * 2
+    ) AS h JOIN plot p ON h.plot_num = p.plot_num AND p.owner = _victim
+    JOIN crop c ON p.crop_name = c.crop_name
+    -- Only allow crops that were not previously stolen
+    WHERE p.plot_num NOT IN (
+        SELECT plot_num FROM stealing
+        WHERE stealer = _stealer AND victim = _victim
+    );
+
+    -- Update victim's plots
+    UPDATE plot p
+    JOIN stolen_crop s ON p.plot_num = s.plot_num AND p.owner = _victim
+    SET p.yield_stolen = p.yield_stolen + s.yield_stolen;
+
+    -- Update stealer's XP and wealth
+    SELECT IFNULL(SUM(wealth_gained), 0), IFNULL(SUM(xp_gained), 0) INTO @total_wealth_gained, @total_xp_gained FROM stolen_crop;
+    UPDATE farmer
+    SET
+        wealth = wealth + @total_wealth_gained,
+        xp = xp + @total_xp_gained
+    WHERE username = _stealer;
+
+    -- Add stealing record
+    INSERT INTO stealing (stealer, victim, plot_num)
+    SELECT _stealer, _victim, plot_num FROM stolen_crop;
+
+    -- Return all stolen crops classified by crop name
+    SELECT crop_name, SUM(yield_stolen) quantity, SUM(xp_gained) total_xp_gained, SUM(wealth_gained) total_wealth_gained FROM stolen_crop
+    GROUP BY crop_name
+    ORDER BY crop_name;
+
+    DROP TEMPORARY TABLE stolen_crop;
 END$$
 DELIMITER ;
 
@@ -623,9 +693,9 @@ CREATE PROCEDURE get_store_items()
     ORDER BY crop_name;
 
 DELIMITER $$
-CREATE PROCEDURE purchase_crop(IN _username VARCHAR(255), IN _crop_name VARCHAR(255), IN amount INT)
+CREATE PROCEDURE purchase_crop(IN _username VARCHAR(255), IN _crop_name VARCHAR(255), IN _amount INT)
 BEGIN
-    IF amount <= 0 THEN
+    IF _amount <= 0 THEN
         SIGNAL SQLSTATE '45000' SET message_text = 'Please choose a quantity bigger than 0.';
     END IF;
 
@@ -634,7 +704,7 @@ BEGIN
     );
     
     SET @purchase_cost := (
-		SELECT cost * amount FROM crop WHERE crop_name = _crop_name
+		SELECT cost * _amount FROM crop WHERE crop_name = _crop_name
 	);
     
     IF @farmer_wealth < @purchase_cost THEN
@@ -645,10 +715,10 @@ BEGIN
 			SELECT count(*) FROM inventory WHERE owner = _username AND crop_name = _crop_name
 		);
 		IF @crop_exist THEN 
-			UPDATE inventory SET quantity = quantity + amount WHERE owner = _username;
+			UPDATE inventory SET quantity = quantity + _amount WHERE owner = _username;
         ELSE
 			INSERT INTO inventory (owner, crop_name, quantity) VALUES 
-			(_username, _crop_name, amount);
+			(_username, _crop_name, _amount);
 		END IF;
         SELECT TRUE AS purchase_success;
 	END IF;

@@ -5,21 +5,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.g1t11.socialmagnet.controller.Controller;
 import com.g1t11.socialmagnet.controller.MainMenuController;
 import com.g1t11.socialmagnet.controller.Navigation;
-import com.g1t11.socialmagnet.data.FarmerDAO;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.farm.Plot;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.cityfarmers.FarmlandPageView;
 
-public class FarmlandController extends Controller {
-    FarmerDAO farmerDAO = new FarmerDAO(nav.database());
-
-    Farmer me;
-
+public class FarmlandController extends CityFarmersController {
     List<Plot> plots = new ArrayList<>();
 
     Map<String, Integer> invCrops = new LinkedHashMap<>();
@@ -27,22 +21,19 @@ public class FarmlandController extends Controller {
     private static final int costToClearWilted = 5;
 
     public FarmlandController(Navigation nav, Farmer me) {
-        super(nav);
+        super(nav, me);
         this.me = me;
-        view = new FarmlandPageView(me);
+        view = new FarmlandPageView();
     }
 
     @Override
     public void updateView() {
-        // Refresh the current user's information
-        me = farmerDAO.getFarmer(me);
-        ((FarmlandPageView) view).setFarmer(me);
+        super.updateView();
         plots = farmerDAO.getPlots(me);
         ((FarmlandPageView) view).setPlots(plots);
         invCrops = farmerDAO.getInventoryCrops(me);
         List<String> invCropNames = List.of(invCrops.keySet().toArray(new String[0]));
         ((FarmlandPageView) view).setInventoryCropNames(invCropNames);
-        view.display();
     }
 
     @Override

@@ -12,6 +12,7 @@ import java.util.Map;
 import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.farm.Plot;
+import com.g1t11.socialmagnet.model.farm.StealingRecord;
 import com.g1t11.socialmagnet.model.social.User;
 
 public class FarmerDAO extends DAO {
@@ -127,7 +128,7 @@ public class FarmerDAO extends DAO {
     }
 
     public void clearPlotUpdateWealth(Farmer farmer, int plotNumber) {
-        String queryString = "CALL clear_plot_update_wealth(?, ?)";
+        String queryString = "CALL clear_plot(?, ?)";
 
         try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             stmt.setString(1, farmer.getUsername());
@@ -151,5 +152,34 @@ public class FarmerDAO extends DAO {
             System.err.println("SQLException: " + e.getMessage());
             throw new DatabaseException(e);
         }
+    }
+
+    public List<StealingRecord> steal(Farmer stealer, Farmer victim) {
+        ResultSet rs = null;
+        List<StealingRecord> stolenCrops = new ArrayList<>();
+
+        String queryString = "CALL steal(?, ?)";
+
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+            stmt.setString(1, stealer.getUsername());
+            stmt.setString(2, victim.getUsername());
+
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                StealingRecord sr = new StealingRecord(
+                    rs.getString("crop_name"),
+                    rs.getInt("quantity"),
+                    rs.getInt("total_xp_gained"),
+                    rs.getInt("total_wealth_gained"));
+                stolenCrops.add(sr);
+            }
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+            throw new DatabaseException(e);
+        } finally {
+            try { if (rs != null) rs.close(); } catch (SQLException e) {}
+        }
+        
+        return stolenCrops;
     }
 }
