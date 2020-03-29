@@ -67,11 +67,11 @@ public class ThreadController extends SocialMagnetController {
         if (isRemovable()) {
             threadDAO.deleteThread(thread, me);
             nav.pop();
-            nav.currentController().view.setStatus(Painter.paint("Successfully removed post!", Painter.Color.GREEN));
+            nav.currController().setStatus(Painter.paint("Successfully removed post!", Painter.Color.GREEN));
         } else if (thread.isTagged()) {
             threadDAO.removeTag(thread, me);
             nav.pop();
-            nav.currentController().view.setStatus(Painter.paint("Successfully untagged post!", Painter.Color.GREEN));
+            nav.currController().setStatus(Painter.paint("Successfully untagged post!", Painter.Color.GREEN));
         }
     }
 

@@ -39,7 +39,7 @@ public class Navigation {
         navigationStack.add(first);
     }
 
-    public Controller currentController() {
+    public Controller currController() {
         int size = navigationStack.size();
         if (size == 0) return null;
         return navigationStack.get(size - 1);
@@ -71,7 +71,7 @@ public class Navigation {
      * @param classToFind The class of the type of controller to find.
      */
     public <T extends Controller> void popTo(Class<T> classToFind) {
-        while (navigationStack.size() > 1 && !currentController().getClass().equals(classToFind)) {
+        while (navigationStack.size() > 1 && !currController().getClass().equals(classToFind)) {
             pop();
         }
     }

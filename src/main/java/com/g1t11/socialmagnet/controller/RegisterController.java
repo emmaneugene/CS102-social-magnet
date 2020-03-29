@@ -21,14 +21,14 @@ public class RegisterController extends Controller {
 
         if (!InputValidator.isAlphanumeric(username)) {
             nav.pop();
-            nav.currentController().view.setStatus(Painter.paint(
+            nav.currController().setStatus(Painter.paint(
                 "Username should only contain alphanumeric characters.", Painter.Color.RED));
             return;
         }
 
         if (credDAO.userExists(username)) {
             nav.pop();
-            nav.currentController().view.setStatus(String.format(Painter.paint(
+            nav.currController().setStatus(String.format(Painter.paint(
                 "%s already exists. Choose another username.", Painter.Color.RED), username));
             return;
         }
@@ -44,12 +44,12 @@ public class RegisterController extends Controller {
 
         if (!password.equals(passwordCheck)) {
             nav.pop();
-            nav.currentController().view.setStatus(Painter.paint("Passwords do not match.", Painter.Color.RED));
+            nav.currController().setStatus(Painter.paint("Passwords do not match.", Painter.Color.RED));
             return;
         }
 
         credDAO.register(username, fullname, password);
         nav.pop();
-        nav.currentController().view.setStatus(String.format(Painter.paint("Registered %s successfully!", Painter.Color.GREEN), username));
+        nav.currController().setStatus(String.format(Painter.paint("Registered %s successfully!", Painter.Color.GREEN), username));
     }
 }

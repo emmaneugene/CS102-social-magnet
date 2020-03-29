@@ -26,7 +26,7 @@ public class LoginController extends Controller {
         User me = credDAO.login(username, password);
         nav.popToFirst();
         if (me == null) {
-            nav.currentController().view.setStatus(Painter.paint("Login error! Please try again.", Painter.Color.RED));
+            nav.currController().setStatus(Painter.paint("Login error! Please try again.", Painter.Color.RED));
         } else {
             nav.push(new MainMenuController(nav, me));
         }

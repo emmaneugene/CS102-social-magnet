@@ -29,8 +29,8 @@ public class TestLoginPageController extends TestApp {
     @Test
     public void testGoToMainMenu() {
         systemInMock.provideLines("adam", "maroon5");
-        app.nav.currentController().run();
+        app.nav.currController().run();
 
-        Assert.assertTrue(app.nav.currentController() instanceof MainMenuController);
+        Assert.assertTrue(app.nav.currController() instanceof MainMenuController);
     }
 }

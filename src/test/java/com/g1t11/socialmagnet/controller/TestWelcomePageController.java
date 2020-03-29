@@ -29,37 +29,37 @@ public class TestWelcomePageController extends TestApp {
     @Test
     public void testGoToLogin() {
         systemInMock.provideLines("2");
-        app.nav.currentController().run();
+        app.nav.currController().run();
 
-        Assert.assertTrue(app.nav.currentController() instanceof LoginController);
+        Assert.assertTrue(app.nav.currController() instanceof LoginController);
     }
 
     @Test
     public void testGoToLoginAndBack() {
         systemInMock.provideLines("2");
-        app.nav.currentController().run();
+        app.nav.currController().run();
 
-        Assert.assertTrue(app.nav.currentController() instanceof LoginController);
+        Assert.assertTrue(app.nav.currController() instanceof LoginController);
 
         systemInMock.provideLines("adam", "solocareer");
-        app.nav.currentController().run();
+        app.nav.currController().run();
 
-        Assert.assertTrue(app.nav.currentController() instanceof WelcomeController);
+        Assert.assertTrue(app.nav.currController() instanceof WelcomeController);
     }
 
     @Test
     public void testInvalidInput() {
         systemInMock.provideLines("pass");
-        app.nav.currentController().run();
+        app.nav.currController().run();
 
-        Assert.assertTrue(app.nav.currentController() instanceof WelcomeController);
+        Assert.assertTrue(app.nav.currController() instanceof WelcomeController);
     }
 
     @Test
     public void simulateExit() {
         exit.expectSystemExit();
         systemInMock.provideLines("3");
-        app.nav.currentController().run();
+        app.nav.currController().run();
 
         String expectedMessage = "Enter your choice > Goodbye!";
         String[] lines = systemOutRule.getLog().split(System.lineSeparator());
