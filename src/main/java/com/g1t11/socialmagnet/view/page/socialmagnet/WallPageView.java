@@ -1,4 +1,4 @@
-package com.g1t11.socialmagnet.view.page;
+package com.g1t11.socialmagnet.view.page.socialmagnet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.List;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.view.component.WallProfileInfoComponent;
+import com.g1t11.socialmagnet.view.page.PageView;
 import com.g1t11.socialmagnet.view.component.SimpleThreadComponent;
 
 public class WallPageView extends PageView {

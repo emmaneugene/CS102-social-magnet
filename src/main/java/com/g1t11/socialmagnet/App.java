@@ -31,7 +31,7 @@ public class App {
     public void run() {
         while (true) {
             try {
-                nav.currentController().run();
+                nav.currController().run();
             } catch (DatabaseException e) {
                 handleDatabaseException(e);
             }
@@ -58,7 +58,7 @@ public class App {
 
     private void handleInitConnectionException(CommunicationsException e) {
         nav.popToFirst();
-        nav.currentController().view.setStatus(Painter.paint("Failed to connect to database.", Painter.Color.RED));
+        nav.currController().setStatus(Painter.paint("Failed to connect to database.", Painter.Color.RED));
     }
 
     private void handleSQLException(SQLException sqlE) {
@@ -66,7 +66,7 @@ public class App {
         System.out.println(sqlE.getErrorCode());
         if (sqlE.getErrorCode() == DatabaseException.SQLErrorCode.NO_CONNECTION.code) {
             nav.popToFirst();
-            nav.currentController().view.setStatus(Painter.paint("Failed to connect to database. Retrying...", Painter.Color.RED));
+            nav.currController().setStatus(Painter.paint("Failed to connect to database. Retrying...", Painter.Color.RED));
             try {
                 db.establishConnection();
             } catch (DatabaseException dbE) {

@@ -6,18 +6,18 @@ import com.g1t11.socialmagnet.view.page.PageView;
 public abstract class Controller {
     public Navigation nav;
 
-    public PageView view;
+    protected PageView view;
 
     public Controller(Navigation nav) {
         this.nav = nav;
     }
 
-    public void setNavigation(Navigation nav) {
-        this.nav = nav;
-    }
-
     public Database database() {
         return nav.database(); 
+    }
+
+    public void setStatus(String text) {
+        view.setStatus(text);
     }
 
     /**
@@ -34,5 +34,4 @@ public abstract class Controller {
     public void updateView() {};
 
     public abstract void handleInput();
-
 }

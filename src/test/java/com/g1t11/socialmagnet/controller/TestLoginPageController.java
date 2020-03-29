@@ -1,6 +1,7 @@
 package com.g1t11.socialmagnet.controller;
 
 import com.g1t11.socialmagnet.TestApp;
+import com.g1t11.socialmagnet.controller.socialmagnet.MainMenuController;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -28,8 +29,8 @@ public class TestLoginPageController extends TestApp {
     @Test
     public void testGoToMainMenu() {
         systemInMock.provideLines("adam", "maroon5");
-        app.nav.currentController().run();
+        app.nav.currController().run();
 
-        Assert.assertTrue(app.nav.currentController() instanceof MainMenuController);
+        Assert.assertTrue(app.nav.currController() instanceof MainMenuController);
     }
 }

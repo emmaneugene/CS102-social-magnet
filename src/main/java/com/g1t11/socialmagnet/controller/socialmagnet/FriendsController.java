@@ -1,34 +1,32 @@
-package com.g1t11.socialmagnet.controller;
+package com.g1t11.socialmagnet.controller.socialmagnet;
 
 import java.util.List;
 
+import com.g1t11.socialmagnet.controller.Navigation;
 import com.g1t11.socialmagnet.data.UserDAO;
 import com.g1t11.socialmagnet.model.social.RequestExistingFriendException;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.model.social.UserNotFoundException;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.PromptInput;
-import com.g1t11.socialmagnet.view.page.FriendsPageView;
+import com.g1t11.socialmagnet.view.page.socialmagnet.FriendsPageView;
 
-public class FriendsController extends Controller {
+public class FriendsController extends SocialMagnetController {
     private UserDAO userDAO = new UserDAO(database());
-
-    private User currentUser;
 
     private List<User> friends;
 
     private List<String> requestUsernames;
 
-    public FriendsController(Navigation nav) {
-        super(nav);
-        currentUser = nav.session().currentUser();
-        view = new FriendsPageView(currentUser);
+    public FriendsController(Navigation nav, User me) {
+        super(nav, me);
+        view = new FriendsPageView(me);
     }
 
     @Override
     public void updateView() {
-        friends = userDAO.getFriends(currentUser);
-        requestUsernames = userDAO.getRequestUsernames(currentUser);
+        friends = userDAO.getFriends(me);
+        requestUsernames = userDAO.getRequestUsernames(me);
         ((FriendsPageView) view).setFriends(friends);
         ((FriendsPageView) view).setRequestUsernames(requestUsernames);
     }
@@ -67,7 +65,7 @@ public class FriendsController extends Controller {
                 return;
             }
             String toUnfriend = friends.get(index - 1).getUsername();
-            userDAO.unfriend(currentUser, toUnfriend);
+            userDAO.unfriend(me, toUnfriend);
             view.setStatus(Painter.paintf(
                 String.format("[{Unfriended [{%s}]}]!", toUnfriend), Painter.Color.GREEN, Painter.Color.BLUE
             ));
@@ -81,7 +79,7 @@ public class FriendsController extends Controller {
         PromptInput input = new PromptInput("Enter the username");
         String requested = input.nextLine();
         try {
-            userDAO.makeRequest(currentUser, requested);
+            userDAO.makeRequest(me, requested);
             view.setStatus(Painter.paintf(
                 String.format("[{Sent [{%s}] a friend request!}]", requested), Painter.Color.GREEN, Painter.Color.BLUE
             ));
@@ -106,7 +104,7 @@ public class FriendsController extends Controller {
                 return;
             }
             String requestUsername = requestUsernames.get(index - friends.size() - 1);
-            userDAO.acceptRequest(requestUsername, currentUser);
+            userDAO.acceptRequest(requestUsername, me);
             view.setStatus(Painter.paintf(
                 String.format("[{Accepted [{%s}]!}]", requestUsername), Painter.Color.GREEN, Painter.Color.BLUE
             ));
@@ -127,7 +125,7 @@ public class FriendsController extends Controller {
                 return;
             }
             String requestUsername = requestUsernames.get(index - friends.size() - 1);
-            userDAO.rejectRequest(requestUsername, currentUser);
+            userDAO.rejectRequest(requestUsername, me);
             view.setStatus(Painter.paintf(
                 String.format("[{Rejected [{%s}]!}]", requestUsername), Painter.Color.GREEN, Painter.Color.BLUE
             ));
@@ -143,7 +141,7 @@ public class FriendsController extends Controller {
                 view.setStatus(Painter.paint("Index out of range.", Painter.Color.RED));
                 return;
             }
-            nav.push(new FriendsWallController(nav, friends.get(index - 1)));
+            nav.push(new FriendsWallController(nav, me, friends.get(index - 1)));
         } catch (NumberFormatException e) {
             view.setStatus(Painter.paint("Use V<id> to view a friend's page.", Painter.Color.RED));
         }

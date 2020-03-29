@@ -1,10 +1,11 @@
-package com.g1t11.socialmagnet.view.page;
+package com.g1t11.socialmagnet.view.page.socialmagnet;
 
 import java.util.List;
 import java.util.Objects;
 
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
+import com.g1t11.socialmagnet.view.page.PageView;
 
 public class MainMenuPageView extends PageView {
     private String greeting;

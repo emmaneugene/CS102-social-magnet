@@ -2,8 +2,8 @@ package com.g1t11.socialmagnet.controller.cityfarmers;
 
 import java.util.List;
 
-import com.g1t11.socialmagnet.controller.MainMenuController;
 import com.g1t11.socialmagnet.controller.Navigation;
+import com.g1t11.socialmagnet.controller.socialmagnet.MainMenuController;
 import com.g1t11.socialmagnet.data.FarmerDAO;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.farm.Plot;
@@ -48,7 +48,7 @@ public class StealingController extends CityFarmersController {
         String choice = input.nextLine();
         if (choice.length() == 0) {
             nav.pop();
-            nav.currentController().view.setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
+            nav.currController().setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
         } else if (choice.equals("M")) {
             nav.popTo(MainMenuController.class);
         } else if (choice.equals("F")) {
@@ -57,7 +57,7 @@ public class StealingController extends CityFarmersController {
             handleSteal();
         } else {
             nav.pop();
-            nav.currentController().view.setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
+            nav.currController().setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
         }
     }
 
@@ -65,11 +65,11 @@ public class StealingController extends CityFarmersController {
         List<StealingRecord> stolenCrops = farmerDAO.steal(me, toStealFrom);
         if (stolenCrops.size() == 0) {
             nav.pop();
-            nav.currentController().view.setStatus(Painter.paint("No plots available to steal from.", Painter.Color.RED));
+            nav.currController().setStatus(Painter.paint("No plots available to steal from.", Painter.Color.RED));
         } else {
             String stolenCropsString = formatStolenCrops(stolenCrops);
             nav.pop();
-            nav.currentController().view.setStatus(String.format(
+            nav.currController().setStatus(String.format(
                 Painter.paint("You have successfully stolen %s.", Painter.Color.GREEN),
                 stolenCropsString
             ));

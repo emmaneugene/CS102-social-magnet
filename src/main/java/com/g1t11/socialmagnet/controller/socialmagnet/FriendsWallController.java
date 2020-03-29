@@ -1,21 +1,22 @@
-package com.g1t11.socialmagnet.controller;
+package com.g1t11.socialmagnet.controller.socialmagnet;
 
+import com.g1t11.socialmagnet.controller.Navigation;
 import com.g1t11.socialmagnet.data.UserDAO;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.PromptInput;
-import com.g1t11.socialmagnet.view.page.FriendsWallPageView;
+import com.g1t11.socialmagnet.view.page.socialmagnet.FriendsWallPageView;
 
 public class FriendsWallController extends WallController {
     private UserDAO userDAO = new UserDAO(database());
 
-    public FriendsWallController(Navigation nav, User friend) {
-        super(nav);
+    public FriendsWallController(Navigation nav, User me, User friend) {
+        super(nav, me);
         farmerToDisplay = farmerDAO.getFarmer(friend);
         view = new FriendsWallPageView(
-            nav.session().currentUser(),
+            me,
             farmerToDisplay, 
-            userDAO.getFriendsOfFriendWithCommon(nav.session().currentUser(), farmerToDisplay)
+            userDAO.getFriendsOfFriendWithCommon(me, farmerToDisplay)
         );
     }
 

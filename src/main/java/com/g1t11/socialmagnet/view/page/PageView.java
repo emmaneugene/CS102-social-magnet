@@ -3,7 +3,6 @@ package com.g1t11.socialmagnet.view.page;
 import java.util.Objects;
 
 import com.g1t11.socialmagnet.util.Painter;
-import com.g1t11.socialmagnet.view.component.*;
 
 /**
  * {@link PageView} is the base of all screens and menus.
@@ -19,7 +18,7 @@ public abstract class PageView {
      * A Component injected from the previous {@link Controller} which allows 
      * us to render content after the screen is cleared by {@link PageView}.
      */
-    private CompoundComponent status = new CompoundComponent();
+    private String status = null;
 
     public PageView(String ...pageTitles) {
         setPageTitle(pageTitles);
@@ -29,21 +28,16 @@ public abstract class PageView {
         this.pageTitles = pageTitles;
     }
 
-    public void setStatus(Component status) {
-        this.status.clear();
-        this.status.add(status);
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public void setStatus(String statusText) {
-        setStatus(new TextComponent(statusText));
-    }
-
-    public CompoundComponent getStatus() {
+    public String getStatus() {
         return status;
     }
 
     public void clearStatus() {
-        status.clear();
+        status = null;
     }
 
     /**
@@ -56,6 +50,14 @@ public abstract class PageView {
 
     public void display() {
         clearScreen();
+        displayHeader();
+        if (status != null) {
+            System.out.println(status);
+            clearStatus();
+        }
+    }
+
+    private void displayHeader() {
         StringBuilder headerBuilder = new StringBuilder("== Social Magnet");
         for (String title : pageTitles) {
             headerBuilder.append(" :: ");
@@ -63,10 +65,6 @@ public abstract class PageView {
         }
         headerBuilder.append(" ==");
         System.out.println(Painter.paint(headerBuilder.toString(), Painter.Color.BOLD));
-        if (status != null) {
-            status.render();
-            clearStatus();
-        }
     }
 
     @Override
