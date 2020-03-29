@@ -53,7 +53,7 @@ public class VisitFriendController extends Controller {
             if (index <= 0 || index > friends.size()) {
                 view.setStatus(Painter.paint("Index out of range.", Painter.Color.RED));
             } else {
-                nav.push(new StealingController(nav, friends.get(index - 1)));
+                nav.push(new StealingController(nav, me, friends.get(index - 1)));
             }
         } catch (NumberFormatException e) {
             view.setStatus(Painter.paint("Use <id> to select a friend to visit.", Painter.Color.RED));

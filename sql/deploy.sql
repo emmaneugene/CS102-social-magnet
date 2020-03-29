@@ -669,8 +669,10 @@ BEGIN
     INSERT INTO stealing (stealer, victim, plot_num)
     SELECT _stealer, _victim, plot_num FROM stolen_crop;
 
-    -- Return all stolen crops
-    SELECT * FROM stolen_crop;
+    -- Return all stolen crops classified by crop name
+    SELECT crop_name, SUM(yield_stolen) quantity, SUM(xp_gained) total_xp_gained, SUM(wealth_gained) total_wealth_gained FROM stolen_crop
+    GROUP BY crop_name
+    ORDER BY crop_name;
 
     DROP TEMPORARY TABLE stolen_crop;
 END$$
