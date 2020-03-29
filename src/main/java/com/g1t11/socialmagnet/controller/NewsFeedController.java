@@ -23,7 +23,6 @@ public class NewsFeedController extends Controller {
     public void updateView() {
         threads = threadDAO.getNewsFeedThreads(nav.session().currentUser(), 5);
         ((NewsFeedPageView) view).setThreads(threads);
-        view.display();
     }
     
     @Override

@@ -3,7 +3,6 @@ package com.g1t11.socialmagnet.controller.cityfarmers;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.g1t11.socialmagnet.controller.Controller;
 import com.g1t11.socialmagnet.controller.MainMenuController;
 import com.g1t11.socialmagnet.controller.Navigation;
 import com.g1t11.socialmagnet.data.FarmerDAO;
@@ -15,7 +14,7 @@ import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.util.TextUtils;
 import com.g1t11.socialmagnet.view.page.cityfarmers.StorePageView;
 
-public class StoreController extends Controller {
+public class StoreController extends CityFarmersController {
     FarmerDAO farmerDAO = new FarmerDAO(nav.database());
     StoreDAO storeDAO = new StoreDAO(nav.database());
 
@@ -24,19 +23,16 @@ public class StoreController extends Controller {
     List<Crop> storeItem = new ArrayList<>();
 
     public StoreController(Navigation nav, Farmer me) {
-        super(nav);
+        super(nav, me);
         this.me = me;
-        view = new StorePageView(me);
+        view = new StorePageView();
     }
 
     @Override
     public void updateView() {
-        // Refresh the current user's information
-        me = farmerDAO.getFarmer(me);
-        ((StorePageView) view).setFarmer(me);
+        super.updateView();
         storeItem = storeDAO.getStoreItems();
         ((StorePageView) view).setCrops(storeItem);
-        view.display();
     }
 
     @Override

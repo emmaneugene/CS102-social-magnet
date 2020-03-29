@@ -2,7 +2,6 @@ package com.g1t11.socialmagnet.view.page.cityfarmers;
 
 import java.util.List;
 
-import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.farm.Plot;
 import com.g1t11.socialmagnet.util.TextUtils;
 import com.g1t11.socialmagnet.view.component.FarmlandComponent;
@@ -13,8 +12,8 @@ public class FarmlandPageView extends CityFarmersPageView {
 
     InventoryComponent invComp;
 
-    public FarmlandPageView(Farmer me) {
-        super(me, "My Farmland");
+    public FarmlandPageView() {
+        super("My Farmland");
     }
 
     public void setPlots(List<Plot> plots) {
@@ -29,7 +28,6 @@ public class FarmlandPageView extends CityFarmersPageView {
     @Override
     public void display() {
         super.display();
-        System.out.println();
 
         System.out.printf("You have %s of land.\n", 
             TextUtils.countedWord(getMe().getMaxPlotCount(), "plot", "plots"));

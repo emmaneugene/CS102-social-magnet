@@ -1,27 +1,18 @@
 package com.g1t11.socialmagnet.controller.cityfarmers;
 
-import com.g1t11.socialmagnet.controller.Controller;
 import com.g1t11.socialmagnet.controller.Navigation;
 import com.g1t11.socialmagnet.data.FarmerDAO;
-import com.g1t11.socialmagnet.model.farm.Farmer;
+import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.cityfarmers.CityFarmersMainMenuPageView;
 
-public class CityFarmersMainMenuController extends Controller {
+public class CityFarmersMainMenuController extends CityFarmersController {
     FarmerDAO farmerDAO = new FarmerDAO(nav.database());
 
-    Farmer me;
-
-    public CityFarmersMainMenuController(Navigation nav) {
-        super(nav);
-        me = farmerDAO.getFarmer(nav.session().currentUser());
-        view = new CityFarmersMainMenuPageView(me);
-    }
-
-    @Override
-    public void updateView() {
-        view.display();
+    public CityFarmersMainMenuController(Navigation nav, User me) {
+        super(nav, me);
+        view = new CityFarmersMainMenuPageView();
     }
 
     @Override

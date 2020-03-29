@@ -27,12 +27,11 @@ public abstract class Controller {
      */
     public void run() {
         updateView();
+        if (view != null) view.display();
         handleInput();
     }
 
-    public void updateView() {
-        view.display();
-    }
+    public void updateView() {};
 
     public abstract void handleInput();
 

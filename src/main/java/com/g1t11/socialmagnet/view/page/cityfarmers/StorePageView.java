@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.g1t11.socialmagnet.model.farm.Crop;
-import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.view.component.StoreComponent;
 
 public class StorePageView extends CityFarmersPageView {
     List<StoreComponent> cropComps = new ArrayList<>();
 
-    public StorePageView(Farmer me) {
-        super(me, "My Store");
+    public StorePageView() {
+        super("My Store");
     }
 
     public void setCrops(List<Crop> crops) {

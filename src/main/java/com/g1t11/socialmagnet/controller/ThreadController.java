@@ -26,7 +26,6 @@ public class ThreadController extends Controller {
     @Override
     public void updateView() {
         ((ThreadPageView) view).setThread(thread);
-        view.display();
     }
     
     @Override

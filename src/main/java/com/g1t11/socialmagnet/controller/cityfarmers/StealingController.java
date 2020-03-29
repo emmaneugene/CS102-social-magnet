@@ -1,13 +1,10 @@
 package com.g1t11.socialmagnet.controller.cityfarmers;
 
 import java.util.List;
-import java.util.Map;
 
-import com.g1t11.socialmagnet.controller.Controller;
 import com.g1t11.socialmagnet.controller.MainMenuController;
 import com.g1t11.socialmagnet.controller.Navigation;
 import com.g1t11.socialmagnet.data.FarmerDAO;
-import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.farm.Plot;
 import com.g1t11.socialmagnet.model.farm.StealingRecord;
@@ -16,17 +13,15 @@ import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.component.FriendFarmComponent;
 
-public class StealingController extends Controller {
+public class StealingController extends CityFarmersController {
     FarmerDAO farmerDAO = new FarmerDAO(database());
 
-    Farmer me;
     Farmer toStealFrom;
 
     FriendFarmComponent friendFarmComp;
 
     public StealingController(Navigation nav, Farmer me, User friend) {
-        super(nav);
-        this.me = me;
+        super(nav, me);
         toStealFrom = farmerDAO.getFarmer(friend);
         friendFarmComp = new FriendFarmComponent(toStealFrom);
     }

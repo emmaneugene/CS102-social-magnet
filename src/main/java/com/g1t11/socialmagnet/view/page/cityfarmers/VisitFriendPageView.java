@@ -2,22 +2,20 @@ package com.g1t11.socialmagnet.view.page.cityfarmers;
 
 import java.util.List;
 
-import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
 
 public class VisitFriendPageView extends CityFarmersPageView {
     List<User> friends;
 
-    public VisitFriendPageView(Farmer me, List<User> friends) {
-        super(me, "Visit Friend");
+    public VisitFriendPageView(List<User> friends) {
+        super("Visit Friend");
         this.friends = friends;
     }
 
     @Override
     public void display() {
         super.display();
-        System.out.println();
 
         System.out.println("My Friends:");
         int index = 1;

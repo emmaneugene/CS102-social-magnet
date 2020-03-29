@@ -30,7 +30,6 @@ public class WallController extends Controller {
     public void updateView() {
         wallThreads = threadDAO.getWallThreads(farmerToDisplay, 5);
         ((WallPageView) view).setThreads(wallThreads);
-        view.display();
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.g1t11.socialmagnet.controller.cityfarmers;
 
 import java.util.List;
 
-import com.g1t11.socialmagnet.controller.Controller;
 import com.g1t11.socialmagnet.controller.MainMenuController;
 import com.g1t11.socialmagnet.controller.Navigation;
 import com.g1t11.socialmagnet.data.UserDAO;
@@ -12,18 +11,15 @@ import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.cityfarmers.VisitFriendPageView;
 
-public class VisitFriendController extends Controller {
+public class VisitFriendController extends CityFarmersController {
     UserDAO userDAO = new UserDAO(database());
-
-    Farmer me;
 
     List<User> friends;
 
     public VisitFriendController(Navigation nav, Farmer me) {
-        super(nav);
-        this.me = me;
+        super(nav, me);
         friends = userDAO.getFriends(me);
-        view = new VisitFriendPageView(me, friends);
+        view = new VisitFriendPageView(friends);
     }
 
     @Override
