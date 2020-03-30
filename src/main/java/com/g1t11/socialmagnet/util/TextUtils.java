@@ -7,6 +7,7 @@ public class TextUtils {
     }
 
     public static String prettyNumber(int number) {
+        if (number < 0) return "-" + prettyNumber(-number);
         if (number < 1000) return Integer.toString(number);
         StringBuilder sb = new StringBuilder();
         while (number >= 1000) {
