@@ -697,6 +697,9 @@ CREATE PROCEDURE sent_gift_today(IN _sender VARCHAR(255), IN _recipient VARCHAR(
     SELECT COUNT(*) sent FROM gift
     WHERE sender = _sender AND recipient = _recipient AND gifted_on = CURDATE();
 
+CREATE PROCEDURE send_gift(IN _sender VARCHAR(255), IN _recipient VARCHAR(255), IN _crop_name VARCHAR(255))
+    INSERT INTO gift (sender, recipient, gifted_on, crop_name) VALUES (_sender, _recipient, CURDATE(), _crop_name);
+
 /*
  * STORE
  */

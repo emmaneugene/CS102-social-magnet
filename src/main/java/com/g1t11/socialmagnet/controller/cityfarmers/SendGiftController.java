@@ -4,10 +4,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.controller.socialmagnet.MainMenuController;
+import com.g1t11.socialmagnet.data.FarmerActionDAO;
 import com.g1t11.socialmagnet.data.StoreDAO;
 import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
@@ -15,6 +15,7 @@ import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.view.page.cityfarmers.SendGiftPageView;
 
 public class SendGiftController extends CityFarmersController {
+    FarmerActionDAO farmerActionDAO = new FarmerActionDAO(database());
     StoreDAO storeDAO = new StoreDAO(database());
 
     List<Crop> crops;
@@ -98,19 +99,21 @@ public class SendGiftController extends CityFarmersController {
 
         StringBuilder sb = new StringBuilder("[{Already sent a gift to");
         if (sentCount == 1) {
-            sb.append(" ")
-            .append(prepName[0])
-            .append(" today.}]");
+            sb.append(" ").append(prepName[0]);
+        } else if (sentCount == 2) {
+            sb.append(" ").append(prepName[0]).append(" and ").append(prepName[1]);
         } else {
             for (int i = 0; i < sentCount - 1; i++) {
                 sb.append(" ").append(prepName[i]).append(",");
             }
-            sb.append(" and ").append(prepName[sentCount - 1]).append(" today.}]");
+            sb.append(" and ").append(prepName[sentCount - 1]);
         }
+        sb.append(" today.}]");
         view.setStatus(Painter.paintf(sb.toString(), Painter.Color.RED, Painter.Color.BLUE));
     }
 
     private void handleSendCrops(Crop toSend, String[] recipients) {
+        farmerActionDAO.sendGifts(me.getUsername(), recipients, toSend.getName());
         view.setStatus(Painter.paint("Gift posted to your friends' wall.", Painter.Color.GREEN));
     }
 }
