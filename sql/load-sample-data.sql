@@ -1,21 +1,30 @@
 USE magnet;
 
 INSERT INTO user (username, fullname, pwd) VALUES
-("adam",    "Adam Levine",    sha1("maroon5")),
-("britney", "Britney Spears", sha1("itsbritney")),
-("charlie", "Charlie Puth",   sha1("attention")),
-("danny",   "Danny DeVito",   sha1("iasip")),
-("elijah",  "Elijah Wood",    sha1("mordor")),
-("frank",   "Frank Sinatra",  sha1("flymetothemoon"));
+-- testGetUser
+("adam",    "Adam Levine",    SHA1("maroon5")),
+-- testGetNoRequests
+("britney", "Britney Spears", SHA1("itsbritney")),
+("charlie", "Charlie Puth",   SHA1("attention")),
+("danny",   "Danny DeVito",   SHA1("iasip")),
+("elijah",  "Elijah Wood",    SHA1("mordor")),
+("frank",   "Frank Sinatra",  SHA1("flymetothemoon")),
+-- testGetNoFriends, testGetRequestUsernames
+("gary",    "Gary Oldman",    SHA1("alone")),
+-- testUnfriend
+("howard",  "Howard Duck",    SHA1("quack")),
+("icarus",  "Icarus",         SHA1("flytoohigh"));
 
 INSERT INTO friend (user_1, user_2) VALUES
+-- testGetFriends
 ("adam",    "charlie"),
+-- testGetFriendsOfFriendNoCommon
 ("adam",    "elijah"),
-("britney", "charlie"),
 ("britney", "elijah"),
+-- testGetFriendsOfFriend
 ("charlie", "danny"),
-("charlie", "elijah"),
 ("charlie", "frank"),
+("danny",   "elijah"),
 ("danny",   "frank");
 
 INSERT INTO thread (author, recipient, posted_on, content) VALUES
@@ -67,9 +76,8 @@ INSERT INTO disliker (username, thread_id) VALUES
 ("elijah",  1);
 
 INSERT INTO request (sender, recipient) VALUES
-("adam",    "danny"),
-("britney", "adam"),
-("danny",   "britney");
+("charlie", "gary"),
+("adam",    "gary");
 
 INSERT INTO farmer (username, xp, wealth) VALUES
 -- testGetFarmer, testPlantAndClearCrops
