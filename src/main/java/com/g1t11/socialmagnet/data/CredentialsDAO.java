@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.g1t11.socialmagnet.model.social.RegisterExistingUserException;
 import com.g1t11.socialmagnet.model.social.User;
 
 /**
@@ -61,6 +62,9 @@ public class CredentialsDAO extends DAO {
 
             stmt.executeUpdate();
         } catch (SQLException e) {
+            if (e.getErrorCode() == DatabaseException.SQLErrorCode.DUPLICATE_KEY.code) {
+                throw new RegisterExistingUserException();
+            }
             System.err.println("SQLException: " + e.getMessage());
             throw new DatabaseException(e);
         }

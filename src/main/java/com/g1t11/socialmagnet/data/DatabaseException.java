@@ -9,7 +9,8 @@ package com.g1t11.socialmagnet.data;
  */
 public class DatabaseException extends RuntimeException {
     public enum SQLErrorCode {
-        NO_CONNECTION(0);
+        NO_CONNECTION(0),
+        DUPLICATE_KEY(1062);
 
         public int code;
 
