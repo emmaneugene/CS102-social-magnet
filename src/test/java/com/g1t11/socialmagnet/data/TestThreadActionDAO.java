@@ -29,8 +29,8 @@ public class TestThreadActionDAO extends TestDAO {
         threadActionDAO = new ThreadActionDAO(db);
     }
 
-    @Test
-    public void testAddThreadAddTags() {
+    @Test(expected = ThreadNotFoundException.class)
+    public void testAddThreadAddTagsDeleteThread() {
         int newId = threadActionDAO.addThread("adam", "adam", "Hello @charlie and @britney!", List.of("charlie", "britney"));
         Thread expected = new Thread(newId, "adam", "adam", "Hello @charlie and @britney!", 0);
         // charlie is a friend, britney is not.
@@ -43,6 +43,16 @@ public class TestThreadActionDAO extends TestDAO {
         List<String> expectedTags = List.of("charlie");
         List<String> actualTags = threadLoadDAO.getTaggedUsernames(newId);
         Assert.assertEquals(expectedTags, actualTags);
+
+        // Delete the new thread.
+        threadActionDAO.deleteThread(newId, "adam");
+
+        // Check if tags were deleted.
+        actualTags = threadLoadDAO.getTaggedUsernames(newId);
+        Assert.assertEquals(0, actualTags.size());
+
+        // Check that the thread does not exist
+        threadLoadDAO.getThread(newId, "adam");
     }
 
     @Test
@@ -62,22 +72,22 @@ public class TestThreadActionDAO extends TestDAO {
 
     @Test(expected = ThreadNotFoundException.class)
     public void testDeleteThreadNoAttributes() {
-        threadActionDAO.deleteThread(5, "charlie");
-        threadLoadDAO.getThread(5, "charlie");
+        threadActionDAO.deleteThread(11, "charlie");
+        threadLoadDAO.getThread(11, "charlie");
     }
 
     @Test(expected = ThreadNotFoundException.class)
     public void testDeleteThreadWithLikesDislikesCommentsTags() {
-        threadActionDAO.deleteThread(6, "danny");
-        threadLoadDAO.getThread(6, "danny");
+        threadActionDAO.deleteThread(12, "danny");
+        threadLoadDAO.getThread(12, "danny");
     }
 
     @Test
     public void testDeleteUnauthorized() {
-        Thread before = threadLoadDAO.getThread(9, "britney");
+        Thread before = threadLoadDAO.getThread(13, "britney");
         // elijah is tagged, but is not a sender or recipient of thread 9
-        threadActionDAO.deleteThread(9, "elijah");
-        Thread after = threadLoadDAO.getThread(9, "britney");
+        threadActionDAO.deleteThread(13, "elijah");
+        Thread after = threadLoadDAO.getThread(13, "britney");
         Assert.assertEquals(before, after);
     }
 

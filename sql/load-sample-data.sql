@@ -28,6 +28,12 @@ INSERT INTO friend (user_1, user_2) VALUES
 ("danny",   "frank");
 
 INSERT INTO thread (thread_id, author, recipient, posted_on, content) VALUES
+-- testDeleteThreadNoAttributes
+(11,  "charlie", "adam",    "2019-03-04 09:30:00", "Added in late but with earlier posted_on..."),
+-- testDeleteThreadWithLikesDislikesCommentsTags
+(12,  "danny",   "frank",   "2019-03-02 15:30:00", "Such that news feed tests and wall tests are..."),
+-- testDeleteUnauthorized
+(13,  "britney", "charlie", "2019-03-03 13:30:00", "Not affected by thread deletion."),
 -- testSetCommentsOnlyThree, testToggleLikeThread
 (1,  "adam",    "adam",    "2019-03-02 08:30:00", "Hello, world!"),
 -- testSetCommentsFewerThanThree, testSetDislikersNone
@@ -36,15 +42,13 @@ INSERT INTO thread (thread_id, author, recipient, posted_on, content) VALUES
 (3,  "britney", "elijah",  "2019-05-15 20:30:00", "Don't know what you're talking about"),
 -- testSetLikersNone, testSetDislikers, testReplyToThread
 (4,  "charlie", "charlie", "2019-09-03 20:30:00", "Where is City Farmer??"),
--- testDeleteThreadNoAttributes
+-- testToggleLikeThread
 (5,  "charlie", "adam",    "2019-09-04 09:30:00", "Who are you talking to?"),
--- testDeleteThreadWithLikesDislikesCommentsTags
 (6,  "danny",   "frank",   "2019-09-02 15:30:00", "Look out, @charlie! Social Magnet is going to get more users!"),
 -- testGetThread, testSetCommentsMoreThanThree, testGetTaggedUsernames
 (7,  "elijah",  "elijah",  "2019-09-15 08:30:00", "Had a great night with @adam, @britney, and @charlie"),
 -- testGetTaggedUsernamesNone, testReplyToThreadMoreThanThree
 (8,  "adam",    "elijah",  "2019-10-02 12:30:00", "Where did you go?"),
--- testDeleteUnauthorized
 (9,  "britney", "charlie", "2019-10-03 13:30:00", "We should meet up again! @elijah @adsm"),
 -- testAddAndRemoveTags, testReplyToThreadNoComments
 (10, "britney", "britney", "2019-10-04 14:30:00", "I'm so lonely...");
@@ -66,8 +70,6 @@ INSERT INTO comment (thread_id, comment_num, commenter, commented_on, content) V
 (2, 1, "charlie", "2019-05-02 10:32:00", "Same!!! Too many things to do!"),
 -- testReplyToThread
 (4, 1, "danny",   "2019-09-03 20:35:00", "I can't find it too!"),
--- testDeleteThreadWithLikesDislikesCommentsTags
-(6, 1, "frank",   "2019-09-03 16:30:00", "Not sure about that."),
 -- testSetCommentsMoreThanThree
 (7, 1, "adam",    "2019-09-15 10:00:00", "You were a blast!"),
 (7, 2, "britney", "2019-09-15 15:00:00", "How did you guys wake up so early??"),
@@ -77,7 +79,9 @@ INSERT INTO comment (thread_id, comment_num, commenter, commented_on, content) V
 (8, 1, "adam",    "2019-09-15 10:00:00", "First time!"),
 (8, 2, "britney", "2019-09-15 15:00:00", "Second."),
 (8, 3, "adam",    "2019-09-15 16:15:00", "Third time!"),
-(8, 4, "elijah",  "2019-09-15 16:30:00", "Stop!!");
+(8, 4, "elijah",  "2019-09-15 16:30:00", "Stop!!"),
+-- testDeleteThreadWithLikesDislikesCommentsTags
+(12, 1, "frank",   "2019-09-03 16:30:00", "Not sure about that.");
 
 
 INSERT INTO liker (username, thread_id) VALUES
@@ -87,7 +91,7 @@ INSERT INTO liker (username, thread_id) VALUES
 ("britney", 7),
 ("charlie", 1),
 -- testDeleteThreadWithLikesDislikesCommentsTags
-("charlie", 6),
+("charlie", 12),
 ("elijah",  2);
 
 INSERT INTO disliker (username, thread_id) VALUES
@@ -97,7 +101,7 @@ INSERT INTO disliker (username, thread_id) VALUES
 ("britney", 4),
 ("elijah",  1),
 -- testDeleteThreadWithLikesDislikesCommentsTags
-("frank",   6);
+("frank",   12);
 
 INSERT INTO request (sender, recipient) VALUES
 ("charlie", "gary"),
