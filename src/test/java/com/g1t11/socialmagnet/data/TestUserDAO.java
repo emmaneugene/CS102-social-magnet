@@ -7,7 +7,6 @@ import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.model.social.UserNotFoundException;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 public class TestUserDAO {
@@ -21,8 +20,7 @@ public class TestUserDAO {
     private static final User frank = new User("frank", "Frank Sinatra");
     private static final User icarus = new User("icarus", "Icarus");
 
-    @Before
-    public void initDAO() {
+    public TestUserDAO() {
         Database db = new Database();
         db.establishConnection();
         userDAO = new UserDAO(db);
