@@ -3,7 +3,6 @@ package com.g1t11.socialmagnet.data;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import com.g1t11.socialmagnet.util.PromptInput;
 
 import com.mysql.cj.jdbc.Driver;
 
@@ -42,15 +41,8 @@ public class Database {
             String dbUser = System.getenv("DB_USER");
             String dbPass = System.getenv("DB_PASS");
 
-            dbUrl = "jdbc:mysql://localhost/magnet?serverTimezone=UTC";
-            dbUser = "***REMOVED***";
-            dbPass = "***REMOVED***";
-
             conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
         } catch (SQLException e) {
-            // System.err.println("SQLException: " + e.getMessage());
-            // System.err.println("SQLState: " + e.getSQLState());
-            // System.err.println("VendorError: " + e.getErrorCode());
             throw new DatabaseException(e);
         }
     }
