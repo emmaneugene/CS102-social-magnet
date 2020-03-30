@@ -9,7 +9,7 @@ import com.g1t11.socialmagnet.model.social.UserNotFoundException;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TestUserDAO {
+public class TestUserDAO extends TestDAO {
     private UserDAO userDAO;
 
     private static final User adam = new User("adam", "Adam Levine");
@@ -21,8 +21,6 @@ public class TestUserDAO {
     private static final User icarus = new User("icarus", "Icarus");
 
     public TestUserDAO() {
-        Database db = new Database();
-        db.establishConnection();
         userDAO = new UserDAO(db);
     }
 
