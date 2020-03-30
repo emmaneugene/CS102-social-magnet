@@ -19,12 +19,12 @@ public abstract class CityFarmersController extends Controller {
 
     public CityFarmersController(Navigator nav, User me) {
         super(nav);
-        this.me = farmerDAO.getFarmer(me);
+        this.me = farmerDAO.getFarmer(me.getUsername());
     }
 
     @Override
     public void updateView() {
-        me = farmerDAO.getFarmer(me);
+        me = farmerDAO.getFarmer(me.getUsername());
         ((CityFarmersPageView) view).setFarmer(me);
     }
 }

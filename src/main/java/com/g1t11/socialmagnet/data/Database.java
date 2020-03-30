@@ -38,24 +38,13 @@ public class Database {
              * If environment variables cannot be read, prompt the user
              */
             String dbName = System.getenv("DB_NAME");
-            if (dbName == null) {
-                PromptInput input =  new PromptInput("Enter database name");
-                dbName = input.nextLine();
-            }
-
             String dbUrl  = "jdbc:mysql://localhost/" + dbName + "?serverTimezone=UTC";
-
             String dbUser = System.getenv("DB_USER");
-            if (dbUser == null) {
-                PromptInput input =  new PromptInput("Enter database user");
-                dbUser = input.nextLine();
-            }
-
             String dbPass = System.getenv("DB_PASS");
-            if (dbPass == null) {
-                PromptInput input =  new PromptInput("Enter database password");
-                dbPass = input.readPassword();
-            }
+
+            dbUrl = "jdbc:mysql://localhost/magnet?serverTimezone=UTC";
+            dbUser = "***REMOVED***";
+            dbPass = "***REMOVED***";
 
             conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
         } catch (SQLException e) {

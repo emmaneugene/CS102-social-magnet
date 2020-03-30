@@ -22,7 +22,7 @@ public class StealingController extends CityFarmersController {
 
     public StealingController(Navigator nav, Farmer me, User friend) {
         super(nav, me);
-        toStealFrom = farmerDAO.getFarmer(friend);
+        toStealFrom = farmerDAO.getFarmer(friend.getUsername());
         friendFarmComp = new FriendFarmComponent(toStealFrom);
     }
 
@@ -34,7 +34,7 @@ public class StealingController extends CityFarmersController {
      */
     @Override
     public void updateView() {
-        List<Plot> toStealPlots = farmerDAO.getPlots(toStealFrom);
+        List<Plot> toStealPlots = farmerDAO.getPlots(toStealFrom.getUsername(), toStealFrom.getMaxPlotCount());
         friendFarmComp.setPlots(toStealPlots);
         friendFarmComp.render();
     }
@@ -62,7 +62,7 @@ public class StealingController extends CityFarmersController {
     }
 
     private void handleSteal() {
-        List<StealingRecord> stolenCrops = farmerDAO.steal(me, toStealFrom);
+        List<StealingRecord> stolenCrops = farmerDAO.steal(me.getUsername(), toStealFrom.getUsername());
         if (stolenCrops.size() == 0) {
             nav.pop();
             nav.setCurrStatus(Painter.paint("No plots available to steal from.", Painter.Color.RED));

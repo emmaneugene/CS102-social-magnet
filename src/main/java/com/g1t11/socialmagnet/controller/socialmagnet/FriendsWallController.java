@@ -12,7 +12,7 @@ public class FriendsWallController extends WallController {
 
     public FriendsWallController(Navigator nav, User me, User friend) {
         super(nav, me);
-        farmerToDisplay = farmerDAO.getFarmer(friend);
+        farmerToDisplay = farmerDAO.getFarmer(friend.getUsername());
         view = new FriendsWallPageView(
             me,
             farmerToDisplay, 

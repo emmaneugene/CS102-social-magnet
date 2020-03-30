@@ -14,6 +14,7 @@ INSERT INTO friend (user_1, user_2) VALUES
 ("britney", "charlie"),
 ("britney", "elijah"),
 ("charlie", "danny"),
+("charlie", "elijah"),
 ("charlie", "frank"),
 ("danny",   "frank");
 
@@ -71,34 +72,51 @@ INSERT INTO request (sender, recipient) VALUES
 ("danny",   "britney");
 
 INSERT INTO farmer (username, xp, wealth) VALUES
-("adam",    1500,  3),
+-- testGetFarmer, testPlantAndClearCrops
+("adam",    11000,  15000),
+-- testGetPlots, testGetInventory
 ("britney", 2000,  1500),
-("charlie", 4000,  1500),
-("danny",   13000, 15000),
+-- testHarvest
+("charlie", 2450,  1500),
+-- testSteal
+("danny",   1300, 1500),
 ("elijah",  100,   1000),
-("frank",   200,   500);
+("frank",   200,   3);
 
 INSERT INTO plot (owner, plot_num, crop_name, time_planted, yield_of_crop, yield_stolen) VALUES
-("adam", 1, "Papaya",        DATE_SUB(NOW(), INTERVAL  30 MINUTE), 75,  13),
-("adam", 2, "Pumpkin",       DATE_SUB(NOW(), INTERVAL  29 MINUTE), 100, 20),
-("adam", 3, "Watermelon",    DATE_SUB(NOW(), INTERVAL 480 MINUTE), 400, 20),
-("adam", 4, "Papaya",        DATE_SUB(NOW(), INTERVAL  30 MINUTE), 75,  13),
-("adam", 6, "Watermelon",    DATE_SUB(NOW(), INTERVAL 250 MINUTE), 400, 20),
-("britney", 1, "Papaya",     DATE_SUB(NOW(), INTERVAL  29 MINUTE), 75,  13),
-("britney", 2, "Pumpkin",    DATE_SUB(NOW(), INTERVAL  29 MINUTE), 100, 20),
-("britney", 3, "Watermelon", DATE_SUB(NOW(), INTERVAL  29 MINUTE), 400, 20);
-
-INSERT INTO stealing (stealer, victim, plot_num) VALUES
-("britney", "adam", 1),
-("charlie", "adam", 1),
-("danny",   "adam", 1),
-("britney", "adam", 2),
-("charlie", "adam", 2),
-("danny",   "adam", 2),
-("elijah",  "adam", 2),
-("britney", "adam", 3),
-("charlie", "adam", 3);
+-- testPlantAndClearCrops
+("adam",    1, "Papaya",     DATE_SUB(NOW(), INTERVAL  30 MINUTE), 75,  0),
+("adam",    2, "Pumpkin",    DATE_SUB(NOW(), INTERVAL  25 MINUTE), 100, 0),
+("adam",    3, "Watermelon", DATE_SUB(NOW(), INTERVAL 480 MINUTE), 400, 0),
+("adam",    6, "Watermelon", DATE_SUB(NOW(), INTERVAL 250 MINUTE), 400, 0),
+-- testGetPlots
+("britney", 1, "Papaya",     DATE_SUB(NOW(), INTERVAL  25 MINUTE), 75,  0),
+("britney", 2, "Pumpkin",    DATE_SUB(NOW(), INTERVAL  25 MINUTE), 100, 0),
+("britney", 3, "Watermelon", DATE_SUB(NOW(), INTERVAL  25 MINUTE), 400, 0),
+-- testHarvest
+("charlie", 1, "Papaya",     DATE_SUB(NOW(), INTERVAL  30 MINUTE), 75,  0),
+("charlie", 2, "Pumpkin",    DATE_SUB(NOW(), INTERVAL  25 MINUTE), 100, 0),
+("charlie", 3, "Watermelon", DATE_SUB(NOW(), INTERVAL 480 MINUTE), 400, 0),
+("charlie", 4, "Papaya",     DATE_SUB(NOW(), INTERVAL  30 MINUTE), 75,  0),
+("charlie", 6, "Watermelon", DATE_SUB(NOW(), INTERVAL 250 MINUTE), 400, 0),
+-- testSteal (no more yield to steal)
+("danny", 1,   "Papaya",     DATE_SUB(NOW(), INTERVAL  30 MINUTE), 75,  15),
+-- testSteal (1 to 3 yield (1-5%))
+("elijah", 1,  "Papaya",     DATE_SUB(NOW(), INTERVAL  30 MINUTE), 75,  0),
+-- testSteal (4 to 20 yield (1-5%))
+("elijah", 2,  "Watermelon", DATE_SUB(NOW(), INTERVAL 250 MINUTE), 400, 0);
 
 INSERT INTO inventory (owner, crop_name, quantity) VALUES
-("adam", "Papaya", 1),
-("adam", "Watermelon", 2);
+-- tesGetInventory
+("britney", "Papaya", 1),
+("britney", "Watermelon", 2);
+
+INSERT INTO gift (sender, recipient, gifted_on, crop_name) VALUES
+("adam",    "britney", "2019-12-03", "Sunflower"),
+("adam",    "elijah",  "2019-12-03", "Sunflower"),
+("adam",    "frank",   "2019-12-03", "Sunflower"),
+("charlie", "adam",    CURDATE(),    "Watermelon"),
+("charlie", "britney", CURDATE(),    "Papaya"),
+("charlie", "danny",   CURDATE(),    "Papaya"),
+("charlie", "elijah",  CURDATE(),    "Papaya"),
+("charlie", "frank",   CURDATE(),    "Papaya");

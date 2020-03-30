@@ -24,7 +24,7 @@ public class WallController extends SocialMagnetController {
 
     public WallController(Navigator nav, User me) {
         super(nav, me);
-        farmerToDisplay = farmerDAO.getFarmer(me);
+        farmerToDisplay = farmerDAO.getFarmer(me.getUsername());
         view = new WallPageView(farmerToDisplay);
     }
 
