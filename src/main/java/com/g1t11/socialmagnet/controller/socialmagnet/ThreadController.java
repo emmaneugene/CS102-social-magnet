@@ -1,7 +1,8 @@
 package com.g1t11.socialmagnet.controller.socialmagnet;
 
 import com.g1t11.socialmagnet.controller.Navigator;
-import com.g1t11.socialmagnet.data.ThreadDAO;
+import com.g1t11.socialmagnet.data.ThreadActionDAO;
+import com.g1t11.socialmagnet.data.ThreadLoadDAO;
 import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
@@ -9,7 +10,8 @@ import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.socialmagnet.ThreadPageView;
 
 public class ThreadController extends SocialMagnetController {
-    private ThreadDAO threadDAO = new ThreadDAO(database());
+    private ThreadLoadDAO threadLoadDAO = new ThreadLoadDAO(database());
+    private ThreadActionDAO threadActionDAO = new ThreadActionDAO(database());
 
     private Thread thread;
 
@@ -65,11 +67,11 @@ public class ThreadController extends SocialMagnetController {
             return;
         }
         if (isRemovable()) {
-            threadDAO.deleteThread(thread.getId(), me.getUsername());
+            threadActionDAO.deleteThread(thread.getId(), me.getUsername());
             nav.pop();
             nav.setCurrStatus(Painter.paint("Successfully removed post!", Painter.Color.GREEN));
         } else if (thread.isTagged()) {
-            threadDAO.removeTag(thread.getId(), me.getUsername());
+            threadActionDAO.removeTag(thread.getId(), me.getUsername());
             nav.pop();
             nav.setCurrStatus(Painter.paint("Successfully untagged post!", Painter.Color.GREEN));
         }
@@ -86,17 +88,17 @@ public class ThreadController extends SocialMagnetController {
         view.display();
         PromptInput input = new PromptInput("Enter your reply");
         String reply = input.nextLine();
-        threadDAO.replyToThread(thread.getId(), me.getUsername(), reply);
-        thread = threadDAO.getThread(thread.getId(), me.getUsername());
+        threadActionDAO.replyToThread(thread.getId(), me.getUsername(), reply);
+        thread = threadLoadDAO.getThread(thread.getId(), me.getUsername());
     }
 
     private void handleLike() {
-        threadDAO.likeThread(thread.getId(), me.getUsername());
-        thread = threadDAO.getThread(thread.getId(), me.getUsername());
+        threadActionDAO.likeThread(thread.getId(), me.getUsername());
+        thread = threadLoadDAO.getThread(thread.getId(), me.getUsername());
     }
 
     private void handleDislike() {
-        threadDAO.dislikeThread(thread.getId(), me.getUsername());
-        thread = threadDAO.getThread(thread.getId(), me.getUsername());
+        threadActionDAO.dislikeThread(thread.getId(), me.getUsername());
+        thread = threadLoadDAO.getThread(thread.getId(), me.getUsername());
     }
 }

@@ -7,7 +7,8 @@ import java.util.regex.Pattern;
 
 import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.data.FarmerDAO;
-import com.g1t11.socialmagnet.data.ThreadDAO;
+import com.g1t11.socialmagnet.data.ThreadActionDAO;
+import com.g1t11.socialmagnet.data.ThreadLoadDAO;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.model.social.User;
@@ -17,7 +18,8 @@ import com.g1t11.socialmagnet.view.page.socialmagnet.WallPageView;
 
 public class WallController extends SocialMagnetController {
     protected FarmerDAO farmerDAO = new FarmerDAO(database());
-    protected ThreadDAO threadDAO = new ThreadDAO(database());
+    protected ThreadLoadDAO threadLoadDAO = new ThreadLoadDAO(database());
+    protected ThreadActionDAO threadActionDAO = new ThreadActionDAO(database());
     
     protected Farmer farmerToDisplay;
     protected List<Thread> wallThreads;
@@ -30,7 +32,7 @@ public class WallController extends SocialMagnetController {
 
     @Override
     public void updateView() {
-        wallThreads = threadDAO.getWallThreads(farmerToDisplay.getUsername(), 5);
+        wallThreads = threadLoadDAO.getWallThreads(farmerToDisplay.getUsername(), 5);
         ((WallPageView) view).setThreads(wallThreads);
     }
 
@@ -71,7 +73,7 @@ public class WallController extends SocialMagnetController {
         PromptInput input = new PromptInput("Enter your post");
         String threadContent = input.nextLine();
         List<String> tags = getRawUserTags(threadContent);
-        threadDAO.addThread(
+        threadActionDAO.addThread(
             me.getUsername(),
             farmerToDisplay.getUsername(),
             threadContent,

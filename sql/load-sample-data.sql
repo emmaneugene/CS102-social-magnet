@@ -27,33 +27,41 @@ INSERT INTO friend (user_1, user_2) VALUES
 ("danny",   "elijah"),
 ("danny",   "frank");
 
-INSERT INTO thread (author, recipient, posted_on, content) VALUES
-("adam",    "adam",    "2019-03-02 08:30:00", "Hello, world!"),
-("adam",    "adam",    "2019-05-02 10:30:00", "I'm going crazy!!"),
-("britney", "elijah",  "2019-05-15 20:30:00", "Don't know what you're talking about"),
-("charlie", "charlie", "2019-09-03 20:30:00", "Where is City Farmer??"),
-("charlie", "adam",    "2019-09-04 09:30:00", "Who are you talking to?"),
-("danny",   "frank",   "2019-09-02 15:30:00", "Look out, Fakebook! Social Magnet is going to get more users!"),
-# elijah and charlie are not friends, therefore the tag does not work.
-("elijah",  "elijah",  "2019-09-15 08:30:00", "Had a great night with @adam, @britney, and @charlie"),
-("adam",    "elijah",  "2019-10-02 12:30:00", "Where did you go?"),
+INSERT INTO thread (thread_id, author, recipient, posted_on, content) VALUES
+-- testSetCommentsOnlyThree
+(1,  "adam",    "adam",    "2019-03-02 08:30:00", "Hello, world!"),
+-- testSetCommentsFewerThanThree, testSetDislikersNone
+(2,  "adam",    "adam",    "2019-05-02 10:30:00", "I'm going crazy!!"),
+-- testSetCommentsZero, testSetLikers
+(3,  "britney", "elijah",  "2019-05-15 20:30:00", "Don't know what you're talking about"),
+-- testSetLikersNone, testSetDislikers
+(4,  "charlie", "charlie", "2019-09-03 20:30:00", "Where is City Farmer??"),
+(5,  "charlie", "adam",    "2019-09-04 09:30:00", "Who are you talking to?"),
+(6,  "danny",   "frank",   "2019-09-02 15:30:00", "Look out, Fakebook! Social Magnet is going to get more users!"),
+-- testGetThread, testSetCommentsMoreThanThree, testGetTaggedUsernames
+(7,  "elijah",  "elijah",  "2019-09-15 08:30:00", "Had a great night with @adam, @britney, and @charlie"),
+-- testGetTaggedUsernamesNone
+(8,  "adam",    "elijah",  "2019-10-02 12:30:00", "Where did you go?"),
 # adam is spelt wrongly, therefore the tag does not work.
-("britney", "charlie", "2019-10-03 13:30:00", "We should meet up again! @elijah @adsm"),
-("britney", "britney", "2019-10-04 14:30:00", "I'm so lonely...");
+(9,  "britney", "charlie", "2019-10-03 13:30:00", "We should meet up again! @elijah @adsm"),
+(10, "britney", "britney", "2019-10-04 14:30:00", "I'm so lonely...");
 
 INSERT INTO tag (thread_id, tagged_user) VALUES
+-- testGetTaggedUsernames
 (7, "adam"),
 (7, "britney"),
 (9, "elijah");
 
 INSERT INTO comment (comment_num, thread_id, commenter, commented_on, content) VALUES
+-- testSetCommentsOnlyThree
 (1, 1, "charlie", "2019-03-02 16:30:00", "Good job! You started programming."),
 (2, 1, "elijah",  "2019-03-04 12:15:00", "Bye!"),
+(3, 1, "charlie", "2019-03-05 12:15:00", "Goodbye!"),
+-- testSetCommentsFewerThanThree
 (1, 2, "charlie", "2019-05-02 10:32:00", "Same!!! Too many things to do!"),
-(1, 3, "elijah",  "2019-05-15 21:00:00", "Same here."),
 (1, 4, "danny",   "2019-09-03 20:35:00", "I can't find it too!"),
 (1, 6, "frank",   "2019-09-03 16:30:00", "Not sure about that."),
-# More than 3 comments on one post
+-- testSetCommentsMoreThanThree
 (1, 7, "adam",    "2019-09-15 10:00:00", "You were a blast!"),
 (2, 7, "britney", "2019-09-15 15:00:00", "How did you guys wake up so early??"),
 (3, 7, "adam",    "2019-09-15 16:15:00", "Early bird gets the worm!"),
@@ -61,16 +69,17 @@ INSERT INTO comment (comment_num, thread_id, commenter, commented_on, content) V
 
 
 INSERT INTO liker (username, thread_id) VALUES
+-- testSetLikers
 ("adam",    3),
 ("britney", 3),
 ("britney", 7),
 ("charlie", 1),
 ("charlie", 5),
-("danny",   4),
 ("elijah",  2);
 
 INSERT INTO disliker (username, thread_id) VALUES
 ("adam",    3),
+-- testSetDislikers
 ("adam",    4),
 ("britney", 4),
 ("elijah",  1);
