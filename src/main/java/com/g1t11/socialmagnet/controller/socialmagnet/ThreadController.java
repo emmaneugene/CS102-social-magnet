@@ -93,12 +93,12 @@ public class ThreadController extends SocialMagnetController {
     }
 
     private void handleLike() {
-        threadActionDAO.likeThread(thread.getId(), me.getUsername());
+        threadActionDAO.toggleLikeThread(thread.getId(), me.getUsername());
         thread = threadLoadDAO.getThread(thread.getId(), me.getUsername());
     }
 
     private void handleDislike() {
-        threadActionDAO.dislikeThread(thread.getId(), me.getUsername());
+        threadActionDAO.toggleDislikeThread(thread.getId(), me.getUsername());
         thread = threadLoadDAO.getThread(thread.getId(), me.getUsername());
     }
 }

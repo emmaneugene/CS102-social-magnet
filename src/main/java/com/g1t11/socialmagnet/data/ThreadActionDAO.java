@@ -10,6 +10,58 @@ public class ThreadActionDAO extends DAO {
         super(db);
     }
 
+    /**
+     * Post a new thread from a user to another user's wall on the database,
+     * and add the tags associated to the database.
+     * 
+     * @param fromUser The user posting the thread.
+     * @param toUser The user receiving the thread.
+     * @param content The content of the thread.
+     * @param usernameTags A list of usernames to tag the thread with.
+     */
+    public int addThread(String fromUser, String toUser, String content, List<String> usernameTags) {
+        String queryString = "CALL add_thread_return_id(?, ?, ?)";
+
+        ResultSet rs = null;
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+            stmt.setString(1, fromUser);
+            stmt.setString(2, toUser);
+            stmt.setString(3, content);
+
+            rs = stmt.executeQuery();
+            rs.next();
+
+            addTags(rs.getInt("new_id"), usernameTags);
+            return rs.getInt("new_id");
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+            throw new DatabaseException(e);
+        }
+    }
+
+    /**
+     * Add a list of username tags to a thread on the database.
+     * 
+     * @param threadId The ID of the thread to tag.
+     * @param usernames A list of usernames to tag the thread with.
+     */
+    public void addTags(int threadId, List<String> usernames) {
+        if (usernames == null || usernames.size() == 0) return;
+        String queryString = "CALL add_tag(?, ?)";
+
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+            for (String username : usernames) {
+                stmt.setInt(1, threadId);
+                stmt.setString(2, username);
+                stmt.addBatch();
+            }
+            stmt.executeBatch();
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+            throw new DatabaseException(e);
+        }
+    }
+
     /*
     /**
      * Remove a tag from a thread on the database.
@@ -75,12 +127,12 @@ public class ThreadActionDAO extends DAO {
     }
 
     /**
-     * Add a user as a liker of a thread.
+     * Toggle between adding or removing a user as a liker of a thread.
      * 
      * @param threadId The ID of the thread to like.
      * @param username The user liking the thread.
      */
-    public void likeThread(int threadId, String username) {
+    public void toggleLikeThread(int threadId, String username) {
         String queryString = "CALL toggle_like_thread(?, ?)";
 
         try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
@@ -95,12 +147,12 @@ public class ThreadActionDAO extends DAO {
     }
 
     /**
-     * Add a user as a disliker of a thread.
+     * Toggle between adding or removing a user as a disliker of a thread.
      * 
      * @param threadId The ID of the thread to like.
      * @param username The user liking the thread.
      */
-    public void dislikeThread(int threadId, String username) {
+    public void toggleDislikeThread(int threadId, String username) {
         String queryString = "CALL toggle_dislike_thread(?, ?)";
 
         try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
@@ -108,57 +160,6 @@ public class ThreadActionDAO extends DAO {
             stmt.setString(2, username);
 
             stmt.executeUpdate();
-        } catch (SQLException e) {
-            System.err.println("SQLException: " + e.getMessage());
-            throw new DatabaseException(e);
-        }
-    }
-
-    /**
-     * Post a new thread from a user to another user's wall on the database,
-     * and add the tags associated to the database.
-     * 
-     * @param fromUser The user posting the thread.
-     * @param toUser The user receiving the thread.
-     * @param content The content of the thread.
-     * @param usernameTags A list of usernames to tag the thread with.
-     */
-    public void addThread(String fromUser, String toUser, String content, List<String> usernameTags) {
-        String queryString = "CALL add_thread_return_id(?, ?, ?)";
-
-        ResultSet rs = null;
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
-            stmt.setString(1, fromUser);
-            stmt.setString(2, toUser);
-            stmt.setString(3, content);
-
-            rs = stmt.executeQuery();
-            rs.next();
-
-            addTags(rs.getInt("new_id"), usernameTags);
-        } catch (SQLException e) {
-            System.err.println("SQLException: " + e.getMessage());
-            throw new DatabaseException(e);
-        }
-    }
-
-    /**
-     * Add a list of username tags to a thread on the database.
-     * 
-     * @param threadId The ID of the thread to tag.
-     * @param usernames A list of usernames to tag the thread with.
-     */
-    public void addTags(int threadId, List<String> usernames) {
-        if (usernames == null || usernames.size() == 0) return;
-        String queryString = "CALL add_tag(?, ?)";
-
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
-            for (String username : usernames) {
-                stmt.setInt(1, threadId);
-                stmt.setString(2, username);
-                stmt.addBatch();
-            }
-            stmt.executeBatch();
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
             throw new DatabaseException(e);

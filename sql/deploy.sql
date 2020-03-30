@@ -369,7 +369,7 @@ DELIMITER $$
 CREATE PROCEDURE reply_to_thread(IN _thread_id INT, IN _username VARCHAR(255), IN _content TEXT(65535))
 BEGIN
     SET @next_num = (
-        SELECT MAX(comment_num) + 1 FROM comment
+        SELECT IFNULL(MAX(comment_num), 0) + 1 FROM comment
         WHERE thread_id = _thread_id
     );
     INSERT INTO comment (comment_num, thread_id, commenter, commented_on, content) VALUES (@next_num, _thread_id, _username, NOW(), _content);
