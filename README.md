@@ -24,3 +24,7 @@ For this project, we are going to write a simple social networking application c
 In Social Magnet, a member has a wall containing his personal information, and the last few messages to the wall. 
 
 All members are automatically players of an integrated farming game called **City Farmers**. In the game, the farmer (i.e. the player) manages a virtual farm by planting, growing and harvesting virtual crops.
+
+## Design Considerations
+
+View our [design considerations](DESIGN_CONSIDERATIONS.md).
