@@ -1,24 +1,277 @@
-# Object-Oriented Design Considerations
+# Design Considerations
 
-## Model-View-Controller
+In designing our application, we adopted some key principles:
 
-`Models` supply `Views` with the data necessary for the UI.
+1. The database is the single source of truth for all data.
+2. The design of the database should be decoupled from the application.
+3. The navigation state of the application should be handled in one single location.
+4. The UI of the application should be as modular as possible in accordance to object-oriented principles.
 
-`Views` organise data to be presented on the UI.
+In addition to these key principles, a few miscellaneous design decisions are listed in the appendix.
 
-`Controllers` handle state, load data into `Models` and inject those into `Views`, and handle user input to decide which `Controller` to navigate to next.
+## Database-First Approach
 
-### Navigation and Controller
+When considering how state was to be stored for the application, we chose to use a [single source of truth](https://en.wikipedia.org/wiki/Single_source_of_truth) approach. Due to the relatively simple data storage requirements, this practice afforded some benefits:
 
-The `Navigation` object is used to implement the [state pattern](https://en.wikipedia.org/wiki/State_pattern), where the behaviour of our application depends on its current state/controller.
+* There is no issue with application state and database state being out-of-sync.
+* Rendering updated data becomes much simpler as we can rely on the database to keep track of changes.
+* We can validate all transactions on the database, allowing easier enforcement of database rules.
+  * Application crashes between database queries would not result in invalid database state.
+    * For example, it is much more difficult to purchase seeds and receive them without having your account balance be deducted.
+
+However, we do note that this approach does come with some limitations.
+
+* It is much harder to scale up the application should we need to do so.
+  * For a small project, we accepted this cost for the benefits of simpler state management.
+* If the database is slow to respond (e.g. served over a web service), then our application becomes unnecessarily sluggish.
+  * Our approach to solving this issue will be to create a data cache on the application between the DAO layer and the database layer. This cache will abstract all DAO calls and serve cached data whenever possible and queue any updates to data for the database.
+
+## Application Architecture
+
+Due to the complexity of this project, we decided to break our application into four distinct components.
+
+**Views** accept data and handles presentation to the UI (console output).
+
+**Models** represent units of information queried from the database, and act as data containers to be injected into views.
+
+**Database Access Objects (DAOs)** handle application-database communication, and formats raw database information into model representations.
+
+**Controllers** handle application state, access DAOs for models, inject those into views, and handle user input to decide the next state.
+
+### Views
+
+We decided to differentiate between two types of views:
+
+1. `PageView` is responsible for representing an entire page managed by a `Controller` which it has a one-to-one relationship with.
+2. `Component` is responsible for displaying a single `Model`, and therefore should be tied to its associated `Model`.
+
+> `PageView` is `Controller` centric, while `Component` is `Model` centric.
+
+`PageViews` can render models directly. However, when a model needs to be rendered repeatedly in a complicated format (e.g. threads on the News Feed), a `Component` should be used within the `PageView`.
+
+```java
+public class NewsFeedPageView extends PageView {
+    // Components representing the threads on the News Feed
+    List<SimpleThreadComponent> threadComps;
+
+    @Override
+    public void display() {
+        super.display();
+        for (SimpleThreadComponent threadComp : threadComps) {
+            threadComp.render();
+        }
+    }
+}
+```
+
+This allows our UI code to be much more modular:
+
+* We can reuse multiple `Components` across different `PageViews` (e.g. `SimpleThreadComponent` is used in both `NewsFeedPageView` and `WallPageView`)
+
+```java
+public class NewsFeedPageView extends PageView {
+    private List<SimpleThreadComponent> threadComps;
+      
+public class WallPageView extends PageView {
+    private WallProfileInfoComponent profileComp;
+    private List<SimpleThreadComponent> threadComps;
+```
+
+* We can extend `PageViews` to create more specialised `PageViews` (e.g. All City Farmer related `PageViews` extend a specialised  `CityFarmersPageView`, which extends `PageView`)
+
+```java
+public abstract class CityFarmersPageView extends PageView { ...
+```
+
+#### Static vs Dynamic Data Representation
+
+**Static data** refers to data that is not expected to change during the lifecycle of a `Controller` (e.g. the username of the logged-in user on the Main Menu).
+
+**Dynamic data** refers to data that can be updated before a `Controller` is popped off the navigation stack (e.g. the wealth of a user can change after harvesting crops on My Farmland).
+
+When developing the application, we settled on the following practices:
+
+* Static data should be passed into `Views` only once through its constructor.
+
+* Dynamic data should be passed into `Views` before every display update through setter methods on the `View`.
+
+```java
+public class WallPageView {
+    // Not expected to update while WallPageController is on the navigation stack.
+    public WallPageView(String currentUsername) {}
+
+    // Will be updated when navigating back from ThreadController.
+    public void setThreads(List<Thread> threads) {}
+```
+
+### Models
+
+When designing our models, we initially represented all relationships.
+
+```java
+public class User {
+    List<User> friends = ...
+    List<Thread> newsFeedThreads = ...
+```
+
+However, this presented some issues.
+
+* Given a unary relationship (i.e. the current user and his friends are all Users), we cannot maintain model integrity.
+  * Assume the `User` model has a field of other `Users` to represent friends.
+  * Given `user1` and `user2` are friends, we cannot fully load the attributes of `user2`, as it would recursively load `user1` again.
+  * If we choose to only load shallow details of `user2`, this **violates the integrity of our models**, as we have two instances of `User` that have different specifications, `user1` containing a proper list of his friends, and `user2` only containing shallow information.
+* Many-to-many relationships result in duplicate data loading.
+  * Given a list of friends, some threads can appear multiple times under different friends due to tagging. Without special handling, this results in much wasted data storage and usage.
+* Some one-to-many relationships are unnecessary.
+  * Given a list of friends, we will not likely access everyone's walls. Therefore, a lot of data loaded goes unused and database bandwidth is wasted.
+
+#### Slim Models
+
+Refering to our database-first approach, we decided to treat our models as **units of information that represent a single entity**, and load relationships from the database only when required.
+
+For example, the `User` model should only contain a username and his fullname, as those are the only two pieces of information that are directly associated with a user.
+
+We will only lazily load any extra information from the database when we need to do so, and store that data on the controller instead.
+
+* We only load the News Feed Threads of a user when we navigate to the News Feed page.
+
+```java
+public class WallController extends Controller {
+  	// The farmer and the threads on his wall are stored separately
+    Farmer farmerToDisplay;
+    List<Thread> wallThreads;
+```
+
+#### Relational Attributes
+
+While we do not represent relationships on our models, we treat one-to-many relations between different tables as **multivariate attributes**. Therefore, some models will still contain multi-valued references.
+
+* For example, `Farmers` have a one-to-many relationship with their `Plots`. As the state of the farmer himself relies on his plots, we chose to model that relationship under our `Farmer` model, which extends our `User` model.
+
+```java
+public class Farmer extends User {
+    List<Plot> farmland;
+```
+
+### Database Access Objects
+
+Database Access Objects (DAOs) abstract the backend systems of our application stack. In designing our DAOs, we decided to instantiate all DAOs with a reference to a custom **Database** object.
+
+#### Database Object
+
+DAOs are instantiated with the `Database` reference, which allows us to handle connection failures and re-establish them should they fail.
+
+* Upon a failed or lost connection, we throw a custom `DatabaseException` runtime exception which is bubbled up to the `App` event loop.
+* `App` will gracefully handle the connection failure, and try to re-establish the database connection.
+
+* If a connection is re-established, we can simply reassign the connection as a member field of `Database`, allowing all DAOs to access the new connection again.
+
+#### DatabaseException
+
+As `java.sql.SQLException` is a checked exception, it is difficult to bubble the exception up from the DAO layer to the event loop layer without polluting the codebase with `throws`.
+
+Therefore, we created a simple runtime exception wrapper around `SQLException` which also allows us to handle other related database exceptions.
+
+#### Decoupling the Database and Application
+
+##### Using stored procedures
+
+Initially, SQL queries were hardcoded in the application itself.
+
+```java
+String queryString = String.join(" ",
+    "SELECT username, fullname",
+    "FROM",
+    "(SELECT user_1 AS friend_name FROM friend WHERE user_2 = ?",
+    "UNION",
+    "SELECT user_2 FROM friend WHERE user_1 = ?) AS f",
+	  "JOIN user ON friend_name = user.username;"
+);
+```
+
+However, this presented multiple issues:
+
+* Compile-time errors were not caught.
+* Updates to the database design required recompilation of the application.
+* Actions that required multiple updates to multiple tables were difficult to implement without increasing the number of queries to the database.
+
+Instead, we abstracted all database-related logic on the database itself through stored procedures.
+
+`UserDAO.java`
+
+```java
+String queryString = "CALL get_friends(?)";
+```
+
+`deploy.sql`
+
+```mysql
+CREATE PROCEDURE get_friends(IN _username VARCHAR(255))
+    SELECT username, fullname FROM (
+        SELECT user_1 AS friend_name FROM friend WHERE user_2 = _username
+        UNION
+        SELECT user_2 FROM friend WHERE user_1 = _username
+    ) AS f
+    JOIN user ON friend_name = user.username;
+```
+
+This afforded us some benefits:
+
+* Compile-time errors were caught by the MySQL engine when deploying the database
+* We could remodel our database behind stored procedures without having to update our application.
+* Complicated transactions could be performed on the database itself, and the application can rely on the state of the database to be valid.
+
+Essentially, the database handles all data logic, and the client application serves a user-friendly view of the database state.
+
+### Controllers
+
+Console applications go through a predictable event cycle:
+
+```
+update console... wait for input... perform actions... update console...
+```
+
+Therefore, we decided early on that our controllers will all implement the same behaviour.
+
+```java
+public abstract class Controller {
+    public void run() {
+        updateView();
+        handleInput();
+    }
+    ...
+}
+```
+
+### State Pattern with Navigation
+
+In addition to the four components, we designed a **Navigation object**.
+
+The **Navigation** object is used to implement the [state pattern](https://en.wikipedia.org/wiki/State_pattern), where the behaviour of our application depends on its current state/controller.
 
 The first controller on the base of the navigation stack represents our application's starting state, and the last controller on the top of the stack always represent the current state of our application.
 
-As such, we can control the execution of our application with just one `while` loop, and depend on the state of our navigation stack to control behaviour.
+#### Benefits
 
-* This behaviour was chosen over managing multiple loops within multiple `Controllers`, and having to trace a navigation path from `Controller` to `Controller`.
+As such, we can control the execution of our application with just one event loop, and depend on the state of our navigation stack to control behaviour.
 
-#### Two-way binding of Navigation and Controller
+```java
+public class App {
+    public void run() {
+        while (true) {
+            nav.currentController().run();
+        }
+    }
+}
+```
+
+This behaviour allows us to inspect `Navigation` whenever we need to check the state of our application, instead of having to trace a navigation path from `Controller` to `Controller`.
+
+#### Limitations
+
+However, this approach does create some issues.
+
+##### Two-way binding of Navigation and Controller
 
 All `Controllers` are initialised with a `Navigation` object, and `Navigation` pushes and pops `Controller` objects onto its stack.
 
@@ -36,11 +289,11 @@ public class Navigation {
 }
 ```
 
-This creates a two-way binding between `Controllers` and `Navigation`, which is necessary for `Navigation` to maintain its stack of `Controllers`, and `Controllers` to decide the next `Controller` to push onto `Navigation`.
+This creates a cyclic dependency between `Controllers` and `Navigation`, which is necessary for `Navigation` to maintain its stack of `Controllers`, and `Controllers` to decide the next `Controller` to push onto `Navigation`.
 
-#### Navigating to other controllers
+However, `Controller` tests are a little bit more difficult to set up, as we also have to initialise a `Navigation` object whenever we use a `Controller`.
 
-To navigate to other controllers, instantiate the controller, then push it onto the stack.
+For example, to navigate to other controllers, we first have to instantiate the `Controller` with the `Navigation` object, then push it onto the stack.
 
 ```java
 // current controller: WelcomeController
@@ -52,65 +305,19 @@ nav.pop();
 
 #### Passing data between Controllers
 
-Data **must be** passed between controllers through their constructors.
+If data needs to be passed between controllers, it must be done so through their constructors.
 
-### Views
+This is to ensure that only static data is passed in between controllers on the application.
 
-There are two types of views:
-1. `PageView`, responsible for representing entire pages.
-2. `Component`, responsible for rendering a provided data model.
+In accordance with the database-first approach, any data that is expected to update during a controller's lifecycle should do so on the database first. Then, any other controllers that rely on updated data should query the database first before presenting its view.
 
-`PageViews` **belong to** `Controllers`, and `PageViews` can contain zero or many `Components`.
+## Appendix
 
-#### Principles
+#### Database Credentials
 
-`PageView` holds a reference to the model(s) that it should display, but **not model(s) that should be displayed by its `Components`**.
+We load our database credentials through system environment variables stored outside the git repositry to minimise exposure of sensitive data.
 
-```java
-public class ThreadPageView {
-    // Directly rendered by ThreadPageView.
-    private Thread thread;
-
-    // Comments are rendered by its Component, therefore ThreadPageView should not hold
-    // a reference to List<Comment>.
-    private List<CommentComponent> commentComps = ...
-    ...
-```
-
-##### Passing data into PageView
-
-For data that is **not expected to update** during the lifecycle of the `PageView`, data can be passed once through the `PageView` constructor and left as it is.
-* A `Controller` lifecycle is the period from its instantiation, to being popped off the navigation stack.
-
-If the data **is expected to change**, then it should not be passed through the constructor. Instead, the `Controller` must inject data into its `PageView` through supplied methods before it calls `PageView::display()`.
-
-When data is injected, the `PageView` will subsequently pass data into its `Components` as necessary.
-
-```java
-public class WallPageView {
-    // Not expected to update while WallPageController is on the navigation stack.
-    public WallPageView(String currentUsername) {}
-
-    // Will be updated when navigating back from ThreadController.
-    public void updateThreads(List<Thread> threads)
-    ...
-```
-
-##### Passing data into Component
-
-Similarly, data that is **not expected to change** for a given instance of `Component` should be passed in through its constructor, and data that is **dynamic** should be set through setter methods before `Component::render()`.
-
-## Database
-
-### Credentials
-
-We also load our credentials through system environment variables stored outside the git repositry to minimise exposure of sensitive data.
-
-### Using stored procedures
-
-By implementing all database-related logic on the database itself, we can minimise the amount of hard-coded SQL queries within the application, and reduce binding between the application and the database design. 
-
-### Saving tagged user information
+#### Saving tagged user information
 
 We wanted to remember which tags were valid at the time of post creation. In addition, we need to remember where our tag was created within the content so that we could highlight the tag appropriately.
 
@@ -125,5 +332,6 @@ While option 2 seemed simpler, it came with multiple disadvantages
 
 Instead, we adopted option 1, and represent the tagging relations with a table, while storing the original `@` tagging markers in the database.
 
-When we load content in, we run through the string for all occurences of `@`, and validate the tag against the relational data before formatting accordingly.
+When we load content onto the database, we run through the string for all occurences of `@`, and validate the tag against the relational data before formatting accordingly.
+
 * We assume that a user can only be tagged once in a post, and only the first valid tag is formatted.
