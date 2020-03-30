@@ -9,7 +9,7 @@ import org.junit.Test;
 public class TestCredentialsDAO extends TestDAO {
     private CredentialsDAO credDAO;
 
-    private static final User adam = new User("adam", "Adam Levine");
+    public static final User adam = new User("adam", "Adam Levine");
 
     public TestCredentialsDAO() {
         credDAO = new CredentialsDAO(db);

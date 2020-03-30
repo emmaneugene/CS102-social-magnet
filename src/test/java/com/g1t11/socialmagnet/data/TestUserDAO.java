@@ -12,13 +12,15 @@ import org.junit.Test;
 public class TestUserDAO extends TestDAO {
     private UserDAO userDAO;
 
-    private static final User adam = new User("adam", "Adam Levine");
-    private static final User britney = new User("britney", "Britney Spears");
-    private static final User charlie = new User("charlie", "Charlie Puth");
-    private static final User danny = new User("danny", "Danny DeVito");
-    private static final User elijah = new User("elijah", "Elijah Wood");
-    private static final User frank = new User("frank", "Frank Sinatra");
-    private static final User icarus = new User("icarus", "Icarus");
+    public static final User adam    = new User("adam", "Adam Levine");
+    public static final User britney = new User("britney", "Britney Spears");
+    public static final User charlie = new User("charlie", "Charlie Puth");
+    public static final User danny   = new User("danny", "Danny DeVito");
+    public static final User elijah  = new User("elijah", "Elijah Wood");
+    public static final User frank   = new User("frank", "Frank Sinatra");
+    public static final User gary    = new User("gary", "Gary Oldman");
+    public static final User howard  = new User("howard", "Howard Duck");
+    public static final User icarus  = new User("icarus", "Icarus");
 
     public TestUserDAO() {
         userDAO = new UserDAO(db);

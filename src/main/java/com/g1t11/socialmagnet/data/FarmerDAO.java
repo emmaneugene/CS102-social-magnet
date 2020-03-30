@@ -13,6 +13,7 @@ import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.farm.Plot;
 import com.g1t11.socialmagnet.model.farm.StealingRecord;
+import com.g1t11.socialmagnet.model.social.UserNotFoundException;
 
 public class FarmerDAO extends DAO {
     public FarmerDAO(Database db) {
@@ -38,7 +39,7 @@ public class FarmerDAO extends DAO {
             stmt.setString(1, username);
 
             rs = stmt.executeQuery();
-            rs.next();
+            if (!rs.next()) throw new UserNotFoundException();
 
             f = new Farmer(
                 rs.getString("username"),

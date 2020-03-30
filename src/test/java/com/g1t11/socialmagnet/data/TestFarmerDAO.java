@@ -9,23 +9,20 @@ import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.farm.Plot;
 import com.g1t11.socialmagnet.model.farm.StealingRecord;
+import com.g1t11.socialmagnet.model.social.UserNotFoundException;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
-public class TestFarmerDAO {
+public class TestFarmerDAO extends TestDAO {
     private FarmerDAO farmerDAO;
 
-    public static final Crop papaya =     new Crop("Papaya",     20, 30,  8,  75, 100, 15);
-    public static final Crop pumpkin =    new Crop("Pumpkin",    30, 60,  5,   5, 200, 20);
+    public static final Crop papaya     = new Crop("Papaya",     20, 30,  8,  75, 100, 15);
+    public static final Crop pumpkin    = new Crop("Pumpkin",    30, 60,  5,   5, 200, 20);
     public static final Crop sunflower  = new Crop("Sunflower",  40, 120, 20, 15, 20,  40);
     public static final Crop watermelon = new Crop("Watermelon", 50, 240, 1,   5, 800, 10);
 
-    @Before
-    public void initDAO() {
-        Database db = new Database();
-        db.establishConnection();
+    public TestFarmerDAO() {
         farmerDAO = new FarmerDAO(db);
     }
 
@@ -39,12 +36,23 @@ public class TestFarmerDAO {
         Assert.assertEquals(expected, actual);
     }
 
+    @Test(expected = UserNotFoundException.class)
+    public void testGetNonExistentFarmer() {
+        farmerDAO.getFarmer("yankee");
+    }
+
     @Test
     public void testGetInventoryCrops() {
         Map<String, Integer> expected = new LinkedHashMap<>(Map.of("Papaya", 1, "Watermelon", 2));
         Map<String, Integer> actual = farmerDAO.getInventoryCrops("britney");
         
         Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testGetInventoryEmpty() {
+        Map<String, Integer> actual = farmerDAO.getInventoryCrops("charlie");
+        Assert.assertEquals(0, actual.size());
     }
 
     @Test
