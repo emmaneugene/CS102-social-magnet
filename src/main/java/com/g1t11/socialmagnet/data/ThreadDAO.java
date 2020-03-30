@@ -248,6 +248,7 @@ public class ThreadDAO extends DAO {
     public void addTags(int threadId, List<String> usernames) {
         if (usernames == null || usernames.size() == 0) return;
         String queryString = "CALL add_tag(?, ?)";
+
         try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
             for (String username : usernames) {
                 stmt.setInt(1, threadId);

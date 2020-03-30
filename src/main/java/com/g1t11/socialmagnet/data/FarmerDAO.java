@@ -182,4 +182,21 @@ public class FarmerDAO extends DAO {
         
         return stolenCrops;
     }
+
+    public void sendGifts(int threadId, List<String> usernames) {
+        if (usernames == null || usernames.size() == 0) return;
+        String queryString = "CALL add_tag(?, ?)";
+
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+            for (String username : usernames) {
+                stmt.setInt(1, threadId);
+                stmt.setString(2, username);
+                stmt.addBatch();
+            }
+            stmt.executeBatch();
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+            throw new DatabaseException(e);
+        }
+    }
 }

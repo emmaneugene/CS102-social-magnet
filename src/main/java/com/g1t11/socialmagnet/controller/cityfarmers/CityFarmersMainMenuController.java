@@ -36,6 +36,8 @@ public class CityFarmersMainMenuController extends CityFarmersController {
                 nav.push(new VisitFriendController(nav, me));
                 break;
             case "5":
+                nav.push(new SendGiftController(nav, me));
+                break;
             case "M":
                 nav.pop();
                 break;

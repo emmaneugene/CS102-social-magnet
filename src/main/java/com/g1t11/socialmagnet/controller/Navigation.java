@@ -45,6 +45,10 @@ public class Navigation {
         return navigationStack.get(size - 1);
     }
 
+    public void setCurrStatus(String text) {
+        currController().setStatus(text);
+    }
+
     /**
      * Remove the current <code>Controller</code> from the navigation stack and
      * prepare the application to navigate to the previous Controller.

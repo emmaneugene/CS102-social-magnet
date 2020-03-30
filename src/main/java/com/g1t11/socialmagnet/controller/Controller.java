@@ -1,12 +1,15 @@
 package com.g1t11.socialmagnet.controller;
 
 import com.g1t11.socialmagnet.data.Database;
+import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.PageView;
 
 public abstract class Controller {
     public Navigation nav;
 
     protected PageView view;
+
+    protected PromptInput input;
 
     public Controller(Navigation nav) {
         this.nav = nav;
