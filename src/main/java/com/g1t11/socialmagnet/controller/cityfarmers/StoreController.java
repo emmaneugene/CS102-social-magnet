@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.controller.socialmagnet.MainMenuController;
-import com.g1t11.socialmagnet.data.FarmerLoadDAO;
 import com.g1t11.socialmagnet.data.StoreDAO;
 import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;

@@ -9,7 +9,7 @@ public abstract class Controller {
 
     protected PageView view;
 
-    protected PromptInput input;
+    protected PromptInput input = new PromptInput();
 
     public Controller(Navigator nav) {
         this.nav = nav;

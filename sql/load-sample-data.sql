@@ -147,12 +147,18 @@ INSERT INTO inventory (owner, crop_name, quantity) VALUES
 ("britney", "Papaya", 1),
 ("britney", "Watermelon", 2);
 
-INSERT INTO gift (sender, recipient, gifted_on, crop_name) VALUES
-("adam",    "britney", "2019-12-03", "Sunflower"),
-("adam",    "elijah",  "2019-12-03", "Sunflower"),
-("adam",    "frank",   "2019-12-03", "Sunflower"),
-("charlie", "adam",    CURDATE(),    "Watermelon"),
-("charlie", "britney", CURDATE(),    "Papaya"),
-("charlie", "danny",   CURDATE(),    "Papaya"),
-("charlie", "elijah",  CURDATE(),    "Papaya"),
-("charlie", "frank",   CURDATE(),    "Papaya");
+INSERT INTO gift (sender, recipient, gifted_on, crop_name, accepted) VALUES
+-- testSentGiftCountNotToday
+("adam",    "britney", "2019-12-03", "Sunflower",  FALSE),
+("adam",    "elijah",  "2019-12-03", "Sunflower",  FALSE),
+-- testSentGiftToUserToday (false)
+("adam",    "frank",   "2019-12-03", "Sunflower",  TRUE),
+-- testSentGiftToUsersToday
+("adam",    "frank",   CURDATE(),    "Watermelon", TRUE),
+-- testGetGiftCountToday
+("charlie", "adam",    CURDATE(),    "Watermelon", FALSE),
+("charlie", "britney", CURDATE(),    "Papaya",     FALSE),
+("charlie", "danny",   CURDATE(),    "Papaya",     FALSE),
+("charlie", "elijah",  CURDATE(),    "Papaya",     FALSE),
+-- testSentGiftToUserToday (true)
+("charlie", "frank",   CURDATE(),    "Papaya",     TRUE);
