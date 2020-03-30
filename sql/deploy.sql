@@ -148,6 +148,7 @@ CREATE TABLE gift (
     recipient VARCHAR(255) BINARY NOT NULL,
     gifted_on DATE                NOT NULL,
     crop_name VARCHAR(255)        NOT NULL,
+    accepted  BOOLEAN             NOT NULL DEFAULT FALSE,
     PRIMARY KEY (sender, recipient, gifted_on),
     FOREIGN KEY (sender)    REFERENCES farmer (username),
     FOREIGN KEY (recipient) REFERENCES farmer (username),
@@ -684,9 +685,20 @@ BEGIN
 END$$
 DELIMITER ;
 
+/*
+ * GIFTING
+ */
+
 CREATE PROCEDURE get_gift_count_today(IN _username VARCHAR(255))
     SELECT COUNT(*) gift_count FROM gift
     WHERE sender = _username AND gifted_on = CURDATE();
+
+CREATE PROCEDURE sent_gift_today(IN _sender VARCHAR(255), IN _recipient VARCHAR(255))
+    SELECT COUNT(*) sent FROM gift
+    WHERE sender = _sender AND recipient = _recipient AND gifted_on = CURDATE();
+
+CREATE PROCEDURE send_gift(IN _sender VARCHAR(255), IN _recipient VARCHAR(255), IN _crop_name VARCHAR(255))
+    INSERT INTO gift (sender, recipient, gifted_on, crop_name) VALUES (_sender, _recipient, CURDATE(), _crop_name);
 
 /*
  * STORE

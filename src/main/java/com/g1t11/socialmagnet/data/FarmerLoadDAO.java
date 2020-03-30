@@ -12,7 +12,6 @@ import java.util.Map;
 import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.farm.Plot;
-import com.g1t11.socialmagnet.model.farm.StealingRecord;
 import com.g1t11.socialmagnet.model.social.UserNotFoundException;
 
 public class FarmerLoadDAO extends DAO {
@@ -130,9 +129,13 @@ public class FarmerLoadDAO extends DAO {
         return plots;
     }
 
+    /**
+     * Get the number of gifts sent by the user today.
+     * @param username The username of the gift sender.
+     * @return The number of gifts sent today.
+     */
     public int getGiftCountToday(String username) {
         ResultSet rs = null;
-
         int giftCount = 0;
 
         String queryString = "CALL get_gift_count_today(?)";
@@ -149,7 +152,49 @@ public class FarmerLoadDAO extends DAO {
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
-
         return giftCount;
+    }
+
+    /**
+     * For a given user, get a map of usernames to send to and whether gifts
+     * were already sent today.
+     * @param username The username of the sender.
+     * @param recipients An array of users to check.
+     * @return A map of recipient usernames to whether a gift was already sent today.
+     */
+    public Map<String, Boolean> sentGiftToUsersToday(String username, String[] recipients) {
+        Map<String, Boolean> result = new LinkedHashMap<>();
+        for (String recipient : recipients) {
+            result.put(recipient, sentGiftToUserToday(username, recipient));
+        }
+        return result;
+    }
+
+    /**
+     * Check if a gift was already sent to a specific user.
+     * @param sender The username of the sender.
+     * @param recipient The recipient of the gift.
+     * @return Whether a gift was already sent today.
+     */
+    public boolean sentGiftToUserToday(String sender, String recipient) {
+        ResultSet rs = null;
+        boolean sentGiftToday = false;
+
+        String queryString = "CALL sent_gift_today(?, ?)";
+
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+            stmt.setString(1, sender);
+            stmt.setString(2, recipient);
+
+            rs = stmt.executeQuery();
+            rs.next();
+            sentGiftToday = rs.getBoolean("sent");
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+            throw new DatabaseException(e);
+        } finally {
+            try { if (rs != null) rs.close(); } catch (SQLException e) {}
+        }
+        return sentGiftToday;
     }
 }

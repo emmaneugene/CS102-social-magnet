@@ -127,14 +127,14 @@ public class FarmerActionDAO extends DAO {
         return stolenCrops;
     }
 
-    public void sendGifts(int threadId, List<String> usernames) {
-        if (usernames == null || usernames.size() == 0) return;
-        String queryString = "CALL add_tag(?, ?)";
+    public void sendGifts(String sender, String[] recipients, String cropName) {
+        String queryString = "CALL send_gift(?, ?, ?)";
 
         try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
-            for (String username : usernames) {
-                stmt.setInt(1, threadId);
-                stmt.setString(2, username);
+            for (String recipient : recipients) {
+                stmt.setString(1, sender);
+                stmt.setString(2, recipient);
+                stmt.setString(3, cropName);
                 stmt.addBatch();
             }
             stmt.executeBatch();

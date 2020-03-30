@@ -71,9 +71,30 @@ public class TestFarmerLoadDAO extends TestDAO {
     }
 
     @Test
-    public void getGiftCountToday() {
-        int expected = 5;
+    public void testGetGiftCountToday() {
         int actual = farmerLoadDAO.getGiftCountToday("charlie");
+        Assert.assertEquals(5, actual);
+    }
+
+    @Test
+    public void testGetGiftCountNotToday() {
+        int actual = farmerLoadDAO.getGiftCountToday("adam");
+        Assert.assertEquals(0, actual);
+    }
+
+    @Test
+    public void testSentGiftToUsersToday() {
+        Map<String, Boolean> expected = Map.of("britney", false, "frank", true);
+        Map<String, Boolean> actual = farmerLoadDAO.sentGiftToUsersToday("adam", new String[]{"britney", "frank"});
         Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testSentGiftToUserToday() {
+        boolean actual = farmerLoadDAO.sentGiftToUserToday("charlie", "frank");
+        Assert.assertTrue(actual);
+
+        actual = farmerLoadDAO.sentGiftToUserToday("adam", "frank");
+        Assert.assertFalse(actual);
     }
 }
