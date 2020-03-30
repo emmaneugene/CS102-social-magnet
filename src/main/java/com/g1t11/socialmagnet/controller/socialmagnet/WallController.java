@@ -30,7 +30,7 @@ public class WallController extends SocialMagnetController {
 
     @Override
     public void updateView() {
-        wallThreads = threadDAO.getWallThreads(farmerToDisplay, 5);
+        wallThreads = threadDAO.getWallThreads(farmerToDisplay.getUsername(), 5);
         ((WallPageView) view).setThreads(wallThreads);
     }
 

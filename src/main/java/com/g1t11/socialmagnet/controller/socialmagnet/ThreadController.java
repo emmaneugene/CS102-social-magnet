@@ -65,11 +65,11 @@ public class ThreadController extends SocialMagnetController {
             return;
         }
         if (isRemovable()) {
-            threadDAO.deleteThread(thread, me);
+            threadDAO.deleteThread(thread.getId(), me.getUsername());
             nav.pop();
             nav.setCurrStatus(Painter.paint("Successfully removed post!", Painter.Color.GREEN));
         } else if (thread.isTagged()) {
-            threadDAO.removeTag(thread, me);
+            threadDAO.removeTag(thread.getId(), me.getUsername());
             nav.pop();
             nav.setCurrStatus(Painter.paint("Successfully untagged post!", Painter.Color.GREEN));
         }
@@ -83,20 +83,20 @@ public class ThreadController extends SocialMagnetController {
 
     private void handleReply() {
         // Refresh the view to remove the previous prompt
-        updateView();
+        view.display();
         PromptInput input = new PromptInput("Enter your reply");
         String reply = input.nextLine();
-        threadDAO.replyToThread(thread, me, reply);
-        thread = threadDAO.getThread(thread.getId(), me);
+        threadDAO.replyToThread(thread.getId(), me.getUsername(), reply);
+        thread = threadDAO.getThread(thread.getId(), me.getUsername());
     }
 
     private void handleLike() {
-        threadDAO.likeThread(thread, me);
-        thread = threadDAO.getThread(thread.getId(), me);
+        threadDAO.likeThread(thread.getId(), me.getUsername());
+        thread = threadDAO.getThread(thread.getId(), me.getUsername());
     }
 
     private void handleDislike() {
-        threadDAO.dislikeThread(thread, me);
-        thread = threadDAO.getThread(thread.getId(), me);
+        threadDAO.dislikeThread(thread.getId(), me.getUsername());
+        thread = threadDAO.getThread(thread.getId(), me.getUsername());
     }
 }

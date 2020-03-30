@@ -81,7 +81,7 @@ public class StoreController extends CityFarmersController {
 
             Crop crop = storeItem.get(index - 1);
 
-            if (storeDAO.purchaseCrop(me, crop, amount)) {
+            if (storeDAO.purchaseCrop(me.getUsername(), crop.getName(), amount)) {
                 view.setStatus(String.format(
                     Painter.paint("%s of seeds purchased for %d gold.", Painter.Color.GREEN),
                     TextUtils.countedWord(amount, "bag", "bags"), amount * crop.getCost()

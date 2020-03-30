@@ -18,7 +18,7 @@ public class VisitFriendController extends CityFarmersController {
 
     public VisitFriendController(Navigator nav, Farmer me) {
         super(nav, me);
-        friends = userDAO.getFriends(me);
+        friends = userDAO.getFriends(me.getUsername());
         view = new VisitFriendPageView(friends);
     }
 

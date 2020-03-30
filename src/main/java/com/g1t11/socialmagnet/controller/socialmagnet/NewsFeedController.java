@@ -23,7 +23,7 @@ public class NewsFeedController extends SocialMagnetController {
 
     @Override
     public void updateView() {
-        threads = threadDAO.getNewsFeedThreads(me, 5);
+        threads = threadDAO.getNewsFeedThreads(me.getUsername(), 5);
         ((NewsFeedPageView) view).setThreads(threads);
     }
     

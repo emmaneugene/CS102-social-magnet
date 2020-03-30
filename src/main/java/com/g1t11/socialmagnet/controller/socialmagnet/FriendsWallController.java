@@ -16,7 +16,7 @@ public class FriendsWallController extends WallController {
         view = new FriendsWallPageView(
             me,
             farmerToDisplay, 
-            userDAO.getFriendsOfFriendWithCommon(me, farmerToDisplay)
+            userDAO.getFriendsOfFriendWithCommon(me.getUsername(), farmerToDisplay.getUsername())
         );
     }
 

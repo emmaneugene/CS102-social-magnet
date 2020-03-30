@@ -20,16 +20,16 @@ public class ThreadDAO extends DAO {
      * whether the thread should be marked as a tagged thread.
      * 
      * @param id The thread id.
-     * @param user The user that is retrieving the thread.
+     * @param username The user that is retrieving the thread.
      */
-    public Thread getThread(int id, User user) {
+    public Thread getThread(int threadId, String username) {
         String queryString = "CALL get_thread(?, ?)";
 
         ResultSet rs = null;
         Thread thread = null;
         try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
-            stmt.setInt(1, id);
-            stmt.setString(2, user.getUsername());
+            stmt.setInt(1, threadId);
+            stmt.setString(2, username);
 
             rs = stmt.executeQuery();
             rs.next();
@@ -44,7 +44,7 @@ public class ThreadDAO extends DAO {
             setCommentsLatestLast(thread, 3);
             setLikers(thread);
             setDislikers(thread);
-            thread.formatContentTags(getTaggedUsernames(thread));
+            thread.formatContentTags(getTaggedUsernames(thread.getId()));
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
             throw new DatabaseException(e);
@@ -56,23 +56,25 @@ public class ThreadDAO extends DAO {
     }
 
     /**
-     * News feed posts include all latest posts on the current user's wall or
+     * Retrieves a list of latest threads on a user's news feed.
+     * <p>
+     * News feed threads include all latest threads on the current user's wall or
      * the current user's friends' walls.
      * <p>
-     * Posts on the current user's wall are either posted to the wall, or exist
+     * Threads on the current user's wall are either posted to the wall, or exist
      * due to the user being tagged.
      * 
      * @param username The user whose news feed to load
      * @param limit The number of latest posts to retrieve
      * @return Posts to be displayed on the news feed
      */
-    public List<Thread> getNewsFeedThreads(User user, int limit) {
+    public List<Thread> getNewsFeedThreads(String username, int limit) {
         String queryString = "CALL get_news_feed_threads(?, ?)";
         
         ResultSet rs = null;
         List<Thread> threads = new ArrayList<>();
         try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
-            stmt.setString(1, user.getUsername());
+            stmt.setString(1, username);
             stmt.setInt(2, limit);
 
             rs = stmt.executeQuery();
@@ -87,7 +89,7 @@ public class ThreadDAO extends DAO {
                 setCommentsLatestLast(thread, 3);
                 setLikers(thread);
                 setDislikers(thread);
-                thread.formatContentTags(getTaggedUsernames(thread));
+                thread.formatContentTags(getTaggedUsernames(thread.getId()));
 
                 threads.add(thread);
             }
@@ -101,13 +103,23 @@ public class ThreadDAO extends DAO {
         return threads;
     }
 
-    public List<Thread> getWallThreads(User user, int limit) {
+    /**
+     * Retrieves a list of latest threads on a user's wall.
+     * <p>
+     * Wall threads include all threads by the current user, threads to the
+     * current user's wall, or threads with the current user tagged.
+     * 
+     * @param username The user whose wall to load
+     * @param limit The number of latest posts to retrieve
+     * @return Posts to be displayed on the wall
+     */
+    public List<Thread> getWallThreads(String username, int limit) {
         String queryString = "CALL get_wall_threads(?, ?)";
         
         ResultSet rs = null;
         List<Thread> threads = new ArrayList<>();
         try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
-            stmt.setString(1, user.getUsername());
+            stmt.setString(1, username);
             stmt.setInt(2, limit);
 
             rs = stmt.executeQuery();
@@ -122,7 +134,7 @@ public class ThreadDAO extends DAO {
                 setCommentsLatestLast(thread, 3);
                 setLikers(thread);
                 setDislikers(thread);
-                thread.formatContentTags(getTaggedUsernames(thread));
+                thread.formatContentTags(getTaggedUsernames(thread.getId()));
 
                 threads.add(thread);
             }
@@ -136,6 +148,13 @@ public class ThreadDAO extends DAO {
         return threads;
     }
 
+    /**
+     * Updates the comments of a {@link Thread} in-place based on latest data 
+     * from the database.
+     * 
+     * @param thread The thread to update.
+     * @param limit Number of comments to load.
+     */
     public void setCommentsLatestLast(Thread thread, int limit) {
         String queryString = "CALL get_thread_comments_latest_last(?, ?)";
 
@@ -162,6 +181,12 @@ public class ThreadDAO extends DAO {
         }
     }
 
+    /**
+     * Updates the likers of a {@link Thread} in-place based on latest data
+     * from the database.
+     * 
+     * @param thread The thread to update.
+     */
     public void setLikers(Thread thread) {
         String queryString = "CALL get_likers(?)";
 
@@ -185,6 +210,12 @@ public class ThreadDAO extends DAO {
         }
     }
 
+    /**
+     * Updates the dislikers of a {@link Thread} in-place based on latest data
+     * from the database.
+     * 
+     * @param thread The thread to update.
+     */
     public void setDislikers(Thread thread) {
         String queryString = "CALL get_dislikers(?)";
 
@@ -208,13 +239,19 @@ public class ThreadDAO extends DAO {
         }
     }
 
-    public List<String> getTaggedUsernames(Thread thread) {
+    /**
+     * Gets the usernames of users who were tagged in this thread.
+     * 
+     * @param threadId The ID of the thread to get tags from.
+     * @return A list of usernames.
+     */
+    public List<String> getTaggedUsernames(int threadId) {
         String queryString = "CALL get_tagged_usernames(?)";
 
         ResultSet rs = null;
         List<String> usernames = new ArrayList<>();
         try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
-            stmt.setInt(1, thread.getId());
+            stmt.setInt(1, threadId);
 
             rs = stmt.executeQuery();
 
@@ -231,47 +268,18 @@ public class ThreadDAO extends DAO {
         return usernames;
     }
 
-    public void addTag(Thread thread, User user) {
-        String queryString = "CALL add_tag(?, ?)";
-
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
-            stmt.setInt(1, thread.getId());
-            stmt.setString(2, user.getUsername());
-
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            System.err.println("SQLException: " + e.getMessage());
-            throw new DatabaseException(e);
-        }
-    }
-
-    public void addTags(int threadId, List<String> usernames) {
-        if (usernames == null || usernames.size() == 0) return;
-        String queryString = "CALL add_tag(?, ?)";
-
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
-            for (String username : usernames) {
-                stmt.setInt(1, threadId);
-                stmt.setString(2, username);
-                stmt.addBatch();
-            }
-            stmt.executeBatch();
-        } catch (SQLException e) {
-            System.err.println("SQLException: " + e.getMessage());
-            throw new DatabaseException(e);
-        }
-    }
-
-    public void addTags(Thread thread, List<String> usernames) {
-        addTags(thread.getId(), usernames);
-    }
-
-    public void removeTag(Thread thread, User user) {
+    /**
+     * Remove a tag from a thread on the database.
+     * 
+     * @param threadId The ID of the thread to untag.
+     * @param usernames The username tag to remove.
+     */
+    public void removeTag(int threadId, String username) {
         String queryString = "CALL remove_tag(?, ?)";
 
         try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
-            stmt.setInt(1, thread.getId());
-            stmt.setString(2, user.getUsername());
+            stmt.setInt(1, threadId);
+            stmt.setString(2, username);
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -280,12 +288,19 @@ public class ThreadDAO extends DAO {
         }
     }
 
-    public void deleteThread(Thread thread, User user) {
+    /**
+     * Deletes a thread from the database, given the deleting user is
+     * authorized to do so.
+     * 
+     * @param threadId The ID of the thread to delete.
+     * @param username The user deleting the thread.
+     */
+    public void deleteThread(int threadId, String username) {
         String queryString = "CALL delete_thread(?, ?)";
 
         try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
-            stmt.setInt(1, thread.getId());
-            stmt.setString(2, user.getUsername());
+            stmt.setInt(1, threadId);
+            stmt.setString(2, username);
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -294,12 +309,19 @@ public class ThreadDAO extends DAO {
         }
     }
 
-    public void replyToThread(Thread thread, User user, String content) {
+    /**
+     * Add a reply to a thread on the database.
+     * 
+     * @param threadId The ID of the thread to reply to.
+     * @param username The user replying to the thread.
+     * @param content The content of the reply.
+     */
+    public void replyToThread(int threadId, String username, String content) {
         String queryString = "CALL reply_to_thread(?, ?, ?)";
 
         try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
-            stmt.setInt(1, thread.getId());
-            stmt.setString(2, user.getUsername());
+            stmt.setInt(1, threadId);
+            stmt.setString(2, username);
             stmt.setString(3, content);
 
             stmt.executeUpdate();
@@ -309,12 +331,18 @@ public class ThreadDAO extends DAO {
         }
     }
 
-    public void likeThread(Thread thread, User user) {
+    /**
+     * Add a user as a liker of a thread.
+     * 
+     * @param threadId The ID of the thread to like.
+     * @param username The user liking the thread.
+     */
+    public void likeThread(int threadId, String username) {
         String queryString = "CALL toggle_like_thread(?, ?)";
 
         try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
-            stmt.setInt(1, thread.getId());
-            stmt.setString(2, user.getUsername());
+            stmt.setInt(1, threadId);
+            stmt.setString(2, username);
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -323,12 +351,18 @@ public class ThreadDAO extends DAO {
         }
     }
 
-    public void dislikeThread(Thread thread, User user) {
+    /**
+     * Add a user as a disliker of a thread.
+     * 
+     * @param threadId The ID of the thread to like.
+     * @param username The user liking the thread.
+     */
+    public void dislikeThread(int threadId, String username) {
         String queryString = "CALL toggle_dislike_thread(?, ?)";
 
         try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
-            stmt.setInt(1, thread.getId());
-            stmt.setString(2, user.getUsername());
+            stmt.setInt(1, threadId);
+            stmt.setString(2, username);
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -337,6 +371,15 @@ public class ThreadDAO extends DAO {
         }
     }
 
+    /**
+     * Post a new thread from a user to another user's wall on the database,
+     * and add the tags associated to the database.
+     * 
+     * @param fromUser The user posting the thread.
+     * @param toUser The user receiving the thread.
+     * @param content The content of the thread.
+     * @param usernameTags A list of usernames to tag the thread with.
+     */
     public void addThread(String fromUser, String toUser, String content, List<String> usernameTags) {
         String queryString = "CALL add_thread_return_id(?, ?, ?)";
 
@@ -356,7 +399,26 @@ public class ThreadDAO extends DAO {
         }
     }
 
-    public void addThread(User fromUser, User toUser, String content, List<String> usernameTags) {
-        addThread(fromUser.getUsername(), toUser.getUsername(), content, usernameTags);
+    /**
+     * Add a list of username tags to a thread on the database.
+     * 
+     * @param threadId The ID of the thread to tag.
+     * @param usernames A list of usernames to tag the thread with.
+     */
+    public void addTags(int threadId, List<String> usernames) {
+        if (usernames == null || usernames.size() == 0) return;
+        String queryString = "CALL add_tag(?, ?)";
+
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+            for (String username : usernames) {
+                stmt.setInt(1, threadId);
+                stmt.setString(2, username);
+                stmt.addBatch();
+            }
+            stmt.executeBatch();
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+            throw new DatabaseException(e);
+        }
     }
 }

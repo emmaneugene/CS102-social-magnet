@@ -15,7 +15,11 @@ public class CredentialsDAO extends DAO {
     }
 
     /**
-     * Verify login information against the database.
+     * Get the logged-in user if login is successful. Otherwise, return null.
+     * 
+     * @param username The inputted username.
+     * @param password The inputted password.
+     * @return A user model if the login is successful, else null.
      */
     public User login(String username, String password) {
         ResultSet rs = null;
@@ -40,6 +44,13 @@ public class CredentialsDAO extends DAO {
         return user;
     }
 
+    /**
+     * Register a new user on the database.
+     * 
+     * @param username The new username.
+     * @param fullname The new fullname.
+     * @param password The new password.
+     */
     public void register(String username, String fullname, String password) {
         String queryString = "CALL register(?, ?, ?)";
 
@@ -55,6 +66,12 @@ public class CredentialsDAO extends DAO {
         }
     }
 
+    /**
+     * Check if the user account with the name username exists.
+     * 
+     * @param username The user to check.
+     * @return The user exists in the database.
+     */
     public boolean userExists(String username) {
         ResultSet rs = null;
         boolean exists = true;
