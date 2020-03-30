@@ -2,7 +2,7 @@ package com.g1t11.socialmagnet.controller.socialmagnet;
 
 import java.util.List;
 
-import com.g1t11.socialmagnet.controller.Navigation;
+import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.data.UserDAO;
 import com.g1t11.socialmagnet.model.social.RequestExistingFriendException;
 import com.g1t11.socialmagnet.model.social.User;
@@ -18,7 +18,7 @@ public class FriendsController extends SocialMagnetController {
 
     private List<String> requestUsernames;
 
-    public FriendsController(Navigation nav, User me) {
+    public FriendsController(Navigator nav, User me) {
         super(nav, me);
         view = new FriendsPageView(me);
     }

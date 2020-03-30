@@ -9,7 +9,7 @@ import com.g1t11.socialmagnet.view.page.RegisterPageView;
 public class RegisterController extends Controller {
     private CredentialsDAO credDAO = new CredentialsDAO(database());
 
-    public RegisterController(Navigation nav) {
+    public RegisterController(Navigator nav) {
         super(nav);
         view = new RegisterPageView();
     }

@@ -2,7 +2,7 @@ package com.g1t11.socialmagnet;
 
 import java.sql.SQLException;
 
-import com.g1t11.socialmagnet.controller.Navigation;
+import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.controller.WelcomeController;
 import com.g1t11.socialmagnet.data.Database;
 import com.g1t11.socialmagnet.data.DatabaseException;
@@ -12,12 +12,12 @@ import com.mysql.cj.jdbc.exceptions.CommunicationsException;
 public class App {
     public Database db = null;
 
-    public Navigation nav = null;
+    public Navigator nav = null;
 
     public App() {
         try {
             db = new Database();
-            nav = new Navigation(db);
+            nav = new Navigator(db);
             nav.setFirstController(new WelcomeController(nav));
             db.establishConnection();
         } catch (DatabaseException e) {

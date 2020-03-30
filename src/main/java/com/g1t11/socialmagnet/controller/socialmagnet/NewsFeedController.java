@@ -3,7 +3,7 @@ package com.g1t11.socialmagnet.controller.socialmagnet;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.g1t11.socialmagnet.controller.Navigation;
+import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.data.ThreadDAO;
 import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.model.social.User;
@@ -16,7 +16,7 @@ public class NewsFeedController extends SocialMagnetController {
 
     private List<Thread> threads = new ArrayList<>();
 
-    public NewsFeedController(Navigation nav, User me) {
+    public NewsFeedController(Navigator nav, User me) {
         super(nav, me);
         view = new NewsFeedPageView();
     }

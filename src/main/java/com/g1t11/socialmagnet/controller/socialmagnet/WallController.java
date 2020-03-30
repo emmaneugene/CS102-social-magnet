@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.g1t11.socialmagnet.controller.Navigation;
+import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.data.FarmerDAO;
 import com.g1t11.socialmagnet.data.ThreadDAO;
 import com.g1t11.socialmagnet.model.farm.Farmer;
@@ -22,7 +22,7 @@ public class WallController extends SocialMagnetController {
     protected Farmer farmerToDisplay;
     protected List<Thread> wallThreads;
 
-    public WallController(Navigation nav, User me) {
+    public WallController(Navigator nav, User me) {
         super(nav, me);
         farmerToDisplay = farmerDAO.getFarmer(me);
         view = new WallPageView(farmerToDisplay);

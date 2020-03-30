@@ -10,7 +10,7 @@ import com.g1t11.socialmagnet.view.page.LoginPageView;
 public class LoginController extends Controller {
     private CredentialsDAO credDAO = new CredentialsDAO(database());
 
-    public LoginController(Navigation nav) {
+    public LoginController(Navigator nav) {
         super(nav);
         view = new LoginPageView();
     }

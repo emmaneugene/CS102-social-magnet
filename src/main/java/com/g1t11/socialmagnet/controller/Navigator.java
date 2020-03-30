@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.g1t11.socialmagnet.data.Database;
 
-public class Navigation {
+public class Navigator {
     private Database db;
 
     /**
@@ -19,7 +19,7 @@ public class Navigation {
      */
     private List<Controller> navigationStack = new ArrayList<>();
 
-    public Navigation(Database db) {
+    public Navigator(Database db) {
         this.db = db;
     }
 

@@ -1,7 +1,7 @@
 package com.g1t11.socialmagnet.controller.cityfarmers;
 
 import com.g1t11.socialmagnet.controller.Controller;
-import com.g1t11.socialmagnet.controller.Navigation;
+import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.data.FarmerDAO;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.social.User;
@@ -12,12 +12,12 @@ public abstract class CityFarmersController extends Controller {
 
     Farmer me;
 
-    public CityFarmersController(Navigation nav, Farmer me) {
+    public CityFarmersController(Navigator nav, Farmer me) {
         super(nav);
         this.me = me;
     }
 
-    public CityFarmersController(Navigation nav, User me) {
+    public CityFarmersController(Navigator nav, User me) {
         super(nav);
         this.me = farmerDAO.getFarmer(me);
     }

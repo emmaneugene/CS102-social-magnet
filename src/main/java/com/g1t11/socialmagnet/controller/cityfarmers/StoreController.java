@@ -3,7 +3,7 @@ package com.g1t11.socialmagnet.controller.cityfarmers;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.g1t11.socialmagnet.controller.Navigation;
+import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.controller.socialmagnet.MainMenuController;
 import com.g1t11.socialmagnet.data.FarmerDAO;
 import com.g1t11.socialmagnet.data.StoreDAO;
@@ -22,7 +22,7 @@ public class StoreController extends CityFarmersController {
 
     List<Crop> storeItem = new ArrayList<>();
 
-    public StoreController(Navigation nav, Farmer me) {
+    public StoreController(Navigator nav, Farmer me) {
         super(nav, me);
         this.me = me;
         view = new StorePageView();

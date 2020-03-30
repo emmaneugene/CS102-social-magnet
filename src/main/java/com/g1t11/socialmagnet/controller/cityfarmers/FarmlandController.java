@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.g1t11.socialmagnet.controller.Navigation;
+import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.controller.socialmagnet.MainMenuController;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.farm.Plot;
@@ -20,7 +20,7 @@ public class FarmlandController extends CityFarmersController {
 
     private static final int costToClearWilted = 5;
 
-    public FarmlandController(Navigation nav, Farmer me) {
+    public FarmlandController(Navigator nav, Farmer me) {
         super(nav, me);
         this.me = me;
         view = new FarmlandPageView();

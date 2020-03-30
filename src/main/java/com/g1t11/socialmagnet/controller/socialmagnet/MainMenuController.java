@@ -1,6 +1,6 @@
 package com.g1t11.socialmagnet.controller.socialmagnet;
 
-import com.g1t11.socialmagnet.controller.Navigation;
+import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.controller.cityfarmers.CityFarmersMainMenuController;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
@@ -10,7 +10,7 @@ import com.g1t11.socialmagnet.view.page.socialmagnet.MainMenuPageView;
 public class MainMenuController extends SocialMagnetController {
     private User me;
 
-    public MainMenuController(Navigation nav, User me) {
+    public MainMenuController(Navigator nav, User me) {
         super(nav, me);
         this.me = me;
         view = new MainMenuPageView(me);

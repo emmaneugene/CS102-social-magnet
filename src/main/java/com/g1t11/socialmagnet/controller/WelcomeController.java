@@ -5,7 +5,7 @@ import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.WelcomePageView;
 
 public class WelcomeController extends Controller {
-    public WelcomeController(Navigation nav) {
+    public WelcomeController(Navigator nav) {
         super(nav);
         view = new WelcomePageView();
     }

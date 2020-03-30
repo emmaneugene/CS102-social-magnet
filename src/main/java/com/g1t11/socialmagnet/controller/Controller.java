@@ -5,13 +5,13 @@ import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.PageView;
 
 public abstract class Controller {
-    public Navigation nav;
+    public Navigator nav;
 
     protected PageView view;
 
     protected PromptInput input;
 
-    public Controller(Navigation nav) {
+    public Controller(Navigator nav) {
         this.nav = nav;
     }
 

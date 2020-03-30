@@ -1,6 +1,6 @@
 package com.g1t11.socialmagnet.controller.socialmagnet;
 
-import com.g1t11.socialmagnet.controller.Navigation;
+import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.data.UserDAO;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
@@ -10,7 +10,7 @@ import com.g1t11.socialmagnet.view.page.socialmagnet.FriendsWallPageView;
 public class FriendsWallController extends WallController {
     private UserDAO userDAO = new UserDAO(database());
 
-    public FriendsWallController(Navigation nav, User me, User friend) {
+    public FriendsWallController(Navigator nav, User me, User friend) {
         super(nav, me);
         farmerToDisplay = farmerDAO.getFarmer(friend);
         view = new FriendsWallPageView(

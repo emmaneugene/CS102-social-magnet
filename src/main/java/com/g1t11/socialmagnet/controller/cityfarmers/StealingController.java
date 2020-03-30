@@ -2,7 +2,7 @@ package com.g1t11.socialmagnet.controller.cityfarmers;
 
 import java.util.List;
 
-import com.g1t11.socialmagnet.controller.Navigation;
+import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.controller.socialmagnet.MainMenuController;
 import com.g1t11.socialmagnet.data.FarmerDAO;
 import com.g1t11.socialmagnet.model.farm.Farmer;
@@ -20,7 +20,7 @@ public class StealingController extends CityFarmersController {
 
     FriendFarmComponent friendFarmComp;
 
-    public StealingController(Navigation nav, Farmer me, User friend) {
+    public StealingController(Navigator nav, Farmer me, User friend) {
         super(nav, me);
         toStealFrom = farmerDAO.getFarmer(friend);
         friendFarmComp = new FriendFarmComponent(toStealFrom);

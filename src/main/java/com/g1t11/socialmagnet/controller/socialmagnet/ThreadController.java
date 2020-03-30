@@ -1,6 +1,6 @@
 package com.g1t11.socialmagnet.controller.socialmagnet;
 
-import com.g1t11.socialmagnet.controller.Navigation;
+import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.data.ThreadDAO;
 import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.model.social.User;
@@ -13,13 +13,13 @@ public class ThreadController extends SocialMagnetController {
 
     private Thread thread;
 
-    public ThreadController(Navigation nav, User me, int threadIndex, Thread thread) {
+    public ThreadController(Navigator nav, User me, int threadIndex, Thread thread) {
         super(nav, me);
         this.thread = thread;
         view = new ThreadPageView(threadIndex, thread);
     }
 
-    public ThreadController(Navigation nav, User me) {
+    public ThreadController(Navigator nav, User me) {
         this(nav, me, 0, null);
     }
 
