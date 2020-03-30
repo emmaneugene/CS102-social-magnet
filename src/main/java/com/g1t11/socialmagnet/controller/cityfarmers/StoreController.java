@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.controller.socialmagnet.MainMenuController;
-import com.g1t11.socialmagnet.data.FarmerDAO;
+import com.g1t11.socialmagnet.data.FarmerLoadDAO;
 import com.g1t11.socialmagnet.data.StoreDAO;
 import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
@@ -15,7 +15,6 @@ import com.g1t11.socialmagnet.util.TextUtils;
 import com.g1t11.socialmagnet.view.page.cityfarmers.StorePageView;
 
 public class StoreController extends CityFarmersController {
-    FarmerDAO farmerDAO = new FarmerDAO(nav.database());
     StoreDAO storeDAO = new StoreDAO(nav.database());
 
     Farmer me;

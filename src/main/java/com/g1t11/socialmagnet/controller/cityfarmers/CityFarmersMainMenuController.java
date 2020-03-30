@@ -1,15 +1,12 @@
 package com.g1t11.socialmagnet.controller.cityfarmers;
 
 import com.g1t11.socialmagnet.controller.Navigator;
-import com.g1t11.socialmagnet.data.FarmerDAO;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.cityfarmers.CityFarmersMainMenuPageView;
 
 public class CityFarmersMainMenuController extends CityFarmersController {
-    FarmerDAO farmerDAO = new FarmerDAO(nav.database());
-
     public CityFarmersMainMenuController(Navigator nav, User me) {
         super(nav, me);
         view = new CityFarmersMainMenuPageView();

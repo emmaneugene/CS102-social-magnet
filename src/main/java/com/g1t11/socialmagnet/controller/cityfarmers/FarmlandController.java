@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.controller.socialmagnet.MainMenuController;
+import com.g1t11.socialmagnet.data.FarmerActionDAO;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.farm.Plot;
 import com.g1t11.socialmagnet.util.Painter;
@@ -14,6 +15,8 @@ import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.cityfarmers.FarmlandPageView;
 
 public class FarmlandController extends CityFarmersController {
+    FarmerActionDAO farmerActionDAO = new FarmerActionDAO(database());
+
     List<Plot> plots = new ArrayList<>();
 
     Map<String, Integer> invCrops = new LinkedHashMap<>();
@@ -29,9 +32,9 @@ public class FarmlandController extends CityFarmersController {
     @Override
     public void updateView() {
         super.updateView();
-        plots = farmerDAO.getPlots(me.getUsername(), me.getMaxPlotCount());
+        plots = farmerLoadDAO.getPlots(me.getUsername(), me.getMaxPlotCount());
         ((FarmlandPageView) view).setPlots(plots);
-        invCrops = farmerDAO.getInventoryCrops(me.getUsername());
+        invCrops = farmerLoadDAO.getInventoryCrops(me.getUsername());
         List<String> invCropNames = List.of(invCrops.keySet().toArray(new String[0]));
         ((FarmlandPageView) view).setInventoryCropNames(invCropNames);
     }
@@ -77,7 +80,7 @@ public class FarmlandController extends CityFarmersController {
             }
             String toPlant = getCropNameFromInventory();
             if (toPlant == null) return;
-            farmerDAO.plantCrop(me.getUsername(), index, toPlant);
+            farmerActionDAO.plantCrop(me.getUsername(), index, toPlant);
             view.setStatus(String.format(
                 Painter.paint("Planted %s in plot %d!", Painter.Color.GREEN),
                 toPlant, index
@@ -139,7 +142,7 @@ public class FarmlandController extends CityFarmersController {
                     view.setStatus(Painter.paint("Insufficient funds to clear wilted crop.", Painter.Color.RED));
                     return;
                 }
-                farmerDAO.clearPlot(me.getUsername(), index);
+                farmerActionDAO.clearPlot(me.getUsername(), index);
                 view.setStatus(String.format(
                     Painter.paint("Cleared plot %d for %d gold!", Painter.Color.GREEN),
                     index,
@@ -156,7 +159,7 @@ public class FarmlandController extends CityFarmersController {
     private void confirmClearHealthy(int index) {
         PromptInput input = new PromptInput("Confirm clearing healthy crop? (Y/n)");
         if (input.nextLine().equals("Y")) {
-            farmerDAO.clearPlot(me.getUsername(), index);
+            farmerActionDAO.clearPlot(me.getUsername(), index);
             view.setStatus(String.format(
                 Painter.paint("Cleared plot %d!", Painter.Color.GREEN),
                 index
@@ -165,6 +168,9 @@ public class FarmlandController extends CityFarmersController {
     }
 
     private void handleHarvest() {
-        farmerDAO.harvest(me.getUsername());
+        farmerActionDAO.harvest(me.getUsername());
+        view.setStatus(
+            Painter.paint("Harvested crops!", Painter.Color.GREEN)
+        );
     }
 }

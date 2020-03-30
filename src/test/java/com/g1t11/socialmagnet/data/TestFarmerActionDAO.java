@@ -1,74 +1,27 @@
 package com.g1t11.socialmagnet.data;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.farm.Plot;
 import com.g1t11.socialmagnet.model.farm.StealingRecord;
-import com.g1t11.socialmagnet.model.social.UserNotFoundException;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TestFarmerDAO extends TestDAO {
-    private FarmerDAO farmerDAO;
+public class TestFarmerActionDAO extends TestDAO {
+    private FarmerLoadDAO farmerLoadDAO;
+    private FarmerActionDAO farmerActionDAO;
 
     public static final Crop papaya     = new Crop("Papaya",     20, 30,  8,  75, 100, 15);
     public static final Crop pumpkin    = new Crop("Pumpkin",    30, 60,  5,   5, 200, 20);
     public static final Crop sunflower  = new Crop("Sunflower",  40, 120, 20, 15, 20,  40);
     public static final Crop watermelon = new Crop("Watermelon", 50, 240, 1,   5, 800, 10);
 
-    public TestFarmerDAO() {
-        farmerDAO = new FarmerDAO(db);
-    }
-
-    @Test
-    public void testGetFarmer() {
-        Farmer expected = new Farmer("adam", "Adam Levine", 11000, 15000, 1);
-
-        Farmer actual = farmerDAO.getFarmer("adam");
-
-        Assert.assertNotNull(actual);
-        Assert.assertEquals(expected, actual);
-    }
-
-    @Test(expected = UserNotFoundException.class)
-    public void testGetNonExistentFarmer() {
-        farmerDAO.getFarmer("yankee");
-    }
-
-    @Test
-    public void testGetInventoryCrops() {
-        Map<String, Integer> expected = new LinkedHashMap<>(Map.of("Papaya", 1, "Watermelon", 2));
-        Map<String, Integer> actual = farmerDAO.getInventoryCrops("britney");
-        
-        Assert.assertEquals(expected, actual);
-    }
-
-    @Test
-    public void testGetInventoryEmpty() {
-        Map<String, Integer> actual = farmerDAO.getInventoryCrops("charlie");
-        Assert.assertEquals(0, actual.size());
-    }
-
-    @Test
-    public void testGetPlots() {
-        List<Plot> expected = new ArrayList<>(List.of(
-            new Plot(papaya),
-            new Plot(pumpkin),
-            new Plot(watermelon),
-            new Plot(),
-            new Plot(),
-            new Plot()
-        ));
-
-        List<Plot> actual = farmerDAO.getPlots("britney", 6);
-
-        Assert.assertEquals(expected, actual);
+    public TestFarmerActionDAO() {
+        farmerLoadDAO = new FarmerLoadDAO(db);
+        farmerActionDAO = new FarmerActionDAO(db);
     }
 
     public void testPlantAndClearCrops() {
@@ -77,26 +30,26 @@ public class TestFarmerDAO extends TestDAO {
     }
 
     private void testPlantCrop() {
-        List<Plot> expected = farmerDAO.getPlots("adam", 6);
+        List<Plot> expected = farmerLoadDAO.getPlots("adam", 6);
         expected.set(4, new Plot(papaya));
 
-        farmerDAO.plantCrop("adam", 5, "Papaya");
+        farmerActionDAO.plantCrop("adam", 5, "Papaya");
 
-        List<Plot> actual = farmerDAO.getPlots("adam", 6);
+        List<Plot> actual = farmerLoadDAO.getPlots("adam", 6);
 
         Assert.assertEquals(expected, actual);
     }
 
     private void testClearCrop() {
-        int expectedWealth = farmerDAO.getFarmer("adam").getWealth() - 5;
+        int expectedWealth = farmerLoadDAO.getFarmer("adam").getWealth() - 5;
 
-        List<Plot> expectedPlots = farmerDAO.getPlots("adam", 6);
+        List<Plot> expectedPlots = farmerLoadDAO.getPlots("adam", 6);
         expectedPlots.set(4, new Plot());
 
-        farmerDAO.clearPlot("adam", 5);
+        farmerActionDAO.clearPlot("adam", 5);
 
-        int actualWealth = farmerDAO.getFarmer("adam").getWealth();
-        List<Plot> actualPlots = farmerDAO.getPlots("adam", 6);
+        int actualWealth = farmerLoadDAO.getFarmer("adam").getWealth();
+        List<Plot> actualPlots = farmerLoadDAO.getPlots("adam", 6);
 
         Assert.assertEquals(expectedWealth, actualWealth);
         Assert.assertEquals(expectedPlots, actualPlots);
@@ -105,24 +58,22 @@ public class TestFarmerDAO extends TestDAO {
 
     @Test(expected = DatabaseException.class)
     public void testPlantOnExistingCrop() {
-        // Duplicate entry
-        farmerDAO.plantCrop("adam", 1, "Papaya");
+        farmerActionDAO.plantCrop("adam", 1, "Papaya");
     }
 
     @Test(expected = DatabaseException.class)
     public void testPlantWithoutInventory() {
-        // Duplicate entry
-        farmerDAO.plantCrop("adam", 1, "Sunflower");
+        farmerActionDAO.plantCrop("adam", 1, "Sunflower");
     }
 
     @Test(expected = DatabaseException.class)
     public void testPlantCropInvalidPlot() {
-        farmerDAO.plantCrop("adam", 9, "Papaya");
+        farmerActionDAO.plantCrop("adam", 9, "Papaya");
     }
 
     @Test
     public void testHarvest() {
-        Farmer charlieBefore = farmerDAO.getFarmer("charlie");
+        Farmer charlieBefore = farmerLoadDAO.getFarmer("charlie");
         int expectedMaxPlotCount = charlieBefore.getMaxPlotCount() + 1;
         int expectedWealth = charlieBefore.getWealth() + 6250;
         List<Plot> expectedPlots = List.of(
@@ -135,12 +86,12 @@ public class TestFarmerDAO extends TestDAO {
             new Plot()
         );
 
-        farmerDAO.harvest("charlie");
+        farmerActionDAO.harvest("charlie");
 
-        Farmer charlieAfter = farmerDAO.getFarmer("charlie");
+        Farmer charlieAfter = farmerLoadDAO.getFarmer("charlie");
         int actualMaxPlotCount = charlieAfter.getMaxPlotCount();
         int actualWealth = charlieAfter.getWealth();
-        List<Plot> actualPlots = farmerDAO.getPlots("charlie", 7);
+        List<Plot> actualPlots = farmerLoadDAO.getPlots("charlie", 7);
 
         Assert.assertEquals(expectedMaxPlotCount, actualMaxPlotCount);
         Assert.assertEquals(expectedWealth, actualWealth);
@@ -164,11 +115,11 @@ public class TestFarmerDAO extends TestDAO {
             new StealingRecord(papaya, 3),
             new StealingRecord(watermelon, 20)
         );
-        Farmer dannyBefore = farmerDAO.getFarmer("danny");
+        Farmer dannyBefore = farmerLoadDAO.getFarmer("danny");
 
-        List<StealingRecord> actualSteal = farmerDAO.steal("danny", "elijah");
+        List<StealingRecord> actualSteal = farmerActionDAO.steal("danny", "elijah");
 
-        Farmer dannyAfter = farmerDAO.getFarmer("danny");
+        Farmer dannyAfter = farmerLoadDAO.getFarmer("danny");
         testStealerWealthAndXP(dannyBefore, dannyAfter, minExpectedSteal, maxExpectedSteal);
 
         int size = actualSteal.size();
@@ -210,13 +161,13 @@ public class TestFarmerDAO extends TestDAO {
 
     private void testStealAgain() {
         // Should result in no yield stolen.
-        Farmer dannyBefore = farmerDAO.getFarmer("danny");
+        Farmer dannyBefore = farmerLoadDAO.getFarmer("danny");
         int expectedWealth = dannyBefore.getWealth();
         int expectedXP = dannyBefore.getXP();
 
-        List<StealingRecord> actualSteal = farmerDAO.steal("danny", "elijah");
+        List<StealingRecord> actualSteal = farmerActionDAO.steal("danny", "elijah");
 
-        Farmer dannyAfter = farmerDAO.getFarmer("danny");
+        Farmer dannyAfter = farmerLoadDAO.getFarmer("danny");
         int actualWealth = dannyAfter.getWealth();
         int actualXP = dannyAfter.getXP();
 
@@ -228,25 +179,18 @@ public class TestFarmerDAO extends TestDAO {
     @Test
     public void testStealAlready20Percent() {
          // Should result in no yield stolen.
-        Farmer elijahBefore = farmerDAO.getFarmer("elijah");
+        Farmer elijahBefore = farmerLoadDAO.getFarmer("elijah");
         int expectedWealth = elijahBefore.getWealth();
         int expectedXP = elijahBefore.getXP();
 
-        List<StealingRecord> actualSteal = farmerDAO.steal("elijah", "danny");
+        List<StealingRecord> actualSteal = farmerActionDAO.steal("elijah", "danny");
 
-        Farmer elijahAfter = farmerDAO.getFarmer("elijah");
+        Farmer elijahAfter = farmerLoadDAO.getFarmer("elijah");
         int actualWealth = elijahAfter.getWealth();
         int actualXP = elijahAfter.getXP();
 
         Assert.assertEquals(0, actualSteal.size());
         Assert.assertEquals(expectedWealth, actualWealth);
         Assert.assertEquals(expectedXP, actualXP);       
-    }
-
-    @Test
-    public void getGiftCountToday() {
-        int expected = 5;
-        int actual = farmerDAO.getGiftCountToday("charlie");
-        Assert.assertEquals(expected, actual);
     }
 }

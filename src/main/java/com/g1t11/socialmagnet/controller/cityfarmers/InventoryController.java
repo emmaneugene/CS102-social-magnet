@@ -10,7 +10,7 @@ import com.g1t11.socialmagnet.view.page.cityfarmers.InventoryPageView;
 public class InventoryController extends CityFarmersController {
     public InventoryController(Navigator nav, Farmer me) {
         super(nav, me);
-        view = new InventoryPageView(farmerDAO.getInventoryCrops(me.getUsername()));
+        view = new InventoryPageView(farmerLoadDAO.getInventoryCrops(me.getUsername()));
         ((InventoryPageView) view).setFarmer(me);
     }
 
