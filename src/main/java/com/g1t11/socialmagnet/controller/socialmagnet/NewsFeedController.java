@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.g1t11.socialmagnet.controller.Navigator;
-import com.g1t11.socialmagnet.data.ThreadDAO;
+import com.g1t11.socialmagnet.data.ThreadLoadDAO;
 import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
@@ -12,7 +12,7 @@ import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.socialmagnet.NewsFeedPageView;
 
 public class NewsFeedController extends SocialMagnetController {
-    private ThreadDAO threadDAO = new ThreadDAO(database());
+    private ThreadLoadDAO threadLoadDAO = new ThreadLoadDAO(database());
 
     private List<Thread> threads = new ArrayList<>();
 
@@ -23,7 +23,7 @@ public class NewsFeedController extends SocialMagnetController {
 
     @Override
     public void updateView() {
-        threads = threadDAO.getNewsFeedThreads(me, 5);
+        threads = threadLoadDAO.getNewsFeedThreads(me.getUsername(), 5);
         ((NewsFeedPageView) view).setThreads(threads);
     }
     

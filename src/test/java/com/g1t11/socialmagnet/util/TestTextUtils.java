@@ -33,9 +33,30 @@ public class TestTextUtils {
     }
 
     @Test
-    public void testPrettyNumberSmall() {
+    public void testPrettyNumberThreeDigits() {
         String expected = "123";
         String actual = TextUtils.prettyNumber(123);
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testPrettyNumberTwoDigits() {
+        String expected = "12";
+        String actual = TextUtils.prettyNumber(12);
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testPrettyNumberOneDigit() {
+        String expected = "1";
+        String actual = TextUtils.prettyNumber(1);
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testPrettyNumberNegative() {
+        String expected = "-12,345";
+        String actual = TextUtils.prettyNumber(-12345);
         Assert.assertEquals(expected, actual);
     }
 }

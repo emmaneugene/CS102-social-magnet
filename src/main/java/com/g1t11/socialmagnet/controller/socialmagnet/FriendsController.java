@@ -25,8 +25,8 @@ public class FriendsController extends SocialMagnetController {
 
     @Override
     public void updateView() {
-        friends = userDAO.getFriends(me);
-        requestUsernames = userDAO.getRequestUsernames(me);
+        friends = userDAO.getFriends(me.getUsername());
+        requestUsernames = userDAO.getRequestUsernames(me.getUsername());
         ((FriendsPageView) view).setFriends(friends);
         ((FriendsPageView) view).setRequestUsernames(requestUsernames);
     }
@@ -65,7 +65,7 @@ public class FriendsController extends SocialMagnetController {
                 return;
             }
             String toUnfriend = friends.get(index - 1).getUsername();
-            userDAO.unfriend(me, toUnfriend);
+            userDAO.unfriend(me.getUsername(), toUnfriend);
             view.setStatus(Painter.paintf(
                 String.format("[{Unfriended [{%s}]}]!", toUnfriend), Painter.Color.GREEN, Painter.Color.BLUE
             ));
@@ -79,7 +79,7 @@ public class FriendsController extends SocialMagnetController {
         PromptInput input = new PromptInput("Enter the username");
         String requested = input.nextLine();
         try {
-            userDAO.makeRequest(me, requested);
+            userDAO.makeRequest(me.getUsername(), requested);
             view.setStatus(Painter.paintf(
                 String.format("[{Sent [{%s}] a friend request!}]", requested), Painter.Color.GREEN, Painter.Color.BLUE
             ));
@@ -104,7 +104,7 @@ public class FriendsController extends SocialMagnetController {
                 return;
             }
             String requestUsername = requestUsernames.get(index - friends.size() - 1);
-            userDAO.acceptRequest(requestUsername, me);
+            userDAO.acceptRequest(requestUsername, me.getUsername());
             view.setStatus(Painter.paintf(
                 String.format("[{Accepted [{%s}]!}]", requestUsername), Painter.Color.GREEN, Painter.Color.BLUE
             ));
@@ -125,7 +125,7 @@ public class FriendsController extends SocialMagnetController {
                 return;
             }
             String requestUsername = requestUsernames.get(index - friends.size() - 1);
-            userDAO.rejectRequest(requestUsername, me);
+            userDAO.rejectRequest(requestUsername, me.getUsername());
             view.setStatus(Painter.paintf(
                 String.format("[{Rejected [{%s}]!}]", requestUsername), Painter.Color.GREEN, Painter.Color.BLUE
             ));

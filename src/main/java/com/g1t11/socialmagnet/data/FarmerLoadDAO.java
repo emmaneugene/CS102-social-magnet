@@ -13,28 +13,37 @@ import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.farm.Plot;
 import com.g1t11.socialmagnet.model.farm.StealingRecord;
-import com.g1t11.socialmagnet.model.social.User;
+import com.g1t11.socialmagnet.model.social.UserNotFoundException;
 
-public class FarmerDAO extends DAO {
-    public FarmerDAO(Database db) {
+public class FarmerLoadDAO extends DAO {
+    public FarmerLoadDAO(Database db) {
         super(db);
     }
 
-    public Farmer getFarmer(User user) {
+    /**
+     * Get farmer details of a given user.
+     * <p>
+     * This allows us to minimise unnecessarily loading farmer information when
+     * it is not required.
+     * 
+     * @param username The username of the farmer.
+     * @return A unique farmer with the specified username.
+     */
+    public Farmer getFarmer(String username) {
         ResultSet rs = null;
         Farmer f = null;
 
         String queryString = "CALL get_farmer_detail(?)";
 
         try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
-            stmt.setString(1, user.getUsername());
+            stmt.setString(1, username);
 
             rs = stmt.executeQuery();
-            rs.next();
+            if (!rs.next()) throw new UserNotFoundException();
 
             f = new Farmer(
-                user.getUsername(),
-                user.getFullname(),
+                rs.getString("username"),
+                rs.getString("fullname"),
                 rs.getInt("xp"),
                 rs.getInt("wealth"),
                 rs.getInt("wealth_rank"));
@@ -49,17 +58,19 @@ public class FarmerDAO extends DAO {
     }
 
     /**
-     * @param farmer The farmer whose inventory to access.
+     * Get the inventory of a farmer.
+     * 
+     * @param farmer The username of the farmer whose inventory to access.
      * @return A sorted map of the names of crops in an inventory with its corresponding quantities.
      */
-    public Map<String, Integer> getInventoryCrops(Farmer farmer) {
+    public Map<String, Integer> getInventoryCrops(String username) {
         ResultSet rs = null;
         Map<String, Integer> invCrops = new LinkedHashMap<>();
 
         String queryString = "CALL get_inventory(?)";
 
         try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
-            stmt.setString(1, farmer.getUsername());
+            stmt.setString(1, username);
 
             rs = stmt.executeQuery();
             while(rs.next()) {
@@ -75,17 +86,24 @@ public class FarmerDAO extends DAO {
         return invCrops;
     }
 
-    public List<Plot> getPlots(Farmer farmer) {
+    /**
+     * Get the plots of a farmer.
+     * 
+     * @param username The username of the farmer whose plots to retrieve.
+     * @param maxPlotCount The maximum number of plots the farmer can access.
+     * @return The plots of a farmer.
+     */
+    public List<Plot> getPlots(String username, int maxPlotCount) {
         ResultSet rs = null;
 
-        Plot[] emptyPlots = new Plot[farmer.getMaxPlotCount()];
+        Plot[] emptyPlots = new Plot[maxPlotCount];
         Arrays.fill(emptyPlots, new Plot());
         List<Plot> plots = new ArrayList<>(Arrays.asList(emptyPlots));
 
         String queryString = "CALL get_plots(?)";
 
         try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
-            stmt.setString(1, farmer.getUsername());
+            stmt.setString(1, username);
 
             rs = stmt.executeQuery();
             while (rs.next()) {
@@ -112,91 +130,26 @@ public class FarmerDAO extends DAO {
         return plots;
     }
 
-    public void plantCrop(Farmer farmer, int plotNumber, String cropName) {
-        String queryString = "CALL plant_crop_auto_yield(?, ?, ?)";
-
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
-            stmt.setString(1, farmer.getUsername());
-            stmt.setInt(2, plotNumber);
-            stmt.setString(3, cropName);
-
-            stmt.execute();
-        } catch (SQLException e) {
-            System.err.println("SQLException: " + e.getMessage());
-            throw new DatabaseException(e);
-        }
-    }
-
-    public void clearPlotUpdateWealth(Farmer farmer, int plotNumber) {
-        String queryString = "CALL clear_plot(?, ?)";
-
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
-            stmt.setString(1, farmer.getUsername());
-            stmt.setInt(2, plotNumber);
-
-            stmt.execute();
-        } catch (SQLException e) {
-            System.err.println("SQLException: " + e.getMessage());
-            throw new DatabaseException(e);
-        }
-    }
-
-    public void harvest(Farmer farmer) {
-        String queryString = "CALL harvest(?)";
-
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
-            stmt.setString(1, farmer.getUsername());
-
-            stmt.execute();
-        } catch (SQLException e) {
-            System.err.println("SQLException: " + e.getMessage());
-            throw new DatabaseException(e);
-        }
-    }
-
-    public List<StealingRecord> steal(Farmer stealer, Farmer victim) {
+    public int getGiftCountToday(String username) {
         ResultSet rs = null;
-        List<StealingRecord> stolenCrops = new ArrayList<>();
 
-        String queryString = "CALL steal(?, ?)";
+        int giftCount = 0;
+
+        String queryString = "CALL get_gift_count_today(?)";
 
         try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
-            stmt.setString(1, stealer.getUsername());
-            stmt.setString(2, victim.getUsername());
+            stmt.setString(1, username);
 
             rs = stmt.executeQuery();
-            while (rs.next()) {
-                StealingRecord sr = new StealingRecord(
-                    rs.getString("crop_name"),
-                    rs.getInt("quantity"),
-                    rs.getInt("total_xp_gained"),
-                    rs.getInt("total_wealth_gained"));
-                stolenCrops.add(sr);
-            }
+            rs.next();
+            giftCount = rs.getInt("gift_count");
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
             throw new DatabaseException(e);
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
-        
-        return stolenCrops;
-    }
 
-    public void sendGifts(int threadId, List<String> usernames) {
-        if (usernames == null || usernames.size() == 0) return;
-        String queryString = "CALL add_tag(?, ?)";
-
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
-            for (String username : usernames) {
-                stmt.setInt(1, threadId);
-                stmt.setString(2, username);
-                stmt.addBatch();
-            }
-            stmt.executeBatch();
-        } catch (SQLException e) {
-            System.err.println("SQLException: " + e.getMessage());
-            throw new DatabaseException(e);
-        }
+        return giftCount;
     }
 }

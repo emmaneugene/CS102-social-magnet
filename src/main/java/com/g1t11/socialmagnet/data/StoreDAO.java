@@ -7,13 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.g1t11.socialmagnet.model.farm.Crop;
-import com.g1t11.socialmagnet.model.farm.Farmer;
 
 public class StoreDAO extends DAO {
     public StoreDAO(Database db) {
         super(db);
     }
 
+    /**
+     * Get all currently available crops on the database.
+     * 
+     * @return A list of all available crops.
+     */
     public List<Crop> getStoreItems() {
         ResultSet rs = null;
 
@@ -45,15 +49,24 @@ public class StoreDAO extends DAO {
         return storeItems;
     }
 
-    public boolean purchaseCrop(Farmer me, Crop crop, int amount) {
+    /**
+     * Purchase an amount of crops from the store and add them to the user's inventory,
+     * and update the user's wealth.
+     * 
+     * @param buyerName The user who is buying crops.
+     * @param cropName The crop to purchase.
+     * @param amount The number of bags of seeds to purchase.
+     * @return True if the purchase was successful, or false if it was not.
+     */
+    public boolean purchaseCrop(String buyerName, String cropName, int amount) {
         ResultSet rs = null;
 
         boolean isSuccessful = false;
 
         String queryString = "CALL purchase_crop(?, ?, ?)";
         try (PreparedStatement stmt = connection().prepareStatement(queryString);) {
-            stmt.setString(1, me.getUsername());
-            stmt.setString(2, crop.getName());
+            stmt.setString(1, buyerName);
+            stmt.setString(2, cropName);
             stmt.setInt(3, amount);
 
             rs = stmt.executeQuery();

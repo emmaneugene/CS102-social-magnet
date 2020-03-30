@@ -2,13 +2,13 @@ package com.g1t11.socialmagnet.controller.cityfarmers;
 
 import com.g1t11.socialmagnet.controller.Controller;
 import com.g1t11.socialmagnet.controller.Navigator;
-import com.g1t11.socialmagnet.data.FarmerDAO;
+import com.g1t11.socialmagnet.data.FarmerLoadDAO;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.view.page.cityfarmers.CityFarmersPageView;
 
 public abstract class CityFarmersController extends Controller {
-    FarmerDAO farmerDAO = new FarmerDAO(nav.database());
+    FarmerLoadDAO farmerLoadDAO = new FarmerLoadDAO(nav.database());
 
     Farmer me;
 
@@ -19,12 +19,12 @@ public abstract class CityFarmersController extends Controller {
 
     public CityFarmersController(Navigator nav, User me) {
         super(nav);
-        this.me = farmerDAO.getFarmer(me);
+        this.me = farmerLoadDAO.getFarmer(me.getUsername());
     }
 
     @Override
     public void updateView() {
-        me = farmerDAO.getFarmer(me);
+        me = farmerLoadDAO.getFarmer(me.getUsername());
         ((CityFarmersPageView) view).setFarmer(me);
     }
 }

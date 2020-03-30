@@ -3,7 +3,6 @@ package com.g1t11.socialmagnet.data;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import com.g1t11.socialmagnet.util.PromptInput;
 
 import com.mysql.cj.jdbc.Driver;
 
@@ -38,30 +37,12 @@ public class Database {
              * If environment variables cannot be read, prompt the user
              */
             String dbName = System.getenv("DB_NAME");
-            if (dbName == null) {
-                PromptInput input =  new PromptInput("Enter database name");
-                dbName = input.nextLine();
-            }
-
             String dbUrl  = "jdbc:mysql://localhost/" + dbName + "?serverTimezone=UTC";
-
             String dbUser = System.getenv("DB_USER");
-            if (dbUser == null) {
-                PromptInput input =  new PromptInput("Enter database user");
-                dbUser = input.nextLine();
-            }
-
             String dbPass = System.getenv("DB_PASS");
-            if (dbPass == null) {
-                PromptInput input =  new PromptInput("Enter database password");
-                dbPass = input.readPassword();
-            }
 
             conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
         } catch (SQLException e) {
-            // System.err.println("SQLException: " + e.getMessage());
-            // System.err.println("SQLState: " + e.getSQLState());
-            // System.err.println("VendorError: " + e.getErrorCode());
             throw new DatabaseException(e);
         }
     }

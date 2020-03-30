@@ -144,13 +144,13 @@ CREATE TABLE inventory (
 );
 
 CREATE TABLE gift (
-    gifter    VARCHAR(255) BINARY NOT NULL,
-    giftee    VARCHAR(255) BINARY NOT NULL,
+    sender    VARCHAR(255) BINARY NOT NULL,
+    recipient VARCHAR(255) BINARY NOT NULL,
+    gifted_on DATE                NOT NULL,
     crop_name VARCHAR(255)        NOT NULL,
-    gifted_on TIMESTAMP           NOT NULL,
-    PRIMARY KEY (gifter, giftee, crop_name, gifted_on),
-    FOREIGN KEY (gifter)    REFERENCES farmer (username),
-    FOREIGN KEY (giftee)    REFERENCES farmer (username),
+    PRIMARY KEY (sender, recipient, gifted_on),
+    FOREIGN KEY (sender)    REFERENCES farmer (username),
+    FOREIGN KEY (recipient) REFERENCES farmer (username),
     FOREIGN KEY (crop_name) REFERENCES crop (crop_name)
 );
 
@@ -160,11 +160,12 @@ CREATE TABLE gift (
  * |-----------------------|
  */
 
-INSERT INTO crop (crop_name, cost, minutes_to_harvest, xp, min_yield, max_yield, sale_price) VALUES
-("Papaya",     20, 30,  8,  75, 100, 15),
-("Pumpkin",    30, 60,  5,  5,  200, 20),
-("Sunflower",  40, 120, 20, 15, 20,  40),
-("Watermelon", 50, 240, 1,  5,  800, 10);
+INSERT INTO crop 
+    (crop_name,  cost, minutes_to_harvest, xp, min_yield, max_yield, sale_price) VALUES
+    ("Papaya",     20,                 30,  8,        75,       100,         15),
+    ("Pumpkin",    30,                 60,  5,         5,       200,         20),
+    ("Sunflower",  40,                120, 20,        15,        20,         40),
+    ("Watermelon", 50,                240,  1,         5,       800,         10);
 
 INSERT INTO ranking (rank_min_xp, rank_name, num_plots) VALUES
 (0,     "Novice",      5),
@@ -368,7 +369,7 @@ DELIMITER $$
 CREATE PROCEDURE reply_to_thread(IN _thread_id INT, IN _username VARCHAR(255), IN _content TEXT(65535))
 BEGIN
     SET @next_num = (
-        SELECT MAX(comment_num) + 1 FROM comment
+        SELECT IFNULL(MAX(comment_num), 0) + 1 FROM comment
         WHERE thread_id = _thread_id
     );
     INSERT INTO comment (comment_num, thread_id, commenter, commented_on, content) VALUES (@next_num, _thread_id, _username, NOW(), _content);
@@ -460,15 +461,16 @@ DELIMITER $$
 CREATE PROCEDURE get_farmer_detail(IN _username VARCHAR(255))
 BEGIN
     SET @rank := 0;
-    SELECT username, xp, r.wealth, r.wealth_rank
-    FROM farmer JOIN (
+    SELECT u.username, u.fullname, xp, r.wealth, r.wealth_rank
+    FROM farmer f JOIN (
         SELECT (@rank := @rank + 1) AS wealth_rank, wealth
         FROM (
             SELECT DISTINCT wealth FROM farmer
         ) AS w
         ORDER BY wealth DESC
-    ) AS r ON farmer.wealth = r.wealth
-    WHERE username = _username;
+    ) AS r ON f.wealth = r.wealth
+    JOIN user u ON f.username = u.username
+    WHERE u.username = _username;
 END$$
 DELIMITER ;
 
@@ -631,8 +633,8 @@ BEGIN
     SELECT @yield_stolen := LEAST(
         -- Limit stolen yield to the remaining yield available
         FLOOR(yield_of_crop * 0.2) - yield_stolen,
-        -- Random int percentage between 1-5% inclusive
-        FLOOR((FLOOR(RAND() * 5) + 1) * yield_of_crop / 100)
+        -- Random yield of percentage ~ [1, 5] rounded down, with minimum 1 yield
+        GREATEST(1, FLOOR((FLOOR(RAND() * 5) + 1) * yield_of_crop / 100))
     ) yield_stolen,
     -- Get the XP gained from yield stolen
     @yield_stolen * c.xp xp_gained,
@@ -675,16 +677,20 @@ BEGIN
     -- Return all stolen crops classified by crop name
     SELECT crop_name, SUM(yield_stolen) quantity, SUM(xp_gained) total_xp_gained, SUM(wealth_gained) total_wealth_gained FROM stolen_crop
     GROUP BY crop_name
+    HAVING SUM(yield_stolen) > 0
     ORDER BY crop_name;
 
     DROP TEMPORARY TABLE stolen_crop;
 END$$
 DELIMITER ;
 
+CREATE PROCEDURE get_gift_count_today(IN _username VARCHAR(255))
+    SELECT COUNT(*) gift_count FROM gift
+    WHERE sender = _username AND gifted_on = CURDATE();
+
 /*
  * STORE
  */
-
 CREATE PROCEDURE get_store_items()
     SELECT * 
     FROM crop

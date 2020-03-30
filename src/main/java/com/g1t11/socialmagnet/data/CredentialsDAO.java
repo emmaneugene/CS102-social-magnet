@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.g1t11.socialmagnet.model.social.RegisterExistingUserException;
 import com.g1t11.socialmagnet.model.social.User;
 
 /**
@@ -15,7 +16,11 @@ public class CredentialsDAO extends DAO {
     }
 
     /**
-     * Verify login information against the database.
+     * Get the logged-in user if login is successful. Otherwise, return null.
+     * 
+     * @param username The inputted username.
+     * @param password The inputted password.
+     * @return A user model if the login is successful, else null.
      */
     public User login(String username, String password) {
         ResultSet rs = null;
@@ -40,6 +45,13 @@ public class CredentialsDAO extends DAO {
         return user;
     }
 
+    /**
+     * Register a new user on the database.
+     * 
+     * @param username The new username.
+     * @param fullname The new fullname.
+     * @param password The new password.
+     */
     public void register(String username, String fullname, String password) {
         String queryString = "CALL register(?, ?, ?)";
 
@@ -50,11 +62,20 @@ public class CredentialsDAO extends DAO {
 
             stmt.executeUpdate();
         } catch (SQLException e) {
+            if (e.getErrorCode() == DatabaseException.SQLErrorCode.DUPLICATE_KEY.code) {
+                throw new RegisterExistingUserException();
+            }
             System.err.println("SQLException: " + e.getMessage());
             throw new DatabaseException(e);
         }
     }
 
+    /**
+     * Check if the user account with the name username exists.
+     * 
+     * @param username The user to check.
+     * @return The user exists in the database.
+     */
     public boolean userExists(String username) {
         ResultSet rs = null;
         boolean exists = true;

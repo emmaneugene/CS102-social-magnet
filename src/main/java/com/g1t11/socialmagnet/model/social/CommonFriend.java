@@ -5,6 +5,10 @@ public class CommonFriend extends User {
         super(username, fullname);
     }
 
+    public CommonFriend(User user) {
+        this(user.getUsername(), user.getFullname());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof CommonFriend)) return false;

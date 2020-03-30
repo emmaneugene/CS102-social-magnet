@@ -1,8 +1,16 @@
 package com.g1t11.socialmagnet.data;
 
+/**
+ * An unchecked exception that wraps around SQLException and other database-
+ * related exceptions.
+ * <p>
+ * This allows us to bubble SQLExceptions up our call stack without polluting
+ * the codebase with <code>throws</code>.
+ */
 public class DatabaseException extends RuntimeException {
     public enum SQLErrorCode {
-        NO_CONNECTION(0);
+        NO_CONNECTION(0),
+        DUPLICATE_KEY(1062);
 
         public int code;
 

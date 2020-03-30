@@ -4,7 +4,8 @@ import java.util.List;
 
 import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.controller.socialmagnet.MainMenuController;
-import com.g1t11.socialmagnet.data.FarmerDAO;
+import com.g1t11.socialmagnet.data.FarmerActionDAO;
+import com.g1t11.socialmagnet.data.FarmerLoadDAO;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.farm.Plot;
 import com.g1t11.socialmagnet.model.farm.StealingRecord;
@@ -14,7 +15,7 @@ import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.component.FriendFarmComponent;
 
 public class StealingController extends CityFarmersController {
-    FarmerDAO farmerDAO = new FarmerDAO(database());
+    FarmerActionDAO farmerActionDAO = new FarmerActionDAO(database());
 
     Farmer toStealFrom;
 
@@ -22,7 +23,7 @@ public class StealingController extends CityFarmersController {
 
     public StealingController(Navigator nav, Farmer me, User friend) {
         super(nav, me);
-        toStealFrom = farmerDAO.getFarmer(friend);
+        toStealFrom = farmerLoadDAO.getFarmer(friend.getUsername());
         friendFarmComp = new FriendFarmComponent(toStealFrom);
     }
 
@@ -34,7 +35,7 @@ public class StealingController extends CityFarmersController {
      */
     @Override
     public void updateView() {
-        List<Plot> toStealPlots = farmerDAO.getPlots(toStealFrom);
+        List<Plot> toStealPlots = farmerLoadDAO.getPlots(toStealFrom.getUsername(), toStealFrom.getMaxPlotCount());
         friendFarmComp.setPlots(toStealPlots);
         friendFarmComp.render();
     }
@@ -62,7 +63,7 @@ public class StealingController extends CityFarmersController {
     }
 
     private void handleSteal() {
-        List<StealingRecord> stolenCrops = farmerDAO.steal(me, toStealFrom);
+        List<StealingRecord> stolenCrops = farmerActionDAO.steal(me.getUsername(), toStealFrom.getUsername());
         if (stolenCrops.size() == 0) {
             nav.pop();
             nav.setCurrStatus(Painter.paint("No plots available to steal from.", Painter.Color.RED));

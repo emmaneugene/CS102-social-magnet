@@ -18,6 +18,10 @@ public class StealingRecord {
         this.totalGoldGained = totalGoldGained;
     }
 
+    public StealingRecord(Crop crop, int quantity) {
+        this(crop.getName(), quantity, quantity * crop.getPerUnitXP(), quantity * crop.getSalePrice());
+    }
+
     public String getCropName() {
         return cropName;
     }
