@@ -9,10 +9,8 @@ INSERT INTO user (username, fullname, pwd) VALUES
 ("danny",   "Danny DeVito",   SHA1("iasip")),
 ("elijah",  "Elijah Wood",    SHA1("mordor")),
 ("frank",   "Frank Sinatra",  SHA1("flymetothemoon")),
-
 -- testGetNoFriends, testGetRequestUsernames
 ("gary",    "Gary Oldman",    SHA1("alone")),
-
 -- testUnfriend
 ("howard",  "Howard Duck",    SHA1("quack")),
 ("icarus",  "Icarus",         SHA1("flytoohigh")),
@@ -20,7 +18,10 @@ INSERT INTO user (username, fullname, pwd) VALUES
 ("james",   "James Bond",     SHA1("shakenotstir")),
 ("king",    "Ben Kingsley",   SHA1("")),
 -- testGetNewsFeedThreads, testGetWallThreads
-("lary",    "Larry King",     SHA1(""));
+("lary",    "Larry King",     SHA1("")),
+-- testAcceptGifts
+("mark",    "Mark Zuck",      SHA1("")),
+("nadia",   "Nadia",          SHA1(""));
 
 INSERT INTO friend (user_1, user_2) VALUES
 -- testGetFriends
@@ -35,7 +36,9 @@ INSERT INTO friend (user_1, user_2) VALUES
 ("danny",   "frank"),
 -- testGetNewsFeedThreads, testGetWallThreads
 ("james", "king"),
-("james", "lary");
+("james", "lary"),
+-- testAcceptGifts
+("mark", "nadia");
 
 INSERT INTO thread (thread_id, author, recipient, posted_on, content) VALUES
 -- testDeleteThreadNoAttributes
@@ -70,7 +73,13 @@ INSERT INTO thread (thread_id, author, recipient, posted_on, content, is_gift) V
 (17, "james",  "lary",  "2019-10-04 14:30:00", "Partners.", FALSE),
 (18, "james",  "lary",  "2019-10-04 15:30:00", "In?", FALSE),
 (19, "james",  "king",  "2019-10-04 16:30:00", "Crime! @lary", FALSE),
-(15, "james",  "lary",  CONCAT(CURDATE(), " 15:30:00"), "Here is some papaya temp", TRUE);
+(15, "james",  "lary",  CONCAT(CURDATE(), " 15:30:00"), "Here is some papaya temp", TRUE),
+-- testAcceptGifts
+(20, "nadia",  "mark",  "2019-08-03 14:30:00", "Here is some papaya temp", TRUE),
+(21, "nadia",  "mark",  "2019-09-03 15:30:00", "Here is some sunflower temp", TRUE),
+(22, "nadia",  "mark",  "2019-10-04 14:30:00", "Hello,", FALSE),
+(23, "nadia",  "mark",  "2019-10-04 15:30:00", "world!", FALSE),
+(25, "nadia",  "mark",  CONCAT(CURDATE(), " 15:30:00"), "Here is some papaya temp", TRUE);
 
 
 INSERT INTO tag (thread_id, tagged_user) VALUES
@@ -144,7 +153,9 @@ INSERT INTO farmer (username, xp, wealth) VALUES
 ("icarus",  200,   3),
 ("james",  200,   3),
 ("king",  200,   3),
-("lary",  200,   3);
+("lary",  200,   3),
+("mark",  200,   3),
+("nadia", 200,   3);
 
 INSERT INTO plot (owner, plot_num, crop_name, time_planted, yield_of_crop, yield_stolen) VALUES
 -- testPlantAndClearCrops
@@ -202,7 +213,11 @@ INSERT INTO gift (sender, recipient, gifted_on, gifted_time, crop_name, thread_i
 ("charlie", "elijah",  CURDATE(),    "15:30:00", "Papaya",     null),
 -- testSentGiftToUserToday (true)
 ("charlie", "frank",   CURDATE(),    "15:30:00", "Papaya",     null),
--- testAcceptGift
-("james", "lary",    "2019-08-03", "15:30:00", "Papaya",     14),
+-- testGetNewsFeedThreads, testGetWallThreads
+("james", "lary",    "2019-08-03", "14:30:00", "Papaya",     14),
 ("james", "lary",    "2019-09-03", "15:30:00", "Sunflower",  16),
-("james", "lary",    CURDATE(),    "15:30:00", "Papaya",     15);
+("james", "lary",    CURDATE(),    "15:30:00", "Papaya",     15),
+
+("nadia", "mark",    "2019-08-03", "14:30:00", "Papaya",     20),
+("nadia", "mark",    "2019-09-03", "15:30:00", "Sunflower",  21),
+("nadia", "mark",    CURDATE(),    "15:30:00", "Papaya",     25);
