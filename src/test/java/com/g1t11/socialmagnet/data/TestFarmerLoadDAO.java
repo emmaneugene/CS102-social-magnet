@@ -85,7 +85,7 @@ public class TestFarmerLoadDAO extends TestDAO {
     @Test
     public void testSentGiftToUsersToday() {
         Map<String, Boolean> expected = Map.of("britney", false, "frank", true);
-        Map<String, Boolean> actual = farmerLoadDAO.sentGiftToUsersToday("adam", new String[]{"britney", "frank"});
+        Map<String, Boolean> actual = farmerLoadDAO.sentGiftToUsersToday("howard", new String[]{"britney", "frank"});
         Assert.assertEquals(expected, actual);
     }
 

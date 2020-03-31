@@ -159,14 +159,12 @@ public class TestThreadLoadDAO extends TestDAO {
     @Test
     public void testGetNewsFeedThreads() {
         List<Thread> expected = List.of(
-            threadLoadDAO.getThread(10, "elijah"),
-            threadLoadDAO.getThread(9,  "elijah"),
-            threadLoadDAO.getThread(8,  "elijah"),
-            threadLoadDAO.getThread(7,  "elijah"),
-            threadLoadDAO.getThread(5,  "elijah")
+            threadLoadDAO.getThread(19, "lary"),
+            threadLoadDAO.getThread(18, "lary"),
+            threadLoadDAO.getThread(17, "lary")
         );
 
-        List<Thread> actual = threadLoadDAO.getNewsFeedThreads("elijah", 5);
+        List<Thread> actual = threadLoadDAO.getNewsFeedThreads("lary", 5);
 
         Assert.assertEquals(expected, actual);
     }
@@ -181,13 +179,14 @@ public class TestThreadLoadDAO extends TestDAO {
     @Test
     public void testGetWallThreads() {
         List<Thread> expected = List.of(
-            threadLoadDAO.getThread(7, "adam"),
-            threadLoadDAO.getThread(5, "adam"),
-            threadLoadDAO.getThread(2, "adam"),
-            threadLoadDAO.getThread(1, "adam")
+            threadLoadDAO.getThread(15, "lary"),
+            threadLoadDAO.getThread(19, "lary"),
+            threadLoadDAO.getThread(18, "lary"),
+            threadLoadDAO.getThread(17, "lary"),
+            threadLoadDAO.getThread(16, "lary")
         );
 
-        List<Thread> actual = threadLoadDAO.getWallThreads("adam", 5);
+        List<Thread> actual = threadLoadDAO.getWallThreads("lary", 5);
 
         Assert.assertEquals(expected, actual);
     }

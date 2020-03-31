@@ -13,7 +13,15 @@ INSERT INTO user (username, fullname, pwd) VALUES
 ("gary",    "Gary Oldman",    SHA1("alone")),
 -- testUnfriend
 ("howard",  "Howard Duck",    SHA1("quack")),
-("icarus",  "Icarus",         SHA1("flytoohigh"));
+("icarus",  "Icarus",         SHA1("flytoohigh")),
+
+("james",   "James Bond",     SHA1("shakenotstir")),
+("king",    "Ben Kingsley",   SHA1("")),
+-- testGetNewsFeedThreads, testGetWallThreads
+("lary",    "Larry King",     SHA1("")),
+-- testAcceptGifts
+("mark",    "Mark Zuck",      SHA1("")),
+("nadia",   "Nadia",          SHA1(""));
 
 INSERT INTO friend (user_1, user_2) VALUES
 -- testGetFriends
@@ -25,15 +33,20 @@ INSERT INTO friend (user_1, user_2) VALUES
 ("charlie", "danny"),
 ("charlie", "frank"),
 ("danny",   "elijah"),
-("danny",   "frank");
+("danny",   "frank"),
+-- testGetNewsFeedThreads, testGetWallThreads
+("james", "king"),
+("james", "lary"),
+-- testAcceptGifts
+("mark", "nadia");
 
 INSERT INTO thread (thread_id, author, recipient, posted_on, content) VALUES
 -- testDeleteThreadNoAttributes
-(11,  "charlie", "adam",    "2019-03-04 09:30:00", "Added in late but with earlier posted_on..."),
+(11, "charlie", "adam",    "2019-03-04 09:30:00", "Added in late but with earlier posted_on..."),
 -- testDeleteThreadWithLikesDislikesCommentsTags
-(12,  "danny",   "frank",   "2019-03-02 15:30:00", "Such that news feed tests and wall tests are..."),
+(12, "danny",   "frank",   "2019-03-02 15:30:00", "Such that news feed tests and wall tests are..."),
 -- testDeleteUnauthorized
-(13,  "britney", "charlie", "2019-03-03 13:30:00", "Not affected by thread deletion."),
+(13, "britney", "charlie", "2019-03-03 13:30:00", "Not affected by thread deletion."),
 -- testSetCommentsOnlyThree, testToggleLikeThread
 (1,  "adam",    "adam",    "2019-03-02 08:30:00", "Hello, world!"),
 -- testSetCommentsFewerThanThree, testSetDislikersNone
@@ -53,13 +66,36 @@ INSERT INTO thread (thread_id, author, recipient, posted_on, content) VALUES
 -- testAddAndRemoveTags, testReplyToThreadNoComments
 (10, "britney", "britney", "2019-10-04 14:30:00", "I'm so lonely...");
 
+INSERT INTO thread (thread_id, author, recipient, posted_on, content, is_gift) VALUES
+-- testGetNewsFeedThreads, testGetWallThreads
+(14, "james",  "lary",  "2019-08-03 14:30:00", "Here is some papaya temp", TRUE),
+(16, "james",  "lary",  "2019-09-03 15:30:00", "Here is some sunflower temp", TRUE),
+(17, "james",  "lary",  "2019-10-04 14:30:00", "Partners.", FALSE),
+(18, "james",  "lary",  "2019-10-04 15:30:00", "In?", FALSE),
+(19, "james",  "king",  "2019-10-04 16:30:00", "Crime! @lary", FALSE),
+(15, "james",  "lary",  CONCAT(CURDATE(), " 15:30:00"), "Here is some papaya temp", TRUE),
+-- testAcceptGifts
+(20, "nadia",  "mark",  "2019-08-03 14:30:00", "Here is some papaya temp", TRUE),
+(21, "nadia",  "mark",  "2019-09-03 15:30:00", "Here is some sunflower temp", TRUE),
+(22, "nadia",  "mark",  "2019-10-04 14:30:00", "Hello,", FALSE),
+(23, "nadia",  "mark",  "2019-10-04 15:30:00", "world!", FALSE),
+(25, "nadia",  "mark",  CONCAT(CURDATE(), " 15:30:00"), "Here is some papaya temp", TRUE),
+-- testRejectGifts
+(26, "mark",  "nadia",  "2019-08-03 14:30:00", "Here is some papaya temp", TRUE),
+(27, "mark",  "nadia",  "2019-09-03 15:30:00", "Here is some sunflower temp", TRUE),
+(28, "mark",  "nadia",  "2019-10-04 14:30:00", "Hello,", FALSE),
+(29, "mark",  "nadia",  "2019-10-04 15:30:00", "world!", FALSE),
+(30, "mark",  "nadia",  CONCAT(CURDATE(), " 15:30:00"), "Here is some papaya temp", TRUE);
+
+
 INSERT INTO tag (thread_id, tagged_user) VALUES
 -- testDeleteThreadWithLikesDislikesCommentsTags
 (6, "charlie"),
 -- testGetTaggedUsernames
 (7, "adam"),
 (7, "britney"),
-(9, "elijah");
+(9, "elijah"),
+(19, "lary");
 
 INSERT INTO comment (thread_id, comment_num, commenter, commented_on, content) VALUES
 -- testSetCommentsOnlyThree
@@ -81,7 +117,7 @@ INSERT INTO comment (thread_id, comment_num, commenter, commented_on, content) V
 (8, 3, "adam",    "2019-09-15 16:15:00", "Third time!"),
 (8, 4, "elijah",  "2019-09-15 16:30:00", "Stop!!"),
 -- testDeleteThreadWithLikesDislikesCommentsTags
-(12, 1, "frank",   "2019-09-03 16:30:00", "Not sure about that.");
+(12, 1, "frank",  "2019-09-03 16:30:00", "Not sure about that.");
 
 
 INSERT INTO liker (username, thread_id) VALUES
@@ -109,15 +145,23 @@ INSERT INTO request (sender, recipient) VALUES
 
 INSERT INTO farmer (username, xp, wealth) VALUES
 -- testGetFarmer, testPlantAndClearCrops
-("adam",    11000,  15000),
+("adam",    11000, 15000),
 -- testGetPlots, testGetInventory
 ("britney", 2000,  1500),
 -- testHarvest
 ("charlie", 2450,  1500),
 -- testSteal
-("danny",   1300, 1500),
+("danny",   1300,  1500),
 ("elijah",  100,   1000),
-("frank",   200,   3);
+("frank",   200,   5),
+("gary",    200,   3),
+("howard",  200,   3),
+("icarus",  200,   3),
+("james",  200,   3),
+("king",  200,   3),
+("lary",  200,   3),
+("mark",  200,   3),
+("nadia", 200,   3);
 
 INSERT INTO plot (owner, plot_num, crop_name, time_planted, yield_of_crop, yield_stolen) VALUES
 -- testPlantAndClearCrops
@@ -136,29 +180,57 @@ INSERT INTO plot (owner, plot_num, crop_name, time_planted, yield_of_crop, yield
 ("charlie", 4, "Papaya",     DATE_SUB(NOW(), INTERVAL  30 MINUTE), 75,  0),
 ("charlie", 6, "Watermelon", DATE_SUB(NOW(), INTERVAL 250 MINUTE), 400, 0),
 -- testSteal (no more yield to steal)
-("danny", 1,   "Papaya",     DATE_SUB(NOW(), INTERVAL  30 MINUTE), 75,  15),
+("danny",   1, "Papaya",     DATE_SUB(NOW(), INTERVAL  30 MINUTE), 75,  15),
 -- testSteal (1 to 3 yield (1-5%))
-("elijah", 1,  "Papaya",     DATE_SUB(NOW(), INTERVAL  30 MINUTE), 75,  0),
+("elijah",  1, "Papaya",     DATE_SUB(NOW(), INTERVAL  30 MINUTE), 75,  0),
 -- testSteal (4 to 20 yield (1-5%))
-("elijah", 2,  "Watermelon", DATE_SUB(NOW(), INTERVAL 250 MINUTE), 400, 0);
+("elijah",  2, "Watermelon", DATE_SUB(NOW(), INTERVAL 250 MINUTE), 400, 0),
+-- testClearWiltedCrop
+("frank",   1, "Papaya",     DATE_SUB(NOW(), INTERVAL  30 MINUTE), 75,  0),
+("frank",   2, "Pumpkin",    DATE_SUB(NOW(), INTERVAL  25 MINUTE), 100, 0),
+("frank",   3, "Watermelon", DATE_SUB(NOW(), INTERVAL 480 MINUTE), 400, 0),
+("frank",   5, "Watermelon", DATE_SUB(NOW(), INTERVAL 250 MINUTE), 400, 0);
 
 INSERT INTO inventory (owner, crop_name, quantity) VALUES
--- tesGetInventory
+-- testPlantAndClearCrops
+("adam",    "Watermelon", 1),
+-- testPlantOnExistingCrop, testPlantCropInvalidPlot
+("adam",    "Papaya", 2),
+-- testGetInventory
 ("britney", "Papaya", 1),
-("britney", "Watermelon", 2);
+("britney", "Watermelon", 2),
+("gary", "Papaya", 1),
+("gary", "Watermelon", 2),
+-- testAcceptGifts
+("mark", "Papaya", 1),
+-- testRejectGifts
+("nadia", "Sunflower", 1);
 
-INSERT INTO gift (sender, recipient, gifted_on, crop_name, accepted) VALUES
+-- All gift datetimes are later than posts for convenience
+INSERT INTO gift (sender, recipient, gifted_on, gifted_time, crop_name, thread_id) VALUES
 -- testSentGiftCountNotToday
-("adam",    "britney", "2019-12-03", "Sunflower",  FALSE),
-("adam",    "elijah",  "2019-12-03", "Sunflower",  FALSE),
+("adam",    "britney", "2019-12-03", "15:30:00", "Sunflower",  null),
+("adam",    "elijah",  "2019-12-03", "15:30:00", "Sunflower",  null),
 -- testSentGiftToUserToday (false)
-("adam",    "frank",   "2019-12-03", "Sunflower",  TRUE),
+("adam",    "frank",   "2019-12-03", "15:30:00", "Sunflower",  null),
 -- testSentGiftToUsersToday
-("adam",    "frank",   CURDATE(),    "Watermelon", TRUE),
+("howard",  "frank",   CURDATE(),    "15:30:00", "Watermelon", null),
 -- testGetGiftCountToday
-("charlie", "adam",    CURDATE(),    "Watermelon", FALSE),
-("charlie", "britney", CURDATE(),    "Papaya",     FALSE),
-("charlie", "danny",   CURDATE(),    "Papaya",     FALSE),
-("charlie", "elijah",  CURDATE(),    "Papaya",     FALSE),
+("charlie", "adam",    CURDATE(),    "15:30:00", "Watermelon", null),
+("charlie", "britney", CURDATE(),    "15:30:00", "Papaya",     null),
+("charlie", "danny",   CURDATE(),    "15:30:00", "Papaya",     null),
+("charlie", "elijah",  CURDATE(),    "15:30:00", "Papaya",     null),
 -- testSentGiftToUserToday (true)
-("charlie", "frank",   CURDATE(),    "Papaya",     TRUE);
+("charlie", "frank",   CURDATE(),    "15:30:00", "Papaya",     null),
+-- testGetNewsFeedThreads, testGetWallThreads
+("james", "lary",    "2019-08-03", "14:30:00", "Papaya",     14),
+("james", "lary",    "2019-09-03", "15:30:00", "Sunflower",  16),
+("james", "lary",    CURDATE(),    "15:30:00", "Papaya",     15),
+-- testAcceptGifts
+("nadia", "mark",    "2019-08-03", "14:30:00", "Papaya",     20),
+("nadia", "mark",    "2019-09-03", "15:30:00", "Sunflower",  21),
+("nadia", "mark",    CURDATE(),    "15:30:00", "Papaya",     25),
+-- testRejectGifts
+("mark", "nadia",    "2019-08-03", "14:30:00", "Papaya",     26),
+("mark", "nadia",    "2019-09-03", "15:30:00", "Sunflower",  27),
+("mark", "nadia",    CURDATE(),    "15:30:00", "Papaya",     30);
