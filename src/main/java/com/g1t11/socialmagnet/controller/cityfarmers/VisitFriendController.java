@@ -8,6 +8,7 @@ import com.g1t11.socialmagnet.data.UserDAO;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
+import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.cityfarmers.VisitFriendPageView;
 
 public class VisitFriendController extends CityFarmersController {
@@ -18,18 +19,18 @@ public class VisitFriendController extends CityFarmersController {
     public VisitFriendController(Navigator nav, Farmer me) {
         super(nav, me);
         friends = userDAO.getFriends(me.getUsername());
-        view = new VisitFriendPageView(friends);
+        setView(new VisitFriendPageView(friends));
     }
 
     @Override
     public void handleInput() {
         input.setPrompt(Painter.paintf(
-            "[[{M}]]ain | City [[{F}]]armers | Select choice",
-            Painter.Color.YELLOW
-        ));
+                "[[{M}]]ain | City [[{F}]]armers | Select choice",
+                Color.YELLOW));
+
         String choice = input.nextLine();
         if (choice.length() == 0) {
-            view.setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
+            setStatus(Painter.paint("Please select a valid option.", Color.RED));
         } else if (choice.equals("M")) {
             nav.popTo(MainMenuController.class);
         } else if (choice.equals("F")) {
@@ -37,7 +38,7 @@ public class VisitFriendController extends CityFarmersController {
         } else if (choice.matches("-?\\d+")) {
             handleVisit(choice);
         } else {
-            view.setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
+            setStatus(Painter.paint("Please select a valid option.", Color.RED));
         }
     }
 
@@ -46,12 +47,12 @@ public class VisitFriendController extends CityFarmersController {
             int index = Integer.parseInt(choice);
             
             if (index <= 0 || index > friends.size()) {
-                view.setStatus(Painter.paint("Index out of range.", Painter.Color.RED));
-            } else {
-                nav.push(new StealingController(nav, me, friends.get(index - 1)));
+                setStatus(Painter.paint("Index out of range.", Color.RED));
+                return;
             }
+            nav.push(new StealingController(nav, me, friends.get(index - 1)));
         } catch (NumberFormatException e) {
-            view.setStatus(Painter.paint("Use <id> to select a friend to visit.", Painter.Color.RED));
+            setStatus(Painter.paint("Use <id> to select a friend to visit.", Color.RED));
         }
     }
 }

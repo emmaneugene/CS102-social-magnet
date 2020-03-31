@@ -38,7 +38,6 @@ public class FarmlandPageView extends CityFarmersPageView {
 
     public void displayInvMenu() {
         System.out.println();
-        System.out.println();
         System.out.println("Select the crop:");
         invComp.render();
     }

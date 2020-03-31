@@ -10,7 +10,7 @@ public class RegisterController extends Controller {
 
     public RegisterController(Navigator nav) {
         super(nav);
-        view = new RegisterPageView();
+        setView(new RegisterPageView());
     }
 
     @Override

@@ -33,6 +33,13 @@ public class TestTextUtils {
     }
 
     @Test
+    public void testPrettyNumberThousand() {
+        String expected = "1,000";
+        String actual = TextUtils.prettyNumber(1000);
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
     public void testPrettyNumberThreeDigits() {
         String expected = "123";
         String actual = TextUtils.prettyNumber(123);
@@ -57,6 +64,27 @@ public class TestTextUtils {
     public void testPrettyNumberNegative() {
         String expected = "-12,345";
         String actual = TextUtils.prettyNumber(-12345);
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testPrettyListOne() {
+        String expected = "1";
+        String actual = TextUtils.prettyList(new String[]{"1"});
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testPrettyListTwo() {
+        String expected = "1 and 2";
+        String actual = TextUtils.prettyList(new String[]{"1", "2"});
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testPrettyListThree() {
+        String expected = "1, 2, and 3";
+        String actual = TextUtils.prettyList(new String[]{"1", "2", "3"});
         Assert.assertEquals(expected, actual);
     }
 }

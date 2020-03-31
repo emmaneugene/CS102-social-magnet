@@ -28,16 +28,25 @@ public abstract class PageView {
         this.pageTitles = pageTitles;
     }
 
-    public void setStatus(String status) {
-        this.status = status + "\n";
+    /**
+     * Sets the status of the PageView.
+     * @param text The status message to set.
+     */
+    public void setStatus(String text) {
+        status = text + "\n";
     }
 
-    public void appendStatus(String status) {
-        if (this.status == null) {
-            setStatus(status);
+    /**
+     * Append a status message to the current status message, or create a new one if the current
+     * status message is null.
+     * @param text The status message to add.
+     */
+    public void appendStatus(String text) {
+        if (status == null) {
+            setStatus(text);
             return;
         }
-        this.status += status + "\n";
+        status += text + "\n";
     }
 
     public void clearStatus() {

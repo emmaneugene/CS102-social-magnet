@@ -7,9 +7,13 @@ import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.view.page.cityfarmers.CityFarmersPageView;
 
+/**
+ * This abstract class acts as the base controller of all City Farmer pages.
+ */
 public abstract class CityFarmersController extends Controller {
     FarmerLoadDAO farmerLoadDAO = new FarmerLoadDAO(nav.database());
 
+    /** The current farmer being displayed in City Farmer */
     Farmer me;
 
     public CityFarmersController(Navigator nav, Farmer me) {
@@ -23,8 +27,14 @@ public abstract class CityFarmersController extends Controller {
     }
 
     @Override
+    public CityFarmersPageView getView() {
+        return (CityFarmersPageView) super.getView();
+    }
+
+    @Override
     public void updateView() {
         me = farmerLoadDAO.getFarmer(me.getUsername());
-        ((CityFarmersPageView) view).setFarmer(me);
+        // Ensures that the farmer is always updated before a page refresh.
+        getView().setFarmer(me);
     }
 }

@@ -1,9 +1,12 @@
 package com.g1t11.socialmagnet.controller.socialmagnet;
 
+import java.util.List;
+
 import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.data.UserDAO;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
+import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.socialmagnet.FriendsWallPageView;
 
 public class FriendsWallController extends WallController {
@@ -12,19 +15,18 @@ public class FriendsWallController extends WallController {
     public FriendsWallController(Navigator nav, User me, User friend) {
         super(nav, me);
         farmerToDisplay = farmerLoadDAO.getFarmer(friend.getUsername());
-        view = new FriendsWallPageView(
-            me,
-            farmerToDisplay, 
-            userDAO.getFriendsOfFriendWithCommon(me.getUsername(), farmerToDisplay.getUsername())
-        );
+        List<User> friendsOfFriend = userDAO.getFriendsOfFriendWithCommon(
+                me.getUsername(),
+                farmerToDisplay.getUsername());
+        setView(new FriendsWallPageView(me, farmerToDisplay, friendsOfFriend));
     }
 
     @Override
     public void handleInput() {
-        input.setPrompt(Painter.paintf("[[{M}]]ain | [[{T}]]hread | [[{P}]]ost", Painter.Color.YELLOW));
+        input.setPrompt(Painter.paintf("[[{M}]]ain | [[{T}]]hread | [[{P}]]ost", Color.YELLOW));
         String choice = input.nextLine();
         if (choice.length() == 0) {
-            view.setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
+            setStatus(Painter.paint("Please select a valid option.", Color.RED));
         } else if (choice.equals("M")) {
             nav.popTo(MainMenuController.class);
         } else if (choice.charAt(0) == 'T') {
@@ -32,7 +34,7 @@ public class FriendsWallController extends WallController {
         } else if (choice.equals("P")) {
             handlePost();
         } else {
-            view.setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
+            setStatus(Painter.paint("Please select a valid option.", Color.RED));
         }
     }
 }

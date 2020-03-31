@@ -28,8 +28,12 @@ public class PromptInput {
         this("Enter your choice");
     }
 
-    public void setPrompt(String prompt) {
-        this.prompt = prompt;
+    /**
+     * Sets the prompt text.
+     * @param text The text to prompt.
+     */
+    public void setPrompt(String text) {
+        prompt = text;
     }
 
     public String readPassword() {

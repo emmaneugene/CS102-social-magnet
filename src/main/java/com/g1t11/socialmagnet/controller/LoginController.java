@@ -11,7 +11,7 @@ public class LoginController extends Controller {
 
     public LoginController(Navigator nav) {
         super(nav);
-        view = new LoginPageView();
+        setView(new LoginPageView());
     }
 
     @Override

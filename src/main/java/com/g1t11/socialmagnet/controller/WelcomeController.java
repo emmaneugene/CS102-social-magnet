@@ -6,7 +6,7 @@ import com.g1t11.socialmagnet.view.page.WelcomePageView;
 public class WelcomeController extends Controller {
     public WelcomeController(Navigator nav) {
         super(nav);
-        view = new WelcomePageView();
+        setView(new WelcomePageView());
     }
 
     @Override
@@ -23,7 +23,7 @@ public class WelcomeController extends Controller {
                 System.exit(0);
                 break;
             default:
-                view.setStatus(Painter.paint("Please enter a choice between 1 & 3!", Painter.Color.RED));
+                setStatus(Painter.paint("Please enter a choice between 1 & 3!", Painter.Color.RED));
                 break;
         }
     }
