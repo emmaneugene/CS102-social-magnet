@@ -193,9 +193,10 @@ INSERT INTO inventory (owner, crop_name, quantity) VALUES
 -- testGetInventory
 ("britney", "Papaya", 1),
 ("britney", "Watermelon", 2),
--- testAcceptGifts
 ("gary", "Papaya", 1),
-("gary", "Watermelon", 2);
+("gary", "Watermelon", 2),
+-- testAcceptGifts
+("mark", "Papaya", 1);
 
 -- All gift datetimes are later than posts for convenience
 INSERT INTO gift (sender, recipient, gifted_on, gifted_time, crop_name, thread_id) VALUES
@@ -217,7 +218,7 @@ INSERT INTO gift (sender, recipient, gifted_on, gifted_time, crop_name, thread_i
 ("james", "lary",    "2019-08-03", "14:30:00", "Papaya",     14),
 ("james", "lary",    "2019-09-03", "15:30:00", "Sunflower",  16),
 ("james", "lary",    CURDATE(),    "15:30:00", "Papaya",     15),
-
+-- testAcceptGifts
 ("nadia", "mark",    "2019-08-03", "14:30:00", "Papaya",     20),
 ("nadia", "mark",    "2019-09-03", "15:30:00", "Sunflower",  21),
 ("nadia", "mark",    CURDATE(),    "15:30:00", "Papaya",     25);

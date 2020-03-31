@@ -725,7 +725,7 @@ BEGIN
     UPDATE inventory i
     JOIN (
         SELECT crop_name, COUNT(*) quantity FROM gift
-        WHERE recipient = _username AND thread_id <> NULL
+        WHERE recipient = _username AND thread_id IS NOT NULL
         GROUP BY crop_name
     ) g ON i.crop_name = g.crop_name
     SET i.quantity = i.quantity + g.quantity

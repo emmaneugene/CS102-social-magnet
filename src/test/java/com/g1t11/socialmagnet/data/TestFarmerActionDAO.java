@@ -235,22 +235,22 @@ public class TestFarmerActionDAO extends TestDAO {
         Assert.assertEquals(expectedXP, actualXP);       
     }
 
-    // @Test
+    @Test
     public void testAcceptGifts() {
-        Map<String, Integer> expected = farmerLoadDAO.getInventoryCrops("gary");
+        Map<String, Integer> expected = farmerLoadDAO.getInventoryCrops("mark");
         // Adding onto existing crops in inventory.
         expected.put("Papaya", expected.get("Papaya") + 2);
         // Adding new crops to inventory.
-        expected.put("Sunflower", 2);
+        expected.put("Sunflower", 1);
 
-        farmerActionDAO.acceptGifts("gary");
-        Map<String, Integer> actual = farmerLoadDAO.getInventoryCrops("gary");
+        farmerActionDAO.acceptGifts("mark");
+        Map<String, Integer> actual = farmerLoadDAO.getInventoryCrops("mark");
         
         Assert.assertEquals(expected, actual);
 
         // Accepted gifts canoot be accepted again.
-        farmerActionDAO.acceptGifts("gary");
-        Map<String, Integer> again = farmerLoadDAO.getInventoryCrops("gary");
+        farmerActionDAO.acceptGifts("mark");
+        Map<String, Integer> again = farmerLoadDAO.getInventoryCrops("mark");
 
         Assert.assertEquals(actual, again);
     }
