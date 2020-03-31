@@ -533,6 +533,16 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE plant_crop_auto_yield(IN _username VARCHAR(255), IN _plot_num INT, IN _crop_name VARCHAR(255))
 BEGIN
+    -- Update inventory
+    SET @quantity := ( SELECT IFNULL(SUM(quantity), 0) FROM inventory WHERE owner = _username AND crop_name = _crop_name );
+    IF (@quantity = 0) THEN
+        SIGNAL SQLSTATE '45000' SET message_text = 'Not enough seeds in inventory.';
+    ELSEIF (@quantity = 1) THEN
+        DELETE FROM inventory WHERE owner = _username AND crop_name = _crop_name;
+    ELSE
+        UPDATE inventory SET quantity = @quantity - 1 WHERE owner = _username AND crop_name = _crop_name;
+    END IF;
+
     -- Generate random yield
     SET @min_yield_of_crop := ( SELECT min_yield FROM crop WHERE crop_name = _crop_name );
     SET @max_yield_of_crop := ( SELECT max_yield FROM crop WHERE crop_name = _crop_name );
@@ -540,29 +550,6 @@ BEGIN
     -- Update plot
     INSERT INTO plot (owner, plot_num, crop_name, time_planted, yield_of_crop, yield_stolen) VALUES 
     (_username, _plot_num, _crop_name, NOW(), @random_yield, 0);
-    -- Update inventory
-    SET @new_quantity := ( SELECT quantity - 1 FROM inventory WHERE owner = _username AND crop_name = _crop_name );
-    IF (@new_quantity = 0) THEN
-        DELETE FROM inventory WHERE owner = _username AND crop_name = _crop_name;
-    ELSE
-        UPDATE inventory SET quantity = @new_quantity WHERE owner = _username AND crop_name = _crop_name;
-    END IF;
-END$$
-DELIMITER ;
-
-DELIMITER $$
-CREATE PROCEDURE plant_crop(IN _username VARCHAR(255), IN _plot_num INT, IN _crop_name VARCHAR(255), IN _yield INT)
-BEGIN
-    -- Update plot
-    INSERT INTO plot (owner, plot_num, crop_name, time_planted, yield_of_crop, yield_stolen) VALUES 
-    (_username, _plot_num, _crop_name, NOW(), _yield, 0);
-    -- Update inventory
-    SET @new_quantity := ( SELECT quantity - 1 FROM inventory WHERE owner = _username AND crop_name = _crop_name );
-    IF (@new_quantity = 0) THEN
-        DELETE FROM inventory WHERE owner = _username AND crop_name = _crop_name;
-    ELSE
-        UPDATE inventory SET quantity = @new_quantity WHERE owner = _username AND crop_name = _crop_name;
-    END IF;
 END$$
 DELIMITER ;
 

@@ -1,6 +1,7 @@
 package com.g1t11.socialmagnet.data;
 
 import java.util.List;
+import java.util.Map;
 
 import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
@@ -24,6 +25,7 @@ public class TestFarmerActionDAO extends TestDAO {
         farmerActionDAO = new FarmerActionDAO(db);
     }
 
+    @Test
     public void testPlantAndClearCrops() {
         testPlantCrop();
         testClearCrop();
@@ -31,9 +33,9 @@ public class TestFarmerActionDAO extends TestDAO {
 
     private void testPlantCrop() {
         List<Plot> expected = farmerLoadDAO.getPlots("adam", 6);
-        expected.set(4, new Plot(papaya));
+        expected.set(4, new Plot(watermelon));
 
-        farmerActionDAO.plantCrop("adam", 5, "Papaya");
+        farmerActionDAO.plantCrop("adam", 5, "Watermelon");
 
         List<Plot> actual = farmerLoadDAO.getPlots("adam", 6);
 
@@ -41,7 +43,7 @@ public class TestFarmerActionDAO extends TestDAO {
     }
 
     private void testClearCrop() {
-        int expectedWealth = farmerLoadDAO.getFarmer("adam").getWealth() - 5;
+        int expectedWealth = farmerLoadDAO.getFarmer("adam").getWealth();
 
         List<Plot> expectedPlots = farmerLoadDAO.getPlots("adam", 6);
         expectedPlots.set(4, new Plot());
@@ -53,22 +55,61 @@ public class TestFarmerActionDAO extends TestDAO {
 
         Assert.assertEquals(expectedWealth, actualWealth);
         Assert.assertEquals(expectedPlots, actualPlots);
-        Assert.assertTrue(false);
     }
 
-    @Test(expected = DatabaseException.class)
+    @Test
+    public void testClearWiltedCrop() {
+        int expectedWealth = farmerLoadDAO.getFarmer("frank").getWealth() - 5;
+
+        List<Plot> expectedPlots = farmerLoadDAO.getPlots("frank", 5);
+        expectedPlots.set(2, new Plot());
+
+        farmerActionDAO.clearPlot("frank", 3);
+
+        int actualWealth = farmerLoadDAO.getFarmer("frank").getWealth();
+        List<Plot> actualPlots = farmerLoadDAO.getPlots("frank", 5);
+
+        Assert.assertEquals(expectedWealth, actualWealth);
+        Assert.assertEquals(expectedPlots, actualPlots);
+    }
+
+    @Test
     public void testPlantOnExistingCrop() {
-        farmerActionDAO.plantCrop("adam", 1, "Papaya");
+        List<Plot> before = farmerLoadDAO.getPlots("adam", 6);
+
+        try {
+            farmerActionDAO.plantCrop("adam", 1, "Papaya");
+        } catch (DatabaseException e) {}
+
+        List<Plot> after = farmerLoadDAO.getPlots("adam", 6);
+
+        Assert.assertEquals(before, after);
     }
 
-    @Test(expected = DatabaseException.class)
+    @Test
     public void testPlantWithoutInventory() {
-        farmerActionDAO.plantCrop("adam", 1, "Sunflower");
+        List<Plot> before = farmerLoadDAO.getPlots("adam", 6);
+
+        try {
+            farmerActionDAO.plantCrop("adam", 5, "Sunflower");
+        } catch (DatabaseException e) {}
+
+        List<Plot> after = farmerLoadDAO.getPlots("adam", 6);
+
+        Assert.assertEquals(before, after);
     }
 
-    @Test(expected = DatabaseException.class)
+    @Test
     public void testPlantCropInvalidPlot() {
-        farmerActionDAO.plantCrop("adam", 9, "Papaya");
+        List<Plot> before = farmerLoadDAO.getPlots("adam", 6);
+
+        try {
+            farmerActionDAO.plantCrop("adam", 9, "Papaya");
+        } catch (DatabaseException e) {}
+
+        List<Plot> after = farmerLoadDAO.getPlots("adam", 6);
+
+        Assert.assertEquals(before, after);
     }
 
     @Test
@@ -192,5 +233,25 @@ public class TestFarmerActionDAO extends TestDAO {
         Assert.assertEquals(0, actualSteal.size());
         Assert.assertEquals(expectedWealth, actualWealth);
         Assert.assertEquals(expectedXP, actualXP);       
+    }
+
+    @Test
+    public void testAcceptGifts() {
+        Map<String, Integer> expected = farmerLoadDAO.getInventoryCrops("gary");
+        // Adding onto existing crops in inventory.
+        expected.put("Papaya", expected.get("Papaya") + 2);
+        // Adding new crops to inventory.
+        expected.put("Sunflower", 2);
+
+        farmerActionDAO.acceptGifts("gary");
+        Map<String, Integer> actual = farmerLoadDAO.getInventoryCrops("gary");
+        
+        Assert.assertEquals(expected, actual);
+
+        // Accepted gifts canoot be accepted again.
+        farmerActionDAO.acceptGifts("gary");
+        Map<String, Integer> again = farmerLoadDAO.getInventoryCrops("gary");
+
+        Assert.assertEquals(actual, again);
     }
 }

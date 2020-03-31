@@ -143,4 +143,17 @@ public class FarmerActionDAO extends DAO {
             throw new DatabaseException(e);
         }
     }
+
+    public void acceptGifts(String username) {
+        String queryString = "CALL accept_gifts(?)";
+
+        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+            stmt.setString(1, username);
+            
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+            throw new DatabaseException(e);
+        }
+    }
 }

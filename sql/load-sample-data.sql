@@ -117,7 +117,10 @@ INSERT INTO farmer (username, xp, wealth) VALUES
 -- testSteal
 ("danny",   1300, 1500),
 ("elijah",  100,   1000),
-("frank",   200,   3);
+("frank",   200,   5),
+("gary",   200,   3),
+("howard",   200,   3),
+("icarus",   200,   3);
 
 INSERT INTO plot (owner, plot_num, crop_name, time_planted, yield_of_crop, yield_stolen) VALUES
 -- testPlantAndClearCrops
@@ -136,16 +139,28 @@ INSERT INTO plot (owner, plot_num, crop_name, time_planted, yield_of_crop, yield
 ("charlie", 4, "Papaya",     DATE_SUB(NOW(), INTERVAL  30 MINUTE), 75,  0),
 ("charlie", 6, "Watermelon", DATE_SUB(NOW(), INTERVAL 250 MINUTE), 400, 0),
 -- testSteal (no more yield to steal)
-("danny", 1,   "Papaya",     DATE_SUB(NOW(), INTERVAL  30 MINUTE), 75,  15),
+("danny",   1, "Papaya",     DATE_SUB(NOW(), INTERVAL  30 MINUTE), 75,  15),
 -- testSteal (1 to 3 yield (1-5%))
-("elijah", 1,  "Papaya",     DATE_SUB(NOW(), INTERVAL  30 MINUTE), 75,  0),
+("elijah",  1, "Papaya",     DATE_SUB(NOW(), INTERVAL  30 MINUTE), 75,  0),
 -- testSteal (4 to 20 yield (1-5%))
-("elijah", 2,  "Watermelon", DATE_SUB(NOW(), INTERVAL 250 MINUTE), 400, 0);
+("elijah",  2, "Watermelon", DATE_SUB(NOW(), INTERVAL 250 MINUTE), 400, 0),
+-- testClearWiltedCrop
+("frank",   1, "Papaya",     DATE_SUB(NOW(), INTERVAL  30 MINUTE), 75,  0),
+("frank",   2, "Pumpkin",    DATE_SUB(NOW(), INTERVAL  25 MINUTE), 100, 0),
+("frank",   3, "Watermelon", DATE_SUB(NOW(), INTERVAL 480 MINUTE), 400, 0),
+("frank",   5, "Watermelon", DATE_SUB(NOW(), INTERVAL 250 MINUTE), 400, 0);
 
 INSERT INTO inventory (owner, crop_name, quantity) VALUES
--- tesGetInventory
+-- testPlantAndClearCrops
+("adam",    "Watermelon", 1),
+-- testPlantOnExistingCrop, testPlantCropInvalidPlot
+("adam",    "Papaya", 2),
+-- testGetInventory
 ("britney", "Papaya", 1),
-("britney", "Watermelon", 2);
+("britney", "Watermelon", 2),
+-- testAcceptGifts
+("gary", "Papaya", 1),
+("gary", "Watermelon", 2);
 
 INSERT INTO gift (sender, recipient, gifted_on, crop_name, accepted) VALUES
 -- testSentGiftCountNotToday
@@ -154,11 +169,16 @@ INSERT INTO gift (sender, recipient, gifted_on, crop_name, accepted) VALUES
 -- testSentGiftToUserToday (false)
 ("adam",    "frank",   "2019-12-03", "Sunflower",  TRUE),
 -- testSentGiftToUsersToday
-("adam",    "frank",   CURDATE(),    "Watermelon", TRUE),
+("howard",  "frank",   CURDATE(),    "Watermelon", TRUE),
 -- testGetGiftCountToday
 ("charlie", "adam",    CURDATE(),    "Watermelon", FALSE),
 ("charlie", "britney", CURDATE(),    "Papaya",     FALSE),
 ("charlie", "danny",   CURDATE(),    "Papaya",     FALSE),
 ("charlie", "elijah",  CURDATE(),    "Papaya",     FALSE),
 -- testSentGiftToUserToday (true)
-("charlie", "frank",   CURDATE(),    "Papaya",     TRUE);
+("charlie", "frank",   CURDATE(),    "Papaya",     TRUE),
+-- testAcceptGift
+("frank",   "gary",    "2019-12-03", "Papaya",     FALSE),
+("frank",   "gary",    CURDATE(),    "Papaya",     FALSE),
+("britney", "gary",    "2019-12-03", "Sunflower",  FALSE),
+("britney", "gary",    CURDATE(),    "Sunflower",  FALSE);
