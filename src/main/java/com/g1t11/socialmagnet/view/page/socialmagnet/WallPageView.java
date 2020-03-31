@@ -28,7 +28,7 @@ public class WallPageView extends PageView {
         super.display();
         profileComp.render();
         System.out.println();
-        System.out.println();
+
         for (SimpleThreadComponent threadComp : threadComps) {
             threadComp.render();
             System.out.println();

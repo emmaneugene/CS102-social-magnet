@@ -10,10 +10,12 @@ public class WallProfileInfoComponent implements Component {
         String.join(System.lineSeparator(),
             "About [{%s}]",
             "Full Name: %s",
-            "%s Farmer, %s richest",
+            "[{%s}] Farmer, [{%s}] richest",
             ""
         ),
-        Painter.Color.BLUE
+        Painter.Color.BLUE,
+        Painter.Color.BRIGHT_CYAN,
+        Painter.Color.BRIGHT_YELLOW
     );
 
     public WallProfileInfoComponent(Farmer me) {

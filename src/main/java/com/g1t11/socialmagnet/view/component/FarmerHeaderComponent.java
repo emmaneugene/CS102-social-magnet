@@ -9,10 +9,11 @@ public class FarmerHeaderComponent implements Component {
     private static final String template = Painter.paintf(
         String.join(System.lineSeparator(),
             "Welcome, %s!",
-            "Title: %s             Gold: %d gold",
+            "Title: [{%s}]             Gold: [{%d gold}]",
             ""
         ),
-        Painter.Color.BLUE
+        Painter.Color.BRIGHT_CYAN,
+        Painter.Color.BRIGHT_YELLOW
     );
 
     public void setFarmer(Farmer me) {
