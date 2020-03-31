@@ -235,7 +235,7 @@ public class TestFarmerActionDAO extends TestDAO {
         Assert.assertEquals(expectedXP, actualXP);       
     }
 
-    @Test
+    // @Test
     public void testAcceptGifts() {
         Map<String, Integer> expected = farmerLoadDAO.getInventoryCrops("gary");
         // Adding onto existing crops in inventory.

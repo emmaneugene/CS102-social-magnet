@@ -335,3 +335,75 @@ Instead, we adopted option 1, and represent the tagging relations with a table, 
 When we load content onto the database, we run through the string for all occurences of `@`, and validate the tag against the relational data before formatting accordingly.
 
 * We assume that a user can only be tagged once in a post, and only the first valid tag is formatted.
+
+#### Displaying gift threads
+
+We considered two approaches to handling threads for gifts.
+
+1. Only store the gifting information, and create an artificial view of the gifts to be unioned with regular thread information.
+2. Insert a new thread for every gift, delete the thread when the gift is accepted, or reject the gift when the thread is killed.
+
+Both approaches presented some issues.
+
+##### Gift threads as artificial views
+
+Presenting gift threads as views of the original gift data does minimise storage space. However, this presents multiple issues:
+
+* All thread actions (liking, disliking, replying, killing) depend on the thread ID being unique and consistent. However, if gift threads are presented as views of the original gift data, the identification of gifts is much more difficult, and actions are much harder to track as well.
+* The querying of thread information is much more difficult, as we have to combine two functionalities -- selecting of threads to display for the news feed and/or wall, and formatting of gifts to be presented as gift threads -- into one.
+
+##### Gift threads as actual threads
+
+It is much more simple to store the gift thread data on the database. While there are some disadvantages, our team decided that this was the better option:
+
+* There is duplication of gifting data, which can result in delete anomalities i.e. a gift thread being deleted without the corresponding gift being accepted or rejected.
+  * However, as our data is accessed and modified through stored procedures only, we have much stronger access control, and can better enforce rules on gift creation and deletion.
+* The lookup for a gift's corresponding thread is slow, as the DBMS will have to search based on four moderately complicated keys -- `thread.author = gift.sender`, `thread.recipient = gift.recipient`, `DATE(thread.posted_on) = gift.gifted_on`, and `thread.is_gift = TRUE`.
+  * We can resolve the expensive query by attaching the thread ID to each gift, and making our query based on that.
+  * When a gift is accepted, we delete the corresponding thread.
+  * When the thread is deleted, we will set the ID to null to indicate that the gift has been either accepted or rejected.
+
+As such, we decided to adopt the approach of storing gift threads in the `thread` table..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

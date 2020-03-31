@@ -27,6 +27,7 @@ CREATE TABLE thread (
     recipient   VARCHAR(255) BINARY NOT NULL,
     posted_on   TIMESTAMP           NOT NULL,
     content     TEXT(65535)         NOT NULL,
+    is_gift     BOOLEAN             NOT NULL DEFAULT FALSE,
     PRIMARY KEY (thread_id),
     FOREIGN KEY (author)    REFERENCES user (username),
     FOREIGN KEY (recipient) REFERENCES user (username)
@@ -144,15 +145,18 @@ CREATE TABLE inventory (
 );
 
 CREATE TABLE gift (
-    sender    VARCHAR(255) BINARY NOT NULL,
-    recipient VARCHAR(255) BINARY NOT NULL,
-    gifted_on DATE                NOT NULL,
-    crop_name VARCHAR(255)        NOT NULL,
-    accepted  BOOLEAN             NOT NULL DEFAULT FALSE,
+    sender      VARCHAR(255) BINARY NOT NULL,
+    recipient   VARCHAR(255) BINARY NOT NULL,
+    gifted_on   DATE                NOT NULL,
+    gifted_time TIME                NOT NULL,
+    crop_name   VARCHAR(255)        NOT NULL,
+    -- If null, represents the gift has been accepted or rejected.
+    thread_id   INT,
     PRIMARY KEY (sender, recipient, gifted_on),
     FOREIGN KEY (sender)    REFERENCES farmer (username),
     FOREIGN KEY (recipient) REFERENCES farmer (username),
-    FOREIGN KEY (crop_name) REFERENCES crop (crop_name)
+    FOREIGN KEY (crop_name) REFERENCES crop (crop_name),
+    FOREIGN KEY (thread_id) REFERENCES thread (thread_id) ON DELETE SET NULL
 );
 
 /*
@@ -310,42 +314,59 @@ CREATE PROCEDURE get_dislikers(IN _thread_id INT)
 
 CREATE PROCEDURE get_news_feed_threads(IN _username VARCHAR(255), IN _limit INT)
     SELECT th.thread_id AS thread_id, author, recipient, content,
-           IFNULL(comment_count, 0) AS comment_count,
-           IF(ta.tagged_user = _username, TRUE, FALSE) AS is_tagged
+            -- Load tagging information
+            IF(tag.tagged_user = _username, TRUE, FALSE) AS is_tagged,
+            -- Load comment count
+            com.comment_count
     FROM thread th
-    LEFT JOIN tag ta ON th.thread_id = ta.thread_id AND tagged_user = _username
+    LEFT JOIN tag ON th.thread_id = tag.thread_id AND tagged_user = _username
     LEFT JOIN (
-        SELECT thread_id, COUNT(*) AS comment_count
+        SELECT thread_id, IFNULL(COUNT(*), 0) comment_count
         FROM comment
         GROUP BY thread_id
-    ) AS c ON th.thread_id = c.thread_id
-    WHERE recipient = _username
-    OR recipient IN (
-        SELECT user_1 AS friend_name FROM friend WHERE user_2 = _username
-        UNION
-        SELECT user_2 FROM friend WHERE user_1 = _username
-    )
-    OR th.thread_id IN (
-        SELECT thread_id FROM tag WHERE tagged_user = _username
+    ) AS com ON th.thread_id = com.thread_id
+    -- No gift threads
+    WHERE NOT th.is_gift AND (
+        -- Include threads posted to my friends
+        recipient IN (
+            SELECT user_1 AS friend_name FROM friend WHERE user_2 = _username
+            UNION
+            SELECT user_2 FROM friend WHERE user_1 = _username
+        )
+        -- Same as posts to my wall
+        -- Include threads posted to me
+        OR recipient = _username
+        -- Include threads I am tagged in
+        OR th.thread_id IN (
+            SELECT thread_id FROM tag WHERE tagged_user = _username
+        )
     )
     ORDER BY posted_on DESC
     LIMIT _limit;
 
 CREATE PROCEDURE get_wall_threads(IN _username VARCHAR(255), IN _limit INT)
     SELECT th.thread_id AS thread_id, author, recipient, content,
-           IFNULL(comment_count, 0) AS comment_count,
-           IF(ta.tagged_user = _username, TRUE, FALSE) AS is_tagged
+            -- Load tagging information
+            IF(tag.tagged_user = _username, TRUE, FALSE) AS is_tagged,
+            -- Load comment count
+            com.comment_count
     FROM thread th
-    LEFT JOIN tag ta ON th.thread_id = ta.thread_id AND tagged_user = _username
+    LEFT JOIN tag ON th.thread_id = tag.thread_id AND tagged_user = _username
     LEFT JOIN (
-        SELECT thread_id, COUNT(*) AS comment_count
+        SELECT thread_id, IFNULL(COUNT(*), 0) comment_count
         FROM comment
         GROUP BY thread_id
-    ) AS c ON th.thread_id = c.thread_id
-    WHERE recipient = _username
-    OR th.thread_id IN (
-        SELECT thread_id FROM tag WHERE tagged_user = _username
-    )
+    ) AS com ON th.thread_id = com.thread_id
+    -- No gift threads
+    WHERE NOT th.is_gift AND (
+        -- Include threads posted to me
+        recipient = _username
+        -- Include threads I am tagged in
+        OR th.thread_id IN (
+            SELECT thread_id FROM tag WHERE tagged_user = _username
+        )
+    -- Only gift threads posted to me
+    ) OR th.is_gift AND recipient = _username
     ORDER BY posted_on DESC
     LIMIT _limit;
 
@@ -684,8 +705,18 @@ CREATE PROCEDURE sent_gift_today(IN _sender VARCHAR(255), IN _recipient VARCHAR(
     SELECT COUNT(*) sent FROM gift
     WHERE sender = _sender AND recipient = _recipient AND gifted_on = CURDATE();
 
+DELIMITER $$
 CREATE PROCEDURE send_gift(IN _sender VARCHAR(255), IN _recipient VARCHAR(255), IN _crop_name VARCHAR(255))
-    INSERT INTO gift (sender, recipient, gifted_on, crop_name) VALUES (_sender, _recipient, CURDATE(), _crop_name);
+BEGIN
+    -- Add the corresponding gift thread.
+    INSERT INTO thread (author, recipient, posted_on, is_gift, content) VALUES
+        (_sender, _recipient, NOW(), TRUE,
+        CONCAT("Here is a bag of ", LOWER(_crop_name), " seeds for you. - City Farmers"));
+    -- Add the gift record with the corresponding gift thread ID
+    INSERT INTO gift (sender, recipient, gifted_on, gifted_time, crop_name, thread_id) VALUES
+        (_sender, _recipient, CURDATE(), CURTIME(), _crop_name, LAST_INSERT_ID());
+END$$
+DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE accept_gifts(IN _username VARCHAR(255))
@@ -694,7 +725,7 @@ BEGIN
     UPDATE inventory i
     JOIN (
         SELECT crop_name, COUNT(*) quantity FROM gift
-        WHERE recipient = _username AND accepted = FALSE
+        WHERE recipient = _username AND thread_id <> NULL
         GROUP BY crop_name
     ) g ON i.crop_name = g.crop_name
     SET i.quantity = i.quantity + g.quantity
@@ -709,10 +740,9 @@ BEGIN
             SELECT crop_name FROM inventory WHERE owner = _username
         );
 
-    -- Mark gifts as accepted
-    UPDATE gift SET 
-    accepted = TRUE
-    WHERE recipient = _username;
+    -- Delete gift threads of current user
+    DELETE th FROM thread th
+    JOIN gift g ON th.thread_id = g.thread_id AND g.recipient = _username;
 END$$
 DELIMITER ;
 

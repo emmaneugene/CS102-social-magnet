@@ -181,13 +181,11 @@ public class ThreadLoadDAO extends DAO {
      * <p>
      * News feed threads include all latest threads on the current user's wall or
      * the current user's friends' walls.
-     * <p>
-     * Threads on the current user's wall are either posted to the wall, or exist
-     * due to the user being tagged.
      * 
      * @param username The user whose news feed to load
      * @param limit The number of latest posts to retrieve
      * @return Posts to be displayed on the news feed
+     * @see #getWallThreads(String, int)
      */
     public List<Thread> getNewsFeedThreads(String username, int limit) {
         String queryString = "CALL get_news_feed_threads(?, ?)";
@@ -227,8 +225,13 @@ public class ThreadLoadDAO extends DAO {
     /**
      * Retrieves a list of latest threads on a user's wall.
      * <p>
-     * Wall threads include all threads by the current user, threads to the
-     * current user's wall, or threads with the current user tagged.
+     * Wall threads include:
+     * <ul>
+     * <li> Threads by the current user
+     * <li> Threads to the current user's wall
+     * <li> Threads with the current user tagged
+     * <li> City Farmer gifts
+     * </ul><p>
      * 
      * @param username The user whose wall to load
      * @param limit The number of latest posts to retrieve
