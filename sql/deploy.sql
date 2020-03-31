@@ -477,17 +477,23 @@ CREATE PROCEDURE remove_tag(IN _thread_id INT, IN _username VARCHAR(255))
     DELETE FROM tag WHERE thread_id = _thread_id AND tagged_user = _username;
 
 /*
- * LOADING FARM DETAILS
+ * LOADING FARMER DETAILS
  */
 DELIMITER $$
 CREATE PROCEDURE get_farmer_detail(IN _username VARCHAR(255))
 BEGIN
     SET @rank := 0;
     SELECT u.username, u.fullname, xp, r.wealth, r.wealth_rank
-    FROM farmer f JOIN (
+    FROM farmer f LEFT JOIN (
         SELECT (@rank := @rank + 1) AS wealth_rank, wealth
         FROM (
+            -- Get all possible wealth levels of friends
             SELECT DISTINCT wealth FROM farmer
+            WHERE username = _username OR username IN (
+                SELECT user_1 FROM friend WHERE user_2 = _username
+                UNION
+                SELECT user_2 FROM friend WHERE user_1 = _username
+            )
         ) AS w
         ORDER BY wealth DESC
     ) AS r ON f.wealth = r.wealth
@@ -509,7 +515,7 @@ CREATE PROCEDURE get_inventory(IN _username VARCHAR(255))
     ORDER BY crop_name;
 
 /*
- * UPDATING FARM DETAILS
+ * UPDATING FARMER DETAILS
  */
 DELIMITER $$
 CREATE TRIGGER verify_crop_num BEFORE INSERT ON plot

@@ -11,7 +11,6 @@ import com.g1t11.socialmagnet.data.FarmerActionDAO;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.farm.Plot;
 import com.g1t11.socialmagnet.util.Painter;
-import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.cityfarmers.FarmlandPageView;
 
 public class FarmlandController extends CityFarmersController {
@@ -41,7 +40,7 @@ public class FarmlandController extends CityFarmersController {
 
     @Override
     public void handleInput() {
-        PromptInput input = new PromptInput(Painter.paintf(
+        input.setPrompt(Painter.paintf(
             "[[{M}]]ain | City [[{F}]]armers | [[{P}]]lant | [[{C}]]lear | [[{H}]]arvest", 
             Painter.Color.YELLOW
         ));
@@ -92,7 +91,7 @@ public class FarmlandController extends CityFarmersController {
 
     private String getCropNameFromInventory() {
         ((FarmlandPageView) view).displayInvMenu();
-        PromptInput input = new PromptInput(Painter.paintf(
+        input.setPrompt(Painter.paintf(
             "[[{M}]]ain | City [[{F}]]armers",
             Painter.Color.YELLOW
         ));
@@ -157,7 +156,7 @@ public class FarmlandController extends CityFarmersController {
     }
 
     private void confirmClearHealthy(int index) {
-        PromptInput input = new PromptInput("Confirm clearing healthy crop? (Y/n)");
+        input.setPrompt("Confirm clearing healthy crop? (Y/n)");
         if (input.nextLine().equals("Y")) {
             farmerActionDAO.clearPlot(me.getUsername(), index);
             view.setStatus(String.format(

@@ -3,7 +3,6 @@ package com.g1t11.socialmagnet.controller;
 import com.g1t11.socialmagnet.data.CredentialsDAO;
 import com.g1t11.socialmagnet.util.InputValidator;
 import com.g1t11.socialmagnet.util.Painter;
-import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.RegisterPageView;
 
 public class RegisterController extends Controller {
@@ -16,7 +15,7 @@ public class RegisterController extends Controller {
 
     @Override
     public void handleInput() {
-        PromptInput input = new PromptInput("Enter your username");
+        input.setPrompt("Enter your username");
         String username = input.nextLine();
 
         if (!InputValidator.isAlphanumeric(username)) {

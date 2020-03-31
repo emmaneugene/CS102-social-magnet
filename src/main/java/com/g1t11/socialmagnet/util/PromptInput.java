@@ -13,7 +13,7 @@ public class PromptInput {
 
     private String prompt;
 
-    private final String promptIndicator = ">";
+    private static final String promptIndicator = ">";
 
     public PromptInput(String prompt) {
         this.prompt = prompt;
@@ -41,17 +41,31 @@ public class PromptInput {
     }
 
     public String nextLine() {
-        System.out.printf("%s %s ", prompt, promptIndicator);
-        return sc.nextLine();
+        printPrompt();
+        String input = sc.nextLine();
+        clearColor();
+        return input;
     }
 
     public int nextInt() {
-        System.out.printf("%s %s ", prompt, promptIndicator);
-        return sc.nextInt();
+        printPrompt();
+        int input = sc.nextInt();
+        clearColor();
+        return input;
     }
 
     public double nextDouble() {
-        System.out.printf("%s %s ", prompt, promptIndicator);
-        return sc.nextDouble();
+        printPrompt();
+        double input = sc.nextDouble();
+        clearColor();
+        return input;
+    }
+
+    private void printPrompt() {
+        System.out.printf("%s %s %s", prompt, promptIndicator, Painter.Color.YELLOW.code);
+    }
+
+    private void clearColor() {
+        System.out.print(Painter.Color.RESET.code);
     }
 }

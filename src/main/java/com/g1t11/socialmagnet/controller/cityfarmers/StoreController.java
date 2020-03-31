@@ -9,7 +9,6 @@ import com.g1t11.socialmagnet.data.StoreDAO;
 import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.util.Painter;
-import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.util.TextUtils;
 import com.g1t11.socialmagnet.view.page.cityfarmers.StorePageView;
 
@@ -35,7 +34,7 @@ public class StoreController extends CityFarmersController {
 
     @Override
     public void handleInput() {
-        PromptInput input = new PromptInput(Painter.paintf(
+        input.setPrompt(Painter.paintf(
             "[[{M}]]ain | City [[{F}]]armers | Select Choice", 
             Painter.Color.YELLOW
         ));
@@ -68,7 +67,7 @@ public class StoreController extends CityFarmersController {
     }
 
     private void handleBuyQuantity(int index) {
-        PromptInput input = new PromptInput(Painter.paintf("Enter quantity", Painter.Color.YELLOW));
+        input.setPrompt(Painter.paintf("Enter quantity", Painter.Color.YELLOW));
         try {
             int amount = Integer.parseInt(input.nextLine());
 

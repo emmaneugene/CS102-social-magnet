@@ -11,7 +11,15 @@ public class Painter {
         BLUE("\u001b[34m"),
         PURPLE("\u001b[35m"),
         CYAN("\u001b[36m"),
-        WHITE("\u001b[37m");
+        WHITE("\u001b[37m"),
+        BRIGHT_BLACK("\u001b[90m"),
+        BRIGHT_RED("\u001b[91m"),
+        BRIGHT_GREEN("\u001b[92m"),
+        BRIGHT_YELLOW("\u001b[93m"),
+        BRIGHT_BLUE("\u001b[94m"),
+        BRIGHT_PURPLE("\u001b[95m"),
+        BRIGHT_CYAN("\u001b[96m"),
+        BRIGHT_WHITE("\u001b[97m");
 
         public String code;
 

@@ -1,16 +1,21 @@
 package com.g1t11.socialmagnet.view.component;
 
 import com.g1t11.socialmagnet.model.farm.Farmer;
+import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.TextUtils;
 
 public class FriendFarmerHeaderComponent implements Component {
     Farmer friend;
 
-    private static final String template = String.join(System.lineSeparator(),
-        "Name: %s",
-        "Title: %s",
-        "Gold: %s",
-        ""
+    private static final String template = Painter.paintf(
+        String.join(System.lineSeparator(),
+            "Name: %s",
+            "Title: [{%s}]",
+            "Gold: [{%s}]",
+            ""
+        ),
+        Painter.Color.BRIGHT_CYAN,
+        Painter.Color.BRIGHT_YELLOW
     );
 
     public FriendFarmerHeaderComponent(Farmer friend) {

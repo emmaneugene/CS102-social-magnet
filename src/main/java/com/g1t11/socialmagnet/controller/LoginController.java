@@ -4,7 +4,6 @@ import com.g1t11.socialmagnet.controller.socialmagnet.MainMenuController;
 import com.g1t11.socialmagnet.data.CredentialsDAO;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
-import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.LoginPageView;
 
 public class LoginController extends Controller {
@@ -17,7 +16,7 @@ public class LoginController extends Controller {
 
     @Override
     public void handleInput() {
-        PromptInput input = new PromptInput("Enter your username");
+        input.setPrompt("Enter your username");
         String username = input.nextLine();
 
         input.setPrompt("Enter your password");

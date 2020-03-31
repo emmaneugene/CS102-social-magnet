@@ -3,6 +3,7 @@ package com.g1t11.socialmagnet.view.page.cityfarmers;
 import java.util.List;
 
 import com.g1t11.socialmagnet.model.farm.Crop;
+import com.g1t11.socialmagnet.util.Painter;
 
 public class SendGiftPageView extends CityFarmersPageView {
     List<Crop> crops;
@@ -20,7 +21,9 @@ public class SendGiftPageView extends CityFarmersPageView {
 
         int index = 1;
         for (Crop crop : crops) {
-            System.out.printf("%d. 1 Bag of %s Seeds\n", index++, crop.getName());
+            System.out.printf(Painter.paintf("[{%d.}] 1 Bag of %s Seeds\n", Painter.Color.YELLOW),
+                index++, crop.getName());
         }
+        System.out.println();
     }
 }
