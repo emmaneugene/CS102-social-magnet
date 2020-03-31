@@ -33,6 +33,7 @@ public class FarmlandPageView extends CityFarmersPageView {
             TextUtils.countedWord(getMe().getMaxPlotCount(), "plot", "plots"));
 
         farmComp.render();
+        System.out.println();
     }
 
     public void displayInvMenu() {

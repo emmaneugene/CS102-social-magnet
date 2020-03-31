@@ -40,14 +40,18 @@ public class SendGiftController extends CityFarmersController {
         } else if (choice.equals("M")) {
             nav.popTo(MainMenuController.class);
             return;
+        } else if (choice.matches("-?\\d+")) {
+            Crop toSend = getCropSelection(choice);
+            String[] recipients = getRecipients();
+
+            if (!giftsAreValid(recipients))
+                return;
+
+            handleSendCrops(toSend, recipients);
+        } else {
+            view.setStatus(Painter.paintf("Please select a valid option.", Painter.Color.RED));
         }
 
-        Crop toSend = getCropSelection(choice);
-        String[] recipients = getRecipients();
-
-        if (!giftsAreValid(recipients)) return;
-
-        handleSendCrops(toSend, recipients);
     }
 
     private Crop getCropSelection(String choice) {

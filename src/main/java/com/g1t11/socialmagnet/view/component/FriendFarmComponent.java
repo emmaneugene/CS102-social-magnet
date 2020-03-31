@@ -25,5 +25,6 @@ public class FriendFarmComponent implements Component {
         System.out.println();
         headerComp.render();
         farmComp.render();
+        System.out.println();
     }
 }
