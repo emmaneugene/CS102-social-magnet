@@ -700,6 +700,35 @@ CREATE PROCEDURE sent_gift_today(IN _sender VARCHAR(255), IN _recipient VARCHAR(
 CREATE PROCEDURE send_gift(IN _sender VARCHAR(255), IN _recipient VARCHAR(255), IN _crop_name VARCHAR(255))
     INSERT INTO gift (sender, recipient, gifted_on, crop_name) VALUES (_sender, _recipient, CURDATE(), _crop_name);
 
+DELIMITER $$
+CREATE PROCEDURE accept_gifts(IN _username VARCHAR(255))
+BEGIN
+    -- Add quantity of gift to inventory
+    UPDATE inventory i
+    JOIN (
+        SELECT crop_name, COUNT(*) quantity FROM gift
+        WHERE recipient = _username AND accepted = FALSE
+        GROUP BY crop_name
+    ) g ON i.crop_name = g.crop_name
+    SET i.quantity = i.quantity + g.quantity
+    WHERE owner = _username;
+
+    -- Add new crops to inventory
+    INSERT INTO inventory (owner, crop_name, quantity)
+        SELECT _username, crop_name, COUNT(*) FROM gift
+        WHERE recipient = _username
+        GROUP BY crop_name
+        HAVING crop_name NOT IN (
+            SELECT crop_name FROM inventory WHERE owner = _username
+        );
+
+    -- Mark gifts as accepted
+    UPDATE gift SET 
+    accepted = TRUE
+    WHERE recipient = _username;
+END$$
+DELIMITER ;
+
 /*
  * STORE
  */
