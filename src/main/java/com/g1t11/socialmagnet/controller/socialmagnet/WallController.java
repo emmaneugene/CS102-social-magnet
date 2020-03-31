@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.g1t11.socialmagnet.controller.Navigator;
+import com.g1t11.socialmagnet.data.FarmerActionDAO;
 import com.g1t11.socialmagnet.data.FarmerLoadDAO;
 import com.g1t11.socialmagnet.data.ThreadActionDAO;
 import com.g1t11.socialmagnet.data.ThreadLoadDAO;
@@ -18,6 +19,7 @@ import com.g1t11.socialmagnet.view.page.socialmagnet.WallPageView;
 
 public class WallController extends SocialMagnetController {
     protected FarmerLoadDAO farmerLoadDAO = new FarmerLoadDAO(database());
+    protected FarmerActionDAO farmerActionDAO = new FarmerActionDAO(database());
     protected ThreadLoadDAO threadLoadDAO = new ThreadLoadDAO(database());
     protected ThreadActionDAO threadActionDAO = new ThreadActionDAO(database());
     
@@ -47,7 +49,7 @@ public class WallController extends SocialMagnetController {
         } else if (choice.charAt(0) == 'T') {
             handleThread(choice);
         } else if (choice.equals("A")) {
-            view.setStatus("Not ready yet...");
+            handleAccept();
         } else if (choice.equals("P")) {
             handlePost();
         } else {
@@ -66,6 +68,11 @@ public class WallController extends SocialMagnetController {
         } catch (NumberFormatException e) {
             view.setStatus(Painter.paint("Use T<id> to select a thread.", Painter.Color.RED));
         }
+    }
+
+    private void handleAccept() {
+        farmerActionDAO.acceptGifts(me.getUsername());
+        view.setStatus(Painter.paint("Accepted all pending gifts!", Painter.Color.GREEN));
     }
 
     protected void handlePost() {
