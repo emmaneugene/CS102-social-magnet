@@ -8,7 +8,6 @@ import com.g1t11.socialmagnet.model.social.RequestExistingFriendException;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.model.social.UserNotFoundException;
 import com.g1t11.socialmagnet.util.Painter;
-import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.socialmagnet.FriendsPageView;
 
 public class FriendsController extends SocialMagnetController {
@@ -33,7 +32,7 @@ public class FriendsController extends SocialMagnetController {
 
     @Override
     public void handleInput() {
-        PromptInput input = new PromptInput(Painter.paintf(
+        input.setPrompt(Painter.paintf(
             "[[{M}]]ain | [[{U}]]nfriend | re[[{Q}]]uest | [[{A}]]ccept | [[{R}]]eject | [[{V}]]iew", 
             Painter.Color.YELLOW
         ));
@@ -76,7 +75,7 @@ public class FriendsController extends SocialMagnetController {
 
     private void handleRequest() {
         updateView();
-        PromptInput input = new PromptInput("Enter the username");
+        input.setPrompt("Enter the username");
         String requested = input.nextLine();
         try {
             userDAO.makeRequest(me.getUsername(), requested);

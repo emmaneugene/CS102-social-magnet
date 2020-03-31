@@ -8,7 +8,6 @@ import com.g1t11.socialmagnet.data.UserDAO;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
-import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.cityfarmers.VisitFriendPageView;
 
 public class VisitFriendController extends CityFarmersController {
@@ -24,7 +23,7 @@ public class VisitFriendController extends CityFarmersController {
 
     @Override
     public void handleInput() {
-        PromptInput input = new PromptInput(Painter.paintf(
+        input.setPrompt(Painter.paintf(
             "[[{M}]]ain | City [[{F}]]armers | Select choice",
             Painter.Color.YELLOW
         ));

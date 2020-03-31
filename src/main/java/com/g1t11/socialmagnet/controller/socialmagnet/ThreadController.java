@@ -6,7 +6,6 @@ import com.g1t11.socialmagnet.data.ThreadLoadDAO;
 import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
-import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.socialmagnet.ThreadPageView;
 
 public class ThreadController extends SocialMagnetController {
@@ -38,7 +37,7 @@ public class ThreadController extends SocialMagnetController {
         } else {
             promptText = Painter.paintf("[[{M}]]ain | [[{R}]]eply | [[{L}]]ike | [[{D}]]islike", Painter.Color.YELLOW); 
         }
-        PromptInput input = new PromptInput(promptText);
+        input.setPrompt(promptText);
         String choice = input.nextLine();
         switch (choice) {
             case "M":
@@ -86,7 +85,7 @@ public class ThreadController extends SocialMagnetController {
     private void handleReply() {
         // Refresh the view to remove the previous prompt
         view.display();
-        PromptInput input = new PromptInput("Enter your reply");
+        input.setPrompt("Enter your reply");
         String reply = input.nextLine();
         threadActionDAO.replyToThread(thread.getId(), me.getUsername(), reply);
         thread = threadLoadDAO.getThread(thread.getId(), me.getUsername());

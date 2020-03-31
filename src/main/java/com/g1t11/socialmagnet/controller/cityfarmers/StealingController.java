@@ -10,7 +10,6 @@ import com.g1t11.socialmagnet.model.farm.Plot;
 import com.g1t11.socialmagnet.model.farm.StealingRecord;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
-import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.component.FriendFarmComponent;
 
 public class StealingController extends CityFarmersController {
@@ -41,7 +40,7 @@ public class StealingController extends CityFarmersController {
 
     @Override
     public void handleInput() {
-        PromptInput input = new PromptInput(Painter.paintf(
+        input.setPrompt(Painter.paintf(
             "[[{M}]]ain | City [[{F}]]armers | [[{S}]]teal",
             Painter.Color.YELLOW
         ));

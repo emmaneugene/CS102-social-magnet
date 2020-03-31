@@ -14,7 +14,6 @@ import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
-import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.socialmagnet.WallPageView;
 
 public class WallController extends SocialMagnetController {
@@ -40,7 +39,7 @@ public class WallController extends SocialMagnetController {
 
     @Override
     public void handleInput() {
-        PromptInput input = new PromptInput(Painter.paintf("[[{M}]]ain | [[{T}]]hread | [[{A}]]ccept Gift | [[{P}]]ost", Painter.Color.YELLOW));
+        input.setPrompt(Painter.paintf("[[{M}]]ain | [[{T}]]hread | [[{A}]]ccept Gift | [[{P}]]ost", Painter.Color.YELLOW));
         String choice = input.nextLine();
         if (choice.length() == 0) {
             view.setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
@@ -77,7 +76,7 @@ public class WallController extends SocialMagnetController {
 
     protected void handlePost() {
         updateView();
-        PromptInput input = new PromptInput("Enter your post");
+        input.setPrompt("Enter your post");
         String threadContent = input.nextLine();
         List<String> tags = getRawUserTags(threadContent);
         threadActionDAO.addThread(

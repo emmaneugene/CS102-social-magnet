@@ -3,7 +3,6 @@ package com.g1t11.socialmagnet.controller.cityfarmers;
 import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
-import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.cityfarmers.CityFarmersMainMenuPageView;
 
 public class CityFarmersMainMenuController extends CityFarmersController {
@@ -14,7 +13,7 @@ public class CityFarmersMainMenuController extends CityFarmersController {
 
     @Override
     public void handleInput() {
-        PromptInput input = new PromptInput(Painter.paintf(
+        input.setPrompt(Painter.paintf(
             "[[{M}]]ain | Enter your choice", 
             Painter.Color.YELLOW
         ));

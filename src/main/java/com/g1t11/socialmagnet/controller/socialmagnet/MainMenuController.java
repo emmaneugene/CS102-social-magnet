@@ -4,7 +4,6 @@ import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.controller.cityfarmers.CityFarmersMainMenuController;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
-import com.g1t11.socialmagnet.util.PromptInput;
 import com.g1t11.socialmagnet.view.page.socialmagnet.MainMenuPageView;
 
 public class MainMenuController extends SocialMagnetController {
@@ -18,7 +17,6 @@ public class MainMenuController extends SocialMagnetController {
 
     @Override
     public void handleInput() {
-        PromptInput input = new PromptInput();
         switch (input.nextLine()) {
             case "1":
                 nav.push(new NewsFeedController(nav, me));
