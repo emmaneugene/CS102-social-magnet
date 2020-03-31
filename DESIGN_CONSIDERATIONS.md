@@ -363,47 +363,4 @@ It is much more simple to store the gift thread data on the database. While ther
   * When a gift is accepted, we delete the corresponding thread.
   * When the thread is deleted, we will set the ID to null to indicate that the gift has been either accepted or rejected.
 
-As such, we decided to adopt the approach of storing gift threads in the `thread` table..
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+As such, we decided to adopt the approach of storing gift threads in the `thread` table.
