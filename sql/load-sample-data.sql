@@ -79,7 +79,13 @@ INSERT INTO thread (thread_id, author, recipient, posted_on, content, is_gift) V
 (21, "nadia",  "mark",  "2019-09-03 15:30:00", "Here is some sunflower temp", TRUE),
 (22, "nadia",  "mark",  "2019-10-04 14:30:00", "Hello,", FALSE),
 (23, "nadia",  "mark",  "2019-10-04 15:30:00", "world!", FALSE),
-(25, "nadia",  "mark",  CONCAT(CURDATE(), " 15:30:00"), "Here is some papaya temp", TRUE);
+(25, "nadia",  "mark",  CONCAT(CURDATE(), " 15:30:00"), "Here is some papaya temp", TRUE),
+-- testRejectGifts
+(26, "mark",  "nadia",  "2019-08-03 14:30:00", "Here is some papaya temp", TRUE),
+(27, "mark",  "nadia",  "2019-09-03 15:30:00", "Here is some sunflower temp", TRUE),
+(28, "mark",  "nadia",  "2019-10-04 14:30:00", "Hello,", FALSE),
+(29, "mark",  "nadia",  "2019-10-04 15:30:00", "world!", FALSE),
+(30, "mark",  "nadia",  CONCAT(CURDATE(), " 15:30:00"), "Here is some papaya temp", TRUE);
 
 
 INSERT INTO tag (thread_id, tagged_user) VALUES
@@ -196,7 +202,9 @@ INSERT INTO inventory (owner, crop_name, quantity) VALUES
 ("gary", "Papaya", 1),
 ("gary", "Watermelon", 2),
 -- testAcceptGifts
-("mark", "Papaya", 1);
+("mark", "Papaya", 1),
+-- testRejectGifts
+("nadia", "Sunflower", 1);
 
 -- All gift datetimes are later than posts for convenience
 INSERT INTO gift (sender, recipient, gifted_on, gifted_time, crop_name, thread_id) VALUES
@@ -221,4 +229,8 @@ INSERT INTO gift (sender, recipient, gifted_on, gifted_time, crop_name, thread_i
 -- testAcceptGifts
 ("nadia", "mark",    "2019-08-03", "14:30:00", "Papaya",     20),
 ("nadia", "mark",    "2019-09-03", "15:30:00", "Sunflower",  21),
-("nadia", "mark",    CURDATE(),    "15:30:00", "Papaya",     25);
+("nadia", "mark",    CURDATE(),    "15:30:00", "Papaya",     25),
+-- testRejectGifts
+("mark", "nadia",    "2019-08-03", "14:30:00", "Papaya",     26),
+("mark", "nadia",    "2019-09-03", "15:30:00", "Sunflower",  27),
+("mark", "nadia",    CURDATE(),    "15:30:00", "Papaya",     30);

@@ -734,7 +734,7 @@ BEGIN
     -- Add new crops to inventory
     INSERT INTO inventory (owner, crop_name, quantity)
         SELECT _username, crop_name, COUNT(*) FROM gift
-        WHERE recipient = _username
+        WHERE recipient = _username AND thread_id IS NOT NULL
         GROUP BY crop_name
         HAVING crop_name NOT IN (
             SELECT crop_name FROM inventory WHERE owner = _username

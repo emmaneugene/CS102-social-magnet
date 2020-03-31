@@ -14,6 +14,7 @@ import org.junit.Test;
 public class TestFarmerActionDAO extends TestDAO {
     private FarmerLoadDAO farmerLoadDAO;
     private FarmerActionDAO farmerActionDAO;
+    private ThreadActionDAO threadActionDAO;
 
     public static final Crop papaya     = new Crop("Papaya",     20, 30,  8,  75, 100, 15);
     public static final Crop pumpkin    = new Crop("Pumpkin",    30, 60,  5,   5, 200, 20);
@@ -23,6 +24,7 @@ public class TestFarmerActionDAO extends TestDAO {
     public TestFarmerActionDAO() {
         farmerLoadDAO = new FarmerLoadDAO(db);
         farmerActionDAO = new FarmerActionDAO(db);
+        threadActionDAO = new ThreadActionDAO(db);
     }
 
     @Test
@@ -251,6 +253,28 @@ public class TestFarmerActionDAO extends TestDAO {
         // Accepted gifts canoot be accepted again.
         farmerActionDAO.acceptGifts("mark");
         Map<String, Integer> again = farmerLoadDAO.getInventoryCrops("mark");
+
+        Assert.assertEquals(actual, again);
+    }
+
+    @Test
+    public void testRejectGifts() {
+        Map<String, Integer> expected = farmerLoadDAO.getInventoryCrops("nadia");
+        // Adding onto existing crops in inventory.
+        // Reject one papaya and one sunflower to test one rejected crop
+        // that exists in inventory and one that does not.
+        expected.put("Papaya", 1);
+
+        threadActionDAO.deleteThread(26, "nadia");
+        threadActionDAO.deleteThread(27, "nadia");
+        farmerActionDAO.acceptGifts("nadia");
+        Map<String, Integer> actual = farmerLoadDAO.getInventoryCrops("nadia");
+        
+        Assert.assertEquals(expected, actual);
+
+        // Accepted gifts canoot be accepted again.
+        farmerActionDAO.acceptGifts("mark");
+        Map<String, Integer> again = farmerLoadDAO.getInventoryCrops("nadia");
 
         Assert.assertEquals(actual, again);
     }
