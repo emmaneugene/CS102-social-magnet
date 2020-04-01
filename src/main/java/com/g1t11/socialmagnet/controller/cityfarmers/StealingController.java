@@ -51,7 +51,8 @@ public class StealingController extends CityFarmersController {
         String choice = input.nextLine();
         nav.pop();
         if (choice.length() == 0) {
-            nav.setCurrStatus(Painter.paint("Please select a valid option.", Color.RED));
+            nav.setCurrStatus(Painter.paint(
+                    "Please select a valid option.", Color.RED));
         } else if (choice.equals("M")) {
             nav.popTo(MainMenuController.class);
         } else if (choice.equals("F")) {
@@ -59,7 +60,8 @@ public class StealingController extends CityFarmersController {
         } else if (choice.equals("S")) {
             handleSteal();
         } else {
-            nav.setCurrStatus(Painter.paint("Please select a valid option.", Color.RED));
+            nav.setCurrStatus(Painter.paint(
+                    "Please select a valid option.", Color.RED));
         }
     }
 
@@ -68,12 +70,14 @@ public class StealingController extends CityFarmersController {
                 me.getUsername(),
                 toStealFrom.getUsername());
         if (stolenCrops.size() == 0) {
-            nav.setCurrStatus(Painter.paint("No plots available to steal from.", Color.RED));
+            nav.setCurrStatus(Painter.paint(
+                    "No plots available to steal from.", Color.RED));
             return;
         }
         String stolenCropsString = TextUtils.prettyList(stolenCrops);
         nav.setCurrStatus(Painter.paint(
-                String.format("You have successfully stolen %s.", stolenCropsString),
+                String.format("You have successfully stolen %s.",
+                        stolenCropsString),
                 Color.GREEN));
     }
 }

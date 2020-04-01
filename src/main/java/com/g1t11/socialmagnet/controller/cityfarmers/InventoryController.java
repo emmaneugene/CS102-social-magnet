@@ -10,12 +10,14 @@ import com.g1t11.socialmagnet.view.page.cityfarmers.InventoryPageView;
 public class InventoryController extends CityFarmersController {
     public InventoryController(Navigator nav, Farmer me) {
         super(nav, me);
-        setView(new InventoryPageView(farmerLoadDAO.getInventoryCrops(me.getUsername())));
+        setView(new InventoryPageView(
+                farmerLoadDAO.getInventoryCrops(me.getUsername())));
     }
 
     @Override
     public void handleInput() {
-        input.setPrompt(Painter.paintf("[[{M}]]ain | City [[{F}]]armers", Color.YELLOW));
+        input.setPrompt(Painter.paintf(
+                "[[{M}]]ain | City [[{F}]]armers", Color.YELLOW));
 
         String choice = input.nextLine();
         switch (choice) {
@@ -26,7 +28,8 @@ public class InventoryController extends CityFarmersController {
                 nav.popTo(CityFarmersMainMenuController.class);
                 break;
             default:
-                setStatus(Painter.paint("Please select a valid option.", Color.RED));
+                setStatus(Painter.paint(
+                        "Please select a valid option.", Color.RED));
         }
     }
 }

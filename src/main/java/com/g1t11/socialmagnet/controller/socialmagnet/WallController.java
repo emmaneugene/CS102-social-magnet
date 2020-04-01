@@ -14,6 +14,7 @@ import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
+import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.socialmagnet.WallPageView;
 
 public class WallController extends SocialMagnetController {
@@ -21,7 +22,7 @@ public class WallController extends SocialMagnetController {
     protected FarmerActionDAO farmerActionDAO = new FarmerActionDAO(database());
     protected ThreadLoadDAO threadLoadDAO = new ThreadLoadDAO(database());
     protected ThreadActionDAO threadActionDAO = new ThreadActionDAO(database());
-    
+
     protected Farmer farmerToDisplay;
     protected List<Thread> wallThreads;
 
@@ -38,7 +39,8 @@ public class WallController extends SocialMagnetController {
 
     @Override
     public void updateView() {
-        wallThreads = threadLoadDAO.getWallThreads(farmerToDisplay.getUsername(), 5);
+        wallThreads = threadLoadDAO.getWallThreads(
+                farmerToDisplay.getUsername(), 5);
         getView().setThreads(wallThreads);
     }
 
@@ -46,11 +48,12 @@ public class WallController extends SocialMagnetController {
     public void handleInput() {
         input.setPrompt(Painter.paintf(
                 "[[{M}]]ain | [[{T}]]hread | [[{A}]]ccept Gift | [[{P}]]ost",
-                Painter.Color.YELLOW));
+                Color.YELLOW));
 
         String choice = input.nextLine();
         if (choice.length() == 0) {
-            setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
+            setStatus(Painter.paint(
+                    "Please select a valid option.", Color.RED));
         } else if (choice.equals("M")) {
             nav.popTo(MainMenuController.class);
         } else if (choice.charAt(0) == 'T') {
@@ -60,7 +63,8 @@ public class WallController extends SocialMagnetController {
         } else if (choice.equals("P")) {
             handlePost();
         } else {
-            setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
+            setStatus(Painter.paint(
+                    "Please select a valid option.", Color.RED));
         }
     }
 
@@ -69,19 +73,21 @@ public class WallController extends SocialMagnetController {
             int index = Integer.parseInt(choice.substring(1));
 
             if (index <= 0 || index > wallThreads.size()) {
-                setStatus(Painter.paint("Index out of range.", Painter.Color.RED));
+                setStatus(Painter.paint("Index out of range.", Color.RED));
                 return;
             }
-            nav.push(new ThreadController(nav, me, index, wallThreads.get(index - 1)));
+            nav.push(new ThreadController(nav, me, index,
+                    wallThreads.get(index - 1)));
         } catch (NumberFormatException e) {
-            setStatus(Painter.paint("Use T<id> to select a thread.", Painter.Color.RED));
+            setStatus(Painter.paint(
+                    "Use T<id> to select a thread.", Color.RED));
         }
     }
 
     private void handleAccept() {
         farmerActionDAO.acceptGifts(me.getUsername());
 
-        setStatus(Painter.paint("Accepted all pending gifts!", Painter.Color.GREEN));
+        setStatus(Painter.paint("Accepted all pending gifts!", Color.GREEN));
     }
 
     protected void handlePost() {
@@ -105,7 +111,7 @@ public class WallController extends SocialMagnetController {
         Matcher m = p.matcher(content);
 
         List<String> tags = new ArrayList<>();
-        while (m.find()) { 
+        while (m.find()) {
             tags.add(m.group(1));
         }
         return tags;

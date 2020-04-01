@@ -40,12 +40,13 @@ public class FriendsController extends SocialMagnetController {
     public void handleInput() {
         input.setPrompt(Painter.paintf(
                 "[[{M}]]ain | [[{U}]]nfriend | re[[{Q}]]uest"
-                        + " | [[{A}]]ccept | [[{R}]]eject | [[{V}]]iew", 
+                        + " | [[{A}]]ccept | [[{R}]]eject | [[{V}]]iew",
                 Color.YELLOW));
 
         String choice = input.nextLine();
         if (choice.length() == 0) {
-            setStatus(Painter.paint("Please select a valid option.", Color.RED));
+            setStatus(Painter.paint(
+                    "Please select a valid option.", Color.RED));
         } else if (choice.equals("M")) {
             nav.pop();
         } else if (choice.charAt(0) == 'U') {
@@ -59,7 +60,8 @@ public class FriendsController extends SocialMagnetController {
         } else if (choice.charAt(0) == 'V') {
             handleView(choice);
         } else {
-            setStatus(Painter.paint("Please select a valid option.", Color.RED));
+            setStatus(Painter.paint(
+                    "Please select a valid option.", Color.RED));
         }
     }
 
@@ -80,7 +82,8 @@ public class FriendsController extends SocialMagnetController {
                     Color.GREEN,
                     Color.BLUE));
         } catch (NumberFormatException e) {
-            setStatus(Painter.paint("Use U<id> to select a friend.", Color.RED));
+            setStatus(Painter.paint(
+                    "Use U<id> to select a friend.", Color.RED));
         }
     }
 
@@ -95,7 +98,8 @@ public class FriendsController extends SocialMagnetController {
             userDAO.makeRequest(me.getUsername(), requested);
 
             setStatus(Painter.paintf(
-                    String.format("[{Sent [{%s}] a friend request!}]", requested),
+                    String.format("[{Sent [{%s}] a friend request!}]",
+                            requested),
                     Color.GREEN,
                     Color.BLUE));
         } catch (UserNotFoundException e) {
@@ -104,7 +108,8 @@ public class FriendsController extends SocialMagnetController {
                     Color.RED,
                     Color.BLUE));
         } catch (RequestExistingFriendException e) {
-            setStatus(Painter.paint("Cannot request existing friend.", Color.RED));
+            setStatus(Painter.paint(
+                    "Cannot request existing friend.", Color.RED));
         }
     }
 
@@ -112,25 +117,28 @@ public class FriendsController extends SocialMagnetController {
         try {
             int index = Integer.parseInt(choice.substring(1));
 
-            if (index <= 0 || index > friends.size() + requestUsernames.size()) {
+            if (index <= 0
+                    || index > friends.size() + requestUsernames.size()) {
                 setStatus(Painter.paint("Index out of range.", Color.RED));
                 return;
             }
 
             if (index <= friends.size()) {
-                setStatus(Painter.paint("Cannot accept existing friend.", Color.RED));
+                setStatus(Painter.paint(
+                        "Cannot accept existing friend.", Color.RED));
                 return;
             }
 
-            String requestUsername = requestUsernames.get(index - friends.size() - 1);
+            String requestUsername = requestUsernames.get(
+                    index - friends.size() - 1);
             userDAO.acceptRequest(requestUsername, me.getUsername());
 
             setStatus(Painter.paintf(
                     String.format("[{Accepted [{%s}]!}]", requestUsername),
-                    Color.GREEN,
-                    Color.BLUE));
+                    Color.GREEN, Color.BLUE));
         } catch (NumberFormatException e) {
-            setStatus(Painter.paint("Use A<id> to select a request.", Color.RED));
+            setStatus(Painter.paint(
+                    "Use A<id> to select a request.", Color.RED));
         }
     }
 
@@ -138,25 +146,28 @@ public class FriendsController extends SocialMagnetController {
         try {
             int index = Integer.parseInt(choice.substring(1));
 
-            if (index <= 0 || index > friends.size() + requestUsernames.size()) {
+            if (index <= 0
+                    || index > friends.size() + requestUsernames.size()) {
                 setStatus(Painter.paint("Index out of range.", Color.RED));
                 return;
             }
 
             if (index <= friends.size()) {
-                setStatus(Painter.paint("Cannot reject existing friend.", Color.RED));
+                setStatus(Painter.paint(
+                        "Cannot reject existing friend.", Color.RED));
                 return;
             }
 
-            String requestUsername = requestUsernames.get(index - friends.size() - 1);
+            String requestUsername = requestUsernames.get(
+                    index - friends.size() - 1);
             userDAO.rejectRequest(requestUsername, me.getUsername());
 
             setStatus(Painter.paintf(
                     String.format("[{Rejected [{%s}]!}]", requestUsername),
-                    Color.GREEN,
-                    Color.BLUE));
+                    Color.GREEN, Color.BLUE));
         } catch (NumberFormatException e) {
-            setStatus(Painter.paint("Use R<id> to select a request.", Color.RED));
+            setStatus(Painter.paint(
+                    "Use R<id> to select a request.", Color.RED));
         }
     }
 
@@ -168,9 +179,11 @@ public class FriendsController extends SocialMagnetController {
                 setStatus(Painter.paint("Index out of range.", Color.RED));
                 return;
             }
-            nav.push(new FriendsWallController(nav, me, friends.get(index - 1)));
+            nav.push(new FriendsWallController(nav, me,
+                    friends.get(index - 1)));
         } catch (NumberFormatException e) {
-            setStatus(Painter.paint("Use V<id> to view a friend's page.", Color.RED));
+            setStatus(Painter.paint(
+                    "Use V<id> to view a friend's page.", Color.RED));
         }
     }
 }

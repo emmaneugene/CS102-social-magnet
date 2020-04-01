@@ -38,12 +38,13 @@ public class StoreController extends CityFarmersController {
     @Override
     public void handleInput() {
         input.setPrompt(Painter.paintf(
-                "[[{M}]]ain | City [[{F}]]armers | Select Choice", 
+                "[[{M}]]ain | City [[{F}]]armers | Select Choice",
                 Color.YELLOW));
-        
+
         String choice = input.nextLine();
         if (choice.length() == 0) {
-            setStatus(Painter.paint("Please select a valid option.", Color.RED));
+            setStatus(Painter.paint(
+                    "Please select a valid option.", Color.RED));
         } else if (choice.equals("M")) {
             nav.popTo(MainMenuController.class);
         } else if (choice.equals("F")) {
@@ -51,7 +52,8 @@ public class StoreController extends CityFarmersController {
         } else if (choice.matches("-?\\d+")) {
             handleBuyItem(choice);
         } else {
-            setStatus(Painter.paint("Please select a valid option.", Color.RED));
+            setStatus(Painter.paint(
+                    "Please select a valid option.", Color.RED));
         }
     }
 
@@ -65,7 +67,8 @@ public class StoreController extends CityFarmersController {
             }
             handleBuyQuantity(index);
         } catch (NumberFormatException e) {
-            setStatus(Painter.paint("Use <id> to select a crop to purchase.", Color.RED));
+            setStatus(Painter.paint(
+                    "Use <id> to select a crop to purchase.", Color.RED));
         }
     }
 
@@ -78,14 +81,15 @@ public class StoreController extends CityFarmersController {
 
             if (amount <= 0) {
                 setStatus(String.format(Painter.paint(
-                        "Please choose a quantity bigger than 0.",
-                        Color.RED)));
+                        "Please choose a quantity bigger than 0.", Color.RED)));
                 return;
             }
 
             Crop crop = storeItem.get(index - 1);
 
-            if (storeDAO.purchaseCrop(me.getUsername(), crop.getName(), amount)) {
+            boolean purchaseSuccessful = storeDAO.purchaseCrop(
+                    me.getUsername(), crop.getName(), amount);
+            if (purchaseSuccessful) {
                 setStatus(Painter.paint(
                         String.format("%s of seeds purchased for %d gold.",
                                 TextUtils.countedWord(amount, "bag", "bags"),
@@ -93,9 +97,11 @@ public class StoreController extends CityFarmersController {
                         Color.GREEN));
                 return;
             }
-            setStatus(Painter.paint("Insufficient funds to purchase crop.", Color.RED));
+            setStatus(Painter.paint(
+                    "Insufficient funds to purchase crop.", Color.RED));
         } catch (NumberFormatException e) {
-            setStatus(Painter.paint("Please input a valid amount to purchase.", Color.RED));
+            setStatus(Painter.paint(
+                    "Please input a valid amount to purchase.", Color.RED));
         }
     }
 }

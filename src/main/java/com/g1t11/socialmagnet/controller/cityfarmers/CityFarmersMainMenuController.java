@@ -14,7 +14,8 @@ public class CityFarmersMainMenuController extends CityFarmersController {
 
     @Override
     public void handleInput() {
-        input.setPrompt(Painter.paintf("[[{M}]]ain | Enter your choice", Color.YELLOW));
+        input.setPrompt(Painter.paintf(
+                "[[{M}]]ain | Enter your choice", Color.YELLOW));
 
         String choice = input.nextLine();
         switch (choice) {
@@ -37,7 +38,8 @@ public class CityFarmersMainMenuController extends CityFarmersController {
                 nav.pop();
                 break;
             default:
-                setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
+                setStatus(Painter.paint(
+                        "Please select a valid option.", Painter.Color.RED));
         }
     }
 }

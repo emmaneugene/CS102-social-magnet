@@ -30,7 +30,8 @@ public class VisitFriendController extends CityFarmersController {
 
         String choice = input.nextLine();
         if (choice.length() == 0) {
-            setStatus(Painter.paint("Please select a valid option.", Color.RED));
+            setStatus(Painter.paint(
+                    "Please select a valid option.", Color.RED));
         } else if (choice.equals("M")) {
             nav.popTo(MainMenuController.class);
         } else if (choice.equals("F")) {
@@ -38,21 +39,23 @@ public class VisitFriendController extends CityFarmersController {
         } else if (choice.matches("-?\\d+")) {
             handleVisit(choice);
         } else {
-            setStatus(Painter.paint("Please select a valid option.", Color.RED));
+            setStatus(Painter.paint(
+                    "Please select a valid option.", Color.RED));
         }
     }
 
     private void handleVisit(String choice) {
         try {
             int index = Integer.parseInt(choice);
-            
+
             if (index <= 0 || index > friends.size()) {
                 setStatus(Painter.paint("Index out of range.", Color.RED));
                 return;
             }
             nav.push(new StealingController(nav, me, friends.get(index - 1)));
         } catch (NumberFormatException e) {
-            setStatus(Painter.paint("Use <id> to select a friend to visit.", Color.RED));
+            setStatus(Painter.paint(
+                    "Use <id> to select a friend to visit.", Color.RED));
         }
     }
 }

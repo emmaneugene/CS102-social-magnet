@@ -15,7 +15,8 @@ public class ThreadController extends SocialMagnetController {
 
     private Thread thread;
 
-    public ThreadController(Navigator nav, User me, int threadIndex, Thread thread) {
+    public ThreadController(Navigator nav, User me,
+            int threadIndex, Thread thread) {
         super(nav, me);
         this.thread = thread;
         setView(new ThreadPageView(threadIndex, thread));
@@ -35,7 +36,7 @@ public class ThreadController extends SocialMagnetController {
         thread = threadLoadDAO.getThread(thread.getId(), me.getUsername());
         getView().setThread(thread);
     }
-    
+
     @Override
     public void handleInput() {
         String promptText = "[[{M}]]ain";
@@ -64,7 +65,8 @@ public class ThreadController extends SocialMagnetController {
                 handleDislike();
                 break;
             default:
-                setStatus(Painter.paint("Please select a valid option.", Color.RED));
+                setStatus(Painter.paint(
+                        "Please select a valid option.", Color.RED));
         }
     }
 
@@ -76,17 +78,19 @@ public class ThreadController extends SocialMagnetController {
         if (isRemovable()) {
             threadActionDAO.deleteThread(thread.getId(), me.getUsername());
             nav.pop();
-            nav.setCurrStatus(Painter.paint("Successfully removed post!", Color.GREEN));
+            nav.setCurrStatus(Painter.paint(
+                    "Successfully removed post!", Color.GREEN));
         } else if (thread.isTagged()) {
             threadActionDAO.removeTag(thread.getId(), me.getUsername());
             nav.pop();
-            nav.setCurrStatus(Painter.paint("Successfully untagged post!", Color.GREEN));
+            nav.setCurrStatus(Painter.paint(
+                    "Successfully untagged post!", Color.GREEN));
         }
     }
 
     private boolean isRemovable() {
         String currentUsername = me.getUsername();
-        return thread.getFromUsername().equals(currentUsername) 
+        return thread.getFromUsername().equals(currentUsername)
                 || thread.getToUsername().equals(currentUsername);
     }
 

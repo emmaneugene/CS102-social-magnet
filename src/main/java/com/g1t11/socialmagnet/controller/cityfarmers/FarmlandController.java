@@ -36,9 +36,11 @@ public class FarmlandController extends CityFarmersController {
     public void updateView() {
         super.updateView();
 
-        plots = farmerLoadDAO.getPlots(me.getUsername(), me.getMaxPlotCount());
+        plots = farmerLoadDAO.getPlots(
+                me.getUsername(), me.getMaxPlotCount());
         invCrops = farmerLoadDAO.getInventoryCrops(me.getUsername());
-        List<String> invCropNames = List.of(invCrops.keySet().toArray(new String[0]));
+        List<String> invCropNames = List.of(
+                invCrops.keySet().toArray(new String[0]));
 
         getView().setPlots(plots);
         getView().setInventoryCropNames(invCropNames);
@@ -47,12 +49,14 @@ public class FarmlandController extends CityFarmersController {
     @Override
     public void handleInput() {
         input.setPrompt(Painter.paintf(
-                "[[{M}]]ain | City [[{F}]]armers | [[{P}]]lant | [[{C}]]lear | [[{H}]]arvest", 
+                "[[{M}]]ain | City [[{F}]]armers | [[{P}]]lant"
+                        + " | [[{C}]]lear | [[{H}]]arvest",
                 Color.YELLOW));
 
         String choice = input.nextLine();
         if (choice.length() == 0) {
-            setStatus(Painter.paint("Please select a valid option.", Color.RED));
+            setStatus(Painter.paint(
+                    "Please select a valid option.", Color.RED));
         } else if (choice.equals("M")) {
             nav.popTo(MainMenuController.class);
         } else if (choice.equals("F")) {
@@ -64,7 +68,8 @@ public class FarmlandController extends CityFarmersController {
         } else if (choice.equals("H")) {
             handleHarvest();
         } else {
-            setStatus(Painter.paint("Please select a valid option.", Color.RED));
+            setStatus(Painter.paint(
+                    "Please select a valid option.", Color.RED));
         }
     }
 
@@ -85,7 +90,8 @@ public class FarmlandController extends CityFarmersController {
             farmerActionDAO.plantCrop(me.getUsername(), index, cropToPlantName);
 
             setStatus(Painter.paint(
-                    String.format("Planted %s in plot %d!", cropToPlantName, index),
+                    String.format("Planted %s in plot %d!",
+                            cropToPlantName, index),
                     Color.GREEN));
         } catch (NumberFormatException e) {
             setStatus(Painter.paint("Use P<id> to select a plot.", Color.RED));
@@ -101,24 +107,27 @@ public class FarmlandController extends CityFarmersController {
     private boolean isSelectedPlotEmpty(int index) {
         Plot selectedPlot = plots.get(index - 1);
         if (selectedPlot.getCrop() != null) {
-            setStatus(Painter.paint("Cannot plant on an existing crop.", Color.RED));
+            setStatus(Painter.paint(
+                    "Cannot plant on an existing crop.", Color.RED));
             return false;
         }
         return true;
     }
 
     /**
-     * Handle user input to get the name of the selected crop from the user inventory to plant, or
-     * handle navigation if "M" or "F" is entered.
+     * Handle user input to get the name of the selected crop from the user
+     * inventory to plant, or handle navigation if "M" or "F" is entered.
      * @return The name of the crop to plant, or null if the choice is invalid.
      */
     private String getCropToPlantName() {
         getView().displayInvMenu();
-        input.setPrompt(Painter.paintf("[[{M}]]ain | City [[{F}]]armers", Color.YELLOW));
+        input.setPrompt(Painter.paintf(
+                "[[{M}]]ain | City [[{F}]]armers", Color.YELLOW));
 
         String choice = input.nextLine();
         if (choice.length() == 0) {
-            setStatus(Painter.paint("Please select a valid option.", Color.RED));
+            setStatus(Painter.paint(
+                    "Please select a valid option.", Color.RED));
             return null;
         }
         if (choice.equals("M")) {
@@ -135,7 +144,8 @@ public class FarmlandController extends CityFarmersController {
     /**
      * Get the selected crop from the user inventory given user input.
      * @param choice The selection index.
-     * @return The name of the selected crop from the inventory, or null if the choice is invalid.
+     * @return The name of the selected crop from the inventory, or null if the
+     * choice is invalid.
      */
     private String getCropToPlantFromInput(String choice) {
         try {
@@ -149,7 +159,8 @@ public class FarmlandController extends CityFarmersController {
             String[] invCropNames = invCrops.keySet().toArray(new String[0]);
             return invCropNames[index - 1];
         } catch (NumberFormatException e) {
-            setStatus(Painter.paint("Please select a valid option.", Color.RED));
+            setStatus(Painter.paint(
+                    "Please select a valid option.", Color.RED));
             return null;
         }
     }
@@ -175,14 +186,16 @@ public class FarmlandController extends CityFarmersController {
             }
 
             if (me.getWealth() < WILTED_CLEAR_COST) {
-                setStatus(Painter.paint("Insufficient funds to clear wilted crop.", Color.RED));
+                setStatus(Painter.paint(
+                        "Insufficient funds to clear wilted crop.", Color.RED));
                 return;
             }
 
             farmerActionDAO.clearPlot(me.getUsername(), index);
 
             setStatus(Painter.paint(
-                    String.format("Cleared plot %d for %d gold!", index, WILTED_CLEAR_COST),
+                    String.format("Cleared plot %d for %d gold!",
+                            index, WILTED_CLEAR_COST),
                     Color.GREEN));
         } catch (NumberFormatException e) {
             setStatus(Painter.paint("Use C<id> to select a plot.", Color.RED));

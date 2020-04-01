@@ -19,11 +19,14 @@ public class WelcomeController extends Controller {
                 nav.push(new LoginController(nav));
                 break;
             case "3":
-                System.out.println(Painter.paint("Goodbye!", Painter.Color.GREEN));
+                System.out.println(Painter.paint(
+                        "Goodbye!", Painter.Color.GREEN));
                 System.exit(0);
                 break;
             default:
-                setStatus(Painter.paint("Please enter a choice between 1 & 3!", Painter.Color.RED));
+                setStatus(Painter.paint(
+                        "Please enter a choice between 1 & 3!",
+                        Painter.Color.RED));
                 break;
         }
     }

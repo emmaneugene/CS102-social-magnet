@@ -23,10 +23,12 @@ public class FriendsWallController extends WallController {
 
     @Override
     public void handleInput() {
-        input.setPrompt(Painter.paintf("[[{M}]]ain | [[{T}]]hread | [[{P}]]ost", Color.YELLOW));
+        input.setPrompt(Painter.paintf(
+                "[[{M}]]ain | [[{T}]]hread | [[{P}]]ost", Color.YELLOW));
         String choice = input.nextLine();
         if (choice.length() == 0) {
-            setStatus(Painter.paint("Please select a valid option.", Color.RED));
+            setStatus(Painter.paint(
+                    "Please select a valid option.", Color.RED));
         } else if (choice.equals("M")) {
             nav.popTo(MainMenuController.class);
         } else if (choice.charAt(0) == 'T') {
@@ -34,7 +36,8 @@ public class FriendsWallController extends WallController {
         } else if (choice.equals("P")) {
             handlePost();
         } else {
-            setStatus(Painter.paint("Please select a valid option.", Color.RED));
+            setStatus(Painter.paint(
+                    "Please select a valid option.", Color.RED));
         }
     }
 }

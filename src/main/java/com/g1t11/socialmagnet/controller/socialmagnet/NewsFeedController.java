@@ -31,20 +31,23 @@ public class NewsFeedController extends SocialMagnetController {
         threads = threadLoadDAO.getNewsFeedThreads(me.getUsername(), 5);
         getView().setThreads(threads);
     }
-    
+
     @Override
     public void handleInput() {
-        input.setPrompt(Painter.paintf("[[{M}]]ain | [[{T}]]hread", Color.YELLOW));
+        input.setPrompt(Painter.paintf(
+                "[[{M}]]ain | [[{T}]]hread", Color.YELLOW));
 
         String choice = input.nextLine();
         if (choice.length() == 0) {
-            setStatus(Painter.paint("Please select a valid option.", Color.RED));
+            setStatus(Painter.paint(
+                    "Please select a valid option.", Color.RED));
         } else if (choice.equals("M")) {
             nav.pop();
         } else if (choice.charAt(0) == 'T') {
             handleThread(choice);
         } else {
-            setStatus(Painter.paint("Please select a valid option.", Color.RED));
+            setStatus(Painter.paint(
+                    "Please select a valid option.", Color.RED));
         }
     }
 
@@ -57,9 +60,11 @@ public class NewsFeedController extends SocialMagnetController {
                 return;
             }
 
-            nav.push(new ThreadController(nav, me, index, threads.get(index - 1)));
+            nav.push(new ThreadController(nav, me, index,
+                    threads.get(index - 1)));
         } catch (NumberFormatException e) {
-            setStatus(Painter.paint("Use T<id> to select a thread.", Color.RED));
+            setStatus(Painter.paint(
+                    "Use T<id> to select a thread.", Color.RED));
         }
     }
 }

@@ -16,7 +16,7 @@ public abstract class Controller {
     }
 
     public final Database database() {
-        return nav.database(); 
+        return nav.database();
     }
 
     public PageView getView() {

@@ -35,11 +35,13 @@ public class SendGiftController extends CityFarmersController {
 
     @Override
     public void handleInput() {
-        input.setPrompt(Painter.paintf("[[{M}]]ain | Select choice", Color.YELLOW));
+        input.setPrompt(Painter.paintf(
+                "[[{M}]]ain | Select choice", Color.YELLOW));
 
         String choice = input.nextLine();
         if (choice.length() == 0) {
-            setStatus(Painter.paint("Please select a valid option.", Color.RED));
+            setStatus(Painter.paint(
+                    "Please select a valid option.", Color.RED));
         } else if (choice.equals("M")) {
             nav.popTo(MainMenuController.class);
         } else if (choice.matches("-?\\d+")) {
@@ -55,7 +57,8 @@ public class SendGiftController extends CityFarmersController {
 
             handleSendCrops(toSend, recipients);
         } else {
-            setStatus(Painter.paint("Please select a valid option.", Color.RED));
+            setStatus(Painter.paint(
+                    "Please select a valid option.", Color.RED));
         }
     }
 
@@ -88,19 +91,23 @@ public class SendGiftController extends CityFarmersController {
     }
 
     /**
-     * Check if the gift request will result in more than 5 gifts being sent today.
+     * Check if the gift request will result in more than 5 gifts being sent
+     * today.
      * @param recipients The list of usernames of recipients to send to.
      * @return Whether the total gifts sent today will be more than 5.
      */
     private boolean moreThanFiveGiftsToday(String[] recipients) {
-        // Check if the gift request will result in more than 5 gifts being sent today.
-        int giftsSentTodayCount = farmerLoadDAO.getGiftCountToday(me.getUsername());
+        // Check if the gift request will result in more than 5 gifts being sent
+        // today.
+        int giftsSentTodayCount = farmerLoadDAO.getGiftCountToday(
+                me.getUsername());
         if (giftsSentTodayCount + recipients.length > 5) {
-            setStatus(Painter.paint("Cannot send more than 5 gifts a day.", Color.RED));
+            setStatus(Painter.paint(
+                    "Cannot send more than 5 gifts a day.", Color.RED));
             appendStatus(Painter.paint(
-                    String.format("Already sent %d gifts today.", giftsSentTodayCount),
-                    Color.RED
-            ));
+                    String.format("Already sent %d gifts today.",
+                            giftsSentTodayCount),
+                    Color.RED));
             return true;
         }
         return false;
@@ -131,8 +138,7 @@ public class SendGiftController extends CityFarmersController {
             if (!credDAO.userExists(name)) {
                 setStatus(Painter.paintf(
                         String.format("[{User [{%s}] not found.}]", name),
-                        Color.RED,
-                        Color.BLUE));
+                        Color.RED, Color.BLUE));
                 return false;
             }
         }
@@ -161,8 +167,8 @@ public class SendGiftController extends CityFarmersController {
      * @return Whether any user has already received a gift today.
      */
     private boolean repeatedGiftToday(String[] recipients) {
-        Map<String, Boolean> sentGifts
-                = farmerLoadDAO.sentGiftToUsersToday(me.getUsername(), recipients);
+        Map<String, Boolean> sentGifts = farmerLoadDAO.sentGiftToUsersToday(
+                me.getUsername(), recipients);
         // Reduce the map into a list containing all invalid recipients.
         String[] usersSentTo = sentGifts.entrySet().stream()
                 .filter((Entry<String, Boolean> entry) -> entry.getValue())
@@ -189,8 +195,10 @@ public class SendGiftController extends CityFarmersController {
     }
 
     private void handleSendCrops(Crop toSend, String[] recipients) {
-        farmerActionDAO.sendGifts(me.getUsername(), recipients, toSend.getName());
+        farmerActionDAO.sendGifts(
+                me.getUsername(), recipients, toSend.getName());
 
-        setStatus(Painter.paint("Gift posted to your friends' wall.", Color.GREEN));
+        setStatus(Painter.paint(
+                "Gift posted to your friends' wall.", Color.GREEN));
     }
 }

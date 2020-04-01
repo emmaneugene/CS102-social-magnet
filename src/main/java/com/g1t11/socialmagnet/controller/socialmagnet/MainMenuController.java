@@ -32,7 +32,8 @@ public class MainMenuController extends SocialMagnetController {
                 nav.popToFirst();
                 break;
             default:
-                setStatus(Painter.paint("Please enter a choice between 1 & 5!", Color.RED));
+                setStatus(Painter.paint(
+                        "Please enter a choice between 1 & 5!", Color.RED));
                 break;
         }
     }
