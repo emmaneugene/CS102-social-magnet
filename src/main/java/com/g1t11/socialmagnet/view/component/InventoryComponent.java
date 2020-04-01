@@ -17,8 +17,9 @@ public class InventoryComponent implements Component {
     public void render() {
         int index = 1;
         for (String invCropName : invCropNames) {
-            System.out.printf(Painter.paintf("[{%d.}] %s\n", Color.YELLOW),
-                index++, invCropName);
+            System.out.printf(
+                    Painter.paintf("[{%d.}] %s\n", Color.YELLOW),
+                    index++, invCropName);
         }
     }
 }

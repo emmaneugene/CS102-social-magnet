@@ -16,10 +16,14 @@ import org.junit.Test;
 public class TestFarmerLoadDAO extends TestDAO {
     private FarmerLoadDAO farmerLoadDAO;
 
-    public static final Crop papaya     = new Crop("Papaya",     20, 30,  8,  75, 100, 15);
-    public static final Crop pumpkin    = new Crop("Pumpkin",    30, 60,  5,   5, 200, 20);
-    public static final Crop sunflower  = new Crop("Sunflower",  40, 120, 20, 15, 20,  40);
-    public static final Crop watermelon = new Crop("Watermelon", 50, 240, 1,   5, 800, 10);
+    public static final Crop papaya
+            = new Crop("Papaya",     20, 30,  8,  75, 100, 15);
+    public static final Crop pumpkin
+            = new Crop("Pumpkin",    30, 60,  5,   5, 200, 20);
+    public static final Crop sunflower
+            = new Crop("Sunflower",  40, 120, 20, 15, 20,  40);
+    public static final Crop watermelon
+            = new Crop("Watermelon", 50, 240, 1,   5, 800, 10);
 
     public TestFarmerLoadDAO() {
         farmerLoadDAO = new FarmerLoadDAO(db);
@@ -42,15 +46,18 @@ public class TestFarmerLoadDAO extends TestDAO {
 
     @Test
     public void testGetInventoryCrops() {
-        Map<String, Integer> expected = new LinkedHashMap<>(Map.of("Papaya", 1, "Watermelon", 2));
-        Map<String, Integer> actual = farmerLoadDAO.getInventoryCrops("britney");
-        
+        Map<String, Integer> expected
+                = new LinkedHashMap<>(Map.of("Papaya", 1, "Watermelon", 2));
+        Map<String, Integer> actual
+                = farmerLoadDAO.getInventoryCrops("britney");
+
         Assert.assertEquals(expected, actual);
     }
 
     @Test
     public void testGetInventoryEmpty() {
-        Map<String, Integer> actual = farmerLoadDAO.getInventoryCrops("charlie");
+        Map<String, Integer> actual
+                = farmerLoadDAO.getInventoryCrops("charlie");
         Assert.assertEquals(0, actual.size());
     }
 
@@ -85,7 +92,9 @@ public class TestFarmerLoadDAO extends TestDAO {
     @Test
     public void testSentGiftToUsersToday() {
         Map<String, Boolean> expected = Map.of("britney", false, "frank", true);
-        Map<String, Boolean> actual = farmerLoadDAO.sentGiftToUsersToday("howard", new String[]{"britney", "frank"});
+        Map<String, Boolean> actual
+                = farmerLoadDAO.sentGiftToUsersToday(
+                        "howard", new String[]{"britney", "frank"});
         Assert.assertEquals(expected, actual);
     }
 

@@ -33,10 +33,12 @@ public class TestThreadLoadDAO extends TestDAO {
     public void testGetThread() {
         // Testing from the perspective of adam
         Thread expected = new Thread(
-            7, "elijah", "elijah",
-            Painter.paintf("Had a great night with [{adam}], [{britney}], and @charlie",
-                    Color.BLUE),
-            4, true
+                7, "elijah", "elijah",
+                Painter.paintf(
+                        "Had a great night with [{adam}], [{britney}],"
+                                + " and @charlie",
+                        Color.BLUE),
+                4, true
         );
         expected.setActualCommentsCount(4);
         expected.setComments(List.of(

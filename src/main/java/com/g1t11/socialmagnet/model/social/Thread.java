@@ -16,15 +16,9 @@ public class Thread {
 
     private String content = null;
 
-    /**
-     * Stores a shallow list of User (only username and fullname) who like and dislike a post
-     */
     private List<User> likers = new ArrayList<>();
     private List<User> dislikers = new ArrayList<>();
 
-    /**
-     * Only loaded when we view the thread.
-     */
     private List<Comment> comments = new ArrayList<>(3);
     private int actualCommentsCount = 0;
 
@@ -34,7 +28,8 @@ public class Thread {
         this.id = id;
     }
 
-    public Thread(int id, String fromUsername, String toUsername, String content, int commentCount, boolean tagged) {
+    public Thread(int id, String fromUsername, String toUsername,
+            String content, int commentCount, boolean tagged) {
         this(id);
         this.fromUsername = fromUsername;
         this.toUsername = toUsername;
@@ -43,7 +38,8 @@ public class Thread {
         this.tagged = tagged;
     }
 
-    public Thread(int id, String fromUsername, String toUsername, String content, int commentCount) {
+    public Thread(int id, String fromUsername, String toUsername,
+            String content, int commentCount) {
         this(id, fromUsername, toUsername, content, commentCount, false);
     }
 
@@ -127,13 +123,14 @@ public class Thread {
         if (!(o instanceof Thread)) return false;
         Thread other = (Thread) o;
         return Objects.equals(id, other.id)
-            && Objects.equals(fromUsername, other.fromUsername)
-            && Objects.equals(toUsername, other.toUsername)
-            && Objects.equals(content, other.content)
-            && Objects.deepEquals(likers, other.likers)
-            && Objects.deepEquals(dislikers, other.dislikers)
-            && Objects.deepEquals(comments, other.comments)
-            && Objects.equals(actualCommentsCount, other.actualCommentsCount)
-            && Objects.equals(tagged, other.tagged);
+                && Objects.equals(fromUsername, other.fromUsername)
+                && Objects.equals(toUsername, other.toUsername)
+                && Objects.equals(content, other.content)
+                && Objects.deepEquals(likers, other.likers)
+                && Objects.deepEquals(dislikers, other.dislikers)
+                && Objects.deepEquals(comments, other.comments)
+                && Objects.equals(actualCommentsCount,
+                        other.actualCommentsCount)
+                && Objects.equals(tagged, other.tagged);
     }
 }

@@ -31,8 +31,10 @@ public class TestThreadActionDAO extends TestDAO {
 
     @Test(expected = ThreadNotFoundException.class)
     public void testAddThreadAddTagsDeleteThread() {
-        int newId = threadActionDAO.addThread("adam", "adam", "Hello @charlie and @britney!", List.of("charlie", "britney"));
-        Thread expected = new Thread(newId, "adam", "adam", "Hello @charlie and @britney!", 0);
+        int newId = threadActionDAO.addThread("adam", "adam",
+                "Hello @charlie and @britney!", List.of("charlie", "britney"));
+        Thread expected = new Thread(newId, "adam", "adam",
+                "Hello @charlie and @britney!", 0);
         // charlie is a friend, britney is not.
         expected.formatContentTags(List.of("charlie"));
 

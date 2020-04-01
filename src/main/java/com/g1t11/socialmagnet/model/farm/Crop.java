@@ -2,16 +2,6 @@ package com.g1t11.socialmagnet.model.farm;
 
 import java.util.Objects;
 
-/**
- * Crop
- * - name : String
- * - cost : int
- * - time : int (in minutes)
- * - XP : int
- * - minYield : int
- * - maxYield : int
- * - salePrice : int
- */
 public class Crop {
     private String name;
 
@@ -29,7 +19,8 @@ public class Crop {
 
     private int salePrice;
 
-    public Crop(String name, int cost, int minutesToHarvest, int perUnitXP, Integer yield, int minYield, int maxYield, int salePrice) {
+    public Crop(String name, int cost, int minutesToHarvest, int perUnitXP,
+            Integer yield, int minYield, int maxYield, int salePrice) {
         this.name = name;
         this.cost = cost;
         this.minutesToHarvest = minutesToHarvest;
@@ -52,8 +43,10 @@ public class Crop {
         this.salePrice = 0;
     }
 
-    public Crop(String name, int cost, int minutesToHarvest, int perUnitXP, int minYield, int maxYield, int salePrice) {
-        this(name, cost, minutesToHarvest, perUnitXP, null, minYield, maxYield, salePrice);
+    public Crop(String name, int cost, int minutesToHarvest, int perUnitXP,
+            int minYield, int maxYield, int salePrice) {
+        this(name, cost, minutesToHarvest, perUnitXP, null,
+                minYield, maxYield, salePrice);
     }
 
     public String getName() {
@@ -81,14 +74,16 @@ public class Crop {
     }
 
     public int getRandomYield() {
-        if (yield == null) yield = (int) (minYield + Math.random() * (maxYield - minYield));
+        if (yield == null) {
+            yield = minYield + (int) Math.random() * (maxYield - minYield);
+        }
         return yield;
     }
 
     public int getSalePrice() {
         return salePrice;
     }
-    
+
     @Override
     public int hashCode() {
         return name.hashCode();
@@ -99,11 +94,11 @@ public class Crop {
         if (!(o instanceof Crop)) return false;
         Crop other = (Crop) o;
         return Objects.equals(name, other.name)
-            && Objects.equals(cost, other.cost)
-            && Objects.equals(minutesToHarvest, other.minutesToHarvest)
-            && Objects.equals(perUnitXP, other.perUnitXP)
-            && Objects.equals(minYield, other.minYield)
-            && Objects.equals(maxYield, other.maxYield)
-            && Objects.equals(salePrice, other.salePrice);
+                && Objects.equals(cost, other.cost)
+                && Objects.equals(minutesToHarvest, other.minutesToHarvest)
+                && Objects.equals(perUnitXP, other.perUnitXP)
+                && Objects.equals(minYield, other.minYield)
+                && Objects.equals(maxYield, other.maxYield)
+                && Objects.equals(salePrice, other.salePrice);
     }
 }

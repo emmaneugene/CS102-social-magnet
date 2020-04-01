@@ -19,7 +19,6 @@ public class ThreadLoadDAO extends DAO {
     /**
      * Gets a thread from the perspective of user. This is needed to determine
      * whether the thread should be marked as a tagged thread.
-     * 
      * @param id The thread id.
      * @param username The user that is retrieving the thread.
      */
@@ -28,7 +27,7 @@ public class ThreadLoadDAO extends DAO {
 
         ResultSet rs = null;
         Thread thread = null;
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {
             stmt.setInt(1, threadId);
             stmt.setString(2, username);
 
@@ -57,9 +56,8 @@ public class ThreadLoadDAO extends DAO {
     }
 
     /**
-     * Updates the comments of a {@link Thread} in-place based on latest data 
+     * Updates the comments of a {@link Thread} in-place based on latest data
      * from the database.
-     * 
      * @param thread The thread to update.
      * @param limit Number of comments to load.
      */
@@ -67,7 +65,7 @@ public class ThreadLoadDAO extends DAO {
         String queryString = "CALL get_thread_comments_latest_last(?, ?)";
 
         ResultSet rs = null;
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {
             stmt.setInt(1, thread.getId());
             stmt.setInt(2, limit);
 
@@ -92,21 +90,21 @@ public class ThreadLoadDAO extends DAO {
     /**
      * Updates the likers of a {@link Thread} in-place based on latest data
      * from the database.
-     * 
      * @param thread The thread to update.
      */
     public void setLikers(Thread thread) {
         String queryString = "CALL get_likers(?)";
 
         ResultSet rs = null;
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {
             stmt.setInt(1, thread.getId());
 
             rs = stmt.executeQuery();
             thread.getLikers().clear();
 
             while (rs.next()) {
-                User u = new User(rs.getString("username"), rs.getString("fullname"));
+                User u = new User(
+                        rs.getString("username"), rs.getString("fullname"));
 
                 thread.getLikers().add(u);
             }
@@ -121,21 +119,21 @@ public class ThreadLoadDAO extends DAO {
     /**
      * Updates the dislikers of a {@link Thread} in-place based on latest data
      * from the database.
-     * 
      * @param thread The thread to update.
      */
     public void setDislikers(Thread thread) {
         String queryString = "CALL get_dislikers(?)";
 
         ResultSet rs = null;
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {
             stmt.setInt(1, thread.getId());
 
             rs = stmt.executeQuery();
             thread.getDislikers().clear();
 
             while (rs.next()) {
-                User u = new User(rs.getString("username"), rs.getString("fullname"));
+                User u = new User(
+                        rs.getString("username"), rs.getString("fullname"));
 
                 thread.getDislikers().add(u);
             }
@@ -149,7 +147,6 @@ public class ThreadLoadDAO extends DAO {
 
     /**
      * Gets the usernames of users who were tagged in this thread.
-     * 
      * @param threadId The ID of the thread to get tags from.
      * @return A list of usernames.
      */
@@ -158,7 +155,7 @@ public class ThreadLoadDAO extends DAO {
 
         ResultSet rs = null;
         List<String> usernames = new ArrayList<>();
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {
             stmt.setInt(1, threadId);
 
             rs = stmt.executeQuery();
@@ -179,9 +176,8 @@ public class ThreadLoadDAO extends DAO {
     /**
      * Retrieves a list of latest threads on a user's news feed.
      * <p>
-     * News feed threads include all latest threads on the current user's wall or
-     * the current user's friends' walls.
-     * 
+     * News feed threads include all latest threads on the current user's wall
+     * or the current user's friends' walls.
      * @param username The user whose news feed to load
      * @param limit The number of latest posts to retrieve
      * @return Posts to be displayed on the news feed
@@ -189,22 +185,19 @@ public class ThreadLoadDAO extends DAO {
      */
     public List<Thread> getNewsFeedThreads(String username, int limit) {
         String queryString = "CALL get_news_feed_threads(?, ?)";
-        
+
         ResultSet rs = null;
         List<Thread> threads = new ArrayList<>();
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {
             stmt.setString(1, username);
             stmt.setInt(2, limit);
 
             rs = stmt.executeQuery();
             while (rs.next()) {
-                Thread thread = new Thread(
-                    rs.getInt("thread_id"),
-                    rs.getString("author"),
-                    rs.getString("recipient"),
-                    rs.getString("content"),
-                    rs.getInt("comment_count"),
-                    rs.getBoolean("is_tagged"));
+                Thread thread = new Thread(rs.getInt("thread_id"),
+                        rs.getString("author"), rs.getString("recipient"),
+                        rs.getString("content"), rs.getInt("comment_count"),
+                        rs.getBoolean("is_tagged"));
                 setCommentsLatestLast(thread, 3);
                 setLikers(thread);
                 setDislikers(thread);
@@ -232,29 +225,25 @@ public class ThreadLoadDAO extends DAO {
      * <li> Threads with the current user tagged
      * <li> City Farmer gifts
      * </ul><p>
-     * 
      * @param username The user whose wall to load
      * @param limit The number of latest posts to retrieve
      * @return Posts to be displayed on the wall
      */
     public List<Thread> getWallThreads(String username, int limit) {
         String queryString = "CALL get_wall_threads(?, ?)";
-        
+
         ResultSet rs = null;
         List<Thread> threads = new ArrayList<>();
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {
             stmt.setString(1, username);
             stmt.setInt(2, limit);
 
             rs = stmt.executeQuery();
             while (rs.next()) {
-                Thread thread = new Thread(
-                    rs.getInt("thread_id"),
-                    rs.getString("author"),
-                    rs.getString("recipient"),
-                    rs.getString("content"),
-                    rs.getInt("comment_count"),
-                    rs.getBoolean("is_tagged"));
+                Thread thread = new Thread(rs.getInt("thread_id"),
+                        rs.getString("author"), rs.getString("recipient"),
+                        rs.getString("content"), rs.getInt("comment_count"),
+                        rs.getBoolean("is_tagged"));
                 setCommentsLatestLast(thread, 3);
                 setLikers(thread);
                 setDislikers(thread);

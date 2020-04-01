@@ -16,12 +16,14 @@ public class SimpleThreadComponent implements Component {
 
     private LikeBarComponent likeBarView;
 
-    private List<CommentComponent> commentViews = new ArrayList<>(commentsToDisplay);
+    private List<CommentComponent> commentViews
+            = new ArrayList<>(commentsToDisplay);
 
     public SimpleThreadComponent(int threadIndex, Thread thread) {
         this.threadIndex = threadIndex;
         this.thread = thread;
-        likeBarView = new LikeBarComponent(thread.getLikers().size(), thread.getDislikers().size());
+        likeBarView = new LikeBarComponent(
+                thread.getLikers().size(), thread.getDislikers().size());
         setComments();
     }
 
@@ -32,9 +34,12 @@ public class SimpleThreadComponent implements Component {
          * If we have more comments than we can display, we want to offset the
          * such that the last comment rendered has the maximum index.
          */
-        int offset = maxIndex > commentsToDisplay ? maxIndex - commentsToDisplay : 0;
+        int offset = maxIndex > commentsToDisplay
+                ? maxIndex - commentsToDisplay
+                : 0;
         for (int i = 0; i < thread.getComments().size(); i++) {
-            commentViews.add(new CommentComponent(threadIndex, i + offset + 1, thread.getComments().get(i)));
+            commentViews.add(new CommentComponent(
+                    threadIndex, i + offset + 1, thread.getComments().get(i)));
         }
     }
 

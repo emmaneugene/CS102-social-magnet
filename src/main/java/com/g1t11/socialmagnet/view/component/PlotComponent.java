@@ -41,7 +41,7 @@ public class PlotComponent implements Component {
     }
 
     private static final String progressBarTemplate
-        = Painter.paintf("[[{%s}]%s]", Color.GREEN);
+            = Painter.paintf("[[{%s}]%s]", Color.GREEN);
 
     private void renderProgressBar() {
         int fillCount = plot.getPercentProgress() / 10;

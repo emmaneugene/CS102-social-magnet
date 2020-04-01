@@ -11,15 +11,16 @@ public class DAO {
     }
 
     /**
-     * The current connection to the database. If the connection is not 
+     * The current connection to the database. If the connection is not
      * established, a {@link DatabaseException} is thrown to be handled by the
      * application event loop.
      * @return A connection to the database.
      */
-    public Connection connection() {
+    public Connection conn() {
         if (db.connection() == null) {
-            throw new DatabaseException(new SQLException("Connection not established", "08S01", 0));
+            throw new DatabaseException(new SQLException(
+                    "Connection not established", "08S01", 0));
         }
         return db.connection();
     }
-} 
+}

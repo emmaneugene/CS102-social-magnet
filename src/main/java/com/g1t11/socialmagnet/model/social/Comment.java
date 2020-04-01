@@ -2,12 +2,9 @@ package com.g1t11.socialmagnet.model.social;
 
 import java.util.Objects;
 
-/**
- * Comment
- */
 public class Comment {
     private String username;
-    
+
     private String content;
 
     public Comment() {}
@@ -38,7 +35,7 @@ public class Comment {
         if (!(o instanceof Comment)) return false;
         Comment other = (Comment) o;
         return Objects.equals(username, other.username)
-            && Objects.equals(content, other.content);
+                && Objects.equals(content, other.content);
     }
 }
-    
+

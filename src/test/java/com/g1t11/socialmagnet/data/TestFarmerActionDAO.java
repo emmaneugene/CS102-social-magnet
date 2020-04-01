@@ -16,10 +16,14 @@ public class TestFarmerActionDAO extends TestDAO {
     private FarmerActionDAO farmerActionDAO;
     private ThreadActionDAO threadActionDAO;
 
-    public static final Crop papaya     = new Crop("Papaya",     20, 30,  8,  75, 100, 15);
-    public static final Crop pumpkin    = new Crop("Pumpkin",    30, 60,  5,   5, 200, 20);
-    public static final Crop sunflower  = new Crop("Sunflower",  40, 120, 20, 15, 20,  40);
-    public static final Crop watermelon = new Crop("Watermelon", 50, 240, 1,   5, 800, 10);
+    public static final Crop papaya
+            = new Crop("Papaya",     20, 30,  8,  75, 100, 15);
+    public static final Crop pumpkin
+            = new Crop("Pumpkin",    30, 60,  5,   5, 200, 20);
+    public static final Crop sunflower
+            = new Crop("Sunflower",  40, 120, 20, 15, 20,  40);
+    public static final Crop watermelon
+            = new Crop("Watermelon", 50, 240, 1,   5, 800, 10);
 
     public TestFarmerActionDAO() {
         farmerLoadDAO = new FarmerLoadDAO(db);
@@ -120,13 +124,8 @@ public class TestFarmerActionDAO extends TestDAO {
         int expectedMaxPlotCount = charlieBefore.getMaxPlotCount() + 1;
         int expectedWealth = charlieBefore.getWealth() + 6250;
         List<Plot> expectedPlots = List.of(
-            new Plot(),
-            new Plot(pumpkin),
-            new Plot(watermelon),
-            new Plot(),
-            new Plot(),
-            new Plot(),
-            new Plot()
+                new Plot(), new Plot(pumpkin), new Plot(watermelon),
+                new Plot(), new Plot(), new Plot(), new Plot()
         );
 
         farmerActionDAO.harvest("charlie");
@@ -160,10 +159,12 @@ public class TestFarmerActionDAO extends TestDAO {
         );
         Farmer dannyBefore = farmerLoadDAO.getFarmer("danny");
 
-        List<StealingRecord> actualSteal = farmerActionDAO.steal("danny", "elijah");
+        List<StealingRecord> actualSteal
+                = farmerActionDAO.steal("danny", "elijah");
 
         Farmer dannyAfter = farmerLoadDAO.getFarmer("danny");
-        testStealerWealthAndXP(dannyBefore, dannyAfter, minExpectedSteal, maxExpectedSteal);
+        testStealerWealthAndXP(dannyBefore, dannyAfter,
+                minExpectedSteal, maxExpectedSteal);
 
         int size = actualSteal.size();
         Assert.assertEquals(minExpectedSteal.size(), size);
@@ -171,24 +172,34 @@ public class TestFarmerActionDAO extends TestDAO {
         for (int i = 0; i < size; i++) {
             int actualXPGained = actualSteal.get(i).getTotalXPGained();
             int actualGoldGained = actualSteal.get(i).getTotalGoldGained();
-            Assert.assertTrue(minExpectedSteal.get(i).getTotalXPGained() <= actualXPGained && actualXPGained <= maxExpectedSteal.get(i).getTotalXPGained());
-            Assert.assertTrue(minExpectedSteal.get(i).getTotalGoldGained() <= actualGoldGained && actualGoldGained <= maxExpectedSteal.get(i).getTotalGoldGained());
+            Assert.assertTrue(
+                    minExpectedSteal.get(i).getTotalXPGained()
+                            <= actualXPGained
+                    && actualXPGained
+                            <= maxExpectedSteal.get(i).getTotalXPGained());
+            Assert.assertTrue(
+                    minExpectedSteal.get(i).getTotalGoldGained()
+                            <= actualGoldGained
+                    && actualGoldGained
+                            <= maxExpectedSteal.get(i).getTotalGoldGained());
         }
     }
 
-    private void testStealerWealthAndXP(Farmer before, Farmer after, List<StealingRecord> minExpectedSteal, List<StealingRecord> maxExpectedSteal) {
+    private void testStealerWealthAndXP(Farmer before, Farmer after,
+            List<StealingRecord> minExpectedSteal,
+            List<StealingRecord> maxExpectedSteal) {
         int minGoldGained = minExpectedSteal.stream().reduce(0,
-            (Integer sum, StealingRecord next) -> sum + next.getTotalGoldGained(), 
-            (Integer a, Integer b) -> a + b);
+            (sum,  next) -> sum + next.getTotalGoldGained(),
+            (a,  b) -> a + b);
         int maxGoldGained = maxExpectedSteal.stream().reduce(0,
-            (Integer sum, StealingRecord next) -> sum + next.getTotalGoldGained(), 
-            (Integer a, Integer b) -> a + b);
+            (sum,  next) -> sum + next.getTotalGoldGained(),
+            (a,  b) -> a + b);
         int minXPGained = minExpectedSteal.stream().reduce(0,
-            (Integer sum, StealingRecord next) -> sum + next.getTotalXPGained(), 
-            (Integer a, Integer b) -> a + b);
+            (sum, next) -> sum + next.getTotalXPGained(),
+            (a, b) -> a + b);
         int maxXPGained = maxExpectedSteal.stream().reduce(0,
-            (Integer sum, StealingRecord next) -> sum + next.getTotalXPGained(), 
-            (Integer a, Integer b) -> a + b);
+            (sum, next) -> sum + next.getTotalXPGained(),
+            (a, b) -> a + b);
 
         int minExpectedWealth = before.getWealth() + minGoldGained;
         int maxExpectedWealth = before.getWealth() + maxGoldGained;
@@ -197,9 +208,10 @@ public class TestFarmerActionDAO extends TestDAO {
         int actualWealth = after.getWealth();
         int actualXP = after.getXP();
 
-        Assert.assertTrue(minExpectedWealth <= actualWealth && actualWealth <= maxExpectedWealth);
-        Assert.assertTrue(minExpectedXP <= actualXP && actualXP <= maxExpectedXP);
-
+        Assert.assertTrue(minExpectedWealth <= actualWealth
+                && actualWealth <= maxExpectedWealth);
+        Assert.assertTrue(minExpectedXP <= actualXP
+                && actualXP <= maxExpectedXP);
     }
 
     private void testStealAgain() {
@@ -208,7 +220,8 @@ public class TestFarmerActionDAO extends TestDAO {
         int expectedWealth = dannyBefore.getWealth();
         int expectedXP = dannyBefore.getXP();
 
-        List<StealingRecord> actualSteal = farmerActionDAO.steal("danny", "elijah");
+        List<StealingRecord> actualSteal
+                = farmerActionDAO.steal("danny", "elijah");
 
         Farmer dannyAfter = farmerLoadDAO.getFarmer("danny");
         int actualWealth = dannyAfter.getWealth();
@@ -226,7 +239,8 @@ public class TestFarmerActionDAO extends TestDAO {
         int expectedWealth = elijahBefore.getWealth();
         int expectedXP = elijahBefore.getXP();
 
-        List<StealingRecord> actualSteal = farmerActionDAO.steal("elijah", "danny");
+        List<StealingRecord> actualSteal
+                = farmerActionDAO.steal("elijah", "danny");
 
         Farmer elijahAfter = farmerLoadDAO.getFarmer("elijah");
         int actualWealth = elijahAfter.getWealth();
@@ -234,7 +248,7 @@ public class TestFarmerActionDAO extends TestDAO {
 
         Assert.assertEquals(0, actualSteal.size());
         Assert.assertEquals(expectedWealth, actualWealth);
-        Assert.assertEquals(expectedXP, actualXP);       
+        Assert.assertEquals(expectedXP, actualXP);
     }
 
     @Test
@@ -247,7 +261,7 @@ public class TestFarmerActionDAO extends TestDAO {
 
         farmerActionDAO.acceptGifts("mark");
         Map<String, Integer> actual = farmerLoadDAO.getInventoryCrops("mark");
-        
+
         Assert.assertEquals(expected, actual);
 
         // Accepted gifts canoot be accepted again.
@@ -259,17 +273,18 @@ public class TestFarmerActionDAO extends TestDAO {
 
     @Test
     public void testRejectGifts() {
-        Map<String, Integer> expected = farmerLoadDAO.getInventoryCrops("nadia");
+        Map<String, Integer> expected
+                = farmerLoadDAO.getInventoryCrops("nadia");
         // Adding onto existing crops in inventory.
-        // Reject one papaya and one sunflower to test one rejected crop
-        // that exists in inventory and one that does not.
+        // Reject one papaya and one sunflower to test one rejected crop that
+        // exists in inventory and one that does not.
         expected.put("Papaya", 1);
 
         threadActionDAO.deleteThread(26, "nadia");
         threadActionDAO.deleteThread(27, "nadia");
         farmerActionDAO.acceptGifts("nadia");
         Map<String, Integer> actual = farmerLoadDAO.getInventoryCrops("nadia");
-        
+
         Assert.assertEquals(expected, actual);
 
         // Accepted gifts canoot be accepted again.

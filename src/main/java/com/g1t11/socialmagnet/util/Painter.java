@@ -43,23 +43,25 @@ public class Painter {
      * <p>
      * Colors are assigned to nested regions based on the order of opening
      * markers from left to right.
-     *
      * @param formatText The string to be painted. Wrap sections of the string
      * to be painted with [{ and }].
-     * @param colors A sequence of {@link Color} to paint each section positionally.
+     * @param colors A sequence of {@link Color} to paint each section
+     * positionally.
      * @return A painted string with all original format code untouched.
      */
     public static String paintf(String formatText, Color ...colors) {
         int colorIndex = 0;
         int stackIndex = 0;
 
-        String[] tokens = formatText.split("(?=\\[\\{|\\}\\])|(?<=\\[\\{|\\}\\])");
+        String[] tokens = formatText.split(
+                "(?=\\[\\{|\\}\\])|(?<=\\[\\{|\\}\\])");
 
         Color[] stack = new Color[tokens.length];
         String result = "";
         for (String token : tokens) {
             if (token.equals("[{")) {
-                stack[stackIndex++] = colors[Math.min(colorIndex++, colors.length - 1)];
+                int index = Math.min(colorIndex++, colors.length - 1);
+                stack[stackIndex++] = colors[index];
             } else if (token.equals("}]")) {
                 stackIndex--;
                 result += Color.RESET.code;

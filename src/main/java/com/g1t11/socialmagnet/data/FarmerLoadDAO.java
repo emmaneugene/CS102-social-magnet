@@ -24,7 +24,6 @@ public class FarmerLoadDAO extends DAO {
      * <p>
      * This allows us to minimise unnecessarily loading farmer information when
      * it is not required.
-     * 
      * @param username The username of the farmer.
      * @return A unique farmer with the specified username.
      */
@@ -34,7 +33,7 @@ public class FarmerLoadDAO extends DAO {
 
         String queryString = "CALL get_farmer_detail(?)";
 
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {
             stmt.setString(1, username);
 
             rs = stmt.executeQuery();
@@ -58,9 +57,9 @@ public class FarmerLoadDAO extends DAO {
 
     /**
      * Get the inventory of a farmer.
-     * 
      * @param farmer The username of the farmer whose inventory to access.
-     * @return A sorted map of the names of crops in an inventory with its corresponding quantities.
+     * @return A sorted map of the names of crops in an inventory with its
+     * corresponding quantities.
      */
     public Map<String, Integer> getInventoryCrops(String username) {
         ResultSet rs = null;
@@ -68,7 +67,7 @@ public class FarmerLoadDAO extends DAO {
 
         String queryString = "CALL get_inventory(?)";
 
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {
             stmt.setString(1, username);
 
             rs = stmt.executeQuery();
@@ -87,7 +86,6 @@ public class FarmerLoadDAO extends DAO {
 
     /**
      * Get the plots of a farmer.
-     * 
      * @param username The username of the farmer whose plots to retrieve.
      * @param maxPlotCount The maximum number of plots the farmer can access.
      * @return The plots of a farmer.
@@ -101,7 +99,7 @@ public class FarmerLoadDAO extends DAO {
 
         String queryString = "CALL get_plots(?)";
 
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {
             stmt.setString(1, username);
 
             rs = stmt.executeQuery();
@@ -140,7 +138,7 @@ public class FarmerLoadDAO extends DAO {
 
         String queryString = "CALL get_gift_count_today(?)";
 
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {
             stmt.setString(1, username);
 
             rs = stmt.executeQuery();
@@ -160,9 +158,11 @@ public class FarmerLoadDAO extends DAO {
      * were already sent today.
      * @param username The username of the sender.
      * @param recipients An array of users to check.
-     * @return A map of recipient usernames to whether a gift was already sent today.
+     * @return A map of recipient usernames to whether a gift was already sent
+     * today.
      */
-    public Map<String, Boolean> sentGiftToUsersToday(String username, String[] recipients) {
+    public Map<String, Boolean> sentGiftToUsersToday(
+                String username, String[] recipients) {
         Map<String, Boolean> result = new LinkedHashMap<>();
         for (String recipient : recipients) {
             result.put(recipient, sentGiftToUserToday(username, recipient));
@@ -182,7 +182,7 @@ public class FarmerLoadDAO extends DAO {
 
         String queryString = "CALL sent_gift_today(?, ?)";
 
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {
             stmt.setString(1, sender);
             stmt.setString(2, recipient);
 

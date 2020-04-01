@@ -26,9 +26,8 @@ public class FriendFarmerHeaderComponent implements Component {
     @Override
     public void render() {
         System.out.printf(template,
-            friend.getFullname(),
-            friend.getRank().value,
-            TextUtils.prettyNumber(friend.getWealth())
-        );
+                friend.getFullname(),
+                friend.getRank().value,
+                TextUtils.prettyNumber(friend.getWealth()));
     }
 }

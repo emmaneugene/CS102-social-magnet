@@ -3,17 +3,6 @@ package com.g1t11.socialmagnet.model.farm;
 import java.util.Date;
 import java.util.Objects;
 
-/**
- * Plot
- * - crop : Crop
- * - timePlanted : Date
- * - readyToHarvest : boolean
- * - wilted : boolean
- * - percentProgress : int
- * - yield : int
- * - percentStolen : int
- * - robberNames : List<String>
- */
 public class Plot {
     private Crop crop;
 
@@ -45,8 +34,10 @@ public class Plot {
 
     public boolean readyToHarvest() {
         Date now = new Date();
-        int minutesElapsed = (int) (now.getTime() - timePlanted.getTime()) / (1000 * 60);
-        if (minutesElapsed >= 2 * crop.getMinutesToHarvest() || minutesElapsed < crop.getMinutesToHarvest()) {
+        int minutesElapsed = (int) (now.getTime() - timePlanted.getTime())
+                           / (1000 * 60);
+        if (minutesElapsed >= 2 * crop.getMinutesToHarvest()
+                || minutesElapsed < crop.getMinutesToHarvest()) {
             return false;
         }
         return true;
@@ -54,7 +45,8 @@ public class Plot {
 
     public boolean isWilted() {
         Date now = new Date();
-        int minutesElapsed = (int) (now.getTime() - timePlanted.getTime()) / (1000 * 60);
+        int minutesElapsed = (int) (now.getTime() - timePlanted.getTime())
+                           / (1000 * 60);
         if (minutesElapsed >= 2 * crop.getMinutesToHarvest()) {
             return true;
         }
@@ -63,7 +55,8 @@ public class Plot {
 
     public int getPercentProgress() {
         Date now = new Date();
-        int minutesElapsed = (int) (now.getTime() - timePlanted.getTime()) / (1000 * 60);
+        int minutesElapsed = (int) (now.getTime() - timePlanted.getTime())
+                           / (1000 * 60);
         return Math.min(minutesElapsed * 100 / crop.getMinutesToHarvest(), 100);
     }
 
