@@ -4,19 +4,18 @@ import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.controller.cityfarmers.CityFarmersMainMenuController;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
+import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.socialmagnet.MainMenuPageView;
 
 public class MainMenuController extends SocialMagnetController {
-    private User me;
-
     public MainMenuController(Navigator nav, User me) {
         super(nav, me);
-        this.me = me;
-        view = new MainMenuPageView(me);
+        setView(new MainMenuPageView(me));
     }
 
     @Override
     public void handleInput() {
+        getView().showMainPrompt();
         switch (input.nextLine()) {
             case "1":
                 nav.push(new NewsFeedController(nav, me));
@@ -34,7 +33,8 @@ public class MainMenuController extends SocialMagnetController {
                 nav.popToFirst();
                 break;
             default:
-                view.setStatus(Painter.paint("Please enter a choice between 1 & 5!", Painter.Color.RED));
+                setStatus(Painter.paint(
+                        "Please enter a choice between 1 & 5!", Color.RED));
                 break;
         }
     }

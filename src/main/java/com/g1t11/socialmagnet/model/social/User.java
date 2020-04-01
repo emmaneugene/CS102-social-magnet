@@ -34,6 +34,6 @@ public class User {
         if (!(o instanceof User)) return false;
         User other = (User) o;
         return Objects.equals(username, other.username)
-            && Objects.equals(fullname, other.fullname);
+                && Objects.equals(fullname, other.fullname);
     }
 }

@@ -11,7 +11,8 @@ public class StealingRecord {
 
     private int totalGoldGained;
 
-    public StealingRecord(String cropName, int quantity, int totalXPGained, int totalGoldGained) {
+    public StealingRecord(String cropName, int quantity,
+            int totalXPGained, int totalGoldGained) {
         this.cropName = cropName;
         this.quantity = quantity;
         this.totalXPGained = totalXPGained;
@@ -19,7 +20,8 @@ public class StealingRecord {
     }
 
     public StealingRecord(Crop crop, int quantity) {
-        this(crop.getName(), quantity, quantity * crop.getPerUnitXP(), quantity * crop.getSalePrice());
+        this(crop.getName(), quantity, quantity * crop.getPerUnitXP(),
+                 quantity * crop.getSalePrice());
     }
 
     public String getCropName() {
@@ -41,9 +43,8 @@ public class StealingRecord {
     @Override
     public String toString() {
         return String.format("%s for %d XP and %d gold",
-            TextUtils.countedWord(quantity, cropName, cropName + "s"),
-            totalXPGained,
-            totalGoldGained
-        );
+                TextUtils.countedWord(quantity, cropName, cropName + "s"),
+                totalXPGained,
+                totalGoldGained);
     }
 }

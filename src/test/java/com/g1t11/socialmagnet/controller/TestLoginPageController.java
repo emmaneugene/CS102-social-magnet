@@ -16,7 +16,7 @@ public class TestLoginPageController extends TestApp {
     public final TextFromStandardInputStream systemInMock
         = TextFromStandardInputStream.emptyStandardInputStream();
     @Rule
-    public final SystemOutRule systemOutRule 
+    public final SystemOutRule systemOutRule
         = new SystemOutRule().mute().enableLog();
     @Rule
     public final ExpectedSystemExit exit = ExpectedSystemExit.none();
@@ -31,6 +31,7 @@ public class TestLoginPageController extends TestApp {
         systemInMock.provideLines("adam", "maroon5");
         app.nav.currController().run();
 
-        Assert.assertTrue(app.nav.currController() instanceof MainMenuController);
+        Assert.assertTrue(
+                app.nav.currController() instanceof MainMenuController);
     }
 }

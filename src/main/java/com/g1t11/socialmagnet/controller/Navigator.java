@@ -12,9 +12,8 @@ public class Navigator {
      * Stack of <code>Controller</code> instances that represent the current
      * application's navigation state.
      * <p>
-     * On every frame update, the top-most <code>Controller</code> is used to 
+     * On every frame update, the top-most <code>Controller</code> is used to
      * handle UI updates and application logic.
-     * 
      * @see Controller
      */
     private List<Controller> navigationStack = new ArrayList<>();
@@ -29,9 +28,7 @@ public class Navigator {
 
     /**
      * Initiate the navigation stack.
-     * 
      * @param first The root <code>Controller</code> for navigation.
-     * 
      * @see Controller
      */
     public void setFirstController(Controller first) {
@@ -52,7 +49,6 @@ public class Navigator {
     /**
      * Remove the current <code>Controller</code> from the navigation stack and
      * prepare the application to navigate to the previous Controller.
-     * 
      * @see Controller
      */
     public void pop() {
@@ -67,15 +63,15 @@ public class Navigator {
             pop();
         }
     }
-    
+
     /**
-     * Pop the navigation stack until a Controller of classToFind is found, or until
-     * one controller is left on the stack.
-     * 
+     * Pop the navigation stack until a Controller of classToFind is found, or
+     * until one controller is left on the stack.
      * @param classToFind The class of the type of controller to find.
      */
     public <T extends Controller> void popTo(Class<T> classToFind) {
-        while (navigationStack.size() > 1 && !currController().getClass().equals(classToFind)) {
+        while (navigationStack.size() > 1
+                && !currController().getClass().equals(classToFind)) {
             pop();
         }
     }
@@ -89,9 +85,7 @@ public class Navigator {
     /**
      * Prepare the next <code>Controller</code> to be loaded onto the navigation
      * stack.
-     * 
      * @param next The <code>Controller</code> of the page to navigate to.
-     * 
      * @see Controller
      */
     public void push(Controller next) {

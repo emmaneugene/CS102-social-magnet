@@ -2,9 +2,11 @@ package com.g1t11.socialmagnet.view.component;
 
 import com.g1t11.socialmagnet.model.social.Comment;
 import com.g1t11.socialmagnet.util.Painter;
+import com.g1t11.socialmagnet.util.Painter.Color;
 
 public class CommentComponent implements Component {
-    private final static String template = Painter.paintf("  %d.%d [{%s}]: %s\n", Painter.Color.BLUE);
+    private final static String template = Painter.paintf(
+            "  %d.%d [{%s}]: %s\n", Color.BLUE);
 
     private final int postIndex;
 
@@ -20,6 +22,7 @@ public class CommentComponent implements Component {
 
     @Override
     public void render() {
-        System.out.printf(template, postIndex, index, comment.getUsername(), comment.getContent());
+        System.out.printf(template, postIndex, index,
+                comment.getUsername(), comment.getContent());
     }
 }

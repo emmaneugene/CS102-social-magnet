@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.social.Thread;
+import com.g1t11.socialmagnet.util.Painter;
+import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.component.WallProfileInfoComponent;
 import com.g1t11.socialmagnet.view.page.PageView;
 import com.g1t11.socialmagnet.view.component.SimpleThreadComponent;
@@ -41,5 +43,17 @@ public class WallPageView extends PageView {
         for (Thread thread : threads) {
             threadComps.add(new SimpleThreadComponent(index++, thread));
         }
+    }
+
+    @Override
+    public void showMainPrompt() {
+        showPrompt(Painter.paintf(
+                "[[{M}]]ain | [[{T}]]hread | [[{A}]]ccept Gift | [[{P}]]ost",
+                Color.YELLOW));
+        setInputColor(Color.YELLOW);
+    }
+
+    public void showPostPrompt() {
+        showPrompt("Enter your post");
     }
 }

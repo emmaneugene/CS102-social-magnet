@@ -15,6 +15,8 @@ import com.g1t11.socialmagnet.data.UserDAO;
 import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.util.Painter;
+import com.g1t11.socialmagnet.util.TextUtils;
+import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.cityfarmers.SendGiftPageView;
 
 public class SendGiftController extends CityFarmersController {
@@ -28,82 +30,88 @@ public class SendGiftController extends CityFarmersController {
     public SendGiftController(Navigator nav, Farmer me) {
         super(nav, me);
         crops = storeDAO.getStoreItems();
-        view = new SendGiftPageView(crops);
+        setView(new SendGiftPageView(crops));
+    }
+
+    @Override
+    public SendGiftPageView getView() {
+        return (SendGiftPageView) super.getView();
     }
 
     @Override
     public void handleInput() {
-        input.setPrompt(Painter.paintf(
-            "[[{M}]]ain | Select choice",
-            Painter.Color.YELLOW
-        ));
+        getView().showMainPrompt();
 
         String choice = input.nextLine();
         if (choice.length() == 0) {
-            view.setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
-            return;
+            setStatus(Painter.paint(
+                    "Please select a valid option.", Color.RED));
         } else if (choice.equals("M")) {
             nav.popTo(MainMenuController.class);
-            return;
         } else if (choice.matches("-?\\d+")) {
-            Crop toSend = getCropSelection(choice);
-            if (toSend == null)
+            Crop toSend = getSelectedCrop(choice);
+            if (toSend == null) {
                 return;
+            }
 
             String[] recipients = getRecipients();
-
-            if (!giftsAreValid(recipients))
+            if (!giftsAreValid(recipients)) {
                 return;
+            }
 
             handleSendCrops(toSend, recipients);
         } else {
-            view.setStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
+            setStatus(Painter.paint(
+                    "Please select a valid option.", Color.RED));
         }
-
     }
 
-    private Crop getCropSelection(String choice) {
-        Crop toSend = null;
+    private Crop getSelectedCrop(String choice) {
         try {
             int index = Integer.parseInt(choice);
+
             if (index <= 0 || index > crops.size()) {
-                view.setStatus(Painter.paint("Index out of range.", Painter.Color.RED));
+                setStatus(Painter.paint("Index out of range.", Color.RED));
                 return null;
             }
-            toSend = crops.get(index - 1);
+            return crops.get(index - 1);
         } catch (NumberFormatException e) {
-            view.setStatus(Painter.paint("Use <id> to select a gift.", Painter.Color.RED));
+            setStatus(Painter.paint("Use <id> to select a gift.", Color.RED));
+            return null;
         }
-        return toSend;
     }
 
     private String[] getRecipients() {
-        input.setPrompt("Send to");
+        getView().showSendToPrompt();
         return input.nextLine().split("\\s*,\\s*");
     }
 
     private boolean giftsAreValid(String[] recipients) {
-        if (moreThanFiveGiftsToday(recipients)
-        || sendingToSelf(recipients)
-        || !allUsersExist(recipients)
-        || !allUsersFriends(recipients)
-        || repeatedGiftToday(recipients)) {
-            return false;
-        }
-        return true;
+        return !moreThanFiveGiftsToday(recipients)
+                && !sendingToSelf(recipients)
+                && allUsersExist(recipients)
+                && allUsersFriends(recipients)
+                && !repeatedGiftToday(recipients);
     }
 
     /**
-     * Check if the gift request will result in more than 5 gifts being sent today.
+     * Check if the gift request will result in more than 5 gifts being sent
+     * today.
      * @param recipients The list of usernames of recipients to send to.
      * @return Whether the total gifts sent today will be more than 5.
      */
     private boolean moreThanFiveGiftsToday(String[] recipients) {
-        // Check if the gift request will result in more than 5 gifts being sent today.
-        int giftsSentTodayCount = farmerLoadDAO.getGiftCountToday(me.getUsername());
+        // Check if the gift request will result in more than 5 gifts being sent
+        // today.
+        int giftsSentTodayCount = farmerLoadDAO.getGiftCountToday(
+                me.getUsername());
         if (giftsSentTodayCount + recipients.length > 5) {
-            view.setStatus(Painter.paint("Cannot send more than 5 gifts a day.", Painter.Color.RED));
-            view.appendStatus(String.format(Painter.paint("Already sent %d gifts today.", Painter.Color.RED), giftsSentTodayCount));
+            setStatus(Painter.paint(
+                    "Cannot send more than 5 gifts a day.", Color.RED));
+            appendStatus(Painter.paint(
+                    String.format("Already sent %d gifts today.",
+                            giftsSentTodayCount),
+                    Color.RED));
             return true;
         }
         return false;
@@ -116,9 +124,9 @@ public class SendGiftController extends CityFarmersController {
      */
     private boolean sendingToSelf(String[] recipients) {
         boolean sendToMyself = Arrays.stream(recipients)
-            .anyMatch(name -> name.equals(me.getUsername()));
+                .anyMatch(name -> name.equals(me.getUsername()));
         if (sendToMyself) {
-            view.setStatus(Painter.paint("Cannot send gift to self.", Painter.Color.RED));
+            setStatus(Painter.paint("Cannot send gift to self.", Color.RED));
             return true;
         }
         return false;
@@ -132,11 +140,9 @@ public class SendGiftController extends CityFarmersController {
     private boolean allUsersExist(String[] recipients) {
         for (String name : recipients) {
             if (!credDAO.userExists(name)) {
-                view.setStatus(Painter.paintf(
-                    String.format("[{User [{%s}] not found.}]", name),
-                    Painter.Color.RED,
-                    Painter.Color.BLUE
-                ));
+                setStatus(Painter.paintf(
+                        String.format("[{User [{%s}] not found.}]", name),
+                        Color.RED, Color.BLUE));
                 return false;
             }
         }
@@ -150,10 +156,10 @@ public class SendGiftController extends CityFarmersController {
      */
     private boolean allUsersFriends(String[] recipients) {
         List<String> friends = userDAO.getFriends(me.getUsername()).stream()
-            .map((user) -> user.getUsername())
-            .collect(Collectors.toList());
+                .map((user) -> user.getUsername())
+                .collect(Collectors.toList());
         if (!friends.containsAll(List.of(recipients))) {
-            view.setStatus(Painter.paint("Cannot send to non friends.", Painter.Color.RED));
+            setStatus(Painter.paint("Cannot send to non friends.", Color.RED));
             return false;
         }
         return true;
@@ -165,45 +171,38 @@ public class SendGiftController extends CityFarmersController {
      * @return Whether any user has already received a gift today.
      */
     private boolean repeatedGiftToday(String[] recipients) {
-        Map<String, Boolean> sentGifts = farmerLoadDAO.sentGiftToUsersToday(me.getUsername(), recipients);
+        Map<String, Boolean> sentGifts = farmerLoadDAO.sentGiftToUsersToday(
+                me.getUsername(), recipients);
         // Reduce the map into a list containing all invalid recipients.
         String[] usersSentTo = sentGifts.entrySet().stream()
-            .filter((Entry<String, Boolean> entry) -> entry.getValue())
-            .map((Entry<String, Boolean> entry) -> entry.getKey())
-            .toArray(size -> new String[size]);
-
+                .filter((Entry<String, Boolean> entry) -> entry.getValue())
+                .map((Entry<String, Boolean> entry) -> entry.getKey())
+                .toArray(size -> new String[size]);
         if (usersSentTo.length != 0) {
             displayAlreadySentTodayError(usersSentTo);
             return true;
         }
-
         return false;
     }
 
     private void displayAlreadySentTodayError(String[] usersSentTo) {
-        int sentCount = usersSentTo.length;
         // Prepare the names for Painter::paintf
-        String[] prepName = Arrays.stream(usersSentTo)
-            .map((String name) -> String.format("[{%s}]", name))
-            .toArray(size -> new String[size]);
+        String[] prepNames = Arrays.stream(usersSentTo)
+                .map((String name) -> String.format("[{%s}]", name))
+                .toArray(size -> new String[size]);
 
-        StringBuilder sb = new StringBuilder("[{Already sent a gift to");
-        if (sentCount == 1) {
-            sb.append(" ").append(prepName[0]);
-        } else if (sentCount == 2) {
-            sb.append(" ").append(prepName[0]).append(" and ").append(prepName[1]);
-        } else {
-            for (int i = 0; i < sentCount - 1; i++) {
-                sb.append(" ").append(prepName[i]).append(",");
-            }
-            sb.append(" and ").append(prepName[sentCount - 1]);
-        }
+        StringBuilder sb = new StringBuilder("[{Already sent a gift to ");
+        sb.append(TextUtils.prettyList(prepNames));
         sb.append(" today.}]");
-        view.setStatus(Painter.paintf(sb.toString(), Painter.Color.RED, Painter.Color.BLUE));
+
+        setStatus(Painter.paintf(sb.toString(), Color.RED, Color.BLUE));
     }
 
     private void handleSendCrops(Crop toSend, String[] recipients) {
-        farmerActionDAO.sendGifts(me.getUsername(), recipients, toSend.getName());
-        view.setStatus(Painter.paint("Gift posted to your friends' wall.", Painter.Color.GREEN));
+        farmerActionDAO.sendGifts(
+                me.getUsername(), recipients, toSend.getName());
+
+        setStatus(Painter.paint(
+                "Gift posted to your friends' wall.", Color.GREEN));
     }
 }

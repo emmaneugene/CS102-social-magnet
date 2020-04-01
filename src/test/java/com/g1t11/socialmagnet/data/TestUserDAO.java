@@ -73,7 +73,8 @@ public class TestUserDAO extends TestDAO {
             new CommonFriend(frank)
         );
 
-        List<User> actual = userDAO.getFriendsOfFriendWithCommon("charlie", "danny");
+        List<User> actual
+                = userDAO.getFriendsOfFriendWithCommon("charlie", "danny");
 
         Assert.assertEquals(expected, actual);
     }
@@ -85,7 +86,8 @@ public class TestUserDAO extends TestDAO {
             danny
         );
 
-        List<User> actual = userDAO.getFriendsOfFriendWithCommon("adam", "elijah");
+        List<User> actual
+                = userDAO.getFriendsOfFriendWithCommon("adam", "elijah");
 
         Assert.assertEquals(expected, actual);
     }

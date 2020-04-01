@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.util.Painter;
+import com.g1t11.socialmagnet.util.Painter.Color;
 
 public class SimpleThreadComponent implements Component {
     private final static int commentsToDisplay = 3;
@@ -15,12 +16,14 @@ public class SimpleThreadComponent implements Component {
 
     private LikeBarComponent likeBarView;
 
-    private List<CommentComponent> commentViews = new ArrayList<>(commentsToDisplay);
-    
+    private List<CommentComponent> commentViews
+            = new ArrayList<>(commentsToDisplay);
+
     public SimpleThreadComponent(int threadIndex, Thread thread) {
         this.threadIndex = threadIndex;
         this.thread = thread;
-        likeBarView = new LikeBarComponent(thread.getLikers().size(), thread.getDislikers().size());
+        likeBarView = new LikeBarComponent(
+                thread.getLikers().size(), thread.getDislikers().size());
         setComments();
     }
 
@@ -31,9 +34,12 @@ public class SimpleThreadComponent implements Component {
          * If we have more comments than we can display, we want to offset the
          * such that the last comment rendered has the maximum index.
          */
-        int offset = maxIndex > commentsToDisplay ? maxIndex - commentsToDisplay : 0;
+        int offset = maxIndex > commentsToDisplay
+                ? maxIndex - commentsToDisplay
+                : 0;
         for (int i = 0; i < thread.getComments().size(); i++) {
-            commentViews.add(new CommentComponent(threadIndex, i + offset + 1, thread.getComments().get(i)));
+            commentViews.add(new CommentComponent(
+                    threadIndex, i + offset + 1, thread.getComments().get(i)));
         }
     }
 
@@ -45,8 +51,10 @@ public class SimpleThreadComponent implements Component {
     }
 
     private void renderContent() {
-        String paintedTemplate = Painter.paintf("[{%d}] [{%s}]: %s\n", Painter.Color.YELLOW, Painter.Color.BLUE);
-        System.out.printf(paintedTemplate, threadIndex, thread.getFromUsername(), thread.getContent());
+        String paintedTemplate = Painter.paintf(
+                "[{%d}] [{%s}]: %s\n", Color.YELLOW, Color.BLUE);
+        System.out.printf(paintedTemplate, threadIndex,
+                thread.getFromUsername(), thread.getContent());
     }
 
     private void renderComments() {

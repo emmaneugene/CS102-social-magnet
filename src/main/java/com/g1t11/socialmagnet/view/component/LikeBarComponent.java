@@ -6,7 +6,7 @@ import com.g1t11.socialmagnet.util.Painter.Color;
 
 public class LikeBarComponent implements Component {
     int likes;
-    
+
     int dislikes;
 
     public LikeBarComponent(int likes, int dislikes) {
@@ -17,11 +17,12 @@ public class LikeBarComponent implements Component {
     @Override
     public void render() {
         String likesString = TextUtils.countedWord(likes, "like", "likes");
-        String dislikesString = TextUtils.countedWord(dislikes, "dislike", "dislikes");
+        String dislikesString
+                = TextUtils.countedWord(dislikes, "dislike", "dislikes");
         String paintedTemplate = Painter.paintf(
-            "[ [{%s}], [{%s}] ]\n",
-            likes > 0 ? Color.GREEN : Color.RESET,
-            dislikes > 0 ? Color.PURPLE : Color.RESET);
+                "[ [{%s}], [{%s}] ]\n",
+                likes > 0 ? Color.GREEN : Color.RESET,
+                dislikes > 0 ? Color.PURPLE : Color.RESET);
         System.out.printf(paintedTemplate, likesString, dislikesString);
     }
 }

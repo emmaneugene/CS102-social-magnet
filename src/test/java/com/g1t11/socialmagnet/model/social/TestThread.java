@@ -3,6 +3,7 @@ package com.g1t11.socialmagnet.model.social;
 import java.util.List;
 
 import com.g1t11.socialmagnet.util.Painter;
+import com.g1t11.socialmagnet.util.Painter.Color;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,8 +12,8 @@ public class TestThread {
     @Test
     public void testFormatContent() {
         Thread thread = new Thread(
-            7, 
-            "elijah", 
+            7,
+            "elijah",
             "elijah",
             "Had a great night with @adam, @britney, and @charlie",
             4
@@ -21,7 +22,7 @@ public class TestThread {
 
         String expected = Painter.paintf(
             "Had a great night with [{adam}], [{britney}], and @charlie",
-            Painter.Color.BLUE
+            Color.BLUE
         );
         Assert.assertEquals(expected, thread.getContent());
     }

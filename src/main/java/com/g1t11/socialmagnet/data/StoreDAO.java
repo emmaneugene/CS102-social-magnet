@@ -15,7 +15,6 @@ public class StoreDAO extends DAO {
 
     /**
      * Get all currently available crops on the database.
-     * 
      * @return A list of all available crops.
      */
     public List<Crop> getStoreItems() {
@@ -25,7 +24,7 @@ public class StoreDAO extends DAO {
 
         String queryString = "CALL get_store_items()";
 
-        try (PreparedStatement stmt = connection().prepareStatement(queryString);) {
+        try (PreparedStatement stmt = conn().prepareStatement(queryString);) {
             rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -50,9 +49,8 @@ public class StoreDAO extends DAO {
     }
 
     /**
-     * Purchase an amount of crops from the store and add them to the user's inventory,
-     * and update the user's wealth.
-     * 
+     * Purchase an amount of crops from the store and add them to the user's
+     * inventory, and update the user's wealth.
      * @param buyerName The user who is buying crops.
      * @param cropName The crop to purchase.
      * @param amount The number of bags of seeds to purchase.
@@ -64,7 +62,7 @@ public class StoreDAO extends DAO {
         boolean isSuccessful = false;
 
         String queryString = "CALL purchase_crop(?, ?, ?)";
-        try (PreparedStatement stmt = connection().prepareStatement(queryString);) {
+        try (PreparedStatement stmt = conn().prepareStatement(queryString);) {
             stmt.setString(1, buyerName);
             stmt.setString(2, cropName);
             stmt.setInt(3, amount);

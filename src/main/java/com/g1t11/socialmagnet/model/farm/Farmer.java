@@ -6,15 +6,6 @@ import java.util.Objects;
 
 import com.g1t11.socialmagnet.model.social.User;
 
-/**
- * Farmer extends User
- * - rank : String
- * - XP : int
- * - wealth : int
- * - farmland : ArrayList<Plot>
- * - inventory : ArrayList<InventoryItem>
- * + getRank() : String
- */
 public class Farmer extends User {
     public enum Rank {
         NOVICE("Novice"),
@@ -32,16 +23,17 @@ public class Farmer extends User {
 
     private int XP = 0;
 
-    /** 
-     *  By default, new farmers start with 50 gold 
-     */ 
+    /**
+     *  By default, new farmers start with 50 gold
+     */
     private int wealth = 50;
 
     private int wealthRankAmongFriends = 0;
 
     private List<Plot> farmland = new ArrayList<>();
 
-    public Farmer(String username, String fullname, int XP, int wealth, int wealthRank) {
+    public Farmer(String username, String fullname, int XP,
+            int wealth, int wealthRank) {
         super(username, fullname);
         this.XP = XP;
         this.wealth = wealth;
@@ -125,9 +117,10 @@ public class Farmer extends User {
         if (!(o instanceof Farmer)) return false;
         Farmer other = (Farmer) o;
         return super.equals(other)
-        && Objects.equals(XP, other.XP)
-        && Objects.equals(wealth, other.wealth)
-        && Objects.equals(wealthRankAmongFriends, other.wealthRankAmongFriends)
-        && Objects.deepEquals(farmland, other.farmland);
+                && Objects.equals(XP, other.XP)
+                && Objects.equals(wealth, other.wealth)
+                && Objects.equals(wealthRankAmongFriends,
+                        other.wealthRankAmongFriends)
+                && Objects.deepEquals(farmland, other.farmland);
     }
 }

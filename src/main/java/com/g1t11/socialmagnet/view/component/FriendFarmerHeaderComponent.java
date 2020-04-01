@@ -3,6 +3,7 @@ package com.g1t11.socialmagnet.view.component;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.TextUtils;
+import com.g1t11.socialmagnet.util.Painter.Color;
 
 public class FriendFarmerHeaderComponent implements Component {
     Farmer friend;
@@ -14,8 +15,8 @@ public class FriendFarmerHeaderComponent implements Component {
             "Gold: [{%s}]",
             ""
         ),
-        Painter.Color.BRIGHT_CYAN,
-        Painter.Color.BRIGHT_YELLOW
+        Color.BRIGHT_CYAN,
+        Color.BRIGHT_YELLOW
     );
 
     public FriendFarmerHeaderComponent(Farmer friend) {
@@ -25,9 +26,8 @@ public class FriendFarmerHeaderComponent implements Component {
     @Override
     public void render() {
         System.out.printf(template,
-            friend.getFullname(),
-            friend.getRank().value,
-            TextUtils.prettyNumber(friend.getWealth())
-        );
+                friend.getFullname(),
+                friend.getRank().value,
+                TextUtils.prettyNumber(friend.getWealth()));
     }
 }

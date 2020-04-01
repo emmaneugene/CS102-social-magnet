@@ -16,7 +16,7 @@ public class TestWelcomePageController extends TestApp {
     public final TextFromStandardInputStream systemInMock
         = TextFromStandardInputStream.emptyStandardInputStream();
     @Rule
-    public final SystemOutRule systemOutRule 
+    public final SystemOutRule systemOutRule
         = new SystemOutRule().mute().enableLog();
     @Rule
     public final ExpectedSystemExit exit = ExpectedSystemExit.none();
@@ -44,7 +44,8 @@ public class TestWelcomePageController extends TestApp {
         systemInMock.provideLines("adam", "solocareer");
         app.nav.currController().run();
 
-        Assert.assertTrue(app.nav.currController() instanceof WelcomeController);
+        Assert.assertTrue(
+                app.nav.currController() instanceof WelcomeController);
     }
 
     @Test
@@ -52,7 +53,8 @@ public class TestWelcomePageController extends TestApp {
         systemInMock.provideLines("pass");
         app.nav.currController().run();
 
-        Assert.assertTrue(app.nav.currController() instanceof WelcomeController);
+        Assert.assertTrue(
+                app.nav.currController() instanceof WelcomeController);
     }
 
     @Test

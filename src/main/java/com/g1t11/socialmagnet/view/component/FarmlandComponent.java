@@ -13,7 +13,8 @@ public class FarmlandComponent implements Component {
         plotComps.clear();
         int index = 1;
         for (Plot plot : plots) {
-            plotComps.add(new PlotComponent(plot, index++, getMaxCropNameLength(plots)));
+            plotComps.add(new PlotComponent(
+                    plot, index++, getMaxCropNameLength(plots)));
         }
     }
 
@@ -28,7 +29,9 @@ public class FarmlandComponent implements Component {
         int maxLength = 0;
         for (Plot plot : plots) {
             Crop crop = plot.getCrop();
-            if (crop == null) continue;
+            if (crop == null) {
+                continue;
+            }
             if (crop.getName().length() > maxLength) {
                 maxLength = crop.getName().length();
             }

@@ -10,44 +10,44 @@ import com.g1t11.socialmagnet.model.farm.Plot;
 import com.g1t11.socialmagnet.model.farm.StealingRecord;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
-import com.g1t11.socialmagnet.view.component.FriendFarmComponent;
+import com.g1t11.socialmagnet.util.Painter.Color;
+import com.g1t11.socialmagnet.util.TextUtils;
+import com.g1t11.socialmagnet.view.page.cityfarmers.StealingPageView;
 
 public class StealingController extends CityFarmersController {
     FarmerActionDAO farmerActionDAO = new FarmerActionDAO(database());
 
     Farmer toStealFrom;
 
-    FriendFarmComponent friendFarmComp;
-
     public StealingController(Navigator nav, Farmer me, User friend) {
         super(nav, me);
         toStealFrom = farmerLoadDAO.getFarmer(friend.getUsername());
-        friendFarmComp = new FriendFarmComponent(toStealFrom);
+        setView(new StealingPageView(toStealFrom));
     }
 
-    /**
-     * This controller is special in that it does not refresh the page.
-     * Therefore, we will not be updating the view by rendering the PageView.
-     * <p>
-     * Instead, we will only render a {@link FriendFarmComponent}.
-     */
+    @Override
+    public StealingPageView getView() {
+        return (StealingPageView) super.getView();
+    }
+
     @Override
     public void updateView() {
-        List<Plot> toStealPlots = farmerLoadDAO.getPlots(toStealFrom.getUsername(), toStealFrom.getMaxPlotCount());
-        friendFarmComp.setPlots(toStealPlots);
-        friendFarmComp.render();
+        super.updateView();
+        List<Plot> toStealPlots = farmerLoadDAO.getPlots(
+                toStealFrom.getUsername(),
+                toStealFrom.getMaxPlotCount());
+        getView().setPlots(toStealPlots);
     }
 
     @Override
     public void handleInput() {
-        input.setPrompt(Painter.paintf(
-            "[[{M}]]ain | City [[{F}]]armers | [[{S}]]teal",
-            Painter.Color.YELLOW
-        ));
+        getView().showMainPrompt();
+
         String choice = input.nextLine();
+        nav.pop();
         if (choice.length() == 0) {
-            nav.pop();
-            nav.setCurrStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
+            nav.setCurrStatus(Painter.paint(
+                    "Please select a valid option.", Color.RED));
         } else if (choice.equals("M")) {
             nav.popTo(MainMenuController.class);
         } else if (choice.equals("F")) {
@@ -55,35 +55,24 @@ public class StealingController extends CityFarmersController {
         } else if (choice.equals("S")) {
             handleSteal();
         } else {
-            nav.pop();
-            nav.setCurrStatus(Painter.paint("Please select a valid option.", Painter.Color.RED));
+            nav.setCurrStatus(Painter.paint(
+                    "Please select a valid option.", Color.RED));
         }
     }
 
     private void handleSteal() {
-        List<StealingRecord> stolenCrops = farmerActionDAO.steal(me.getUsername(), toStealFrom.getUsername());
+        List<StealingRecord> stolenCrops = farmerActionDAO.steal(
+                me.getUsername(),
+                toStealFrom.getUsername());
         if (stolenCrops.size() == 0) {
-            nav.pop();
-            nav.setCurrStatus(Painter.paint("No plots available to steal from.", Painter.Color.RED));
-        } else {
-            String stolenCropsString = formatStolenCrops(stolenCrops);
-            nav.pop();
-            nav.setCurrStatus(String.format(
-                Painter.paint("You have successfully stolen %s.", Painter.Color.GREEN),
-                stolenCropsString
-            ));
+            nav.setCurrStatus(Painter.paint(
+                    "No plots available to steal from.", Color.RED));
+            return;
         }
-    }
-
-    private String formatStolenCrops(List<StealingRecord> stolenCrops) {
-        int size = stolenCrops.size();
-        if (size == 0) return "";
-        if (size == 1) return stolenCrops.get(0).toString();
-        StringBuilder sb = new StringBuilder(stolenCrops.get(0).toString());
-        for (int i = 1; i < size - 1; i++) {
-            sb.append(", ").append(stolenCrops.get(i).toString());
-        }
-        sb.append(", and ").append(stolenCrops.get(size - 1).toString());
-        return sb.toString();
+        String stolenCropsString = TextUtils.prettyList(stolenCrops);
+        nav.setCurrStatus(Painter.paint(
+                String.format("You have successfully stolen %s.",
+                        stolenCropsString),
+                Color.GREEN));
     }
 }

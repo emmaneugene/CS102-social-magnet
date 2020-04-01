@@ -31,7 +31,7 @@ public class UserDAO extends DAO {
 
         String queryString = "CALL get_user(?)";
 
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {
             stmt.setString(1, username);
 
             rs = stmt.executeQuery();
@@ -52,7 +52,6 @@ public class UserDAO extends DAO {
 
     /**
      * Loads usernames and full names of friends.
-     * 
      * @param username The username of the user whose friends to get.
      * @return A list of users who are friends.
      */
@@ -62,7 +61,7 @@ public class UserDAO extends DAO {
 
         String queryString = "CALL get_friends(?)";
 
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {
             stmt.setString(1, username);
 
             rs = stmt.executeQuery();
@@ -86,18 +85,18 @@ public class UserDAO extends DAO {
     /**
      * Load the friends of a friend. If a friend is a mutual friend, load as
      * {@link CommonFriend}.
-     * 
      * @param username The username of the current user.
      * @param friendName The username of the friend whose friends to get.
      * @return A list of usernames of friends with common friends.
      */
-    public List<User> getFriendsOfFriendWithCommon(String username, String friendName) {
+    public List<User> getFriendsOfFriendWithCommon(
+                String username, String friendName) {
         ResultSet rs = null;
         List<User> friends = new ArrayList<>();
 
         String queryString = "CALL get_friends_of_friend_with_common(?, ?)";
 
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {
             stmt.setString(1, username);
             stmt.setString(2, friendName);
 
@@ -127,14 +126,13 @@ public class UserDAO extends DAO {
 
     /**
      * Removes a friend relation between two users on the database.
-     * 
      * @param username The username of the current user.
      * @param toUnfriend The username of the user to unfriend.
      */
     public void unfriend(String username, String toUnfriend) {
         String queryString = "CALL unfriend(?, ?)";
 
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {
             stmt.setString(1, username);
             stmt.setString(2, toUnfriend);
 
@@ -147,7 +145,6 @@ public class UserDAO extends DAO {
 
     /**
      * Get all pending friend requests.
-     * 
      * @param username The username of the user to get friend requests for.
      * @return A list usernames of users sending friend requests.
      */
@@ -157,7 +154,7 @@ public class UserDAO extends DAO {
 
         String queryString = "CALL get_requests(?)";
 
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {
             stmt.setString(1, username);
 
             rs = stmt.executeQuery();
@@ -176,14 +173,13 @@ public class UserDAO extends DAO {
 
     /**
      * Add a friend request to the database.
-     * 
      * @param sender The username of the user making a friend request.
      * @param recipient The username of the user to receive the friend request.
      */
     public void makeRequest(String sender, String recipient) {
         String queryString = "CALL make_request(?, ?)";
 
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {
             stmt.setString(1, sender);
             stmt.setString(2, recipient);
 
@@ -201,14 +197,14 @@ public class UserDAO extends DAO {
 
     /**
      * Accept a friend request on the database.
-     * 
      * @param sender The username of the user who made the friend request.
-     * @param recipient The username of the user who received the friend request.
+     * @param recipient The username of the user who received the friend
+     * request.
      */
     public void acceptRequest(String sender, String recipient) {
         String queryString = "CALL accept_request(?, ?)";
 
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {
             stmt.setString(1, sender);
             stmt.setString(2, recipient);
 
@@ -221,14 +217,14 @@ public class UserDAO extends DAO {
 
     /**
      * Reject a friend request on the database.
-     * 
      * @param sender The username of the user who made the friend request.
-     * @param recipient The username of the user who received the friend request.
+     * @param recipient The username of the user who received the friend
+     * request.
      */
     public void rejectRequest(String sender, String recipient) {
         String queryString = "CALL reject_request(?, ?)";
 
-        try ( PreparedStatement stmt = connection().prepareStatement(queryString); ) {
+        try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {
             stmt.setString(1, sender);
             stmt.setString(2, recipient);
 

@@ -4,6 +4,7 @@ import com.g1t11.socialmagnet.controller.socialmagnet.MainMenuController;
 import com.g1t11.socialmagnet.data.CredentialsDAO;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
+import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.LoginPageView;
 
 public class LoginController extends Controller {
@@ -11,21 +12,27 @@ public class LoginController extends Controller {
 
     public LoginController(Navigator nav) {
         super(nav);
-        view = new LoginPageView();
+        setView(new LoginPageView());
+    }
+
+    @Override
+    public LoginPageView getView() {
+        return (LoginPageView) super.getView();
     }
 
     @Override
     public void handleInput() {
-        input.setPrompt("Enter your username");
+        getView().showUsernamePrompt();
         String username = input.nextLine();
 
-        input.setPrompt("Enter your password");
+        getView().showPasswordPrompt();
         String password = input.readPassword();
 
         User me = credDAO.login(username, password);
         nav.popToFirst();
         if (me == null) {
-            nav.setCurrStatus(Painter.paint("Login error! Please try again.", Painter.Color.RED));
+            nav.setCurrStatus(Painter.paint(
+                    "Login error! Please try again.", Color.RED));
         } else {
             nav.push(new MainMenuController(nav, me));
         }
