@@ -108,6 +108,9 @@ public class FriendsController extends SocialMagnetController {
             } else if (code.equals(SQLErrorCode.REQUEST_EXISTING_FRIEND)) {
                 setStatus(Painter.paint(
                         "Cannot request existing friend.", Color.RED));
+            } else if (code.equals(SQLErrorCode.REQUEST_SELF)) {
+                setStatus(Painter.paint(
+                        "Cannot request self.", Color.RED));
             }
         }
     }

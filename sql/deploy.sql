@@ -538,7 +538,7 @@ FOR EACH ROW BEGIN
         ON r1.max_rank_level = r2.rank_level
     );
     IF (NEW.plot_num > @max_plots) THEN
-        SIGNAL SQLSTATE '45000' SET message_text = 'You do not have access to so many plots.';
+        SIGNAL SQLSTATE '45000' SET message_text = 'Plot inaccessible.';
     END IF;
 END$$
 DELIMITER ;
