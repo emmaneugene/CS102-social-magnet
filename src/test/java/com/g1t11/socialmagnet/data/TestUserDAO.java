@@ -2,9 +2,9 @@ package com.g1t11.socialmagnet.data;
 
 import java.util.List;
 
+import com.g1t11.socialmagnet.data.DatabaseException.SQLErrorCode;
 import com.g1t11.socialmagnet.model.social.CommonFriend;
 import com.g1t11.socialmagnet.model.social.User;
-import com.g1t11.socialmagnet.model.social.UserNotFoundException;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -35,9 +35,15 @@ public class TestUserDAO extends TestDAO {
         Assert.assertEquals(expected, actual);
     }
 
-    @Test(expected = UserNotFoundException.class)
+    @Test
     public void testGetNonExistentUser() {
-        userDAO.getUser("ADAM");
+        try {
+            userDAO.getUser("ADAM");
+            Assert.assertTrue(false);
+        } catch (DatabaseException e) {
+            Assert.assertEquals(
+                    SQLErrorCode.USER_NOT_FOUND, e.getCode());
+        }
     }
 
     @Test

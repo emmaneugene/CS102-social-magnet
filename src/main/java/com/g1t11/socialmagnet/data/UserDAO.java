@@ -6,10 +6,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.g1t11.socialmagnet.data.DatabaseException.SQLErrorCode;
 import com.g1t11.socialmagnet.model.social.CommonFriend;
-import com.g1t11.socialmagnet.model.social.RequestExistingFriendException;
 import com.g1t11.socialmagnet.model.social.User;
-import com.g1t11.socialmagnet.model.social.UserNotFoundException;
 
 public class UserDAO extends DAO {
     public UserDAO(Database db) {
@@ -35,7 +34,9 @@ public class UserDAO extends DAO {
             stmt.setString(1, username);
 
             rs = stmt.executeQuery();
-            if (!rs.next()) throw new UserNotFoundException();
+            if (!rs.next()) {
+                throw new DatabaseException(SQLErrorCode.USER_NOT_FOUND);
+            }
 
             String fullname = rs.getString("fullname");
 
@@ -186,9 +187,13 @@ public class UserDAO extends DAO {
             stmt.executeUpdate();
         } catch (SQLException e) {
             if (e.getMessage().contains("Cannot request existing friend")) {
-                throw new RequestExistingFriendException();
+                throw new DatabaseException(
+                        SQLErrorCode.REQUEST_EXISTING_FRIEND);
+            } else if (e.getMessage().contains("Cannot request self")) {
+                throw new DatabaseException(
+                        SQLErrorCode.REQUEST_SELF);
             } else if (e.getErrorCode() == 1452) {
-                throw new UserNotFoundException();
+                throw new DatabaseException(SQLErrorCode.USER_NOT_FOUND);
             }
             System.err.println("SQLException: " + e.getMessage());
             throw new DatabaseException(e);

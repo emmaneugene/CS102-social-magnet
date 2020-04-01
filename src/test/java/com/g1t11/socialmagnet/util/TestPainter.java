@@ -48,7 +48,7 @@ public class TestPainter {
     @Test
     public void testPaintWithUnderloadedColor() {
         String expected = "\u001b[31mred\u001b[0m \u001b[34mblue\u001b[0m"
-                + "out of colors but \u001b[34mno\u001b[0m";
+                + " out of colors but \u001b[34mno\u001b[0m";
 
         String painted = Painter.paintf(
                 "[{red}] [{blue}] out of colors but [{no}]",

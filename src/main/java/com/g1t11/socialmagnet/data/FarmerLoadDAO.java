@@ -9,10 +9,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.g1t11.socialmagnet.data.DatabaseException.SQLErrorCode;
 import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.farm.Plot;
-import com.g1t11.socialmagnet.model.social.UserNotFoundException;
 
 public class FarmerLoadDAO extends DAO {
     public FarmerLoadDAO(Database db) {
@@ -37,7 +37,8 @@ public class FarmerLoadDAO extends DAO {
             stmt.setString(1, username);
 
             rs = stmt.executeQuery();
-            if (!rs.next()) throw new UserNotFoundException();
+            if (!rs.next()) throw new DatabaseException(
+                    SQLErrorCode.USER_NOT_FOUND);
 
             f = new Farmer(
                 rs.getString("username"),

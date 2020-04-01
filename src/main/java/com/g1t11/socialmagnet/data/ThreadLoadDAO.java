@@ -6,9 +6,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.g1t11.socialmagnet.data.DatabaseException.SQLErrorCode;
 import com.g1t11.socialmagnet.model.social.Comment;
 import com.g1t11.socialmagnet.model.social.Thread;
-import com.g1t11.socialmagnet.model.social.ThreadNotFoundException;
 import com.g1t11.socialmagnet.model.social.User;
 
 public class ThreadLoadDAO extends DAO {
@@ -32,7 +32,9 @@ public class ThreadLoadDAO extends DAO {
             stmt.setString(2, username);
 
             rs = stmt.executeQuery();
-            if (!rs.next()) throw new ThreadNotFoundException();
+            if (!rs.next()) {
+                throw new DatabaseException(SQLErrorCode.THREAD_NOT_FOUND);
+            }
 
             thread = new Thread(
                 rs.getInt("thread_id"),

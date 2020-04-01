@@ -2,9 +2,9 @@ package com.g1t11.socialmagnet.data;
 
 import java.util.List;
 
+import com.g1t11.socialmagnet.data.DatabaseException.SQLErrorCode;
 import com.g1t11.socialmagnet.model.social.Comment;
 import com.g1t11.socialmagnet.model.social.Thread;
-import com.g1t11.socialmagnet.model.social.ThreadNotFoundException;
 import com.g1t11.socialmagnet.model.social.User;
 
 import org.junit.Assert;
@@ -29,7 +29,7 @@ public class TestThreadActionDAO extends TestDAO {
         threadActionDAO = new ThreadActionDAO(db);
     }
 
-    @Test(expected = ThreadNotFoundException.class)
+    @Test
     public void testAddThreadAddTagsDeleteThread() {
         int newId = threadActionDAO.addThread("adam", "adam",
                 "Hello @charlie and @britney!", List.of("charlie", "britney"));
@@ -54,7 +54,13 @@ public class TestThreadActionDAO extends TestDAO {
         Assert.assertEquals(0, actualTags.size());
 
         // Check that the thread does not exist
-        threadLoadDAO.getThread(newId, "adam");
+        try {
+            threadLoadDAO.getThread(newId, "adam");
+            Assert.assertTrue(false);
+        } catch (DatabaseException e) {
+            Assert.assertEquals(
+                    SQLErrorCode.THREAD_NOT_FOUND, e.getCode());
+        }
     }
 
     @Test
@@ -72,16 +78,28 @@ public class TestThreadActionDAO extends TestDAO {
         Assert.assertFalse(actual.isTagged());
     }
 
-    @Test(expected = ThreadNotFoundException.class)
+    @Test
     public void testDeleteThreadNoAttributes() {
         threadActionDAO.deleteThread(11, "charlie");
-        threadLoadDAO.getThread(11, "charlie");
+        try {
+            threadLoadDAO.getThread(11, "charlie");
+            Assert.assertTrue(false);
+        } catch (DatabaseException e) {
+            Assert.assertEquals(
+                    SQLErrorCode.THREAD_NOT_FOUND, e.getCode());
+        }
     }
 
-    @Test(expected = ThreadNotFoundException.class)
+    @Test
     public void testDeleteThreadWithLikesDislikesCommentsTags() {
         threadActionDAO.deleteThread(12, "danny");
-        threadLoadDAO.getThread(12, "danny");
+        try {
+            threadLoadDAO.getThread(12, "danny");
+            Assert.assertTrue(false);
+        } catch (DatabaseException e) {
+            Assert.assertEquals(
+                    SQLErrorCode.THREAD_NOT_FOUND, e.getCode());
+        }
     }
 
     @Test
