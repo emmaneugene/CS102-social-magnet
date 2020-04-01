@@ -34,8 +34,7 @@ public class NewsFeedController extends SocialMagnetController {
 
     @Override
     public void handleInput() {
-        input.setPrompt(Painter.paintf(
-                "[[{M}]]ain | [[{T}]]hread", Color.YELLOW));
+        getView().showMainPrompt();
 
         String choice = input.nextLine();
         if (choice.length() == 0) {

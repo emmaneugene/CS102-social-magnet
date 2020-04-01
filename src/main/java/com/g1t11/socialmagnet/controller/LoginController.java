@@ -15,11 +15,16 @@ public class LoginController extends Controller {
     }
 
     @Override
+    public LoginPageView getView() {
+        return (LoginPageView) super.getView();
+    }
+
+    @Override
     public void handleInput() {
-        input.setPrompt("Enter your username");
+        getView().showUsernamePrompt();
         String username = input.nextLine();
 
-        input.setPrompt("Enter your password");
+        getView().showPasswordPrompt();
         String password = input.readPassword();
 
         User me = credDAO.login(username, password);

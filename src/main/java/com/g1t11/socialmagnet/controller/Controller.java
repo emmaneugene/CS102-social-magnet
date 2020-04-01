@@ -1,7 +1,7 @@
 package com.g1t11.socialmagnet.controller;
 
 import com.g1t11.socialmagnet.data.Database;
-import com.g1t11.socialmagnet.util.PromptInput;
+import com.g1t11.socialmagnet.util.Input;
 import com.g1t11.socialmagnet.view.page.PageView;
 
 public abstract class Controller {
@@ -9,7 +9,7 @@ public abstract class Controller {
 
     private PageView view;
 
-    protected PromptInput input = new PromptInput();
+    protected Input input = new Input();
 
     public Controller(Navigator nav) {
         this.nav = nav;

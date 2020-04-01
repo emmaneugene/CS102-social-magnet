@@ -37,9 +37,7 @@ public class StoreController extends CityFarmersController {
 
     @Override
     public void handleInput() {
-        input.setPrompt(Painter.paintf(
-                "[[{M}]]ain | City [[{F}]]armers | Select Choice",
-                Color.YELLOW));
+        getView().showMainPrompt();
 
         String choice = input.nextLine();
         if (choice.length() == 0) {
@@ -73,7 +71,7 @@ public class StoreController extends CityFarmersController {
     }
 
     private void handleBuyQuantity(int index) {
-        input.setPrompt(Painter.paintf("Enter quantity", Color.YELLOW));
+        getView().showQuantityPrompt();
 
         String choice = input.nextLine();
         try {

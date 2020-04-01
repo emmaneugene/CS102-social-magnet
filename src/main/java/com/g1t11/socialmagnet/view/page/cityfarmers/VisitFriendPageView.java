@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
+import com.g1t11.socialmagnet.util.Painter.Color;
 
 public class VisitFriendPageView extends CityFarmersPageView {
     List<User> friends;
@@ -26,5 +27,13 @@ public class VisitFriendPageView extends CityFarmersPageView {
             ), index++, friend.getFullname(), friend.getUsername());
         }
         System.out.println();
+    }
+
+    @Override
+    public void showMainPrompt() {
+        showPrompt(Painter.paintf(
+                "[[{M}]]ain | City [[{F}]]armers | Select choice",
+                Color.YELLOW));
+        setInputColor(Color.YELLOW);
     }
 }

@@ -48,10 +48,7 @@ public class FarmlandController extends CityFarmersController {
 
     @Override
     public void handleInput() {
-        input.setPrompt(Painter.paintf(
-                "[[{M}]]ain | City [[{F}]]armers | [[{P}]]lant"
-                        + " | [[{C}]]lear | [[{H}]]arvest",
-                Color.YELLOW));
+        getView().showMainPrompt();
 
         String choice = input.nextLine();
         if (choice.length() == 0) {
@@ -121,8 +118,7 @@ public class FarmlandController extends CityFarmersController {
      */
     private String getCropToPlantName() {
         getView().displayInvMenu();
-        input.setPrompt(Painter.paintf(
-                "[[{M}]]ain | City [[{F}]]armers", Color.YELLOW));
+        getView().showGetCropPrompt();
 
         String choice = input.nextLine();
         if (choice.length() == 0) {
@@ -203,7 +199,7 @@ public class FarmlandController extends CityFarmersController {
     }
 
     private void confirmClearHealthy(int index) {
-        input.setPrompt("Confirm clearing healthy crop? (Y/n)");
+        getView().showConfirmClearPrompt();
 
         if (input.nextLine().equals("Y")) {
             farmerActionDAO.clearPlot(me.getUsername(), index);

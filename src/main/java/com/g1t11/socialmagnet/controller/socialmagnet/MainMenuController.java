@@ -15,6 +15,7 @@ public class MainMenuController extends SocialMagnetController {
 
     @Override
     public void handleInput() {
+        getView().showMainPrompt();
         switch (input.nextLine()) {
             case "1":
                 nav.push(new NewsFeedController(nav, me));

@@ -46,9 +46,7 @@ public class WallController extends SocialMagnetController {
 
     @Override
     public void handleInput() {
-        input.setPrompt(Painter.paintf(
-                "[[{M}]]ain | [[{T}]]hread | [[{A}]]ccept Gift | [[{P}]]ost",
-                Color.YELLOW));
+        getView().showMainPrompt();
 
         String choice = input.nextLine();
         if (choice.length() == 0) {
@@ -93,17 +91,13 @@ public class WallController extends SocialMagnetController {
     protected void handlePost() {
         // Clear the previous prompt by refreshing the view.
         getView().display();
-
-        input.setPrompt("Enter your post");
+        getView().showPostPrompt();
 
         String threadContent = input.nextLine();
         List<String> tags = getRawUserTags(threadContent);
 
-        threadActionDAO.addThread(
-                me.getUsername(),
-                farmerToDisplay.getUsername(),
-                threadContent,
-                tags);
+        threadActionDAO.addThread(me.getUsername(),
+                farmerToDisplay.getUsername(), threadContent, tags);
     }
 
     private List<String> getRawUserTags(String content) {

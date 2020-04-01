@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
+import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.PageView;
 
 public class FriendsPageView extends PageView {
@@ -36,15 +37,29 @@ public class FriendsPageView extends PageView {
         System.out.println("My Friends:");
         int index = 1;
         for (User friend : friends) {
-            System.out.printf(Painter.paintf("[{%d}]. [{%s}]\n", Painter.Color.YELLOW, Painter.Color.BLUE), index++, friend.getUsername());
+            System.out.printf(Painter.paintf("[{%d}]. [{%s}]\n", Color.YELLOW, Color.BLUE), index++, friend.getUsername());
         }
 
         System.out.println();
         System.out.println("My Requests:");
         for (String requestUsername : requestUsernames) {
-            System.out.printf(Painter.paintf("[{%d}]. [{%s}]\n", Painter.Color.YELLOW, Painter.Color.BLUE), index++, requestUsername);
+            System.out.printf(Painter.paintf("[{%d}]. [{%s}]\n", Color.YELLOW, Color.BLUE), index++, requestUsername);
         }
 
         System.out.println();
+    }
+
+    @Override
+    public void showMainPrompt() {
+        showPrompt(Painter.paintf(
+                "[[{M}]]ain | [[{U}]]nfriend | re[[{Q}]]uest"
+                        + " | [[{A}]]ccept | [[{R}]]eject | [[{V}]]iew",
+                Color.YELLOW));
+        setInputColor(Color.YELLOW);
+    }
+
+    public void showRequestUsernamePrompt() {
+        showPrompt("Enter the username");
+        setInputColor(Color.BLUE);
     }
 }

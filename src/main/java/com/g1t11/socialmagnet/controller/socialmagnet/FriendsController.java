@@ -38,10 +38,7 @@ public class FriendsController extends SocialMagnetController {
 
     @Override
     public void handleInput() {
-        input.setPrompt(Painter.paintf(
-                "[[{M}]]ain | [[{U}]]nfriend | re[[{Q}]]uest"
-                        + " | [[{A}]]ccept | [[{R}]]eject | [[{V}]]iew",
-                Color.YELLOW));
+        getView().showMainPrompt();
 
         String choice = input.nextLine();
         if (choice.length() == 0) {
@@ -90,8 +87,7 @@ public class FriendsController extends SocialMagnetController {
     private void handleRequest() {
         // Clear the previous prompt by refreshing the view.
         getView().display();
-
-        input.setPrompt("Enter the username");
+        getView().showRequestUsernamePrompt();
 
         String requested = input.nextLine();
         try {

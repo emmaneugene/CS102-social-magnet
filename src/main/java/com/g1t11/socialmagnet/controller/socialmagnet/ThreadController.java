@@ -39,13 +39,11 @@ public class ThreadController extends SocialMagnetController {
 
     @Override
     public void handleInput() {
-        String promptText = "[[{M}]]ain";
         if (isRemovable() || thread.isTagged()) {
-            promptText += " | [[{K}]]ill";
+            getView().showMainPrompt();
+        } else {
+            getView().showMainPromptNoKill();
         }
-        promptText += " | [[{R}]]eply | [[{L}]]ike | [[{D}]]islike";
-        promptText = Painter.paintf(promptText, Color.YELLOW);
-        input.setPrompt(promptText);
 
         String choice = input.nextLine();
         switch (choice) {
@@ -97,8 +95,7 @@ public class ThreadController extends SocialMagnetController {
     private void handleReply() {
         // Clear the previous prompt by refreshing the view.
         getView().display();
-
-        input.setPrompt("Enter your reply");
+        getView().showReplyPrompt();
 
         String reply = input.nextLine();
         threadActionDAO.replyToThread(thread.getId(), me.getUsername(), reply);

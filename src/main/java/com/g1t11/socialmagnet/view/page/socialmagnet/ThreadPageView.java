@@ -6,6 +6,7 @@ import java.util.List;
 import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
+import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.component.CommentComponent;
 import com.g1t11.socialmagnet.view.page.PageView;
 
@@ -16,8 +17,9 @@ public class ThreadPageView extends PageView {
 
     private Thread thread;
 
-    private List<CommentComponent> commentComps = new ArrayList<>(commentsToDisplay);
-    
+    private List<CommentComponent> commentComps
+            = new ArrayList<>(commentsToDisplay);
+
     public ThreadPageView(int threadIndex, Thread thread) {
         super("View a Thread");
         this.threadIndex = threadIndex;
@@ -31,13 +33,14 @@ public class ThreadPageView extends PageView {
     private void setComments() {
         commentComps.clear();
         int maxIndex = thread.getActualCommentsCount();
-        /**
-         * If we have more comments than we can display, we want to offset the
-         * such that the last comment rendered has the maximum index.
-         */
-        int offset = maxIndex > commentsToDisplay ? maxIndex - commentsToDisplay : 0;
+        // If we have more comments than we can display, we want to offset the
+        // such that the last comment rendered has the maximum index.
+        int offset = maxIndex > commentsToDisplay
+                ? maxIndex - commentsToDisplay
+                : 0;
         for (int i = 0; i < thread.getComments().size(); i++) {
-            commentComps.add(new CommentComponent(threadIndex, i + offset + 1, thread.getComments().get(i)));
+            commentComps.add(new CommentComponent(threadIndex,
+                    i + offset + 1, thread.getComments().get(i)));
         }
     }
 
@@ -54,8 +57,10 @@ public class ThreadPageView extends PageView {
     }
 
     private void renderContent() {
-        String paintedTemplate = Painter.paintf("[{%d}] [{%s}]: %s\n", Painter.Color.YELLOW, Painter.Color.BLUE);
-        System.out.printf(paintedTemplate, threadIndex, thread.getFromUsername(), thread.getContent());
+        String paintedTemplate = Painter.paintf(
+                "[{%d}] [{%s}]: %s\n", Color.YELLOW, Color.BLUE);
+        System.out.printf(paintedTemplate, threadIndex,
+                thread.getFromUsername(), thread.getContent());
     }
 
     private void renderComments() {
@@ -65,22 +70,49 @@ public class ThreadPageView extends PageView {
     }
 
     private void renderLikes() {
-        System.out.println(Painter.paint("Who likes this post:", Painter.Color.GREEN));
+        System.out.println(Painter.paint(
+                "Who likes this post:", Color.GREEN));
         int index = 1;
 
-        String paintedTemplate = Painter.paintf("  %d. %s ([{%s}])\n", Painter.Color.BLUE);
+        String paintedTemplate = Painter.paintf(
+                "  %d. %s ([{%s}])\n", Color.BLUE);
         for (User liker : thread.getLikers()) {
-            System.out.printf(paintedTemplate, index++, liker.getFullname(), liker.getUsername());
+            System.out.printf(paintedTemplate, index++,
+                    liker.getFullname(), liker.getUsername());
         }
     }
 
     private void renderDislikes() {
-        System.out.println(Painter.paint("Who dislikes this post:", Painter.Color.PURPLE));
+        System.out.println(Painter.paint(
+                "Who dislikes this post:", Color.PURPLE));
         int index = 1;
 
-        String paintedTemplate = Painter.paintf("  %d. %s ([{%s}])\n", Painter.Color.BLUE);
+        String paintedTemplate = Painter.paintf(
+                "  %d. %s ([{%s}])\n", Color.BLUE);
         for (User disliker : thread.getDislikers()) {
-            System.out.printf(paintedTemplate, index++, disliker.getFullname(), disliker.getUsername());
+            System.out.printf(paintedTemplate, index++,
+                    disliker.getFullname(), disliker.getUsername());
         }
+    }
+
+    @Override
+    public void showMainPrompt() {
+        showPrompt(Painter.paintf(
+                "[[{M}]]ain | [[{K}]]ill | [[{R}]]eply"
+                        + " | [[{L}]]ike | [[{D}]]islike",
+                Color.YELLOW));
+        setInputColor(Color.YELLOW);
+    }
+
+    public void showMainPromptNoKill() {
+        showPrompt(Painter.paintf(
+                "[[{M}]]ain | [[{R}]]eply"
+                        + " | [[{L}]]ike | [[{D}]]islike",
+                Color.YELLOW));
+        setInputColor(Color.YELLOW);
+    }
+
+    public void showReplyPrompt() {
+        showPrompt("Enter your reply");
     }
 }

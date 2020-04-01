@@ -15,8 +15,13 @@ public class RegisterController extends Controller {
     }
 
     @Override
+    public RegisterPageView getView() {
+        return (RegisterPageView) super.getView();
+    }
+
+    @Override
     public void handleInput() {
-        input.setPrompt("Enter your username");
+        getView().showUsernamePrompt();
         String username = input.nextLine();
 
         if (!InputValidator.isAlphanumeric(username)) {
@@ -36,13 +41,13 @@ public class RegisterController extends Controller {
             return;
         }
 
-        input.setPrompt("Enter your full name");
+        getView().showFullnamePrompt();
         String fullname = input.nextLine();
 
-        input.setPrompt("Enter your password");
+        getView().showPasswordPrompt();
         String password = input.readPassword();
 
-        input.setPrompt("Confirm your password");
+        getView().showConfirmPasswordPrompt();
         String passwordCheck = input.readPassword();
 
         if (!password.equals(passwordCheck)) {

@@ -23,8 +23,8 @@ public class FriendsWallController extends WallController {
 
     @Override
     public void handleInput() {
-        input.setPrompt(Painter.paintf(
-                "[[{M}]]ain | [[{T}]]hread | [[{P}]]ost", Color.YELLOW));
+        getView().showMainPrompt();
+
         String choice = input.nextLine();
         if (choice.length() == 0) {
             setStatus(Painter.paint(

@@ -3,6 +3,7 @@ package com.g1t11.socialmagnet.view.page;
 import java.util.Objects;
 
 import com.g1t11.socialmagnet.util.Painter;
+import com.g1t11.socialmagnet.util.Painter.Color;
 
 /**
  * {@link PageView} is the base of all screens and menus.
@@ -15,10 +16,14 @@ public abstract class PageView {
     private String[] pageTitles;
 
     /**
-     * A Component injected from the previous {@link Controller} which allows 
+     * A Component injected from the previous {@link Controller} which allows
      * us to render content after the screen is cleared by {@link PageView}.
      */
     private String status = null;
+
+    public static final String APP_TITLE = "Social Magnet";
+    public static final String PROMPT_INDICATOR = ">";
+    public static final String DEFAULT_PROMPT = "Enter your choice";
 
     public PageView(String ...pageTitles) {
         setPageTitle(pageTitles);
@@ -37,8 +42,8 @@ public abstract class PageView {
     }
 
     /**
-     * Append a status message to the current status message, or create a new one if the current
-     * status message is null.
+     * Append a status message to the current status message, or create a new
+     * one if the current status message is null.
      * @param text The status message to add.
      */
     public void appendStatus(String text) {
@@ -54,9 +59,11 @@ public abstract class PageView {
     }
 
     /**
-     * A system-independent method of clearing the console.
+     * A system-independent method of clearing the console and resetting all
+     * formatting on the screen.
      */
     public void clearScreen() {
+        System.out.print(Color.RESET);
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
@@ -71,13 +78,28 @@ public abstract class PageView {
     }
 
     private void displayHeader() {
-        StringBuilder headerBuilder = new StringBuilder("== Social Magnet");
+        StringBuilder headerBuilder = new StringBuilder("== ");
+        headerBuilder.append(APP_TITLE);
         for (String title : pageTitles) {
             headerBuilder.append(" :: ");
             headerBuilder.append(title);
         }
         headerBuilder.append(" ==");
-        System.out.println(Painter.paint(headerBuilder.toString(), Painter.Color.BOLD));
+        System.out.println(Painter.paint(
+                headerBuilder.toString(), Color.BOLD));
+    }
+
+    protected final void showPrompt(String message) {
+        System.out.printf("%s %s ", message, PROMPT_INDICATOR);
+    }
+
+    public void showMainPrompt() {
+        System.out.printf("%s %s ", DEFAULT_PROMPT, PROMPT_INDICATOR);
+        setInputColor(Color.YELLOW);
+    }
+
+    protected final void setInputColor(Color color) {
+        System.out.print(color);
     }
 
     @Override

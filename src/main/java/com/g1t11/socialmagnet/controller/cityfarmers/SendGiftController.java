@@ -34,9 +34,13 @@ public class SendGiftController extends CityFarmersController {
     }
 
     @Override
+    public SendGiftPageView getView() {
+        return (SendGiftPageView) super.getView();
+    }
+
+    @Override
     public void handleInput() {
-        input.setPrompt(Painter.paintf(
-                "[[{M}]]ain | Select choice", Color.YELLOW));
+        getView().showMainPrompt();
 
         String choice = input.nextLine();
         if (choice.length() == 0) {
@@ -78,7 +82,7 @@ public class SendGiftController extends CityFarmersController {
     }
 
     private String[] getRecipients() {
-        input.setPrompt("Send to");
+        getView().showSendToPrompt();
         return input.nextLine().split("\\s*,\\s*");
     }
 

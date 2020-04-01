@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.g1t11.socialmagnet.model.farm.Crop;
+import com.g1t11.socialmagnet.util.Painter;
+import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.component.StoreComponent;
 
 public class StorePageView extends CityFarmersPageView {
@@ -43,5 +45,18 @@ public class StorePageView extends CityFarmersPageView {
             }
         }
         return maxLength;
+    }
+
+    @Override
+    public void showMainPrompt() {
+        showPrompt(Painter.paintf(
+                "[[{M}]]ain | City [[{F}]]armers | Select Choice",
+                Color.YELLOW));
+        setInputColor(Color.YELLOW);
+    }
+
+    public void showQuantityPrompt() {
+        showPrompt("Enter quantity");
+        setInputColor(Color.YELLOW);
     }
 }

@@ -10,43 +10,38 @@ import com.g1t11.socialmagnet.model.farm.Plot;
 import com.g1t11.socialmagnet.model.farm.StealingRecord;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
-import com.g1t11.socialmagnet.util.TextUtils;
 import com.g1t11.socialmagnet.util.Painter.Color;
-import com.g1t11.socialmagnet.view.component.FriendFarmComponent;
+import com.g1t11.socialmagnet.util.TextUtils;
+import com.g1t11.socialmagnet.view.page.cityfarmers.StealingPageView;
 
 public class StealingController extends CityFarmersController {
     FarmerActionDAO farmerActionDAO = new FarmerActionDAO(database());
 
     Farmer toStealFrom;
 
-    FriendFarmComponent friendFarmComp;
-
     public StealingController(Navigator nav, Farmer me, User friend) {
         super(nav, me);
         toStealFrom = farmerLoadDAO.getFarmer(friend.getUsername());
-        friendFarmComp = new FriendFarmComponent(toStealFrom);
+        setView(new StealingPageView(toStealFrom));
     }
 
-    /**
-     * This controller is special in that it does not refresh the page.
-     * Therefore, we will not be updating the view by rendering the PageView.
-     * <p>
-     * Instead, we will only render a {@link FriendFarmComponent}.
-     */
+    @Override
+    public StealingPageView getView() {
+        return (StealingPageView) super.getView();
+    }
+
     @Override
     public void updateView() {
+        super.updateView();
         List<Plot> toStealPlots = farmerLoadDAO.getPlots(
                 toStealFrom.getUsername(),
                 toStealFrom.getMaxPlotCount());
-        friendFarmComp.setPlots(toStealPlots);
-        friendFarmComp.render();
+        getView().setPlots(toStealPlots);
     }
 
     @Override
     public void handleInput() {
-        input.setPrompt(Painter.paintf(
-                "[[{M}]]ain | City [[{F}]]armers | [[{S}]]teal",
-                Color.YELLOW));
+        getView().showMainPrompt();
 
         String choice = input.nextLine();
         nav.pop();

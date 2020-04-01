@@ -16,8 +16,7 @@ public class InventoryController extends CityFarmersController {
 
     @Override
     public void handleInput() {
-        input.setPrompt(Painter.paintf(
-                "[[{M}]]ain | City [[{F}]]armers", Color.YELLOW));
+        getView().showMainPrompt();
 
         String choice = input.nextLine();
         switch (choice) {

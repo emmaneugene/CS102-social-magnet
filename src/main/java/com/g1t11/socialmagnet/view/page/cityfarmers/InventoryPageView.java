@@ -2,7 +2,9 @@ package com.g1t11.socialmagnet.view.page.cityfarmers;
 
 import java.util.Map;
 
+import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.TextUtils;
+import com.g1t11.socialmagnet.util.Painter.Color;
 
 public class InventoryPageView extends CityFarmersPageView {
     Map<String, Integer> invCrops;
@@ -21,9 +23,15 @@ public class InventoryPageView extends CityFarmersPageView {
         for (String key : invCrops.keySet()) {
             int quantity = invCrops.get(key);
             System.out.printf("%d. %s of %s\n",
-                index++, TextUtils.countedWord(quantity, "Bag", "Bags"), key
-            );
+                index++, TextUtils.countedWord(quantity, "Bag", "Bags"), key);
         }
         System.out.println();
+    }
+
+    @Override
+    public void showMainPrompt() {
+        showPrompt(Painter.paintf(
+                "[[{M}]]ain | City [[{F}]]armers", Color.YELLOW));
+        setInputColor(Color.YELLOW);
     }
 }
