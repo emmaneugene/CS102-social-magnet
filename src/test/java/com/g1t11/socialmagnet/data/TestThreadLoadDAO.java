@@ -7,6 +7,7 @@ import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.model.social.ThreadNotFoundException;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
+import com.g1t11.socialmagnet.util.Painter.Color;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -33,7 +34,8 @@ public class TestThreadLoadDAO extends TestDAO {
         // Testing from the perspective of adam
         Thread expected = new Thread(
             7, "elijah", "elijah",
-            Painter.paintf("Had a great night with [{adam}], [{britney}], and @charlie", Painter.Color.BLUE), 
+            Painter.paintf("Had a great night with [{adam}], [{britney}], and @charlie",
+                    Color.BLUE),
             4, true
         );
         expected.setActualCommentsCount(4);

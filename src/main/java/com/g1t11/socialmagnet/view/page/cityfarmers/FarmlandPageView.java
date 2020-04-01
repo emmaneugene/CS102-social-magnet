@@ -55,7 +55,8 @@ public class FarmlandPageView extends CityFarmersPageView {
 
     public void showGetCropPrompt() {
         showPrompt(Painter.paintf(
-                "[[{M}]]ain | City [[{F}]]armers | Select Choice", Color.YELLOW));
+                "[[{M}]]ain | City [[{F}]]armers | Select Choice",
+                Color.YELLOW));
         setInputColor(Color.YELLOW);
     }
 

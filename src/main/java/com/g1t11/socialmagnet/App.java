@@ -7,6 +7,7 @@ import com.g1t11.socialmagnet.controller.WelcomeController;
 import com.g1t11.socialmagnet.data.Database;
 import com.g1t11.socialmagnet.data.DatabaseException;
 import com.g1t11.socialmagnet.util.Painter;
+import com.g1t11.socialmagnet.util.Painter.Color;
 import com.mysql.cj.jdbc.exceptions.CommunicationsException;
 
 public class App {
@@ -41,7 +42,7 @@ public class App {
     private void handleDatabaseException(DatabaseException e) {
         Throwable cause = e.getCause();
         System.out.println(cause);
-        /* 
+        /*
          * CommunicationsException is only thrown when Database cannot establish a connection.
          * CommunicationsException inherits from SQLException.
          */
@@ -58,7 +59,7 @@ public class App {
 
     private void handleInitConnectionException(CommunicationsException e) {
         nav.popToFirst();
-        nav.setCurrStatus(Painter.paint("Failed to connect to database.", Painter.Color.RED));
+        nav.setCurrStatus(Painter.paint("Failed to connect to database.", Color.RED));
     }
 
     private void handleSQLException(SQLException sqlE) {
@@ -66,7 +67,7 @@ public class App {
         System.out.println(sqlE.getErrorCode());
         if (sqlE.getErrorCode() == DatabaseException.SQLErrorCode.NO_CONNECTION.code) {
             nav.popToFirst();
-            nav.setCurrStatus(Painter.paint("Failed to connect to database. Retrying...", Painter.Color.RED));
+            nav.setCurrStatus(Painter.paint("Failed to connect to database. Retrying...", Color.RED));
             try {
                 db.establishConnection();
             } catch (DatabaseException dbE) {

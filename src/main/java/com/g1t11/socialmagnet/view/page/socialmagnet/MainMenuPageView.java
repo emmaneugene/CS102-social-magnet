@@ -5,17 +5,18 @@ import java.util.Objects;
 
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
+import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.PageView;
 
 public class MainMenuPageView extends PageView {
     private String greeting;
 
     private final List<String> actions = List.of(
-        Painter.paintf("[{1.}] News Feed", Painter.Color.YELLOW),
-        Painter.paintf("[{2.}] My Wall", Painter.Color.YELLOW),
-        Painter.paintf("[{3.}] My Friends", Painter.Color.YELLOW),
-        Painter.paintf("[{4.}] City Farmers", Painter.Color.YELLOW),
-        Painter.paintf("[{5.}] Logout", Painter.Color.YELLOW)
+        Painter.paintf("[{1.}] News Feed", Color.YELLOW),
+        Painter.paintf("[{2.}] My Wall", Color.YELLOW),
+        Painter.paintf("[{3.}] My Friends", Color.YELLOW),
+        Painter.paintf("[{4.}] City Farmers", Color.YELLOW),
+        Painter.paintf("[{5.}] Logout", Color.YELLOW)
     );
 
     public MainMenuPageView(User currentUser) {

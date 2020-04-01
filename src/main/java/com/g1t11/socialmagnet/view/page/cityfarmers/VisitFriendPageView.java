@@ -23,7 +23,7 @@ public class VisitFriendPageView extends CityFarmersPageView {
         for (User friend : friends) {
             System.out.printf(Painter.paintf(
                 "[{%d.}] %s ([{%s}])\n",
-                Painter.Color.YELLOW, Painter.Color.BLUE
+                Color.YELLOW, Color.BLUE
             ), index++, friend.getFullname(), friend.getUsername());
         }
         System.out.println();

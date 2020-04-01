@@ -2,6 +2,7 @@ package com.g1t11.socialmagnet.view.component;
 
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.util.Painter;
+import com.g1t11.socialmagnet.util.Painter.Color;
 
 public class WallProfileInfoComponent implements Component {
     Farmer me;
@@ -13,10 +14,7 @@ public class WallProfileInfoComponent implements Component {
             "[{%s}] Farmer, [{%s}] richest",
             ""
         ),
-        Painter.Color.BLUE,
-        Painter.Color.BRIGHT_CYAN,
-        Painter.Color.BRIGHT_YELLOW
-    );
+        Color.BLUE, Color.BRIGHT_CYAN, Color.BRIGHT_YELLOW);
 
     public WallProfileInfoComponent(Farmer me) {
         this.me = me;
@@ -24,13 +22,20 @@ public class WallProfileInfoComponent implements Component {
 
     @Override
     public void render() {
-        System.out.printf(template, me.getUsername(), me.getFullname(), me.getRank().value, prettyRank(me.getWealthRankAmongFriends()));
+        System.out.printf(template, me.getUsername(), me.getFullname(),
+                me.getRank().value, prettyRank(me.getWealthRankAmongFriends()));
     }
 
     private String prettyRank(int i) {
-        if (i % 10 == 1 && i % 100 != 11) return i + "st";
-        if (i % 10 == 2 && i % 100 != 12) return i + "nd";
-        if (i % 10 == 3 && i % 100 != 13) return i + "rd";
+        if (i % 10 == 1 && i % 100 != 11) {
+            return i + "st";
+        }
+        if (i % 10 == 2 && i % 100 != 12) {
+            return i + "nd";
+        }
+        if (i % 10 == 3 && i % 100 != 13) {
+            return i + "rd";
+        }
         return i + "th";
     }
 }

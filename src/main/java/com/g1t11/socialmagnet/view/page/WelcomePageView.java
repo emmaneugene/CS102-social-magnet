@@ -5,14 +5,15 @@ import java.util.List;
 import java.util.Objects;
 
 import com.g1t11.socialmagnet.util.Painter;
+import com.g1t11.socialmagnet.util.Painter.Color;
 
 public class WelcomePageView extends PageView {
     private String greeting = "";
 
     private final List<String> actions = List.of(
-        Painter.paintf("[{1.}] Register", Painter.Color.YELLOW),
-        Painter.paintf("[{2.}] Login", Painter.Color.YELLOW),
-        Painter.paintf("[{3.}] Exit", Painter.Color.YELLOW)
+        Painter.paintf("[{1.}] Register", Color.YELLOW),
+        Painter.paintf("[{2.}] Login", Color.YELLOW),
+        Painter.paintf("[{3.}] Exit", Color.YELLOW)
     );
 
     Integer fixedHourOfDay = null;

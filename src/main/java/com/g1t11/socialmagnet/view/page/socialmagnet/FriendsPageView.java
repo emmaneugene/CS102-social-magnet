@@ -37,13 +37,15 @@ public class FriendsPageView extends PageView {
         System.out.println("My Friends:");
         int index = 1;
         for (User friend : friends) {
-            System.out.printf(Painter.paintf("[{%d}]. [{%s}]\n", Color.YELLOW, Color.BLUE), index++, friend.getUsername());
+            System.out.printf(Painter.paintf("[{%d}]. [{%s}]\n",
+                    Color.YELLOW, Color.BLUE), index++, friend.getUsername());
         }
 
         System.out.println();
         System.out.println("My Requests:");
         for (String requestUsername : requestUsernames) {
-            System.out.printf(Painter.paintf("[{%d}]. [{%s}]\n", Color.YELLOW, Color.BLUE), index++, requestUsername);
+            System.out.printf(Painter.paintf("[{%d}]. [{%s}]\n",
+                    Color.YELLOW, Color.BLUE), index++, requestUsername);
         }
 
         System.out.println();

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.util.Painter;
+import com.g1t11.socialmagnet.util.Painter.Color;
 
 public class SimpleThreadComponent implements Component {
     private final static int commentsToDisplay = 3;
@@ -16,7 +17,7 @@ public class SimpleThreadComponent implements Component {
     private LikeBarComponent likeBarView;
 
     private List<CommentComponent> commentViews = new ArrayList<>(commentsToDisplay);
-    
+
     public SimpleThreadComponent(int threadIndex, Thread thread) {
         this.threadIndex = threadIndex;
         this.thread = thread;
@@ -45,8 +46,10 @@ public class SimpleThreadComponent implements Component {
     }
 
     private void renderContent() {
-        String paintedTemplate = Painter.paintf("[{%d}] [{%s}]: %s\n", Painter.Color.YELLOW, Painter.Color.BLUE);
-        System.out.printf(paintedTemplate, threadIndex, thread.getFromUsername(), thread.getContent());
+        String paintedTemplate = Painter.paintf(
+                "[{%d}] [{%s}]: %s\n", Color.YELLOW, Color.BLUE);
+        System.out.printf(paintedTemplate, threadIndex,
+                thread.getFromUsername(), thread.getContent());
     }
 
     private void renderComments() {

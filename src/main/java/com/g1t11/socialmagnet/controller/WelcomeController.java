@@ -22,13 +22,13 @@ public class WelcomeController extends Controller {
                 break;
             case "3":
                 System.out.println(Painter.paint(
-                        "Goodbye!", Painter.Color.GREEN));
+                        "Goodbye!", Color.GREEN));
                 System.exit(0);
                 break;
             default:
                 setStatus(Painter.paint(
                         "Please enter a choice between 1 & 3!",
-                        Painter.Color.RED));
+                        Color.RED));
                 break;
         }
     }

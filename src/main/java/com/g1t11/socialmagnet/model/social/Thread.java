@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 import com.g1t11.socialmagnet.util.Painter;
+import com.g1t11.socialmagnet.util.Painter.Color;
 
 public class Thread {
     private int id;
@@ -73,7 +74,7 @@ public class Thread {
     public void setContent(String content) {
         this.content = content;
     }
-    
+
     public List<User> getLikers() {
         return likers;
     }
@@ -116,7 +117,8 @@ public class Thread {
 
     public void formatContentTags(List<String> taggedUsernames) {
         for (String tag : taggedUsernames) {
-            content = content.replaceFirst("@" + tag, Painter.paint(tag, Painter.Color.BLUE));
+            content = content.replaceFirst("@" + tag,
+                    Painter.paint(tag, Color.BLUE));
         }
     }
 

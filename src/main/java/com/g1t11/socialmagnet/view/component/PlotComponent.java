@@ -2,6 +2,7 @@ package com.g1t11.socialmagnet.view.component;
 
 import com.g1t11.socialmagnet.model.farm.Plot;
 import com.g1t11.socialmagnet.util.Painter;
+import com.g1t11.socialmagnet.util.Painter.Color;
 
 public class PlotComponent implements Component {
     private Plot plot;
@@ -18,13 +19,14 @@ public class PlotComponent implements Component {
 
     @Override
     public void render() {
-        System.out.printf(Painter.paint("%d. ", Painter.Color.YELLOW), index);
+        System.out.printf(Painter.paint("%d. ", Color.YELLOW), index);
         if (plot.getCrop() == null) {
             System.out.println("<empty>");
             return;
         }
         // Left pad crop name
-        System.out.printf("%-" + (maxCropNameLength + 2) + "s", plot.getCrop().getName());
+        System.out.printf("%-" + (maxCropNameLength + 2) + "s",
+                plot.getCrop().getName());
         if (plot.isWilted()) {
             renderWilted();
         } else {
@@ -35,11 +37,11 @@ public class PlotComponent implements Component {
     }
 
     private void renderWilted() {
-        System.out.print(Painter.paintf("[  [{wilted}]  ]", Painter.Color.RED));
+        System.out.print(Painter.paintf("[  [{wilted}]  ]", Color.RED));
     }
 
-    private static final String progressBarTemplate 
-        = Painter.paintf("[[{%s}]%s]", Painter.Color.GREEN);
+    private static final String progressBarTemplate
+        = Painter.paintf("[[{%s}]%s]", Color.GREEN);
 
     private void renderProgressBar() {
         int fillCount = plot.getPercentProgress() / 10;
