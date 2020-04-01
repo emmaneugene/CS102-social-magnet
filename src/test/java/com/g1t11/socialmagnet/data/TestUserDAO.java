@@ -107,6 +107,17 @@ public class TestUserDAO extends TestDAO {
         testRejectRequest();
     }
 
+    @Test
+    public void testRequestSelf() {
+        try {
+            userDAO.makeRequest("howard", "howard");
+            Assert.assertTrue(false);
+        } catch (DatabaseException e) {
+            Assert.assertEquals(
+                    SQLErrorCode.REQUEST_SELF, e.getCode());
+        }
+    }
+
     private void testAcceptRequest() {
         userDAO.acceptRequest("howard", "icarus");
 
