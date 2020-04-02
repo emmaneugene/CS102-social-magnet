@@ -6,6 +6,9 @@ import java.util.Objects;
 
 import com.g1t11.socialmagnet.model.social.User;
 
+/**
+ * Represent a farmer.
+ */
 public class Farmer extends User {
     public enum Rank {
         NOVICE("Novice"),
@@ -32,6 +35,14 @@ public class Farmer extends User {
 
     private List<Plot> farmland = new ArrayList<>();
 
+    /**
+     * Create a farmer with specifed parameters.
+     * @param username The username of farmer.
+     * @param fullname The full name of farmer.
+     * @param XP The experience point farmer currently have.
+     * @param wealth The wealth of farmer.
+     * @param wealthRank The rank of farmer based on wealth.
+     */
     public Farmer(String username, String fullname, int XP,
             int wealth, int wealthRank) {
         super(username, fullname);
@@ -40,12 +51,24 @@ public class Farmer extends User {
         this.wealthRankAmongFriends = wealthRank;
     }
 
+    /**
+     * Create a farmer with only username and fullname.
+     * @param username The username of farmer.
+     * @param fullname The full name of farmer.
+     */
     public Farmer(String username, String fullname) {
         super(username, fullname);
     }
 
+    /**
+     * Create a empty farmer.
+     */
     public Farmer() {}
 
+    /**
+     * Gets the rank of farmer.
+     * @return The rank of farmer.
+     */
     public Rank getRank() {
         if (XP < 1000) {
             return Rank.NOVICE;
@@ -62,6 +85,10 @@ public class Farmer extends User {
         return Rank.LEGENDARY;
     }
 
+    /**
+     * Gets the count of maximum plot a farmer can have based on it's rank.
+     * @return The number of maximum plot of farmer..
+     */
     public int getMaxPlotCount() {
         switch (getRank()) {
             case NOVICE:
@@ -77,41 +104,76 @@ public class Farmer extends User {
         }
     }
 
+    /**
+     * Gets the experience points of farmer.
+     * @return The experience points of farmer.
+     */
     public int getXP() {
         return XP;
     }
 
     /**
-     * Convenience method to add XP
+     * A method to add experience point to farmer.
+     * @param XPEarned The amount of experience point to add to farmer.
      */
     public void addXP(int XPEarned) {
         XP += XPEarned;
     }
 
+    /**
+     * Gets the wealth of farmer.
+     * @return The wealth of farmer.
+     */
     public int getWealth() {
         return wealth;
     }
 
+    /**
+     * A method to add wealth to farmer.
+     * @param wealth The amount of wealth to add to farmer.
+     */
     public void addWealth(int wealth) {
         this.wealth += wealth;
     }
 
+    /**
+     * A method to subtract wealth from farmer.
+     * @param wealth The amount of wealth to subtract from farmer.
+     */
     public void subtractWealth(int wealth) {
         this.wealth -= wealth;
     }
 
+    /**
+     * Gets wealth rank among friends. 
+     * @return The wealth rank of farmer among it's friends.
+     */
     public int getWealthRankAmongFriends() {
         return wealthRankAmongFriends;
     }
 
+    /**
+     * Set wealth rank of farmer among it's friend.
+     * @param wealthRank The wealth rank of farmer among it's friends
+     */
     public void setWealthRankAmongFriends(int wealthRank) {
         this.wealthRankAmongFriends = wealthRank;
     }
 
+    /**
+     * Gets farmland of a farmer.
+     * @return The list of plot of a farmer.
+     */
     public List<Plot> getFarmland() {
         return farmland;
     }
 
+    /**
+     * Compares the specified object with this farmer for equality.
+     * It returns true if and only if specified object is a farmer and 
+     * both farmer have the same experience point, wealth, wealth rank among
+     * friends and farmland.
+     */
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Farmer)) return false;

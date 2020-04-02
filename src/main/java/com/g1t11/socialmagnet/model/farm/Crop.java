@@ -2,6 +2,9 @@ package com.g1t11.socialmagnet.model.farm;
 
 import java.util.Objects;
 
+/**
+ * Represents a crop.
+ */
 public class Crop {
     private String name;
 
@@ -19,6 +22,17 @@ public class Crop {
 
     private int salePrice;
 
+    /**
+     * Creates a crop with specifed parameters including actual yield.
+     * @param name The name of crop.
+     * @param cost The cost of crop.
+     * @param minutesToHarvest The time for the crop to grow to maturity.
+     * @param perUnitXP The experience points per unit of crop.
+     * @param yield The actual yield of crop will be produced.
+     * @param minYield The minimum yield of crop can be produced.
+     * @param maxYield The maximum yield of crop can be produced.
+     * @param salePrice The sale price of crop.
+     */
     public Crop(String name, int cost, int minutesToHarvest, int perUnitXP,
             Integer yield, int minYield, int maxYield, int salePrice) {
         this.name = name;
@@ -31,7 +45,9 @@ public class Crop {
         this.salePrice = salePrice;
     }
 
-    // Empty Crop
+    /**
+     * Creates an empty crop.
+     */
     public Crop() {
         this.name = "empty crop";
         this.cost = 0;
@@ -43,36 +59,74 @@ public class Crop {
         this.salePrice = 0;
     }
 
+    /**
+     * Creates a crop with specifed parameters without actual yield.
+     * @param name The name of crop.
+     * @param cost The cost of crop.
+     * @param minutesToHarvest The time for the crop to grow to maturity.
+     * @param perUnitXP The experience points per unit of crop.
+     * @param minYield The minimum yield of crop can be produced.
+     * @param maxYield The maximum yield of crop can be produced.
+     * @param salePrice The sale price of crop.
+     */
     public Crop(String name, int cost, int minutesToHarvest, int perUnitXP,
             int minYield, int maxYield, int salePrice) {
         this(name, cost, minutesToHarvest, perUnitXP, null,
                 minYield, maxYield, salePrice);
     }
 
+    /**
+     * Gets the name of crop.
+     * @return The name of crop.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Gets the cost of crop.
+     * @return The cost of crop.
+     */
     public int getCost() {
         return cost;
     }
 
+    /**
+     * Gets the time for the crop to grow to maturity in minutes.
+     * @return The time for the crop to grow to maturity in minutes.
+     */
     public int getMinutesToHarvest() {
         return minutesToHarvest;
     }
 
+    /**
+     * Gets the experience points per unit of crop.
+     * @return The experience points per unit of crop.
+     */
     public int getPerUnitXP() {
         return perUnitXP;
     }
 
+    /**
+     * Gets the minimum yield of crop.
+     * @return The minimum yield of crop.
+     */
     public int getMinYield() {
         return minYield;
     }
 
+    /**
+     * Gets the maximum yield of crop. 
+     * @return The maximum yield of crop.
+     */
     public int getMaxYield() {
         return maxYield;
     }
 
+    /**
+     * Gets the random yield between the minimum and maximum yield.
+     * @return The random yield between the minimum and maximum yield.
+     */
     public int getRandomYield() {
         if (yield == null) {
             yield = minYield + (int) Math.random() * (maxYield - minYield);
@@ -80,15 +134,28 @@ public class Crop {
         return yield;
     }
 
+    /**
+     * Gets the sale price of the crop.
+     * @return The sale price of the crop.
+     */
     public int getSalePrice() {
         return salePrice;
     }
 
+    /**
+     * Uses the hashcode of the name of crop as hashcode of crop.
+     */
     @Override
     public int hashCode() {
         return name.hashCode();
     }
 
+    /**
+     * Compares the specified object with this crop for equality.
+     * It returns true if and only if specified object is a crop and both crops
+     * have the same name, cost, time for the crop to grow to maturity,
+     * minimum yield, maximum yield and sale price.
+     */
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Crop)) return false;
