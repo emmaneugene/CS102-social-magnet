@@ -165,7 +165,7 @@ CREATE TABLE gift (
  * |-----------------------|
  */
 
-INSERT INTO crop 
+INSERT INTO crop
     (crop_name,  cost, minutes_to_harvest, xp, min_yield, max_yield, sale_price) VALUES
     ("Papaya",     20,                 30,  8,        75,       100,         15),
     ("Pumpkin",    30,                 60,  5,         5,       200,         20),
@@ -254,8 +254,16 @@ FOR EACH ROW BEGIN
 END$$
 DELIMITER ;
 
+DELIMITER $$
 CREATE PROCEDURE make_request(IN _sender VARCHAR(255), IN _recipient VARCHAR(255))
-    INSERT INTO request (sender, recipient) VALUES (_sender, _recipient);
+BEGIN
+    IF (_sender = _recipient) THEN
+        SIGNAL SQLSTATE '45000' SET message_text = 'Cannot request self.';
+    ELSE
+        INSERT INTO request (sender, recipient) VALUES (_sender, _recipient);
+    END IF;
+END$$
+DELIMITER ;
 
 CREATE PROCEDURE get_requests(IN _recipient VARCHAR(255))
     SELECT sender FROM request WHERE recipient = _recipient;
@@ -530,7 +538,7 @@ FOR EACH ROW BEGIN
         ON r1.max_rank_level = r2.rank_level
     );
     IF (NEW.plot_num > @max_plots) THEN
-        SIGNAL SQLSTATE '45000' SET message_text = 'You do not have access to so many plots.';
+        SIGNAL SQLSTATE '45000' SET message_text = 'Plot inaccessible.';
     END IF;
 END$$
 DELIMITER ;
@@ -575,7 +583,7 @@ BEGIN
     SET @max_yield_of_crop := ( SELECT max_yield FROM crop WHERE crop_name = _crop_name );
     SET @random_yield := FLOOR(RAND() * (@max_yield_of_crop - @min_yield_of_crop + 1)) + @min_yield_of_crop;
     -- Update plot
-    INSERT INTO plot (owner, plot_num, crop_name, time_planted, yield_of_crop, yield_stolen) VALUES 
+    INSERT INTO plot (owner, plot_num, crop_name, time_planted, yield_of_crop, yield_stolen) VALUES
     (_username, _plot_num, _crop_name, NOW(), @random_yield, 0);
 END$$
 DELIMITER ;
@@ -592,7 +600,7 @@ BEGIN
     SET @farmer_wealth := (
         SELECT wealth FROM farmer WHERE username = _username
     );
-    IF @is_wilted THEN 
+    IF @is_wilted THEN
         IF @farmer_wealth < 5 THEN
             SIGNAL SQLSTATE '45000' SET message_text = 'Insufficient funds to clear wilted crop.';
         ELSE
@@ -756,7 +764,7 @@ DELIMITER ;
  * STORE
  */
 CREATE PROCEDURE get_store_items()
-    SELECT * 
+    SELECT *
     FROM crop
     ORDER BY crop_name;
 
@@ -770,11 +778,11 @@ BEGIN
     SET @farmer_wealth := (
         SELECT wealth FROM farmer WHERE username = _username
     );
-    
+
     SET @purchase_cost := (
         SELECT cost * _amount FROM crop WHERE crop_name = _crop_name
     );
-    
+
     IF @farmer_wealth < @purchase_cost THEN
         SELECT FALSE AS purchase_success;
     ELSE
@@ -782,10 +790,10 @@ BEGIN
         SET @crop_exist := (
             SELECT count(*) FROM inventory WHERE owner = _username AND crop_name = _crop_name
         );
-        IF @crop_exist THEN 
+        IF @crop_exist THEN
             UPDATE inventory SET quantity = quantity + _amount WHERE owner = _username;
         ELSE
-            INSERT INTO inventory (owner, crop_name, quantity) VALUES 
+            INSERT INTO inventory (owner, crop_name, quantity) VALUES
             (_username, _crop_name, _amount);
         END IF;
         SELECT TRUE AS purchase_success;

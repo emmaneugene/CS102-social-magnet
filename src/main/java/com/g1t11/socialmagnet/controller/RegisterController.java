@@ -23,37 +23,25 @@ public class RegisterController extends Controller {
     public void handleInput() {
         getView().showUsernamePrompt();
         String username = input.nextLine();
-
-        if (!InputValidator.isAlphanumeric(username)) {
-            nav.pop();
-            nav.setCurrStatus(Painter.paint(
-                "Username should only contain alphanumeric characters.",
-                Color.RED));
-            return;
-        }
-
-        if (credDAO.userExists(username)) {
-            nav.pop();
-            nav.setCurrStatus(Painter.paint(
-                    String.format("%s already exists. Choose another username.",
-                            username),
-                    Color.RED));
+        if (!validateUsername(username)) {
             return;
         }
 
         getView().showFullnamePrompt();
         String fullname = input.nextLine();
+        if (!validateFullname(fullname)) {
+            return;
+        }
 
         getView().showPasswordPrompt();
         String password = input.readPassword();
+        if (!validatePassword(password)) {
+            return;
+        }
 
         getView().showConfirmPasswordPrompt();
         String passwordCheck = input.readPassword();
-
-        if (!password.equals(passwordCheck)) {
-            nav.pop();
-            nav.setCurrStatus(Painter.paint(
-                    "Passwords do not match.", Color.RED));
+        if (!validatePasswordCheck(password, passwordCheck)) {
             return;
         }
 
@@ -62,5 +50,72 @@ public class RegisterController extends Controller {
         nav.setCurrStatus(Painter.paint(
                 String.format("Registered %s successfully!", username),
                 Color.GREEN));
+    }
+
+    private boolean validateUsername(String username) {
+        if (username.length() == 0) {
+            rejectRegistration("Username cannot be empty.");
+            return false;
+        }
+
+        if (username.length() > 255) {
+            rejectRegistration("Username is too long.");
+            return false;
+        }
+
+        if (!InputValidator.isAlphanumeric(username)) {
+            rejectRegistration(
+                    "Username should only contain alphanumeric characters.");
+            return false;
+        }
+
+        if (credDAO.userExists(username)) {
+            rejectRegistration("%s already exists. Choose another username.");
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean validateFullname(String fullname) {
+        if (fullname.length() == 0) {
+            rejectRegistration("Your name cannot be empty.");
+            return false;
+        }
+
+        if (fullname.length() > 255) {
+            rejectRegistration("Your name is too long.");
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean validatePassword(String password) {
+        if (password.length() == 0) {
+            rejectRegistration("Password cannot be empty.");
+            return false;
+        }
+
+        if (password.length() < 6) {
+            rejectRegistration("Password must 6 characters or more.");
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean validatePasswordCheck(String password, String check) {
+        if (!password.equals(check)) {
+            rejectRegistration("Passwords do not match.");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void rejectRegistration(String message) {
+        nav.pop();
+        nav.setCurrStatus(Painter.paint(message, Color.RED));
     }
 }

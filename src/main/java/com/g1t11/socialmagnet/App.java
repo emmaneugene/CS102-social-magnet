@@ -64,7 +64,7 @@ public class App {
     private void handleSQLException(SQLException sqlE) {
         System.out.println(sqlE.getMessage());
         System.out.println(sqlE.getErrorCode());
-        if (sqlE.getErrorCode() == SQLErrorCode.NO_CONNECTION.code) {
+        if (sqlE.getErrorCode() == SQLErrorCode.NO_CONNECTION.value) {
             nav.popToFirst();
             nav.setCurrStatus(Painter.paint(
                     "Failed to connect to database. Retrying...", Color.RED));

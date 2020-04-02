@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.g1t11.socialmagnet.data.DatabaseException.SQLErrorCode;
 import com.g1t11.socialmagnet.model.farm.StealingRecord;
 
 public class FarmerActionDAO extends DAO {
@@ -32,7 +33,14 @@ public class FarmerActionDAO extends DAO {
 
             stmt.execute();
         } catch (SQLException e) {
-            System.err.println("SQLException: " + e.getMessage());
+            if (e.getErrorCode() == SQLErrorCode.DUPLICATE_KEY.value) {
+                throw new DatabaseException(
+                        SQLErrorCode.PLANT_ON_EXISTING_CROP);
+            } else if (e.getMessage().contains("Not enough seeds")) {
+                throw new DatabaseException(SQLErrorCode.NOT_ENOUGH_INVENTORY);
+            } else if (e.getMessage().contains("Plot inaccessible")) {
+                throw new DatabaseException(SQLErrorCode.PLOT_INACCESSIBLE);
+            }
             throw new DatabaseException(e);
         }
     }

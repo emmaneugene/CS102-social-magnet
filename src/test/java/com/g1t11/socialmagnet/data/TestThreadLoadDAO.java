@@ -2,9 +2,9 @@ package com.g1t11.socialmagnet.data;
 
 import java.util.List;
 
+import com.g1t11.socialmagnet.data.DatabaseException.SQLErrorCode;
 import com.g1t11.socialmagnet.model.social.Comment;
 import com.g1t11.socialmagnet.model.social.Thread;
-import com.g1t11.socialmagnet.model.social.ThreadNotFoundException;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
@@ -44,8 +44,7 @@ public class TestThreadLoadDAO extends TestDAO {
         expected.setComments(List.of(
             new Comment("britney", "How did you guys wake up so early??"),
             new Comment("adam",    "Early bird gets the worm!"),
-            new Comment("elijah",  "Maybe you shouldn't stay out too late!")
-        ));
+            new Comment("elijah",  "Maybe you shouldn't stay out too late!")));
         expected.setLikers(List.of(britney));
 
         Thread actual = threadLoadDAO.getThread(7, "adam");
@@ -53,9 +52,15 @@ public class TestThreadLoadDAO extends TestDAO {
         Assert.assertEquals(expected, actual);
     }
 
-    @Test(expected = ThreadNotFoundException.class)
+    @Test
     public void testGetNonExistentThread() {
-        threadLoadDAO.getThread(100, "adam");
+        try {
+            threadLoadDAO.getThread(100, "adam");
+            Assert.assertTrue(false);
+        } catch (DatabaseException e) {
+            Assert.assertEquals(
+                    SQLErrorCode.THREAD_NOT_FOUND, e.getCode());
+        }
     }
 
     @Test
@@ -63,8 +68,7 @@ public class TestThreadLoadDAO extends TestDAO {
         List<Comment> expected = List.of(
             new Comment("charlie", "Good job! You started programming."),
             new Comment("elijah",  "Bye!"),
-            new Comment("charlie", "Goodbye!")
-        );
+            new Comment("charlie", "Goodbye!"));
         Thread actual = new Thread(1);
         threadLoadDAO.setCommentsLatestLast(actual, 3);
 
@@ -74,8 +78,7 @@ public class TestThreadLoadDAO extends TestDAO {
     @Test
     public void testSetCommentsFewerThanThree() {
         List<Comment> expected = List.of(
-            new Comment("charlie", "Same!!! Too many things to do!")
-        );
+            new Comment("charlie", "Same!!! Too many things to do!"));
         Thread actual = new Thread(2);
         threadLoadDAO.setCommentsLatestLast(actual, 3);
 
@@ -87,8 +90,7 @@ public class TestThreadLoadDAO extends TestDAO {
         List<Comment> expected = List.of(
             new Comment("britney", "How did you guys wake up so early??"),
             new Comment("adam",    "Early bird gets the worm!"),
-            new Comment("elijah",  "Maybe you shouldn't stay out too late!")
-        );
+            new Comment("elijah",  "Maybe you shouldn't stay out too late!"));
         Thread actual = new Thread(7);
         threadLoadDAO.setCommentsLatestLast(actual, 3);
 
@@ -107,8 +109,7 @@ public class TestThreadLoadDAO extends TestDAO {
     public void testSetLikers() {
         List<User> expected = List.of(
             new User("adam", "Adam Levine"),
-            new User("britney", "Britney Spears")
-        );
+            new User("britney", "Britney Spears"));
 
         Thread actual = new Thread(3);
         threadLoadDAO.setLikers(actual);
@@ -128,8 +129,7 @@ public class TestThreadLoadDAO extends TestDAO {
     public void testSetDislikers() {
         List<User> expected = List.of(
             new User("adam", "Adam Levine"),
-            new User("britney", "Britney Spears")
-        );
+            new User("britney", "Britney Spears"));
 
         Thread actual = new Thread(4);
         threadLoadDAO.setDislikers(actual);
@@ -165,8 +165,7 @@ public class TestThreadLoadDAO extends TestDAO {
         List<Thread> expected = List.of(
             threadLoadDAO.getThread(19, "lary"),
             threadLoadDAO.getThread(18, "lary"),
-            threadLoadDAO.getThread(17, "lary")
-        );
+            threadLoadDAO.getThread(17, "lary"));
 
         List<Thread> actual = threadLoadDAO.getNewsFeedThreads("lary", 5);
 
@@ -187,8 +186,7 @@ public class TestThreadLoadDAO extends TestDAO {
             threadLoadDAO.getThread(19, "lary"),
             threadLoadDAO.getThread(18, "lary"),
             threadLoadDAO.getThread(17, "lary"),
-            threadLoadDAO.getThread(16, "lary")
-        );
+            threadLoadDAO.getThread(16, "lary"));
 
         List<Thread> actual = threadLoadDAO.getWallThreads("lary", 5);
 

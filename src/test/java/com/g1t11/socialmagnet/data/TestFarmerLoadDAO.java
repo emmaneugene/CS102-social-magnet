@@ -5,10 +5,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.g1t11.socialmagnet.data.DatabaseException.SQLErrorCode;
 import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.farm.Plot;
-import com.g1t11.socialmagnet.model.social.UserNotFoundException;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -39,9 +39,15 @@ public class TestFarmerLoadDAO extends TestDAO {
         Assert.assertEquals(expected, actual);
     }
 
-    @Test(expected = UserNotFoundException.class)
+    @Test
     public void testGetNonExistentFarmer() {
-        farmerLoadDAO.getFarmer("yankee");
+        try {
+            farmerLoadDAO.getFarmer("yankee");
+            Assert.assertTrue(false);
+        } catch (DatabaseException e) {
+            Assert.assertEquals(
+                    SQLErrorCode.USER_NOT_FOUND, e.getCode());
+        }
     }
 
     @Test

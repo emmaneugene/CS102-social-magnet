@@ -3,10 +3,10 @@ package com.g1t11.socialmagnet.controller.socialmagnet;
 import java.util.List;
 
 import com.g1t11.socialmagnet.controller.Navigator;
+import com.g1t11.socialmagnet.data.DatabaseException;
 import com.g1t11.socialmagnet.data.UserDAO;
-import com.g1t11.socialmagnet.model.social.RequestExistingFriendException;
+import com.g1t11.socialmagnet.data.DatabaseException.SQLErrorCode;
 import com.g1t11.socialmagnet.model.social.User;
-import com.g1t11.socialmagnet.model.social.UserNotFoundException;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.socialmagnet.FriendsPageView;
@@ -98,14 +98,20 @@ public class FriendsController extends SocialMagnetController {
                             requested),
                     Color.GREEN,
                     Color.BLUE));
-        } catch (UserNotFoundException e) {
-            setStatus(Painter.paintf(
-                    String.format("[{User [{%s}] not found.}]", requested),
-                    Color.RED,
-                    Color.BLUE));
-        } catch (RequestExistingFriendException e) {
-            setStatus(Painter.paint(
-                    "Cannot request existing friend.", Color.RED));
+        } catch (DatabaseException e) {
+            SQLErrorCode code = e.getCode();
+            if (code.equals(SQLErrorCode.USER_NOT_FOUND)) {
+                setStatus(Painter.paintf(
+                        String.format("[{User [{%s}] not found.}]", requested),
+                        Color.RED,
+                        Color.BLUE));
+            } else if (code.equals(SQLErrorCode.REQUEST_EXISTING_FRIEND)) {
+                setStatus(Painter.paint(
+                        "Cannot request existing friend.", Color.RED));
+            } else if (code.equals(SQLErrorCode.REQUEST_SELF)) {
+                setStatus(Painter.paint(
+                        "Cannot request self.", Color.RED));
+            }
         }
     }
 

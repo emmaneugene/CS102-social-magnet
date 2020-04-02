@@ -1,6 +1,6 @@
 package com.g1t11.socialmagnet.data;
 
-import com.g1t11.socialmagnet.model.social.RegisterExistingUserException;
+import com.g1t11.socialmagnet.data.DatabaseException.SQLErrorCode;
 import com.g1t11.socialmagnet.model.social.User;
 
 import org.junit.Assert;
@@ -35,9 +35,15 @@ public class TestCredentialsDAO extends TestDAO {
         Assert.assertTrue(credDAO.userExists("zulu"));
     }
 
-    @Test(expected = RegisterExistingUserException.class)
+    @Test
     public void testRegisterExisting() {
-        credDAO.register("adam", "Adam Sandler", "gems");
+        try {
+            credDAO.register("adam", "Adam Sandler", "gems");
+            Assert.assertTrue(false);
+        } catch (DatabaseException e) {
+            Assert.assertEquals(
+                    SQLErrorCode.REGISTER_EXISTING_USER, e.getCode());
+        }
     }
 
     @Test
