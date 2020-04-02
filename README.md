@@ -8,7 +8,7 @@ Social Magnet, City Farmers
 
 **Weightage**: *20% of final grade*
 
-**Members**: 
+**Members**:
 
 * Bryan Lee
 * Charlie Angriawan
@@ -21,10 +21,14 @@ Social networking sites such as Facebook have become ubiquitous platforms for co
 
 For this project, we are going to write a simple social networking application called **Social Magnet**.
 
-In Social Magnet, a member has a wall containing his personal information, and the last few messages to the wall. 
+In Social Magnet, a member has a wall containing his personal information, and the last few messages to the wall.
 
 All members are automatically players of an integrated farming game called **City Farmers**. In the game, the farmer (i.e. the player) manages a virtual farm by planting, growing and harvesting virtual crops.
 
+## Requirements
+
+View our [requirements](docs/requirements.md).
+
 ## Design Considerations
 
-View our [design considerations](DESIGN_CONSIDERATIONS.md).
+View our [design considerations](docs/design_considerations.md).
