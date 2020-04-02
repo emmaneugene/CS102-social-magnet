@@ -25,6 +25,24 @@ In Social Magnet, a member has a wall containing his personal information, and t
 
 All members are automatically players of an integrated farming game called **City Farmers**. In the game, the farmer (i.e. the player) manages a virtual farm by planting, growing and harvesting virtual crops.
 
+## Usage
+
+#### Loading database credentials
+
+Confidential database credentials should be stored in the `scripts/env.bat` or `scripts/env.sh` file. See [`env-sample.bat`][scripts/env-sample.bat] or [`env-sample.sh`][scripts/env-sample.sh].
+
+#### Compilation
+
+Use `compile.bat` or `compile.sh` to compile the application.
+
+#### Running
+
+Use `run.bat` or `run.sh` to run the application, after setting the database credentials.
+
+#### Testing
+
+Use `scripts/test.bat` or `scripts/test.sh`, after setting up the database credentials.
+
 ## Requirements
 
 View our [requirements](docs/requirements.md).
