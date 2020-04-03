@@ -6,9 +6,16 @@ import java.util.List;
 import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Plot;
 
+/**
+ * This is a render component for Farmland.
+ */
 public class FarmlandComponent implements Component {
     List<PlotComponent> plotComps = new ArrayList<>();
 
+    /**
+     * Sets the plots to list of plot components for rendering.
+     * @param plots The list of plot components.
+     */
     public void setPlots(List<Plot> plots) {
         plotComps.clear();
         int index = 1;
@@ -18,6 +25,9 @@ public class FarmlandComponent implements Component {
         }
     }
 
+    /**
+     * A method to render out the components for Farmland.
+     */
     @Override
     public void render() {
         for (PlotComponent plotComp : plotComps) {
@@ -25,6 +35,11 @@ public class FarmlandComponent implements Component {
         }
     }
 
+    /**
+     * A method to calulate the amount of spaces for formatting.
+     * @param plots The list of plots.
+     * @return The amount of spaces required for formatting.
+     */
     private int getMaxCropNameLength(List<Plot> plots) {
         int maxLength = 0;
         for (Plot plot : plots) {
