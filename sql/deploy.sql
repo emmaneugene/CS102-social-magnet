@@ -306,6 +306,11 @@ CREATE PROCEDURE get_thread_comments_latest_last(IN _thread_id INT, IN _limit IN
     ) AS c
     ORDER BY commented_on;
 
+CREATE PROCEDURE get_all_thread_comments_latest_last(IN _thread_id INT)
+    SELECT commenter, content FROM comment
+    WHERE thread_id = _thread_id
+    ORDER BY commented_on;
+
 CREATE PROCEDURE get_likers(IN _thread_id INT)
     SELECT u.username AS username, fullname
     FROM liker l JOIN user u

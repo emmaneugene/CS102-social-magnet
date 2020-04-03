@@ -43,7 +43,7 @@ public class ThreadLoadDAO extends DAO {
                 rs.getString("content"),
                 rs.getInt("comment_count"),
                 rs.getBoolean("is_tagged"));
-            setCommentsLatestLast(thread, 3);
+            setAllCommentsLatestLast(thread);
             setLikers(thread);
             setDislikers(thread);
             thread.formatContentTags(getTaggedUsernames(thread.getId()));
@@ -70,6 +70,31 @@ public class ThreadLoadDAO extends DAO {
         try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {
             stmt.setInt(1, thread.getId());
             stmt.setInt(2, limit);
+
+            rs = stmt.executeQuery();
+            thread.getComments().clear();
+
+            while (rs.next()) {
+                Comment c = new Comment();
+                c.setUsername(rs.getString("commenter"));
+                c.setContent(rs.getString("content"));
+
+                thread.getComments().add(c);
+            }
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+            throw new DatabaseException(e);
+        } finally {
+            try { if (rs != null) rs.close(); } catch (SQLException e) {}
+        }
+    }
+
+    public void setAllCommentsLatestLast(Thread thread) {
+        String queryString = "CALL get_all_thread_comments_latest_last(?)";
+
+        ResultSet rs = null;
+        try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {
+            stmt.setInt(1, thread.getId());
 
             rs = stmt.executeQuery();
             thread.getComments().clear();
