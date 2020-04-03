@@ -1,8 +1,8 @@
 package com.g1t11.socialmagnet.controller;
 
 import com.g1t11.socialmagnet.data.CredentialsDAO;
-import com.g1t11.socialmagnet.util.InputValidator;
 import com.g1t11.socialmagnet.util.Painter;
+import com.g1t11.socialmagnet.util.TextUtils;
 import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.RegisterPageView;
 
@@ -63,7 +63,7 @@ public class RegisterController extends Controller {
             return false;
         }
 
-        if (!InputValidator.isAlphanumeric(username)) {
+        if (!TextUtils.isAlphanumeric(username)) {
             rejectRegistration(
                     "Username should only contain alphanumeric characters.");
             return false;

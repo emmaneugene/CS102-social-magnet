@@ -7,7 +7,6 @@ import java.util.Map;
 
 import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.controller.socialmagnet.MainMenuController;
-import com.g1t11.socialmagnet.data.FarmerActionDAO;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.farm.Plot;
 import com.g1t11.socialmagnet.util.Painter;
@@ -16,8 +15,6 @@ import com.g1t11.socialmagnet.view.page.cityfarmers.FarmlandPageView;
 
 public class FarmlandController extends CityFarmersController {
     private static final int WILTED_CLEAR_COST = 5;
-
-    FarmerActionDAO farmerActionDAO = new FarmerActionDAO(database());
 
     List<Plot> plots = new ArrayList<>();
     Map<String, Integer> invCrops = new LinkedHashMap<>();

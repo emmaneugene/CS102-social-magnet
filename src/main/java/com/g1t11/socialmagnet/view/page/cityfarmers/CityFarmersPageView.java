@@ -5,8 +5,8 @@ import com.g1t11.socialmagnet.view.component.FarmerHeaderComponent;
 import com.g1t11.socialmagnet.view.page.PageView;
 
 public abstract class CityFarmersPageView extends PageView {
-    Farmer me;
-    FarmerHeaderComponent headerComp = new FarmerHeaderComponent();
+    protected Farmer me;
+    protected FarmerHeaderComponent headerComp = new FarmerHeaderComponent();
 
     public CityFarmersPageView(String title) {
         super("City Farmers", title);

@@ -15,7 +15,7 @@ public class Database {
      * re-establish it if the connection is dropped.
      * @see <a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/adfns/connection_strategies.html#GUID-90D1249D-38B8-47BF-9829-BA0146BD814A">docs.oracle.com</a>
      */
-    private static Connection conn;
+    private Connection conn;
 
     public Database() {
         // JDBC Driver must be instantiated before we can use DriverManager.

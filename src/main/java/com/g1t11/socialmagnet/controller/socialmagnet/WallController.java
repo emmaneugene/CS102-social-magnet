@@ -8,8 +8,6 @@ import java.util.regex.Pattern;
 import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.data.FarmerActionDAO;
 import com.g1t11.socialmagnet.data.FarmerLoadDAO;
-import com.g1t11.socialmagnet.data.ThreadActionDAO;
-import com.g1t11.socialmagnet.data.ThreadLoadDAO;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.model.social.User;
@@ -20,8 +18,6 @@ import com.g1t11.socialmagnet.view.page.socialmagnet.WallPageView;
 public class WallController extends SocialMagnetController {
     protected FarmerLoadDAO farmerLoadDAO = new FarmerLoadDAO(database());
     protected FarmerActionDAO farmerActionDAO = new FarmerActionDAO(database());
-    protected ThreadLoadDAO threadLoadDAO = new ThreadLoadDAO(database());
-    protected ThreadActionDAO threadActionDAO = new ThreadActionDAO(database());
 
     protected Farmer farmerToDisplay;
     protected List<Thread> wallThreads;

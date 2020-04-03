@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.controller.socialmagnet.MainMenuController;
-import com.g1t11.socialmagnet.data.FarmerActionDAO;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.farm.Plot;
 import com.g1t11.socialmagnet.model.farm.StealingRecord;
@@ -15,8 +14,6 @@ import com.g1t11.socialmagnet.util.TextUtils;
 import com.g1t11.socialmagnet.view.page.cityfarmers.StealingPageView;
 
 public class StealingController extends CityFarmersController {
-    FarmerActionDAO farmerActionDAO = new FarmerActionDAO(database());
-
     Farmer toStealFrom;
 
     public StealingController(Navigator nav, Farmer me, User friend) {
