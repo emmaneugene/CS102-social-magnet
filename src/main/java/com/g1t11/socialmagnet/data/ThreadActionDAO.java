@@ -17,6 +17,7 @@ public class ThreadActionDAO extends DAO {
      * @param toUser The user receiving the thread.
      * @param content The content of the thread.
      * @param usernameTags A list of usernames to tag the thread with.
+     * @return The id of new thread.
      */
     public int addThread(String fromUser, String toUser,
             String content, List<String> usernameTags) {
@@ -64,7 +65,7 @@ public class ThreadActionDAO extends DAO {
     /**
      * Remove a tag from a thread on the database.
      * @param threadId The ID of the thread to untag.
-     * @param usernames The username tag to remove.
+     * @param username The username tag to remove.
      */
     public void removeTag(int threadId, String username) {
         String queryString = "CALL remove_tag(?, ?)";
