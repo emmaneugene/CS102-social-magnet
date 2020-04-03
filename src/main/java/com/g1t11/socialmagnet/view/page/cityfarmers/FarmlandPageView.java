@@ -10,9 +10,9 @@ import com.g1t11.socialmagnet.view.component.FarmlandComponent;
 import com.g1t11.socialmagnet.view.component.InventoryComponent;
 
 public class FarmlandPageView extends CityFarmersPageView {
-    FarmlandComponent farmComp = new FarmlandComponent();
+    private FarmlandComponent farmComp = new FarmlandComponent();
 
-    InventoryComponent invComp;
+    private InventoryComponent invComp;
 
     public FarmlandPageView() {
         super("My Farmland");

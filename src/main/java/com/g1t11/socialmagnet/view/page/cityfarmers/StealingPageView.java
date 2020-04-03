@@ -12,8 +12,8 @@ import com.g1t11.socialmagnet.view.component.FriendFarmerHeaderComponent;
 public class StealingPageView extends CityFarmersPageView {
     Farmer friend;
 
-    FriendFarmerHeaderComponent headerComp;
-    FarmlandComponent farmComp = new FarmlandComponent();
+    private FriendFarmerHeaderComponent headerComp;
+    private FarmlandComponent farmComp = new FarmlandComponent();
 
     public StealingPageView(Farmer friend) {
         this.friend = friend;

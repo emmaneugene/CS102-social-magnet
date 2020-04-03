@@ -14,21 +14,21 @@ public class SimpleThreadComponent implements Component {
 
     private Thread thread;
 
-    private LikeBarComponent likeBarView;
+    private LikeBarComponent likeBarComp;
 
-    private List<CommentComponent> commentViews
+    private List<CommentComponent> commentComps
             = new ArrayList<>(commentsToDisplay);
 
     public SimpleThreadComponent(int threadIndex, Thread thread) {
         this.threadIndex = threadIndex;
         this.thread = thread;
-        likeBarView = new LikeBarComponent(
+        likeBarComp = new LikeBarComponent(
                 thread.getLikers().size(), thread.getDislikers().size());
         setComments();
     }
 
     private void setComments() {
-        commentViews.clear();
+        commentComps.clear();
         int maxIndex = thread.getActualCommentsCount();
         /**
          * If we have more comments than we can display, we want to offset the
@@ -38,7 +38,7 @@ public class SimpleThreadComponent implements Component {
                 ? maxIndex - commentsToDisplay
                 : 0;
         for (int i = 0; i < thread.getComments().size(); i++) {
-            commentViews.add(new CommentComponent(
+            commentComps.add(new CommentComponent(
                     threadIndex, i + offset + 1, thread.getComments().get(i)));
         }
     }
@@ -46,7 +46,7 @@ public class SimpleThreadComponent implements Component {
     @Override
     public void render() {
         renderContent();
-        likeBarView.render();
+        likeBarComp.render();
         renderComments();
     }
 
@@ -58,7 +58,7 @@ public class SimpleThreadComponent implements Component {
     }
 
     private void renderComments() {
-        for (CommentComponent commentView : commentViews) {
+        for (CommentComponent commentView : commentComps) {
             commentView.render();
         }
     }

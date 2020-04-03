@@ -1,8 +1,6 @@
 package com.g1t11.socialmagnet.controller.socialmagnet;
 
 import com.g1t11.socialmagnet.controller.Navigator;
-import com.g1t11.socialmagnet.data.ThreadActionDAO;
-import com.g1t11.socialmagnet.data.ThreadLoadDAO;
 import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
@@ -10,9 +8,6 @@ import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.socialmagnet.ThreadPageView;
 
 public class ThreadController extends SocialMagnetController {
-    private ThreadLoadDAO threadLoadDAO = new ThreadLoadDAO(database());
-    private ThreadActionDAO threadActionDAO = new ThreadActionDAO(database());
-
     private Thread thread;
 
     public ThreadController(Navigator nav, User me,

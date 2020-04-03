@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.controller.socialmagnet.MainMenuController;
-import com.g1t11.socialmagnet.data.UserDAO;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
@@ -12,8 +11,6 @@ import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.cityfarmers.VisitFriendPageView;
 
 public class VisitFriendController extends CityFarmersController {
-    UserDAO userDAO = new UserDAO(database());
-
     List<User> friends;
 
     public VisitFriendController(Navigator nav, Farmer me) {

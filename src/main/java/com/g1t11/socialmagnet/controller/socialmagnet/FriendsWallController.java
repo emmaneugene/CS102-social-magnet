@@ -3,15 +3,12 @@ package com.g1t11.socialmagnet.controller.socialmagnet;
 import java.util.List;
 
 import com.g1t11.socialmagnet.controller.Navigator;
-import com.g1t11.socialmagnet.data.UserDAO;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.socialmagnet.FriendsWallPageView;
 
 public class FriendsWallController extends WallController {
-    private UserDAO userDAO = new UserDAO(database());
-
     public FriendsWallController(Navigator nav, User me, User friend) {
         super(nav, me);
         farmerToDisplay = farmerLoadDAO.getFarmer(friend.getUsername());

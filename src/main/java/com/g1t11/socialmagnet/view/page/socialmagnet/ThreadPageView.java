@@ -11,14 +11,11 @@ import com.g1t11.socialmagnet.view.component.CommentComponent;
 import com.g1t11.socialmagnet.view.page.PageView;
 
 public class ThreadPageView extends PageView {
-    private final static int commentsToDisplay = 3;
-
     private int threadIndex;
 
     private Thread thread;
 
-    private List<CommentComponent> commentComps
-            = new ArrayList<>(commentsToDisplay);
+    private List<CommentComponent> commentComps = new ArrayList<>();
 
     public ThreadPageView(int threadIndex, Thread thread) {
         super("View a Thread");
@@ -32,15 +29,9 @@ public class ThreadPageView extends PageView {
 
     private void setComments() {
         commentComps.clear();
-        int maxIndex = thread.getActualCommentsCount();
-        // If we have more comments than we can display, we want to offset the
-        // such that the last comment rendered has the maximum index.
-        int offset = maxIndex > commentsToDisplay
-                ? maxIndex - commentsToDisplay
-                : 0;
         for (int i = 0; i < thread.getComments().size(); i++) {
             commentComps.add(new CommentComponent(threadIndex,
-                    i + offset + 1, thread.getComments().get(i)));
+                    i + 1, thread.getComments().get(i)));
         }
     }
 

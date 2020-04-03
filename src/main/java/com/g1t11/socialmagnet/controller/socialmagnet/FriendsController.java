@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.data.DatabaseException;
-import com.g1t11.socialmagnet.data.UserDAO;
 import com.g1t11.socialmagnet.data.DatabaseException.SQLErrorCode;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
@@ -12,8 +11,6 @@ import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.socialmagnet.FriendsPageView;
 
 public class FriendsController extends SocialMagnetController {
-    private UserDAO userDAO = new UserDAO(database());
-
     private List<User> friends;
 
     private List<String> requestUsernames;

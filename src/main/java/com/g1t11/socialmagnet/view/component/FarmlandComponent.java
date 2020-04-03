@@ -7,7 +7,7 @@ import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Plot;
 
 public class FarmlandComponent implements Component {
-    List<PlotComponent> plotComps = new ArrayList<>();
+    private List<PlotComponent> plotComps = new ArrayList<>();
 
     public void setPlots(List<Plot> plots) {
         plotComps.clear();

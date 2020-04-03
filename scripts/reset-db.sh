@@ -1,4 +1,4 @@
-source load-env.sh;
+source env.sh;
 
-mysql -u"$DB_USER" -p"$DB_PASS" < sql/deploy.sql &&
-mysql -u"$DB_USER" -p"$DB_PASS" < sql/load-sample-data.sql;
+mysql -u"$DB_USER" -p"$DB_PASS" < ../sql/deploy.sql &&
+mysql -u"$DB_USER" -p"$DB_PASS" < ../sql/load-sample-data.sql;
