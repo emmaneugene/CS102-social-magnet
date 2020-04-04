@@ -35,6 +35,10 @@ public class RestDAO {
         return getTarget(urlParts).request(MediaType.TEXT_PLAIN);
     }
 
+    protected Invocation.Builder getInvocationOfTarget(String ...urlParts) {
+        return getTarget(urlParts).request();
+    }
+
     private WebTarget getTarget(String ...urlParts) {
         return client.target(BASE_URL + String.join("/", urlParts));
     }

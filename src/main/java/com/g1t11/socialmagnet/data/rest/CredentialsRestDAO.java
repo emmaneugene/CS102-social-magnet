@@ -55,7 +55,7 @@ public class CredentialsRestDAO extends RestDAO {
     }
 
     public boolean userExists(String username) {
-        Response response = getTextInvocationOfTarget("exists", username).get();
+        Response response = getInvocationOfTarget("exists", username).get();
 
         if (response.getStatus() == Status.OK.getStatusCode()) {
             return true;
