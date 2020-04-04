@@ -5,7 +5,7 @@ import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.data.FarmerActionDAO;
 import com.g1t11.socialmagnet.data.FarmerLoadDAO;
 import com.g1t11.socialmagnet.data.StoreDAO;
-import com.g1t11.socialmagnet.data.UserRestDAO;
+import com.g1t11.socialmagnet.data.rest.UserRestDAO;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.view.page.cityfarmers.CityFarmersPageView;

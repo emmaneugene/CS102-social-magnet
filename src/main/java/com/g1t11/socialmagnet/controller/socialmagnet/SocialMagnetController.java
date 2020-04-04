@@ -4,7 +4,7 @@ import com.g1t11.socialmagnet.controller.Controller;
 import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.data.ThreadActionDAO;
 import com.g1t11.socialmagnet.data.ThreadLoadDAO;
-import com.g1t11.socialmagnet.data.UserRestDAO;
+import com.g1t11.socialmagnet.data.rest.UserRestDAO;
 import com.g1t11.socialmagnet.model.social.User;
 
 /**

@@ -1,7 +1,8 @@
-package com.g1t11.socialmagnet.data;
+package com.g1t11.socialmagnet.data.rest;
 
 import java.util.List;
 
+import com.g1t11.socialmagnet.data.DatabaseException;
 import com.g1t11.socialmagnet.data.DatabaseException.SQLErrorCode;
 import com.g1t11.socialmagnet.model.social.Friend;
 import com.g1t11.socialmagnet.model.social.User;

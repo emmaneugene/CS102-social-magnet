@@ -1,8 +1,9 @@
-package com.g1t11.socialmagnet.data;
+package com.g1t11.socialmagnet.data.rest;
 
 import java.io.IOException;
 import java.util.List;
 
+import com.g1t11.socialmagnet.data.DatabaseException;
 import com.g1t11.socialmagnet.data.DatabaseException.SQLErrorCode;
 import com.g1t11.socialmagnet.model.social.Friend;
 import com.g1t11.socialmagnet.model.social.User;
@@ -36,7 +37,7 @@ public class UserRestDAO extends RestDAO {
                 "user", username, "friends").get();
 
         if (response.getStatus() != Status.OK.getStatusCode()) {
-            throw new DatabaseException((String) response.getEntity());
+            throw new DatabaseException(response.readEntity(String.class));
         }
 
         List<User> friends = null;
@@ -55,7 +56,7 @@ public class UserRestDAO extends RestDAO {
         Response response = getJSONInvocationOfTarget(
                 "user", username, "mutual", friendName).get();
         if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
-            throw new DatabaseException((String) response.getEntity());
+            throw new DatabaseException(response.readEntity(String.class));
         }
 
         List<Friend> friends = null;
@@ -74,7 +75,7 @@ public class UserRestDAO extends RestDAO {
                 "user", username, "unfriend")
                 .put(Entity.entity(toUnfriend, MediaType.TEXT_PLAIN));
         if (response.getStatus() != Status.OK.getStatusCode()) {
-            throw new DatabaseException((String) response.getEntity());
+            throw new DatabaseException(response.readEntity(String.class));
         }
     }
 

@@ -1,8 +1,12 @@
-package com.g1t11.socialmagnet.data;
+package com.g1t11.socialmagnet.data.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
+
+import org.glassfish.jersey.client.ClientConfig;
+// import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.client.JerseyClient;
+import org.glassfish.jersey.client.JerseyClientBuilder;
+
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
@@ -11,12 +15,15 @@ public class RestDAO {
     private final static String BASE_URL
             = "http://localhost:8080/social-magnet-service/";
 
-    Client client;
+    JerseyClient client;
 
     ObjectMapper mapper;
 
     public RestDAO() {
-        client = ClientBuilder.newClient();
+        ClientConfig config = new ClientConfig();
+        // config.property(
+        //         ClientProperties.SUPPRESS_HTTP_COMPLIANCE_VALIDATION, true);
+        client = JerseyClientBuilder.createClient(config);
         mapper = new ObjectMapper();
     }
 

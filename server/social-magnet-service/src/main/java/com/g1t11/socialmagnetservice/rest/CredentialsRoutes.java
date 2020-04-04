@@ -18,7 +18,7 @@ import org.json.JSONObject;
 
 @Path("/")
 public class CredentialsRoutes {
-    @GET
+    @POST
     @Path("login")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
