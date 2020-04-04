@@ -3,8 +3,6 @@ package com.g1t11.socialmagnetservice.rest;
 import java.util.List;
 
 import javax.annotation.security.PermitAll;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -12,7 +10,6 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -23,12 +20,7 @@ import com.g1t11.socialmagnetservice.data.UserDAO;
 import com.g1t11.socialmagnetservice.data.DatabaseException.SQLErrorCode;
 
 @Path("/user")
-public class UserRestAPI {
-    @Context
-    ServletContext servContext;
-    @Context
-    HttpServletRequest servRequest;
-
+public class UserRoutes {
     @PermitAll
     @GET
     @Path("{username}")
@@ -38,7 +30,7 @@ public class UserRestAPI {
             User user = UserDAO.getUser(username);
 
             return Response.status(Response.Status.OK).entity(user)
-                    .type("application/json").build();
+                    .type(MediaType.APPLICATION_JSON).build();
         } catch (DatabaseException e) {
             if (e.getCode().equals(SQLErrorCode.USER_NOT_FOUND)) {
                 return Response.status(Response.Status.NOT_FOUND).build();
@@ -57,7 +49,7 @@ public class UserRestAPI {
             List<User> friends = UserDAO.getFriends(username);
 
             return Response.status(Response.Status.OK).entity(friends)
-                    .type("application/json").build();
+                    .type(MediaType.APPLICATION_JSON).build();
         } catch (DatabaseException e) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(e.getMessage()).build();
@@ -74,7 +66,7 @@ public class UserRestAPI {
                     username, friendName);
 
             return Response.status(Response.Status.OK).entity(friends)
-                    .type("application/json").build();
+                    .type(MediaType.APPLICATION_JSON).build();
         } catch (DatabaseException e) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(e.getMessage()).build();
@@ -105,7 +97,7 @@ public class UserRestAPI {
             List<String> requests = UserDAO.getRequestUsernames(username);
 
             return Response.status(Response.Status.OK).entity(requests)
-                    .type("application/json").build();
+                    .type(MediaType.APPLICATION_JSON).build();
         } catch (DatabaseException e) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity(e.getMessage()).build();

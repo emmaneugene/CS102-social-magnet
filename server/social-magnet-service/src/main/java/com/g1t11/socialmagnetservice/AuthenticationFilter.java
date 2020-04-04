@@ -14,8 +14,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
-import com.g1t11.socialmagnetservice.data.CredentialsDAO;
-
 public class AuthenticationFilter implements ContainerRequestFilter {
     @Context
     private ResourceInfo resourceInfo;
@@ -64,14 +62,14 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         final String username = tokens[0];
         final String password = tokens[1];
 
-        // Verify user access
-        boolean isValid = CredentialsDAO.login(username, password);
-        if (!isValid) {
-            requestContext.abortWith(
-                    Response.status(Response.Status.UNAUTHORIZED)
-                    .entity("Invalid authorization.").build());
-            return;
-        }
+        // // Verify user access
+        // boolean isValid = CredentialsDAO.login(username, password);
+        // if (!isValid) {
+        //     requestContext.abortWith(
+        //             Response.status(Response.Status.UNAUTHORIZED)
+        //             .entity("Invalid authorization.").build());
+        //     return;
+        // }
 
         // if (method.isAnnotationPresent(RolesAllowed.class)) {
         //     RolesAllowed rolesAnnotation
