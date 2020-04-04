@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.g1t11.socialmagnet.data.DatabaseException.SQLErrorCode;
-import com.g1t11.socialmagnet.model.social.CommonFriend;
+import com.g1t11.socialmagnet.model.social.Friend;
 import com.g1t11.socialmagnet.model.social.User;
 
 public class UserDAO extends DAO {
@@ -90,10 +90,10 @@ public class UserDAO extends DAO {
      * @param friendName The username of the friend whose friends to get.
      * @return A list of usernames of friends with common friends.
      */
-    public List<User> getFriendsOfFriendWithCommon(
+    public List<Friend> getFriendsOfFriendWithCommon(
                 String username, String friendName) {
         ResultSet rs = null;
-        List<User> friends = new ArrayList<>();
+        List<Friend> friends = new ArrayList<>();
 
         String queryString = "CALL get_friends_of_friend_with_common(?, ?)";
 
@@ -108,11 +108,11 @@ public class UserDAO extends DAO {
                 boolean isMutual = rs.getBoolean("mutual");
 
                 if (isMutual) {
-                    CommonFriend f = new CommonFriend(name, fullname);
+                    Friend f = new Friend(name, fullname, true);
                     friends.add(f);
                 } else {
-                    User u = new User(name, fullname);
-                    friends.add(u);
+                    Friend f = new Friend(name, fullname, false);
+                    friends.add(f);
                 }
             }
         } catch (SQLException e) {

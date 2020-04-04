@@ -3,7 +3,7 @@ package com.g1t11.socialmagnet.data;
 import java.util.List;
 
 import com.g1t11.socialmagnet.data.DatabaseException.SQLErrorCode;
-import com.g1t11.socialmagnet.model.social.CommonFriend;
+import com.g1t11.socialmagnet.model.social.Friend;
 import com.g1t11.socialmagnet.model.social.User;
 
 import org.junit.Assert;
@@ -74,12 +74,12 @@ public class TestUserDAO extends TestDAO {
 
     @Test
     public void testGetFriendsOfFriend() {
-        List<User> expected = List.of(
-            elijah,
-            new CommonFriend(frank)
+        List<Friend> expected = List.of(
+            new Friend(elijah.getUsername(), elijah.getFullname(), false),
+            new Friend(frank.getUsername(), frank.getFullname(), true)
         );
 
-        List<User> actual
+        List<Friend> actual
                 = userDAO.getFriendsOfFriendWithCommon("charlie", "danny");
 
         Assert.assertEquals(expected, actual);
@@ -92,7 +92,7 @@ public class TestUserDAO extends TestDAO {
             danny
         );
 
-        List<User> actual
+        List<Friend> actual
                 = userDAO.getFriendsOfFriendWithCommon("adam", "elijah");
 
         Assert.assertEquals(expected, actual);
