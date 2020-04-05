@@ -9,6 +9,9 @@ import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.component.SimpleThreadComponent;
 import com.g1t11.socialmagnet.view.page.PageView;
 
+/**
+ * This is a page view for News Feed page.
+ */
 public class NewsFeedPageView extends PageView {
     private List<SimpleThreadComponent> threadComps = new ArrayList<>(5);
 
@@ -25,6 +28,10 @@ public class NewsFeedPageView extends PageView {
         }
     }
 
+    /**
+     * Sets a list of threads for this view page.
+     * @param threads The list of threads.
+     */
     public void setThreads(List<Thread> threads) {
         threadComps.clear();
         int index = 1;

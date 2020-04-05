@@ -11,6 +11,9 @@ import com.g1t11.socialmagnet.view.component.WallProfileInfoComponent;
 import com.g1t11.socialmagnet.view.page.PageView;
 import com.g1t11.socialmagnet.view.component.SimpleThreadComponent;
 
+/**
+ * This is a page view for User's Wall page.
+ */
 public class WallPageView extends PageView {
     private WallProfileInfoComponent profileComp;
     private List<SimpleThreadComponent> threadComps = new ArrayList<>(5);
@@ -37,6 +40,10 @@ public class WallPageView extends PageView {
         }
     }
 
+    /**
+     * Sets the threads for wall page viewing.
+     * @param threads The list of threads for wall page.
+     */
     public void setThreads(List<Thread> threads) {
         threadComps.clear();
         int index = 1;

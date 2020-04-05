@@ -10,6 +10,9 @@ import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.component.CommentComponent;
 import com.g1t11.socialmagnet.view.page.PageView;
 
+/**
+ * This is a page view for viewing individual thread.
+ */
 public class ThreadPageView extends PageView {
     private final static int commentsToDisplay = 3;
 
@@ -20,16 +23,28 @@ public class ThreadPageView extends PageView {
     private List<CommentComponent> commentComps
             = new ArrayList<>(commentsToDisplay);
 
+    /**
+     * Create a Thread page view with specified threads.
+     * @param threadIndex The index for thread
+     * @param thread The thread that user is viewing.
+     */
     public ThreadPageView(int threadIndex, Thread thread) {
         super("View a Thread");
         this.threadIndex = threadIndex;
     }
 
+    /**
+     * Sets the thread for view.
+     * @param thread The thread for view.
+     */
     public void setThread(Thread thread) {
         this.thread = thread;
         setComments();
     }
 
+    /**
+     * Setes the comments for the thread user is viewing.
+     */
     private void setComments() {
         commentComps.clear();
         int maxIndex = thread.getActualCommentsCount();

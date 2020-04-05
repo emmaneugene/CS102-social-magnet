@@ -102,6 +102,11 @@ public abstract class PageView {
         System.out.print(color);
     }
 
+    /**
+     * Compares the specified object with this PageView for equality.
+     * It returns true if and only if specified object is a PageView and 
+     * both PageViews have the same page titles and status.
+     */
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof PageView)) return false;

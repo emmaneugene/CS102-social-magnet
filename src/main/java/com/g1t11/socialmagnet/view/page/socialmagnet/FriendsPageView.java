@@ -8,6 +8,9 @@ import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.PageView;
 
+/**
+ * This is a page view for Friends page.
+ */
 public class FriendsPageView extends PageView {
     private User currentUser;
 
@@ -20,10 +23,18 @@ public class FriendsPageView extends PageView {
         this.currentUser = currentUser;
     }
 
+    /**
+     * Sets the list of friends to a arraylist.
+     * @param friends The list of friends.
+     */
     public void setFriends(List<User> friends) {
         this.friends = friends;
     }
 
+    /**
+     * Sets the list of usernames of friend requests to a arraylist.
+     * @param requestUsernames The list of usernames of friend requests.
+     */
     public void setRequestUsernames(List<String> requestUsernames) {
         this.requestUsernames = requestUsernames;
     }
