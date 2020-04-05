@@ -22,20 +22,20 @@ import javax.ws.rs.PUT;
 @Path("/thread")
 public class ThreadActionRoutes {
     @POST
-    @Path("new")
+    @Path("{username}/new")
+    @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.TEXT_PLAIN})
-    public Response addThread(String body) {
+    public Response addThread(@PathParam("username") String fromUser, String body) {
         JSONObject obj = new JSONObject(body);
-        String fromUser = obj.getString("fromUser");
         String toUser = obj.getString("toUser");
         String content = obj.getString("content");
         List<String> tags = obj.getJSONArray("tags").toList().stream()
                 .map(x -> (String) x)
                 .collect(Collectors.toList());
         try {
-            ThreadActionDAO.addThread(fromUser, toUser, content, tags);
+            int id = ThreadActionDAO.addThread(fromUser, toUser, content, tags);
 
-            return Response.status(Response.Status.OK).build();
+            return Response.status(Response.Status.OK).entity(id).build();
         } catch (DatabaseException e) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity(e.getMessage()).build();
