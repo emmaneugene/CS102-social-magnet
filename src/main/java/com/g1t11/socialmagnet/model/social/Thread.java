@@ -24,6 +24,8 @@ public class Thread {
 
     private boolean tagged = false;
 
+    public Thread() {}
+
     public Thread(int id) {
         this.id = id;
     }
@@ -45,6 +47,10 @@ public class Thread {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getFromUsername() {
