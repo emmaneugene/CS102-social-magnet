@@ -1,16 +1,12 @@
 package com.g1t11.socialmagnet.data.rest;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.g1t11.socialmagnet.data.DatabaseException;
-import com.g1t11.socialmagnet.data.DatabaseException.SQLErrorCode;
-import com.g1t11.socialmagnet.model.social.Thread;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
