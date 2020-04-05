@@ -66,7 +66,7 @@ public class Farmer extends User {
     public Farmer() {}
 
     /**
-     * Gets the rank of farmer.
+     * Gets the rank of farmer based on current farmer's experience point.
      * @return The rank of farmer.
      */
     public Rank getRank() {
