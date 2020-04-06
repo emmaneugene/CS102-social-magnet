@@ -8,7 +8,7 @@ import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 
 /**
- * This is a render component for Single thread.
+ * This is a render component for a Single thread.
  */
 public class SimpleThreadComponent implements Component {
     private final static int commentsToDisplay = 3;
@@ -25,7 +25,7 @@ public class SimpleThreadComponent implements Component {
     /**
      * Creates a single thread component with specified thread index and thread.
      * @param threadIndex The index of thread.
-     * @param thread The thread content.
+     * @param thread The thread.
      */
     public SimpleThreadComponent(int threadIndex, Thread thread) {
         this.threadIndex = threadIndex;
@@ -76,7 +76,7 @@ public class SimpleThreadComponent implements Component {
     }
 
     /**
-     * A method used to render out the comments of the single thread
+     * A method used to render out the comments of the single thread.
      */
     private void renderComments() {
         for (CommentComponent commentView : commentViews) {

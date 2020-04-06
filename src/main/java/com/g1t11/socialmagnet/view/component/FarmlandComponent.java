@@ -13,7 +13,7 @@ public class FarmlandComponent implements Component {
     List<PlotComponent> plotComps = new ArrayList<>();
 
     /**
-     * Sets the plots to list of plot components for rendering.
+     * Sets the list of plot components for rendering.
      * @param plots The list of plot components.
      */
     public void setPlots(List<Plot> plots) {
@@ -36,7 +36,7 @@ public class FarmlandComponent implements Component {
     }
 
     /**
-     * A method to calulate the amount of spaces for formatting.
+     * A method to calulate the amount of spaces required for formatting.
      * @param plots The list of plots.
      * @return The amount of spaces required for formatting.
      */

@@ -5,7 +5,7 @@ import com.g1t11.socialmagnet.view.component.FarmerHeaderComponent;
 import com.g1t11.socialmagnet.view.page.PageView;
 
 /**
- * This is a general City Farmers Page view that will be used for the rest of 
+ * This is the general City Farmers Page view that will be used for the rest of 
  * the page views that is under City Farmers.
  */
 public abstract class CityFarmersPageView extends PageView {
@@ -28,8 +28,8 @@ public abstract class CityFarmersPageView extends PageView {
     }
 
     /**
-     * Sets the farmer to the current user
-     * @param me The current user.
+     * Sets the farmer to the farmer of current user.
+     * @param me The farmer of current user.
      */
     public void setFarmer(Farmer me) {
         this.me = me;
@@ -37,8 +37,8 @@ public abstract class CityFarmersPageView extends PageView {
     }
 
     /**
-     * Gets the current farmer which is the current user.
-     * @return The current farmer/user.
+     * Gets the current farmer of current user.
+     * @return The farmer of user.
      */
     public Farmer getMe() {
         return me;

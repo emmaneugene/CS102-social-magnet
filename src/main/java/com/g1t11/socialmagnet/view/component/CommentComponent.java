@@ -19,7 +19,7 @@ public class CommentComponent implements Component {
 
     /**
      * Create a comment component with specified post index, comment index 
-     * and comment for render.
+     * and comment.
      * @param postIndex The post index.
      * @param index The comment index.
      * @param comment The comment content.

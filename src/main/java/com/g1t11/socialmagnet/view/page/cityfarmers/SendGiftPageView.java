@@ -44,7 +44,7 @@ public class SendGiftPageView extends CityFarmersPageView {
     }
 
     /**
-     * A method to prompt user for the friend user is gifting to.
+     * A method to prompt user for the friend to gift to.
      */
     public void showSendToPrompt() {
         showPrompt("Send to");

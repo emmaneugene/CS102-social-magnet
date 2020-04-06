@@ -30,7 +30,7 @@ public class StealingPageView extends CityFarmersPageView {
 
     /**
      * Sets a list of plots availble for stealing.
-     * @param plots The list of plots  availble for stealing.
+     * @param plots The list of plots availble for stealing.
      */
     public void setPlots(List<Plot> plots) {
         farmComp.setPlots(plots);

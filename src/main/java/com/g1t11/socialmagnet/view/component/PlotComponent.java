@@ -50,7 +50,7 @@ public class PlotComponent implements Component {
     }
 
     /**
-     * A method used to render out wilted plot.
+     * A method to render out wilted plot.
      */
     private void renderWilted() {
         System.out.print(Painter.paintf("[  [{wilted}]  ]", Color.RED));

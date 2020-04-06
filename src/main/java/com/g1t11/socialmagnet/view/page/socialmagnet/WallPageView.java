@@ -50,7 +50,7 @@ public class WallPageView extends PageView {
     }
 
     /**
-     * Sets the threads for wall page viewing.
+     * Sets the threads for wall page.
      * @param threads The list of threads for wall page.
      */
     public void setThreads(List<Thread> threads) {
@@ -70,7 +70,7 @@ public class WallPageView extends PageView {
     }
 
     /**
-     * A method to prompt user for content of post.
+     * A method to prompt user for the content of post.
      */
     public void showPostPrompt() {
         showPrompt("Enter your post");

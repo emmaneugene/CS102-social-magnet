@@ -25,7 +25,7 @@ public class FarmlandPageView extends CityFarmersPageView {
     }
 
     /**
-     * Sets the appropriate plots for the Farmland.
+     * Sets the specified plots for the Farmland.
      * @param plots The list of plots.
      */
     public void setPlots(List<Plot> plots) {

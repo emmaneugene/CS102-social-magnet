@@ -49,7 +49,7 @@ public class StorePageView extends CityFarmersPageView {
     /**
      * Gets the maximum length of the crop name that is available in Store.
      * @param crops The list of crops available in the Store.
-     * @return The maximum length of the crop name
+     * @return The maximum length of the crop name.
      */
     private int getMaxCropNameLength(List<Crop> crops) {
         int maxLength = 0;

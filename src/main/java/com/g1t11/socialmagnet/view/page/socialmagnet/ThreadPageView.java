@@ -11,7 +11,7 @@ import com.g1t11.socialmagnet.view.component.CommentComponent;
 import com.g1t11.socialmagnet.view.page.PageView;
 
 /**
- * This is a page view for viewing individual thread.
+ * This is a page view for Individual thread.
  */
 public class ThreadPageView extends PageView {
     private final static int commentsToDisplay = 3;
@@ -24,7 +24,7 @@ public class ThreadPageView extends PageView {
             = new ArrayList<>(commentsToDisplay);
 
     /**
-     * Create a Thread page view with specified threads.
+     * Create a Thread page view with specified thread.
      * @param threadIndex The index for thread
      * @param thread The thread that user is viewing.
      */
@@ -43,7 +43,7 @@ public class ThreadPageView extends PageView {
     }
 
     /**
-     * Setes the comments for the thread user is viewing.
+     * Sets the comments for the thread user is viewing.
      */
     private void setComments() {
         commentComps.clear();
@@ -72,7 +72,7 @@ public class ThreadPageView extends PageView {
     }
 
     /**
-     * A method to render out the content of the thread.
+     * A method to render out the contents of the thread.
      */
     private void renderContent() {
         String paintedTemplate = Painter.paintf(
@@ -132,7 +132,7 @@ public class ThreadPageView extends PageView {
     }
 
     /**
-     * A method to prompt user the options of inputs availble (Go back to
+     * A method to prompt user with available inputs (Go back to
      * main menu, Reply to thread, Like or Dislike thread).
      */
     public void showMainPromptNoKill() {

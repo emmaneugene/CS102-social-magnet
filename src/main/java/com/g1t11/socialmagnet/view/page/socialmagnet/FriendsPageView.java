@@ -19,7 +19,7 @@ public class FriendsPageView extends PageView {
     private List<String> requestUsernames = new ArrayList<>();
 
     /**
-     * Creates Friend's page view with specified current user.
+     * Creates Friend's page view with current user.
      * @param currentUser The current user that is using the app.
      */
     public FriendsPageView(User currentUser) {
@@ -28,7 +28,7 @@ public class FriendsPageView extends PageView {
     }
 
     /**
-     * Sets the list of friends to a arraylist.
+     * Sets the list of friends.
      * @param friends The list of friends.
      */
     public void setFriends(List<User> friends) {
@@ -36,7 +36,7 @@ public class FriendsPageView extends PageView {
     }
 
     /**
-     * Sets the list of usernames of friend requests to a arraylist.
+     * Sets the list of usernames of friend requests.
      * @param requestUsernames The list of usernames of friend requests.
      */
     public void setRequestUsernames(List<String> requestUsernames) {
