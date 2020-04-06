@@ -19,7 +19,7 @@ public class FarmerActionDAO extends DAO {
      * @param plotNumber The number of the plot to plant the crop in.
      * @param cropName The name of the crop to plant.
      */
-    public void plantCrop(String username, int plotNumber, String cropName) {
+    public static void plantCrop(String username, int plotNumber, String cropName) {
         String queryString = "CALL plant_crop_auto_yield(?, ?, ?)";
 
         try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {
@@ -49,7 +49,7 @@ public class FarmerActionDAO extends DAO {
      * @param username The username of the farmer planting the crop.
      * @param plotNumber The number of the plot to clear the crop from.
      */
-    public void clearPlot(String username, int plotNumber) {
+    public static void clearPlot(String username, int plotNumber) {
         String queryString = "CALL clear_plot(?, ?)";
 
         try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {
@@ -73,7 +73,7 @@ public class FarmerActionDAO extends DAO {
      * ready to harvest.
      * @param username The username of the farmer harvesting crops.
      */
-    public void harvest(String username) {
+    public static void harvest(String username) {
         String queryString = "CALL harvest(?)";
 
         try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {
@@ -101,7 +101,7 @@ public class FarmerActionDAO extends DAO {
      * @param victimName The username of the farmer being stolen from.
      * @return A list of what was stolen, in the form of {@link StealingRecord}.
      */
-    public List<StealingRecord> steal(String stealerName, String victimName) {
+    public static List<StealingRecord> steal(String stealerName, String victimName) {
         ResultSet rs = null;
         List<StealingRecord> stolenCrops = new ArrayList<>();
 
@@ -130,7 +130,7 @@ public class FarmerActionDAO extends DAO {
         return stolenCrops;
     }
 
-    public void sendGifts(String sender, String[] recipients, String cropName) {
+    public static void sendGifts(String sender, String[] recipients, String cropName) {
         String queryString = "CALL send_gift(?, ?, ?)";
 
         try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {
@@ -147,7 +147,7 @@ public class FarmerActionDAO extends DAO {
         }
     }
 
-    public void acceptGifts(String username) {
+    public static void acceptGifts(String username) {
         String queryString = "CALL accept_gifts(?)";
 
         try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {

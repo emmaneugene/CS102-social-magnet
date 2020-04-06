@@ -7,17 +7,17 @@ public class StealingRecord {
 
     private int quantity;
 
-    private int totalXPGained;
+    private int totalXpGained;
 
     private int totalGoldGained;
 
     public StealingRecord() {}
 
     public StealingRecord(String cropName, int quantity,
-            int totalXPGained, int totalGoldGained) {
+            int totalXpGained, int totalGoldGained) {
         this.cropName = cropName;
         this.quantity = quantity;
-        this.totalXPGained = totalXPGained;
+        this.totalXpGained = totalXpGained;
         this.totalGoldGained = totalGoldGained;
     }
 
@@ -42,12 +42,12 @@ public class StealingRecord {
         this.quantity = quantity;
     }
 
-    public int getTotalXPGained() {
-        return totalXPGained;
+    public int getTotalXpGained() {
+        return totalXpGained;
     }
 
-    public void setTotalXPGained(int totalXPGained) {
-        this.totalXPGained = totalXPGained;
+    public void setTotalXpGained(int totalXpGained) {
+        this.totalXpGained = totalXpGained;
     }
 
     public int getTotalGoldGained() {
@@ -62,7 +62,7 @@ public class StealingRecord {
     public String toString() {
         return String.format("%s for %d XP and %d gold",
                 TextUtils.countedWord(quantity, cropName, cropName + "s"),
-                totalXPGained,
+                totalXpGained,
                 totalGoldGained);
     }
 }
