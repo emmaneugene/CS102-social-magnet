@@ -4,7 +4,14 @@ import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.WelcomePageView;
 
+/**
+ * This is the controller for Welcome page.
+ */
 public class WelcomeController extends Controller {
+    /**
+     * Creates a Welcome page Controller.
+     * @param nav The app's navigator.
+     */
     public WelcomeController(Navigator nav) {
         super(nav);
         setView(new WelcomePageView());

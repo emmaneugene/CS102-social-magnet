@@ -19,6 +19,9 @@ import com.g1t11.socialmagnet.util.TextUtils;
 import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.cityfarmers.SendGiftPageView;
 
+/**
+ * This is a controller for Sending of gifts.
+ */
 public class SendGiftController extends CityFarmersController {
     CredentialsDAO credDAO = new CredentialsDAO(database());
     FarmerActionDAO farmerActionDAO = new FarmerActionDAO(database());
@@ -27,6 +30,11 @@ public class SendGiftController extends CityFarmersController {
 
     List<Crop> crops;
 
+    /**
+     * Creates a sending of gifts controller.
+     * @param nav The app's navigator.
+     * @param me The farmer.
+     */
     public SendGiftController(Navigator nav, Farmer me) {
         super(nav, me);
         crops = storeDAO.getStoreItems();
@@ -66,6 +74,11 @@ public class SendGiftController extends CityFarmersController {
         }
     }
 
+    /**
+     * Gets the selected crop for sending gift.
+     * @param choice The choice of crop for sending gift.
+     * @return The selected choice of crop.
+     */
     private Crop getSelectedCrop(String choice) {
         try {
             int index = Integer.parseInt(choice);
@@ -81,11 +94,20 @@ public class SendGiftController extends CityFarmersController {
         }
     }
 
+    /**
+     * Gets a string array of recipients.
+     * @return The string array of recipients.
+     */
     private String[] getRecipients() {
         getView().showSendToPrompt();
         return input.nextLine().split("\\s*,\\s*");
     }
 
+    /**
+     * A method to check if the gifts are valid to send with various conditions. 
+     * @param recipients The string array of recipients.
+     * @return If the gifts are valid to send.
+     */
     private boolean giftsAreValid(String[] recipients) {
         return !moreThanFiveGiftsToday(recipients)
                 && !sendingToSelf(recipients)
@@ -185,6 +207,11 @@ public class SendGiftController extends CityFarmersController {
         return false;
     }
 
+    /**
+     * A method to display that the error of gift already sent today.
+     * @param usersSentTo The string array of friends that user already sent 
+     *                    gift to.
+     */
     private void displayAlreadySentTodayError(String[] usersSentTo) {
         // Prepare the names for Painter::paintf
         String[] prepNames = Arrays.stream(usersSentTo)
@@ -198,6 +225,11 @@ public class SendGiftController extends CityFarmersController {
         setStatus(Painter.paintf(sb.toString(), Color.RED, Color.BLUE));
     }
 
+    /**
+     * A method to handle sending of crops.
+     * @param toSend The crop to send.
+     * @param recipients The string array of recipients of the crop gift.
+     */
     private void handleSendCrops(Crop toSend, String[] recipients) {
         farmerActionDAO.sendGifts(
                 me.getUsername(), recipients, toSend.getName());

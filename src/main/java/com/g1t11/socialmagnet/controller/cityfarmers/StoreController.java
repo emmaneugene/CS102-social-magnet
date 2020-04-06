@@ -13,11 +13,19 @@ import com.g1t11.socialmagnet.util.TextUtils;
 import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.cityfarmers.StorePageView;
 
+/**
+ * This is a controller for Store.
+ */
 public class StoreController extends CityFarmersController {
     StoreDAO storeDAO = new StoreDAO(nav.database());
 
     List<Crop> storeItem = new ArrayList<>();
 
+    /**
+     * Creates a Store controller.
+     * @param nav The app's navigator.
+     * @param me The farmer.
+     */
     public StoreController(Navigator nav, Farmer me) {
         super(nav, me);
         setView(new StorePageView());
@@ -55,6 +63,11 @@ public class StoreController extends CityFarmersController {
         }
     }
 
+    /**
+     * This is a method that handles the buying of item. It will check if the 
+     * index is out of range.
+     * @param choice The choice of item farmer is buying.
+     */
     private void handleBuyItem(String choice) {
         try {
             int index = Integer.parseInt(choice);
@@ -70,6 +83,12 @@ public class StoreController extends CityFarmersController {
         }
     }
 
+    /**
+     * This is a method to handle the quantity of item that the user is buying.
+     * It will check if the quantity is not less than 0 and if there is 
+     * sufficient funds to purchase.
+     * @param index The amount of item user is buying.
+     */
     private void handleBuyQuantity(int index) {
         getView().showQuantityPrompt();
 

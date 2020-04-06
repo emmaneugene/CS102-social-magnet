@@ -11,11 +11,19 @@ import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.socialmagnet.NewsFeedPageView;
 
+/**
+ * This is a controller for News Feed.
+ */
 public class NewsFeedController extends SocialMagnetController {
     private ThreadLoadDAO threadLoadDAO = new ThreadLoadDAO(database());
 
     private List<Thread> threads = new ArrayList<>();
 
+    /**
+     * Creates a News Feed Controller.
+     * @param nav The app's navigator.
+     * @param me The user.
+     */
     public NewsFeedController(Navigator nav, User me) {
         super(nav, me);
         setView(new NewsFeedPageView());
@@ -50,6 +58,10 @@ public class NewsFeedController extends SocialMagnetController {
         }
     }
 
+    /**
+     * A method to handle thread viewing. It will check for out of range index.
+     * @param choice The input choice to view thread.
+     */
     private void handleThread(String choice) {
         try {
             int index = Integer.parseInt(choice.substring(1));

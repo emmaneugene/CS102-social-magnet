@@ -14,6 +14,9 @@ import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.cityfarmers.FarmlandPageView;
 
+/**
+ * This is a controller for Farmland.
+ */
 public class FarmlandController extends CityFarmersController {
     private static final int WILTED_CLEAR_COST = 5;
 
@@ -22,6 +25,11 @@ public class FarmlandController extends CityFarmersController {
     List<Plot> plots = new ArrayList<>();
     Map<String, Integer> invCrops = new LinkedHashMap<>();
 
+    /**
+     * Creates a Farmland controller.
+     * @param nav The app's navigator.
+     * @param me The farmer.
+     */
     public FarmlandController(Navigator nav, Farmer me) {
         super(nav, me);
         setView(new FarmlandPageView());
@@ -70,6 +78,12 @@ public class FarmlandController extends CityFarmersController {
         }
     }
 
+    /**
+     * A method to handle planting of crops at a specified plot. It will check 
+     * for index out of range and if the selected plot is not empty. It will not 
+     * plant the crop if it fits any of the previously stated condtions.
+     * @param choice The choice to plot the crop at.
+     */
     private void handlePlant(String choice) {
         try {
             int index = Integer.parseInt(choice.substring(1));
@@ -161,6 +175,12 @@ public class FarmlandController extends CityFarmersController {
         }
     }
 
+    /**
+     * A method to handle clearing of plot. It will check for index out of range
+     * and if the selected plot is empty. It will not clear the the plot if it 
+     * fits any of the previously stated conditions.
+     * @param choice The choice of plot to clear.
+     */
     private void handleClear(String choice) {
         try {
             int index = Integer.parseInt(choice.substring(1));
@@ -198,6 +218,10 @@ public class FarmlandController extends CityFarmersController {
         }
     }
 
+    /**
+     * A method to ask user for comfirmation of clearing of healthy crop.
+     * @param index The index of the plot to clear.
+     */
     private void confirmClearHealthy(int index) {
         getView().showConfirmClearPrompt();
 
@@ -210,6 +234,9 @@ public class FarmlandController extends CityFarmersController {
         }
     }
 
+    /**
+     * A method to handle harvesting of crop in the plot.
+     */
     private void handleHarvest() {
         farmerActionDAO.harvest(me.getUsername());
 

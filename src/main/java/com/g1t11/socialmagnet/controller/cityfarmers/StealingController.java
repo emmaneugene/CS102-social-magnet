@@ -14,11 +14,20 @@ import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.util.TextUtils;
 import com.g1t11.socialmagnet.view.page.cityfarmers.StealingPageView;
 
+/**
+ * This is a controller for Stealing.
+ */
 public class StealingController extends CityFarmersController {
     FarmerActionDAO farmerActionDAO = new FarmerActionDAO(database());
 
     Farmer toStealFrom;
 
+    /**
+     * Creates a Stealing controller.
+     * @param nav The app's navigator.
+     * @param me The farmer.
+     * @param friend The friend that the farming is stealing from.
+     */
     public StealingController(Navigator nav, Farmer me, User friend) {
         super(nav, me);
         toStealFrom = farmerLoadDAO.getFarmer(friend.getUsername());
@@ -60,6 +69,10 @@ public class StealingController extends CityFarmersController {
         }
     }
 
+    /**
+     * A method to handle stealing. It will check if there is any plots 
+     * available to steal from.
+     */
     private void handleSteal() {
         List<StealingRecord> stolenCrops = farmerActionDAO.steal(
                 me.getUsername(),

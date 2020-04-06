@@ -7,9 +7,16 @@ import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.LoginPageView;
 
+/**
+ * This is the controller of Login page.
+ */
 public class LoginController extends Controller {
     private CredentialsDAO credDAO = new CredentialsDAO(database());
 
+    /**
+     * Creates a Login page controller.
+     * @param nav The app's navigator.
+     */
     public LoginController(Navigator nav) {
         super(nav);
         setView(new LoginPageView());

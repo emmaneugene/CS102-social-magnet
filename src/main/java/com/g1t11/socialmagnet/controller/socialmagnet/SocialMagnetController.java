@@ -10,6 +10,11 @@ import com.g1t11.socialmagnet.model.social.User;
 public abstract class SocialMagnetController extends Controller {
     User me;
 
+    /**
+     * Creates a Social Magnet controller.
+     * @param nav The app's navigator.
+     * @param me The user.
+     */
     public SocialMagnetController(Navigator nav, User me) {
         super(nav);
         this.me = me;

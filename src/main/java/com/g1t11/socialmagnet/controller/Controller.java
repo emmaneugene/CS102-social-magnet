@@ -4,6 +4,9 @@ import com.g1t11.socialmagnet.data.Database;
 import com.g1t11.socialmagnet.util.Input;
 import com.g1t11.socialmagnet.view.page.PageView;
 
+/**
+ * This abstract class acts as the base controller.
+ */
 public abstract class Controller {
     public Navigator nav;
 
@@ -11,18 +14,31 @@ public abstract class Controller {
 
     protected Input input = new Input();
 
+    /**
+     * Creates controller.
+     * @param nav The navigator.
+     */
     public Controller(Navigator nav) {
         this.nav = nav;
     }
+
 
     public final Database database() {
         return nav.database();
     }
 
+    /**
+     * Gets the page view.
+     * @return The page view.
+     */
     public PageView getView() {
         return view;
     }
 
+    /**
+     * Sets specified page view.
+     * @param view The page view to set.
+     */
     public void setView(PageView view) {
         this.view = view;
     }

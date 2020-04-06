@@ -9,9 +9,18 @@ import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.socialmagnet.FriendsWallPageView;
 
+/**
+ * This is the controller for Friends' Wall.
+ */
 public class FriendsWallController extends WallController {
     private UserDAO userDAO = new UserDAO(database());
 
+    /**
+     * Creates a Friends Wall controller.
+     * @param nav The app's navigator.
+     * @param me The user.
+     * @param friend The friend that user is visiting.
+     */
     public FriendsWallController(Navigator nav, User me, User friend) {
         super(nav, me);
         farmerToDisplay = farmerLoadDAO.getFarmer(friend.getUsername());

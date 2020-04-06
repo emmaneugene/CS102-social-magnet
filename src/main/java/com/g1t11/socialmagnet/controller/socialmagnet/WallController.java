@@ -17,6 +17,9 @@ import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.socialmagnet.WallPageView;
 
+/**
+ * This is a controller for Wall page.
+ */
 public class WallController extends SocialMagnetController {
     protected FarmerLoadDAO farmerLoadDAO = new FarmerLoadDAO(database());
     protected FarmerActionDAO farmerActionDAO = new FarmerActionDAO(database());
@@ -26,6 +29,11 @@ public class WallController extends SocialMagnetController {
     protected Farmer farmerToDisplay;
     protected List<Thread> wallThreads;
 
+    /**
+     * Creates a controller for Wall page.
+     * @param nav The app's navigator.
+     * @param me The user.
+     */
     public WallController(Navigator nav, User me) {
         super(nav, me);
         farmerToDisplay = farmerLoadDAO.getFarmer(me.getUsername());
@@ -66,6 +74,11 @@ public class WallController extends SocialMagnetController {
         }
     }
 
+    /**
+     * A method to handle viewing of thread. It will check for index out of 
+     * range.
+     * @param choice The input choice of viewing of thread.
+     */
     protected void handleThread(String choice) {
         try {
             int index = Integer.parseInt(choice.substring(1));
@@ -82,12 +95,18 @@ public class WallController extends SocialMagnetController {
         }
     }
 
+    /**
+     * A method to handle accepting of gifts.
+     */
     private void handleAccept() {
         farmerActionDAO.acceptGifts(me.getUsername());
 
         setStatus(Painter.paint("Accepted all pending gifts!", Color.GREEN));
     }
 
+    /**
+     * A method to handle posting of thread.
+     */
     protected void handlePost() {
         // Clear the previous prompt by refreshing the view.
         getView().display();
@@ -100,6 +119,11 @@ public class WallController extends SocialMagnetController {
                 farmerToDisplay.getUsername(), threadContent, tags);
     }
 
+    /**
+     * Gets the tags of user in the content of thread.
+     * @param content The content of thread.
+     * @return The list of user that is tagged.
+     */
     private List<String> getRawUserTags(String content) {
         Pattern p = Pattern.compile("@([A-Za-z0-9]+)");
         Matcher m = p.matcher(content);
