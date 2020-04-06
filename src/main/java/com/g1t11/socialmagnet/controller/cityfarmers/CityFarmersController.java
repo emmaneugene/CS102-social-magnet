@@ -3,7 +3,7 @@ package com.g1t11.socialmagnet.controller.cityfarmers;
 import com.g1t11.socialmagnet.controller.Controller;
 import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.data.FarmerActionDAO;
-import com.g1t11.socialmagnet.data.FarmerLoadDAO;
+import com.g1t11.socialmagnet.data.rest.FarmerLoadRestDAO;
 import com.g1t11.socialmagnet.data.StoreDAO;
 import com.g1t11.socialmagnet.data.rest.UserRestDAO;
 import com.g1t11.socialmagnet.model.farm.Farmer;
@@ -15,7 +15,7 @@ import com.g1t11.socialmagnet.view.page.cityfarmers.CityFarmersPageView;
  */
 public abstract class CityFarmersController extends Controller {
     protected UserRestDAO userDAO = new UserRestDAO();
-    protected FarmerLoadDAO farmerLoadDAO = new FarmerLoadDAO(nav.database());
+    protected FarmerLoadRestDAO farmerLoadDAO = new FarmerLoadRestDAO();
     protected FarmerActionDAO farmerActionDAO = new FarmerActionDAO(database());
     protected StoreDAO storeDAO = new StoreDAO(database());
 
