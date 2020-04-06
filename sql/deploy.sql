@@ -61,7 +61,7 @@ CREATE TABLE comment (
 );
 
 CREATE TABLE liker (
-    username   VARCHAR(128) BINARY NOT NULL,
+    username   VARCHAR(255) BINARY NOT NULL,
     thread_id  INT                 NOT NULL,
     PRIMARY KEY (username, thread_id),
     FOREIGN KEY (username)  REFERENCES user (username),
@@ -69,7 +69,7 @@ CREATE TABLE liker (
 );
 
 CREATE TABLE disliker (
-    username   VARCHAR(128) BINARY NOT NULL,
+    username   VARCHAR(255) BINARY NOT NULL,
     thread_id  INT                 NOT NULL,
     PRIMARY KEY (username, thread_id),
     FOREIGN KEY (username)  REFERENCES user (username),
