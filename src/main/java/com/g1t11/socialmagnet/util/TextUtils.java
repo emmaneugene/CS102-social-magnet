@@ -9,10 +9,10 @@ import java.util.List;
 public class TextUtils {
 
     /**
-     * Build appropriate string whether if it is singular or plural.
+     * Build appropriate string according to the count of word.
      * @param count The number of words.
-     * @param singular The string to use if it is singular.
-     * @param plural The string to use if it is plural.
+     * @param singular The string to use if its singular.
+     * @param plural The string to use if its plural.
      * @return Generated appropriate string.
      */
     public static String countedWord(int count,
@@ -25,6 +25,7 @@ public class TextUtils {
 
     /**
      * Build appropriate string with ',' according to the input number.
+     * (e.g 1,000,000)
      * @param number The input number
      * @return Generated appropriate string wuth ','.
      */

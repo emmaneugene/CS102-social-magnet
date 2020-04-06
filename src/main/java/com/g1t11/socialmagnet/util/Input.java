@@ -14,7 +14,8 @@ public class Input {
     private final Scanner sc = new Scanner(System.in);
 
     /**
-     * A method to read password from console instead of scanner.
+     * A method to read password from console instead of scanner. This will 
+     * allow the masking of the password.
      * @return The password.
      */
     public String readPassword() {
