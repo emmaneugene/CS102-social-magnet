@@ -31,7 +31,7 @@ public class StealingRecord {
     }
 
     /**
-     * Creates a stealing record with only specified crop and quantity.
+     * Creates a stealing record with specified crop and quantity.
      * @param crop The name of the crop.
      * @param quantity The quantity of produced stolen.
      */

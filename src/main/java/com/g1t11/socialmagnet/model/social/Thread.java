@@ -71,7 +71,7 @@ public class Thread {
     }
  
     /**
-     * Gets id of thread
+     * Gets id of thread.
      * @return Id of the thread.
      */
     public int getId() {

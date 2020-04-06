@@ -87,7 +87,7 @@ public class Farmer extends User {
 
     /**
      * Gets the count of maximum plot a farmer can have based on it's rank.
-     * @return The number of maximum plot of farmer..
+     * @return The number of maximum plot of farmer.
      */
     public int getMaxPlotCount() {
         switch (getRank()) {
@@ -113,8 +113,8 @@ public class Farmer extends User {
     }
 
     /**
-     * A method to add experience point to farmer.
-     * @param XPEarned The amount of experience point to add to farmer.
+     * A method to add experience points to farmer.
+     * @param XPEarned The amount of experience points to add to farmer.
      */
     public void addXP(int XPEarned) {
         XP += XPEarned;
@@ -162,7 +162,7 @@ public class Farmer extends User {
 
     /**
      * Gets farmland of a farmer.
-     * @return The list of plot of a farmer.
+     * @return The list of plot of farmer.
      */
     public List<Plot> getFarmland() {
         return farmland;

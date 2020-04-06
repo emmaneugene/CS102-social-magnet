@@ -125,6 +125,8 @@ public class Crop {
 
     /**
      * Gets the random yield between the minimum and maximum yield.
+     * The formula to calculate the yield is Min Yield + random number in the
+     * range of 0 to (Max Yield - min Yield).
      * @return The random yield between the minimum and maximum yield.
      */
     public int getRandomYield() {
