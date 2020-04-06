@@ -51,10 +51,10 @@ public class FarmerLoadRoutes {
     }
 
     @GET
-    @Path("{username}/plots/{count}")
+    @Path("{username}/plots")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getPlots(@PathParam("username") String username,
-            @PathParam("count") int maxPlotCount) {
+            @QueryParam("count") int maxPlotCount) {
         try {
             List<Plot> plots = FarmerLoadDAO.getPlots(username, maxPlotCount);
             System.out.println(plots.toString());

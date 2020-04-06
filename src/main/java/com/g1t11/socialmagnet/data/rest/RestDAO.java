@@ -39,7 +39,7 @@ public class RestDAO {
         return getTarget(urlParts).request();
     }
 
-    private WebTarget getTarget(String ...urlParts) {
+    protected WebTarget getTarget(String ...urlParts) {
         return client.target(BASE_URL + String.join("/", urlParts));
     }
 }

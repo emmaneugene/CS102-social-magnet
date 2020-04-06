@@ -203,10 +203,10 @@ public class TestFarmerActionDAO extends TestDAO {
 
         int minExpectedWealth = before.getWealth() + minGoldGained;
         int maxExpectedWealth = before.getWealth() + maxGoldGained;
-        int minExpectedXP = before.getXP() + minXPGained;
-        int maxExpectedXP = before.getXP() + maxXPGained;
+        int minExpectedXP = before.getXp() + minXPGained;
+        int maxExpectedXP = before.getXp() + maxXPGained;
         int actualWealth = after.getWealth();
-        int actualXP = after.getXP();
+        int actualXP = after.getXp();
 
         Assert.assertTrue(minExpectedWealth <= actualWealth
                 && actualWealth <= maxExpectedWealth);
@@ -218,14 +218,14 @@ public class TestFarmerActionDAO extends TestDAO {
         // Should result in no yield stolen.
         Farmer dannyBefore = farmerLoadDAO.getFarmer("danny");
         int expectedWealth = dannyBefore.getWealth();
-        int expectedXP = dannyBefore.getXP();
+        int expectedXP = dannyBefore.getXp();
 
         List<StealingRecord> actualSteal
                 = farmerActionDAO.steal("danny", "elijah");
 
         Farmer dannyAfter = farmerLoadDAO.getFarmer("danny");
         int actualWealth = dannyAfter.getWealth();
-        int actualXP = dannyAfter.getXP();
+        int actualXP = dannyAfter.getXp();
 
         Assert.assertEquals(0, actualSteal.size());
         Assert.assertEquals(expectedWealth, actualWealth);
@@ -237,14 +237,14 @@ public class TestFarmerActionDAO extends TestDAO {
          // Should result in no yield stolen.
         Farmer elijahBefore = farmerLoadDAO.getFarmer("elijah");
         int expectedWealth = elijahBefore.getWealth();
-        int expectedXP = elijahBefore.getXP();
+        int expectedXP = elijahBefore.getXp();
 
         List<StealingRecord> actualSteal
                 = farmerActionDAO.steal("elijah", "danny");
 
         Farmer elijahAfter = farmerLoadDAO.getFarmer("elijah");
         int actualWealth = elijahAfter.getWealth();
-        int actualXP = elijahAfter.getXP();
+        int actualXP = elijahAfter.getXp();
 
         Assert.assertEquals(0, actualSteal.size());
         Assert.assertEquals(expectedWealth, actualWealth);

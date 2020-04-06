@@ -3,9 +3,12 @@ package com.g1t11.socialmagnet.model.farm;
 import java.util.Date;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class Plot {
     private Crop crop;
 
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
     private Date timePlanted;
 
     public Plot(Crop crop, Date timePlanted) {
