@@ -1,4 +1,4 @@
-package com.g1t11.socialmagnet.data;
+package com.g1t11.socialmagnetservice.data;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,16 +9,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.g1t11.socialmagnet.data.DatabaseException.SQLErrorCode;
-import com.g1t11.socialmagnet.model.farm.Crop;
-import com.g1t11.socialmagnet.model.farm.Farmer;
-import com.g1t11.socialmagnet.model.farm.Plot;
+import com.g1t11.socialmagnetservice.data.DatabaseException.SQLErrorCode;
+import com.g1t11.socialmagnetservice.model.farm.Crop;
+import com.g1t11.socialmagnetservice.model.farm.Farmer;
+import com.g1t11.socialmagnetservice.model.farm.Plot;
 
 public class FarmerLoadDAO extends DAO {
-    public FarmerLoadDAO(Database db) {
-        super(db);
-    }
-
     /**
      * Get farmer details of a given user.
      * <p>
@@ -27,7 +23,7 @@ public class FarmerLoadDAO extends DAO {
      * @param username The username of the farmer.
      * @return A unique farmer with the specified username.
      */
-    public Farmer getFarmer(String username) {
+    public static Farmer getFarmer(String username) {
         ResultSet rs = null;
         Farmer f = null;
 
@@ -62,7 +58,7 @@ public class FarmerLoadDAO extends DAO {
      * @return A sorted map of the names of crops in an inventory with its
      * corresponding quantities.
      */
-    public Map<String, Integer> getInventoryCrops(String username) {
+    public static Map<String, Integer> getInventoryCrops(String username) {
         ResultSet rs = null;
         Map<String, Integer> invCrops = new LinkedHashMap<>();
 
@@ -91,7 +87,7 @@ public class FarmerLoadDAO extends DAO {
      * @param maxPlotCount The maximum number of plots the farmer can access.
      * @return The plots of a farmer.
      */
-    public List<Plot> getPlots(String username, int maxPlotCount) {
+    public static List<Plot> getPlots(String username, int maxPlotCount) {
         ResultSet rs = null;
 
         Plot[] emptyPlots = new Plot[maxPlotCount];
@@ -133,7 +129,7 @@ public class FarmerLoadDAO extends DAO {
      * @param username The username of the gift sender.
      * @return The number of gifts sent today.
      */
-    public int getGiftCountToday(String username) {
+    public static int getGiftCountToday(String username) {
         ResultSet rs = null;
         int giftCount = 0;
 
@@ -162,7 +158,7 @@ public class FarmerLoadDAO extends DAO {
      * @return A map of recipient usernames to whether a gift was already sent
      * today.
      */
-    public Map<String, Boolean> sentGiftToUsersToday(
+    public static Map<String, Boolean> sentGiftToUsersToday(
                 String username, String[] recipients) {
         Map<String, Boolean> result = new LinkedHashMap<>();
         for (String recipient : recipients) {
@@ -177,7 +173,7 @@ public class FarmerLoadDAO extends DAO {
      * @param recipient The recipient of the gift.
      * @return Whether a gift was already sent today.
      */
-    public boolean sentGiftToUserToday(String sender, String recipient) {
+    public static boolean sentGiftToUserToday(String sender, String recipient) {
         ResultSet rs = null;
         boolean sentGiftToday = false;
 

@@ -10,10 +10,6 @@ import com.g1t11.socialmagnetservice.data.DatabaseException.SQLErrorCode;
 import com.g1t11.socialmagnetservice.model.farm.StealingRecord;
 
 public class FarmerActionDAO extends DAO {
-    public FarmerActionDAO(Database db) {
-        super(db);
-    }
-
     /**
      * Plant a specified crop on a specified plot of a given farmer in the
      * database.
