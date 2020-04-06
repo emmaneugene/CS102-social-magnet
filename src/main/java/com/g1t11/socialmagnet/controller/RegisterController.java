@@ -61,11 +61,11 @@ public class RegisterController extends Controller {
 
     /**
      * This is a method to validate the input username. It will check the 
-     * username for empty, too long, not alphanumeric and existing username. 
+     * username for empty, too long, not an alphanumeric and existing username. 
      * It will then return false if the input username fits any of the
-     * conditions previously stated. Else return true.
+     * conditions previously stated. Else it will return true.
      * @param username The input username.
-     * @return Return true if pass validation. Else false.
+     * @return Whether if the username is valid.
      */
     private boolean validateUsername(String username) {
         if (username.length() == 0) {
@@ -95,9 +95,10 @@ public class RegisterController extends Controller {
     /**
      * This is a method to validate the input fullname. It will check the 
      * fullname for empty or too long. It will return false if the input 
-     * fullname fits any of the conditions previously stated. Else return true.
+     * fullname fits any of the conditions previously stated. Else it will 
+     * return true.
      * @param fullname The input fullname.
-     * @return Return true if pass validation. Else false.
+     * @return Whether if the fullname is valid.
      */
     private boolean validateFullname(String fullname) {
         if (fullname.length() == 0) {
@@ -116,9 +117,10 @@ public class RegisterController extends Controller {
     /**
      * This is a method to validate the input password. It will check the 
      * password for empty or too short. It will return false if the input 
-     * fullname fits any of the conditions previously stated. Else return true.
+     * fullname fits any of the conditions previously stated. Else it will
+     * return true.
      * @param password The input password.
-     * @return Return true if pass validation. Else false.
+     * @return Whether if the password is valid.
      */
     private boolean validatePassword(String password) {
         if (password.length() == 0) {
@@ -135,12 +137,12 @@ public class RegisterController extends Controller {
     }
 
     /**
-     * This is a method to validate the input password check. It will check
-     * if it match with previous password that the user input. It will return 
-     * true if it match. Else return false.
+     * This is a method to validate the 2nd input password for the check. It 
+     * will check if it matches with the previous password that the user input.
+     * It will return true if it matches. Else it returns false.
      * @param password The input password before check.
      * @param check The input password after check.
-     * @return Return true if pass validation. Else false.
+     * @return Whetherif the 2nd password check is valid.
      */
     private boolean validatePasswordCheck(String password, String check) {
         if (!password.equals(check)) {

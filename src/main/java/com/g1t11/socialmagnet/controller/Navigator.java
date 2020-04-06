@@ -6,7 +6,7 @@ import java.util.List;
 import com.g1t11.socialmagnet.data.Database;
 
 /**
- * This is the navigator where it control the current navigation state of the
+ * This is the navigator where it controls the current navigation state of the
  * application by going through the various controllers.
  */
 public class Navigator {
@@ -31,7 +31,7 @@ public class Navigator {
     }
 
     /**
-     * Gets the database of the ap.
+     * Gets the database of the app.
      * @return The database the app is using.
      */
     public Database database() {

@@ -29,7 +29,7 @@ public abstract class CityFarmersController extends Controller {
     /**
      * Creates a City Farmers controller with specified user.
      * @param nav The app's navigator.
-     * @param me The farmer.
+     * @param me The user.
      */
     public CityFarmersController(Navigator nav, User me) {
         super(nav);

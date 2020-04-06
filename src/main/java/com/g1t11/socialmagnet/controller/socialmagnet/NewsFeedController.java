@@ -59,7 +59,7 @@ public class NewsFeedController extends SocialMagnetController {
     }
 
     /**
-     * A method to handle thread viewing. It will check for out of range index.
+     * A method to handle thread viewing. It will check for out of range choice.
      * @param choice The input choice to view thread.
      */
     private void handleThread(String choice) {

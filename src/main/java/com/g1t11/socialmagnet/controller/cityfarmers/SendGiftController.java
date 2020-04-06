@@ -106,7 +106,7 @@ public class SendGiftController extends CityFarmersController {
     /**
      * A method to check if the gifts are valid to send with various conditions. 
      * @param recipients The string array of recipients.
-     * @return If the gifts are valid to send.
+     * @return Whether gifts are valid to send.
      */
     private boolean giftsAreValid(String[] recipients) {
         return !moreThanFiveGiftsToday(recipients)

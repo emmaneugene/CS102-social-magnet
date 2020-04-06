@@ -75,8 +75,8 @@ public class WallController extends SocialMagnetController {
     }
 
     /**
-     * A method to handle viewing of thread. It will check for index out of 
-     * range.
+     * A method to handle viewing of thread. It will check for out of 
+     * range choice.
      * @param choice The input choice of viewing of thread.
      */
     protected void handleThread(String choice) {

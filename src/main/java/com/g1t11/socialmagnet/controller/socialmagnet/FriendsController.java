@@ -72,7 +72,7 @@ public class FriendsController extends SocialMagnetController {
 
     /**
      * A method to handle input for unfriend. It will check for
-     * out of range index.
+     * out of range choice.
      * @param choice The input choice to unfriend.
      */
     private void handleUnfriend(String choice) {
@@ -99,9 +99,8 @@ public class FriendsController extends SocialMagnetController {
 
     /**
      * A method to handle sending of friend request. It will check if the friend
-     * exists, if it is a existing friend or it is a self request. It will 
-     * return error with appropriate message if it fits any of the stated
-     * conditions.
+     * exists, existing friend or self request. It will return error with an
+     * appropriate message if it fits any of the previously stated conditions.
      */
     private void handleRequest() {
         // Clear the previous prompt by refreshing the view.
@@ -135,8 +134,8 @@ public class FriendsController extends SocialMagnetController {
     }
 
     /**
-     * A method to handle accepting of friend request. It will check for index
-     * out of range and if the input choice is in the list of friend request
+     * A method to handle accepting of friend request. It will check for out of 
+     * range choice and if the input choice is in the list of friend request
      * and not in the list of friends.
      * @param choice The input choice of friend request to accept.
      */
@@ -170,8 +169,8 @@ public class FriendsController extends SocialMagnetController {
     }
 
     /**
-     * A method to handle rejecting of friend request. It will check for index
-     * out of range and if the input choice is in the list of friend request
+     * A method to handle rejecting of friend request. It will check for out
+     * of range choice and if the input choice is in the list of friend request
      * and not in the list of friends.
      * @param choice The input choice of friend request to reject.
      */
@@ -205,9 +204,9 @@ public class FriendsController extends SocialMagnetController {
     }
 
     /**
-     * A method to handle viewing of friend's page. It will check for index out 
-     * of range.
-     * @param choice The input choice of friend to view thier page.
+     * A method to handle viewing of friend's page. It will check for out 
+     * of range choice.
+     * @param choice The input choice of friend for viewing of thier page.
      */
     private void handleView(String choice) {
         try {

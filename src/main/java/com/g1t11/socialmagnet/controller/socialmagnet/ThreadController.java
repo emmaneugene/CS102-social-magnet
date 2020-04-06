@@ -84,7 +84,7 @@ public class ThreadController extends SocialMagnetController {
     }
 
     /**
-     * A method to handle killing of thread. It will check it if is killable. It
+     * A method to handle killing of thread. It will check if it is killable. It
      * is killable when the thread is posted by the user or when the user is 
      * tagged. When posted by user, it will remove post. When tagged, it will 
      * remove tag only.
@@ -109,8 +109,8 @@ public class ThreadController extends SocialMagnetController {
 
     /**
      * A method to check if the thread is removable. It is removable when the
-     * thread is posted by the user.
-     * @return If it is removable.
+     * thread is posted by the user or the thread is posted to the user.
+     * @return Whether the thread is removable.
      */
     private boolean isRemovable() {
         String currentUsername = me.getUsername();

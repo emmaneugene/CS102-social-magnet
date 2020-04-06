@@ -79,9 +79,9 @@ public class FarmlandController extends CityFarmersController {
     }
 
     /**
-     * A method to handle planting of crops at a specified plot. It will check 
-     * for index out of range and if the selected plot is not empty. It will not 
-     * plant the crop if it fits any of the previously stated condtions.
+     * A method to handle planting of crops at specific plot. It will check 
+     * for out of range choice and if the specific plot is not empty. It will 
+     * not plant the crop if it fits any of the previously stated conditions.
      * @param choice The choice to plot the crop at.
      */
     private void handlePlant(String choice) {
@@ -113,7 +113,7 @@ public class FarmlandController extends CityFarmersController {
     /**
      * Check if the selected plot has crops growing on it.
      * @param index The index of the selected plot.
-     * @return Whether the selected plot has crops growing on it.
+     * @return Whether the selected plot is empty.
      */
     private boolean isSelectedPlotEmpty(int index) {
         Plot selectedPlot = plots.get(index - 1);
@@ -126,7 +126,7 @@ public class FarmlandController extends CityFarmersController {
     }
 
     /**
-     * Handle user input to get the name of the selected crop from the user
+     * Handle user input to get the name of the selected crop from the user's
      * inventory to plant, or handle navigation if "M" or "F" is entered.
      * @return The name of the crop to plant, or null if the choice is invalid.
      */
@@ -176,9 +176,9 @@ public class FarmlandController extends CityFarmersController {
     }
 
     /**
-     * A method to handle clearing of plot. It will check for index out of range
-     * and if the selected plot is empty. It will not clear the the plot if it 
-     * fits any of the previously stated conditions.
+     * A method to handle clearing of plot. It will check for out of range 
+     * choice and if the selected plot is empty. It will not clear the plot if 
+     * it fits any of the previously stated conditions.
      * @param choice The choice of plot to clear.
      */
     private void handleClear(String choice) {
