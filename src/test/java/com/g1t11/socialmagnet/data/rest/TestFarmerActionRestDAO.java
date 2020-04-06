@@ -1,8 +1,10 @@
-package com.g1t11.socialmagnet.data;
+package com.g1t11.socialmagnet.data.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.g1t11.socialmagnet.data.DatabaseException;
 import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.farm.Plot;
@@ -11,10 +13,10 @@ import com.g1t11.socialmagnet.model.farm.StealingRecord;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TestFarmerActionDAO extends TestDAO {
-    private FarmerLoadDAO farmerLoadDAO;
-    private FarmerActionDAO farmerActionDAO;
-    private ThreadActionDAO threadActionDAO;
+public class TestFarmerActionRestDAO {
+    private FarmerLoadRestDAO farmerLoadDAO;
+    private FarmerActionRestDAO farmerActionDAO;
+    private ThreadActionRestDAO threadActionDAO;
 
     public static final Crop papaya
             = new Crop("Papaya",     20, 30,  8,  75, 100, 15);
@@ -25,10 +27,10 @@ public class TestFarmerActionDAO extends TestDAO {
     public static final Crop watermelon
             = new Crop("Watermelon", 50, 240, 1,   5, 800, 10);
 
-    public TestFarmerActionDAO() {
-        farmerLoadDAO = new FarmerLoadDAO(db);
-        farmerActionDAO = new FarmerActionDAO(db);
-        threadActionDAO = new ThreadActionDAO(db);
+    public TestFarmerActionRestDAO() {
+        farmerLoadDAO = new FarmerLoadRestDAO();
+        farmerActionDAO = new FarmerActionRestDAO();
+        threadActionDAO = new ThreadActionRestDAO();
     }
 
     @Test
@@ -38,7 +40,8 @@ public class TestFarmerActionDAO extends TestDAO {
     }
 
     private void testPlantCrop() {
-        List<Plot> expected = farmerLoadDAO.getPlots("adam", 6);
+        List<Plot> expected
+                = new ArrayList<>(farmerLoadDAO.getPlots("adam", 6));
         expected.set(4, new Plot(watermelon));
 
         farmerActionDAO.plantCrop("adam", 5, "Watermelon");
@@ -51,7 +54,8 @@ public class TestFarmerActionDAO extends TestDAO {
     private void testClearCrop() {
         int expectedWealth = farmerLoadDAO.getFarmer("adam").getWealth();
 
-        List<Plot> expectedPlots = farmerLoadDAO.getPlots("adam", 6);
+        List<Plot> expectedPlots
+                = new ArrayList<>(farmerLoadDAO.getPlots("adam", 6));
         expectedPlots.set(4, new Plot());
 
         farmerActionDAO.clearPlot("adam", 5);
@@ -67,7 +71,8 @@ public class TestFarmerActionDAO extends TestDAO {
     public void testClearWiltedCrop() {
         int expectedWealth = farmerLoadDAO.getFarmer("frank").getWealth() - 5;
 
-        List<Plot> expectedPlots = farmerLoadDAO.getPlots("frank", 5);
+        List<Plot> expectedPlots
+                = new ArrayList<>(farmerLoadDAO.getPlots("frank", 5));
         expectedPlots.set(2, new Plot());
 
         farmerActionDAO.clearPlot("frank", 3);
