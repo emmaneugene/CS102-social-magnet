@@ -6,6 +6,10 @@ import com.g1t11.socialmagnet.util.Painter.Color;
  * This is the page view for Login page.
  */
 public class LoginPageView extends PageView {
+
+    /**
+     * Creates a Login in page view.
+     */
     public LoginPageView() {
         super("Login");
     }

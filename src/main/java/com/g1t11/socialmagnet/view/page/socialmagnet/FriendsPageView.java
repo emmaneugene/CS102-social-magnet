@@ -18,6 +18,10 @@ public class FriendsPageView extends PageView {
 
     private List<String> requestUsernames = new ArrayList<>();
 
+    /**
+     * Creates Friend's page view with specified current user.
+     * @param currentUser The current user that is using the app.
+     */
     public FriendsPageView(User currentUser) {
         super("My Friends");
         this.currentUser = currentUser;
@@ -71,6 +75,9 @@ public class FriendsPageView extends PageView {
         setInputColor(Color.YELLOW);
     }
 
+    /**
+     * A method to prompt for username.
+     */
     public void showRequestUsernamePrompt() {
         showPrompt("Enter the username");
         setInputColor(Color.BLUE);

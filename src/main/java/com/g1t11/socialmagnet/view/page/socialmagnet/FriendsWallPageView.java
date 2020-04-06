@@ -45,6 +45,10 @@ public class FriendsWallPageView extends WallPageView {
         System.out.println();
     }
     
+    /**
+     * Append the status with the appropriate greeting based on full name of 
+     * user.
+     */
     private void appendGreeting() {
         appendStatus(String.format("Welcome, %s!\n", me.getFullname()));
     }

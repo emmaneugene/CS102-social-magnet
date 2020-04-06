@@ -6,6 +6,10 @@ import com.g1t11.socialmagnet.util.Painter.Color;
  * This is the page view for Registration page.
  */
 public class RegisterPageView extends PageView {
+
+    /**
+     * Creates Register page view.
+     */
     public RegisterPageView() {
         super("Registration");
     }

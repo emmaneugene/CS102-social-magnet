@@ -71,6 +71,9 @@ public class ThreadPageView extends PageView {
         System.out.println();
     }
 
+    /**
+     * A method to render out the content of the thread.
+     */
     private void renderContent() {
         String paintedTemplate = Painter.paintf(
                 "[{%d}] [{%s}]: %s\n", Color.YELLOW, Color.BLUE);
@@ -78,12 +81,18 @@ public class ThreadPageView extends PageView {
                 thread.getFromUsername(), thread.getContent());
     }
 
+    /**
+     * A method to render out the comments of the thread.
+     */
     private void renderComments() {
         for (CommentComponent commentView : commentComps) {
             commentView.render();
         }
     }
 
+    /**
+     * A method to render out the likes for the thread.
+     */
     private void renderLikes() {
         System.out.println(Painter.paint(
                 "Who likes this post:", Color.GREEN));
@@ -97,6 +106,9 @@ public class ThreadPageView extends PageView {
         }
     }
 
+    /**
+     * A method to render out the dislikes for the thread.
+     */
     private void renderDislikes() {
         System.out.println(Painter.paint(
                 "Who dislikes this post:", Color.PURPLE));
@@ -119,6 +131,10 @@ public class ThreadPageView extends PageView {
         setInputColor(Color.YELLOW);
     }
 
+    /**
+     * A method to prompt user the options of inputs availble (Go back to
+     * main menu, Reply to thread, Like or Dislike thread).
+     */
     public void showMainPromptNoKill() {
         showPrompt(Painter.paintf(
                 "[[{M}]]ain | [[{R}]]eply"
@@ -127,6 +143,9 @@ public class ThreadPageView extends PageView {
         setInputColor(Color.YELLOW);
     }
 
+    /**
+     * A method to prompt user for reply of thread.
+     */
     public void showReplyPrompt() {
         showPrompt("Enter your reply");
     }

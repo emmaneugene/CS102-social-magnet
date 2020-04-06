@@ -21,10 +21,17 @@ public class WelcomePageView extends PageView {
 
     Integer fixedHourOfDay = null;
 
+    /**
+     * Creates Welcome Page view.
+     */
     public WelcomePageView() {
         super("Welcome");
     }
 
+    /**
+     * Creates Welcome Page view with the hour of the day.
+     * @param fixedHourOfDay The hour of the day.
+     */
     public WelcomePageView(int fixedHourOfDay) {
         this();
         this.fixedHourOfDay = fixedHourOfDay;

@@ -18,11 +18,20 @@ public class WallPageView extends PageView {
     private WallProfileInfoComponent profileComp;
     private List<SimpleThreadComponent> threadComps = new ArrayList<>(5);
 
+    /**
+     * Creates a Wall Page view of the user.
+     * @param me The user.
+     */
     public WallPageView(Farmer me) {
         super("My Wall");
         this.profileComp = new WallProfileInfoComponent(me);
     }
 
+    /**
+     * Creates a Wall Page view of the user and the specified title of the page.
+     * @param me The user.
+     * @param title The title.
+     */
     protected WallPageView(Farmer me, String title) {
         super(title);
         this.profileComp = new WallProfileInfoComponent(me);
@@ -60,6 +69,9 @@ public class WallPageView extends PageView {
         setInputColor(Color.YELLOW);
     }
 
+    /**
+     * A method to prompt user for content of post.
+     */
     public void showPostPrompt() {
         showPrompt("Enter your post");
     }

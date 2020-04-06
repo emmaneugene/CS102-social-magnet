@@ -22,6 +22,10 @@ public class MainMenuPageView extends PageView {
         Painter.paintf("[{5.}] Logout", Color.YELLOW)
     );
 
+    /**
+     * Creates a Main Menu page view with specified current user of app.
+     * @param currentUser
+     */
     public MainMenuPageView(User currentUser) {
         super("Main Menu");
         greeting = String.format("Welcome, %s!", currentUser.getFullname());

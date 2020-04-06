@@ -15,6 +15,9 @@ import com.g1t11.socialmagnet.view.page.PageView;
 public class NewsFeedPageView extends PageView {
     private List<SimpleThreadComponent> threadComps = new ArrayList<>(5);
 
+    /**
+     * Creates a News Feed page view
+     */
     public NewsFeedPageView() {
         super("News Feed");
     }
