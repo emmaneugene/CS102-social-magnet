@@ -6,9 +6,17 @@ import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.TextUtils;
 import com.g1t11.socialmagnet.util.Painter.Color;
 
+/**
+ * This is a page view for City Farmers' Inventory page.
+ */
 public class InventoryPageView extends CityFarmersPageView {
     Map<String, Integer> invCrops;
 
+    /**
+     * Creates a page view for Inventory page with the specified crops in
+     * inventory.
+     * @param invCrops The specified crops in inventory.
+     */
     public InventoryPageView(Map<String, Integer> invCrops) {
         super("My Inventory");
         this.invCrops = invCrops;

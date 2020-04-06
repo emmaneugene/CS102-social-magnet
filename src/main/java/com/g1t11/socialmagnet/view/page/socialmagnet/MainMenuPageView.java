@@ -24,7 +24,7 @@ public class MainMenuPageView extends PageView {
 
     /**
      * Creates a Main Menu page view with specified current user of app.
-     * @param currentUser
+     * @param currentUser The current user.
      */
     public MainMenuPageView(User currentUser) {
         super("Main Menu");

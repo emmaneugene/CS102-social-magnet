@@ -38,6 +38,7 @@ public class Plot {
 
     /**
      * Gets the crop at plot.
+     * @return The crop at plot
      */
     public Crop getCrop() {
         return crop;
@@ -45,6 +46,7 @@ public class Plot {
 
     /**
      * Gets the date when the crop is planted.
+     * @return The date the crop is planted.
      */
     public Date getTimePlanted() {
         return timePlanted;

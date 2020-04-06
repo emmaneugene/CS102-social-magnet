@@ -68,6 +68,7 @@ public class Navigator {
      * Pop the navigation stack until a Controller of classToFind is found, or
      * until one controller is left on the stack.
      * @param classToFind The class of the type of controller to find.
+     * @param <T> The type of class to accept.
      */
     public <T extends Controller> void popTo(Class<T> classToFind) {
         while (navigationStack.size() > 1

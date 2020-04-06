@@ -29,7 +29,7 @@ public class Thread {
 
     /**
      * Creates a thread with specified id only.
-     * @param id
+     * @param id The specified thread id.
      */
     public Thread(int id) {
         this.id = id;

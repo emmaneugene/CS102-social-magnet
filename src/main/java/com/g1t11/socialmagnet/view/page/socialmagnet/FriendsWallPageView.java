@@ -17,8 +17,11 @@ public class FriendsWallPageView extends WallPageView {
     List<User> friendFriends;
 
     /**
-     * Create a Friend's Wall page with specified friend's friend as well as
+     * Creates a Friend's Wall page with specified friend's friend as well as
      * the common friends with the user.
+     * @param me The user.
+     * @param friend Ther user's friend.
+     * @param friendFriends The list of common friends.
      */
     public FriendsWallPageView(User me, Farmer friend,
             List<User> friendFriends) {

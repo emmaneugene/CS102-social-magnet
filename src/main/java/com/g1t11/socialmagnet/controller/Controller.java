@@ -29,7 +29,6 @@ public abstract class Controller {
 
     /**
      * The associated <code>View</code> is rendered before any input is handled.
-     * @see View
      */
     public void run() {
         updateView();

@@ -5,6 +5,10 @@ import java.util.List;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 
+/**
+ * This is a page view for City Farmers Main Menu page. It lists down the 
+ * actions and prompt user for action.
+ */
 public class CityFarmersMainMenuPageView extends CityFarmersPageView {
     private final List<String> actions = List.of(
         Painter.paintf("[{1.}] My Farmland", Color.YELLOW),

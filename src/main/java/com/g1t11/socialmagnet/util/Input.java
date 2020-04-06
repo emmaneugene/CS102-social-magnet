@@ -13,6 +13,10 @@ public class Input {
     private final Console secure_sc = System.console();
     private final Scanner sc = new Scanner(System.in);
 
+    /**
+     * A method to read password from console instead of scanner.
+     * @return The password.
+     */
     public String readPassword() {
         if (secure_sc == null) {
             return nextLine();
@@ -22,9 +26,8 @@ public class Input {
     }
 
     /**
-     * Get user input and display it as colored text.
-     * @param color The color to display the input in.
-     * @return The user input.
+     * A method to read next line of input in scanner.
+     * @return The content of next line.
      */
     public String nextLine() {
         String input = sc.nextLine();
@@ -32,6 +35,9 @@ public class Input {
         return input;
     }
 
+    /**
+     * A method to clear the color.
+     */
     private void clearColor() {
         System.out.print(Color.RESET);
     }

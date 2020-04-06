@@ -10,7 +10,6 @@ import com.g1t11.socialmagnet.util.Painter.Color;
  * <code>PageView</code> clears the entire console before rendering any
  * content, giving the effect of an in-place view that can be used to render
  * static views.
- * @see View
  */
 public abstract class PageView {
     private String[] pageTitles;
@@ -117,6 +116,7 @@ public abstract class PageView {
 
     /**
      * Sets input color
+     * @param color The color for input.
      */
     protected final void setInputColor(Color color) {
         System.out.print(color);

@@ -6,9 +6,16 @@ import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 
+/**
+ * This is a page view for City Farmers' Send Gift page.
+ */
 public class SendGiftPageView extends CityFarmersPageView {
     List<Crop> crops;
 
+    /**
+     * Creates a Send Gift page view with the list of crops available to gift.
+     * @param crops The list of crops that is available for gifting.
+     */
     public SendGiftPageView(List<Crop> crops) {
         super("Send a Gift");
         this.crops = crops;
@@ -36,6 +43,9 @@ public class SendGiftPageView extends CityFarmersPageView {
         setInputColor(Color.YELLOW);
     }
 
+    /**
+     * A method to prompt user for the friend user is gifting to.
+     */
     public void showSendToPrompt() {
         showPrompt("Send to");
         setInputColor(Color.BLUE);
