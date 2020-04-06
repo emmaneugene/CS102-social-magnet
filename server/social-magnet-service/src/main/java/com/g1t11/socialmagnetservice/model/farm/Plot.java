@@ -1,4 +1,4 @@
-package com.g1t11.socialmagnet.model.farm;
+package com.g1t11.socialmagnetservice.model.farm;
 
 import java.util.Date;
 import java.util.Objects;

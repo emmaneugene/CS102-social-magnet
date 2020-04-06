@@ -1,6 +1,6 @@
-package com.g1t11.socialmagnet.model.farm;
+package com.g1t11.socialmagnetservice.model.farm;
 
-import com.g1t11.socialmagnet.util.TextUtils;
+import com.g1t11.socialmagnetservice.util.TextUtils;
 
 public class StealingRecord {
     private String cropName;

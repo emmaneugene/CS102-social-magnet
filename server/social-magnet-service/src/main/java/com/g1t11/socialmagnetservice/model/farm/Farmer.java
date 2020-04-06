@@ -1,10 +1,10 @@
-package com.g1t11.socialmagnet.model.farm;
+package com.g1t11.socialmagnetservice.model.farm;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import com.g1t11.socialmagnet.model.social.User;
+import com.g1t11.socialmagnetservice.model.social.User;
 
 public class Farmer extends User {
     public enum Rank {
