@@ -1,0 +1,13 @@
+com.g1t11.socialmagnet
+com.g1t11.socialmagnet.controller
+com.g1t11.socialmagnet.controller.cityfarmers
+com.g1t11.socialmagnet.controller.socialmagnet
+com.g1t11.socialmagnet.data
+com.g1t11.socialmagnet.data.rest
+com.g1t11.socialmagnet.model.farm
+com.g1t11.socialmagnet.model.social
+com.g1t11.socialmagnet.util
+com.g1t11.socialmagnet.view.component
+com.g1t11.socialmagnet.view.page
+com.g1t11.socialmagnet.view.page.cityfarmers
+com.g1t11.socialmagnet.view.page.socialmagnet
