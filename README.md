@@ -72,6 +72,10 @@ Use `compile.bat` or `compile.sh` to compile the application.
 
 Use `run.bat` or `run.sh` to run the application.
 
+By default, the Social Magnet Service should be running on `localhost:8080/magnet`.
+
+However, should the server be on another location, simply modify `run.bat` or `run.sh` to update the server URL.
+
 #### Testing
 
 Because the tests require the database to be reset, ensure that database credentials are stored in `scripts/env.sh` or `scripts/env.bat` before running tests.

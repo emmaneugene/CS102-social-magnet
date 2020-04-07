@@ -12,8 +12,8 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 public class RestDAO {
-    private final static String BASE_URL
-            = "http://localhost:8080/social-magnet-service/";
+    public static String BASE_URL;
+            // = "http://localhost:8080/magnet";
 
     JerseyClient client;
 
@@ -40,6 +40,6 @@ public class RestDAO {
     }
 
     protected WebTarget getTarget(String ...urlParts) {
-        return client.target(BASE_URL + String.join("/", urlParts));
+        return client.target(BASE_URL + "/" + String.join("/", urlParts));
     }
 }
