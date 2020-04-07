@@ -1,7 +1,7 @@
 package com.g1t11.socialmagnet.data.rest;
 
 import com.g1t11.socialmagnet.data.ServerException;
-import com.g1t11.socialmagnet.data.ServerException.SQLErrorCode;
+import com.g1t11.socialmagnet.data.ServerException.ErrorCode;
 import com.g1t11.socialmagnet.model.social.User;
 
 import org.junit.Assert;
@@ -43,7 +43,7 @@ public class TestCredentialsRestDAO {
             Assert.assertTrue(false);
         } catch (ServerException e) {
             Assert.assertTrue(
-                    SQLErrorCode.REGISTER_EXISTING_USER.value == e.getCode());
+                    ErrorCode.REGISTER_EXISTING_USER.value == e.getCode());
         }
     }
 

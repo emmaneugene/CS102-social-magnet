@@ -3,7 +3,7 @@ package com.g1t11.socialmagnet.data.rest;
 import java.util.List;
 
 import com.g1t11.socialmagnet.data.ServerException;
-import com.g1t11.socialmagnet.data.ServerException.SQLErrorCode;
+import com.g1t11.socialmagnet.data.ServerException.ErrorCode;
 import com.g1t11.socialmagnet.model.social.Friend;
 import com.g1t11.socialmagnet.model.social.User;
 
@@ -43,7 +43,7 @@ public class TestUserRestDAO {
             Assert.assertTrue(false);
         } catch (ServerException e) {
             Assert.assertTrue(
-                    SQLErrorCode.USER_NOT_FOUND.value == e.getCode());
+                    ErrorCode.USER_NOT_FOUND.value == e.getCode());
         }
     }
 
@@ -103,7 +103,7 @@ public class TestUserRestDAO {
             Assert.assertTrue(false);
         } catch (ServerException e) {
             Assert.assertTrue(
-                    SQLErrorCode.REQUEST_SELF.value == e.getCode());
+                    ErrorCode.REQUEST_SELF.value == e.getCode());
         }
     }
 

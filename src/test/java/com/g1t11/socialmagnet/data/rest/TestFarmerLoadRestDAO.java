@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.g1t11.socialmagnet.data.ServerException;
-import com.g1t11.socialmagnet.data.ServerException.SQLErrorCode;
+import com.g1t11.socialmagnet.data.ServerException.ErrorCode;
 import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.farm.Plot;
@@ -47,7 +47,7 @@ public class TestFarmerLoadRestDAO {
             Assert.assertTrue(false);
         } catch (ServerException e) {
             Assert.assertTrue(
-                    SQLErrorCode.USER_NOT_FOUND.value == e.getCode());
+                    ErrorCode.USER_NOT_FOUND.value == e.getCode());
         }
     }
 

@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.data.ServerException;
-import com.g1t11.socialmagnet.data.ServerException.SQLErrorCode;
+import com.g1t11.socialmagnet.data.ServerException.ErrorCode;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
@@ -97,15 +97,15 @@ public class FriendsController extends SocialMagnetController {
                     Color.BLUE));
         } catch (ServerException e) {
             int code = e.getCode();
-            if (code == SQLErrorCode.USER_NOT_FOUND.value) {
+            if (code == ErrorCode.USER_NOT_FOUND.value) {
                 setStatus(Painter.paintf(
                         String.format("[{User [{%s}] not found.}]", requested),
                         Color.RED,
                         Color.BLUE));
-            } else if (code == SQLErrorCode.REQUEST_EXISTING_FRIEND.value) {
+            } else if (code == ErrorCode.REQUEST_EXISTING_FRIEND.value) {
                 setStatus(Painter.paint(
                         "Cannot request existing friend.", Color.RED));
-            } else if (code == SQLErrorCode.REQUEST_SELF.value) {
+            } else if (code == ErrorCode.REQUEST_SELF.value) {
                 setStatus(Painter.paint(
                         "Cannot request self.", Color.RED));
             }

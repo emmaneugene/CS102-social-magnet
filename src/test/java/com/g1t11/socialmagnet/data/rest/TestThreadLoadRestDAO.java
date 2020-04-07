@@ -3,7 +3,7 @@ package com.g1t11.socialmagnet.data.rest;
 import java.util.List;
 
 import com.g1t11.socialmagnet.data.ServerException;
-import com.g1t11.socialmagnet.data.ServerException.SQLErrorCode;
+import com.g1t11.socialmagnet.data.ServerException.ErrorCode;
 import com.g1t11.socialmagnet.model.social.Comment;
 import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.model.social.User;
@@ -61,7 +61,7 @@ public class TestThreadLoadRestDAO {
             Assert.assertTrue(false);
         } catch (ServerException e) {
             Assert.assertTrue(
-                    SQLErrorCode.THREAD_NOT_FOUND.value == e.getCode());
+                    ErrorCode.THREAD_NOT_FOUND.value == e.getCode());
         }
     }
 
