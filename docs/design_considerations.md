@@ -159,24 +159,18 @@ Database Access Objects (DAOs) abstract the backend systems of our application s
 
 #### Database Object
 
-DAOs are instantiated with the `Database` reference, which allows us to handle connection failures and re-establish them should they fail.
+DAOs call our web service, located under `server/`.
 
-* Upon a failed or lost connection, we throw a custom `DatabaseException` runtime exception which is bubbled up to the `App` event loop.
-* `App` will gracefully handle the connection failure, and try to re-establish the database connection.
-
-* If a connection is re-established, we can simply reassign the connection as a member field of `Database`, allowing all DAOs to access the new connection again.
-
-#### DatabaseException
-
-As `java.sql.SQLException` is a checked exception, it is difficult to bubble the exception up from the DAO layer to the event loop layer without polluting the codebase with `throws`.
-
-Therefore, we created a simple runtime exception wrapper around `SQLException` which also allows us to handle other related database exceptions.
+* Upon a failed or lost connection, we throw a custom `ServerException` runtime exception which is bubbled up to the `App` event loop.
+* `App` will gracefully handle the connection failure, and log the user out.
 
 #### Decoupling the Database and Application
 
-##### Using stored procedures
+##### Using stored procedures before transitioning to web service
 
-Initially, SQL queries were hardcoded in the application itself.
+During initial development, the application connected to the database directly. Therefore, we had to make queries to the database.
+
+At first, SQL queries were hardcoded in the application itself.
 
 ```java
 String queryString = String.join(" ",
@@ -222,6 +216,12 @@ This afforded us some benefits:
 * Complicated transactions could be performed on the database itself, and the application can rely on the state of the database to be valid.
 
 Essentially, the database handles all data logic, and the client application serves a user-friendly view of the database state.
+
+##### Using a REST API
+
+Currently, all database logic has been further abstracted away behind a REST API, stored under `server/`. However, the usage of stored procedures made the transition to a server-side implementation of a database much easier.
+
+As the database was already handling most of the business logic, there was little restructuring of the application to be done. We simply moved all database access objects to the server, and created new API access objects, packaged under `com.g1t11.socialmagnet.data.rest`. Once feature parity was reached between the previous DAO implementations and the API access objects, usage of access objects could simply be substituted.
 
 ### Controllers
 
