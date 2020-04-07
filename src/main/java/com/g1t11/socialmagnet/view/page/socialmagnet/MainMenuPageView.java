@@ -8,6 +8,9 @@ import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.PageView;
 
+/**
+ * This is a page view for Main Menu page after user logging in.
+ */
 public class MainMenuPageView extends PageView {
     private String greeting;
 
@@ -19,6 +22,10 @@ public class MainMenuPageView extends PageView {
         Painter.paintf("[{5.}] Logout", Color.YELLOW)
     );
 
+    /**
+     * Creates a Main Menu page view with specified current user.
+     * @param currentUser The current user.
+     */
     public MainMenuPageView(User currentUser) {
         super("Main Menu");
         greeting = String.format("Welcome, %s!", currentUser.getFullname());
@@ -33,6 +40,11 @@ public class MainMenuPageView extends PageView {
         }
     }
 
+    /**
+     * Compares the specified object with this MainMenuPageView for equality.
+     * It returns true if and only if specified object is a MainMenuPageView and 
+     * both MainMenuPageViews have the same greeting, action.
+     */
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof MainMenuPageView)) return false;

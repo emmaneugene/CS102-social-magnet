@@ -10,7 +10,6 @@ import com.g1t11.socialmagnet.util.Painter.Color;
  * <code>PageView</code> clears the entire console before rendering any
  * content, giving the effect of an in-place view that can be used to render
  * static views.
- * @see View
  */
 public abstract class PageView {
     private String[] pageTitles;
@@ -54,6 +53,9 @@ public abstract class PageView {
         status += text + "\n";
     }
 
+    /**
+     * Sets status to null.
+     */
     public void clearStatus() {
         status = null;
     }
@@ -68,6 +70,10 @@ public abstract class PageView {
         System.out.flush();
     }
 
+    /**
+     * A method to clear the screen and display the header and status if there
+     * is any.
+     */
     public void display() {
         clearScreen();
         displayHeader();
@@ -77,6 +83,9 @@ public abstract class PageView {
         }
     }
 
+    /**
+     * A method to format and display the header.
+     */
     private void displayHeader() {
         StringBuilder headerBuilder = new StringBuilder("== ");
         headerBuilder.append(APP_TITLE);
@@ -89,19 +98,35 @@ public abstract class PageView {
                 headerBuilder.toString(), Color.BOLD));
     }
 
+    /**
+     * A method to display specified message and prompt user for input.
+     * @param message The specified message to display.
+     */
     protected final void showPrompt(String message) {
         System.out.printf("%s %s ", message, PROMPT_INDICATOR);
     }
 
+    /**
+     * A method to display "Enter a choice" and prompt user for input.
+     */
     public void showMainPrompt() {
         System.out.printf("%s %s ", DEFAULT_PROMPT, PROMPT_INDICATOR);
         setInputColor(Color.YELLOW);
     }
 
+    /**
+     * Sets input color
+     * @param color The color for input.
+     */
     protected final void setInputColor(Color color) {
         System.out.print(color);
     }
 
+    /**
+     * Compares the specified object with this PageView for equality.
+     * It returns true if and only if specified object is a PageView and 
+     * both PageViews have the same page titles and status.
+     */
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof PageView)) return false;

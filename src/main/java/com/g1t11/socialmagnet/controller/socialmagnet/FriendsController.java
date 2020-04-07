@@ -10,11 +10,19 @@ import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.socialmagnet.FriendsPageView;
 
+/**
+ * This is the controller for Friends.
+ */
 public class FriendsController extends SocialMagnetController {
     private List<User> friends;
 
     private List<String> requestUsernames;
 
+    /**
+     * Creates a Friends controller.
+     * @param nav The app's navigator.
+     * @param me The user.
+     */
     public FriendsController(Navigator nav, User me) {
         super(nav, me);
         setView(new FriendsPageView(me));
@@ -59,6 +67,11 @@ public class FriendsController extends SocialMagnetController {
         }
     }
 
+    /**
+     * A method to handle input for unfriend. It will check for
+     * out of range choice.
+     * @param choice The input choice to unfriend.
+     */
     private void handleUnfriend(String choice) {
         try {
             int index = Integer.parseInt(choice.substring(1));
@@ -81,6 +94,11 @@ public class FriendsController extends SocialMagnetController {
         }
     }
 
+    /**
+     * A method to handle sending of friend request. It will check if the friend
+     * exists, existing friend or self request. It will return error with an
+     * appropriate message if it fits any of the previously stated conditions.
+     */
     private void handleRequest() {
         // Clear the previous prompt by refreshing the view.
         getView().display();
@@ -119,6 +137,12 @@ public class FriendsController extends SocialMagnetController {
         }
     }
 
+    /**
+     * A method to handle accepting of friend request. It will check for out of 
+     * range choice and if the input choice is in the list of friend request
+     * and not in the list of friends.
+     * @param choice The input choice of friend request to accept.
+     */
     private void handleAccept(String choice) {
         try {
             int index = Integer.parseInt(choice.substring(1));
@@ -148,6 +172,12 @@ public class FriendsController extends SocialMagnetController {
         }
     }
 
+    /**
+     * A method to handle rejecting of friend request. It will check for out
+     * of range choice and if the input choice is in the list of friend request
+     * and not in the list of friends.
+     * @param choice The input choice of friend request to reject.
+     */
     private void handleReject(String choice) {
         try {
             int index = Integer.parseInt(choice.substring(1));
@@ -177,6 +207,11 @@ public class FriendsController extends SocialMagnetController {
         }
     }
 
+    /**
+     * A method to handle viewing of friend's page. It will check for out 
+     * of range choice.
+     * @param choice The input choice of friend for viewing of thier page.
+     */
     private void handleView(String choice) {
         try {
             int index = Integer.parseInt(choice.substring(1));

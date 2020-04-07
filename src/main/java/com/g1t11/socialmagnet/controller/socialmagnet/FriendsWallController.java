@@ -9,6 +9,9 @@ import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.socialmagnet.FriendsWallPageView;
 
+/**
+ * This is the controller for Friends' Wall.
+ */
 public class FriendsWallController extends WallController {
     public FriendsWallController(Navigator nav, User me, User friend) {
         super(nav, me);

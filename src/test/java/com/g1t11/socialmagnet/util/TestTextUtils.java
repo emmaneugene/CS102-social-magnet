@@ -8,7 +8,7 @@ import org.junit.Test;
 public class TestTextUtils {
     @Test
     public void testIsAlphanumeric() {
-        Assert.assertTrue(InputValidator.isAlphanumeric("garyOldman123"));
+        Assert.assertTrue(TextUtils.isAlphanumeric("garyOldman123"));
     }
 
     @Test
@@ -17,14 +17,14 @@ public class TestTextUtils {
                 = List.of('_', '-', ' ', '.', '*', '+');
         for (char c : invalidChars) {
             Assert.assertFalse(
-                    InputValidator.isAlphanumeric("gary" + c + "oldman"));
+                TextUtils.isAlphanumeric("gary" + c + "oldman"));
         }
     }
 
     @Test
     public void testIsAlphanumericBadStrings() {
-        Assert.assertFalse(InputValidator.isAlphanumeric(""));
-        Assert.assertFalse(InputValidator.isAlphanumeric(null));
+        Assert.assertFalse(TextUtils.isAlphanumeric(""));
+        Assert.assertFalse(TextUtils.isAlphanumeric(null));
     }
     @Test
     public void testCountedWordPlural() {

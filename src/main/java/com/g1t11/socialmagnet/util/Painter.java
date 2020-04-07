@@ -1,5 +1,9 @@
 package com.g1t11.socialmagnet.util;
 
+/**
+ * This class consists exclusively of static methods that paint strings. 
+ */
+
 public class Painter {
     public enum Color {
         RESET("\u001b[0m"),
@@ -32,7 +36,12 @@ public class Painter {
             return code;
         }
     }
-
+    /**
+     * Paint an entire string with specified color.
+     * @param text The whole string to be painted.
+     * @param color The color to paint to the string.
+     * @return A painted string with all original format code untouched.
+     */
     public static String paint(String text, Color color) {
         return color.code + text + Color.RESET.code;
     }

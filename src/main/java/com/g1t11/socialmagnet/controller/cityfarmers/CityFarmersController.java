@@ -22,11 +22,21 @@ public abstract class CityFarmersController extends Controller {
     /** The current farmer being displayed in City Farmer */
     protected Farmer me;
 
+    /**
+     * Creates a City Farmers controller with specified farmer.
+     * @param nav The app's navigator.
+     * @param me The farmer.
+     */
     public CityFarmersController(Navigator nav, Farmer me) {
         super(nav);
         this.me = me;
     }
 
+    /**
+     * Creates a City Farmers controller with specified user.
+     * @param nav The app's navigator.
+     * @param me The user.
+     */
     public CityFarmersController(Navigator nav, User me) {
         super(nav);
         this.me = farmerLoadDAO.getFarmer(me.getUsername());

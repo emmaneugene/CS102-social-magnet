@@ -24,12 +24,20 @@ public class Navigator {
         navigationStack.add(first);
     }
 
+    /**
+     * A method to get the current controller.
+     * @return The current controller.
+     */
     public Controller currController() {
         int size = navigationStack.size();
         if (size == 0) return null;
         return navigationStack.get(size - 1);
     }
 
+    /**
+     * Sets the current status.
+     * @param text The current status.
+     */
     public void setCurrStatus(String text) {
         currController().setStatus(text);
     }
@@ -46,6 +54,11 @@ public class Navigator {
         navigationStack.remove(size - 1);
     }
 
+    /**
+     * Remove an specified amount of controller from the navigation stack and 
+     * prepare the application to navigate to the correct controller.
+     * @param count The amount of controller to pop.
+     */
     public void pop(int count) {
         for (int i = 0; i < count; i++) {
             pop();
@@ -56,6 +69,7 @@ public class Navigator {
      * Pop the navigation stack until a Controller of classToFind is found, or
      * until one controller is left on the stack.
      * @param classToFind The class of the type of controller to find.
+     * @param <T> The type of class to accept.
      */
     public <T extends Controller> void popTo(Class<T> classToFind) {
         while (navigationStack.size() > 1
@@ -64,6 +78,9 @@ public class Navigator {
         }
     }
 
+    /**
+     * Pop the navigation stack to the first controller.
+     */
     public void popToFirst() {
         Controller firstController = navigationStack.get(0);
         navigationStack.clear();

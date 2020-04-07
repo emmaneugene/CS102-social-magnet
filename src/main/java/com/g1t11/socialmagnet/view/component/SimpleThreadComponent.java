@@ -7,6 +7,11 @@ import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 
+/**
+ * A render component for a thread in a list of threads.
+ * <p>
+ * Most notably used in the news feed and the wall page views.
+ */
 public class SimpleThreadComponent implements Component {
     private final static int commentsToDisplay = 3;
 
@@ -19,6 +24,11 @@ public class SimpleThreadComponent implements Component {
     private List<CommentComponent> commentComps
             = new ArrayList<>(commentsToDisplay);
 
+    /**
+     * Creates a single thread component with specified thread index and thread.
+     * @param threadIndex The index of thread.
+     * @param thread The thread.
+     */
     public SimpleThreadComponent(int threadIndex, Thread thread) {
         this.threadIndex = threadIndex;
         this.thread = thread;
@@ -27,6 +37,9 @@ public class SimpleThreadComponent implements Component {
         setComments();
     }
 
+    /**
+     * Sets comments of the single thread.
+     */
     private void setComments() {
         commentComps.clear();
         int maxIndex = thread.getActualCommentsCount();
@@ -43,6 +56,10 @@ public class SimpleThreadComponent implements Component {
         }
     }
 
+    /**
+     * A method used to render out the single thread which include content,
+     * like/diislike bar and comments.
+     */
     @Override
     public void render() {
         renderContent();
@@ -50,6 +67,9 @@ public class SimpleThreadComponent implements Component {
         renderComments();
     }
 
+    /**
+     * A method used to render out the content of the single thread.
+     */
     private void renderContent() {
         String paintedTemplate = Painter.paintf(
                 "[{%d}] [{%s}]: %s\n", Color.YELLOW, Color.BLUE);
@@ -57,6 +77,9 @@ public class SimpleThreadComponent implements Component {
                 thread.getFromUsername(), thread.getContent());
     }
 
+    /**
+     * A method used to render out the comments of the single thread.
+     */
     private void renderComments() {
         for (CommentComponent commentView : commentComps) {
             commentView.render();

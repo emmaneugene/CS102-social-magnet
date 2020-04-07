@@ -8,6 +8,9 @@ import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.PageView;
 
+/**
+ * This is a page view for Friends page.
+ */
 public class FriendsPageView extends PageView {
     private User currentUser;
 
@@ -15,15 +18,27 @@ public class FriendsPageView extends PageView {
 
     private List<String> requestUsernames = new ArrayList<>();
 
+    /**
+     * Creates Friend's page view with current user.
+     * @param currentUser The current user that is using the app.
+     */
     public FriendsPageView(User currentUser) {
         super("My Friends");
         this.currentUser = currentUser;
     }
 
+    /**
+     * Sets the list of friends.
+     * @param friends The list of friends.
+     */
     public void setFriends(List<User> friends) {
         this.friends = friends;
     }
 
+    /**
+     * Sets the list of usernames of friend requests.
+     * @param requestUsernames The list of usernames of friend requests.
+     */
     public void setRequestUsernames(List<String> requestUsernames) {
         this.requestUsernames = requestUsernames;
     }
@@ -60,6 +75,9 @@ public class FriendsPageView extends PageView {
         setInputColor(Color.YELLOW);
     }
 
+    /**
+     * A method to prompt for username.
+     */
     public void showRequestUsernamePrompt() {
         showPrompt("Enter the username");
         setInputColor(Color.BLUE);

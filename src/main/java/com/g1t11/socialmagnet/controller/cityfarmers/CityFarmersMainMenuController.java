@@ -6,7 +6,15 @@ import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.cityfarmers.CityFarmersMainMenuPageView;
 
+/**
+ * This is a controller for City Farmers' Main Menu.
+ */
 public class CityFarmersMainMenuController extends CityFarmersController {
+    /**
+     * Creates a City Farmers' Main Menu controller.
+     * @param nav The app's navigator.
+     * @param me The user.
+     */
     public CityFarmersMainMenuController(Navigator nav, User me) {
         super(nav, me);
         setView(new CityFarmersMainMenuPageView());

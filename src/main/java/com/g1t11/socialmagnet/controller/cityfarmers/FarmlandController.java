@@ -13,12 +13,20 @@ import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.cityfarmers.FarmlandPageView;
 
+/**
+ * This is a controller for My Farmland.
+ */
 public class FarmlandController extends CityFarmersController {
     private static final int WILTED_CLEAR_COST = 5;
 
     private List<Plot> plots = new ArrayList<>();
     private Map<String, Integer> invCrops = new LinkedHashMap<>();
 
+    /**
+     * Creates a Farmland controller.
+     * @param nav The app's navigator.
+     * @param me The farmer.
+     */
     public FarmlandController(Navigator nav, Farmer me) {
         super(nav, me);
         setView(new FarmlandPageView());
@@ -67,6 +75,12 @@ public class FarmlandController extends CityFarmersController {
         }
     }
 
+    /**
+     * A method to handle planting of crops at specific plot. It will check
+     * for out of range choice and if the specific plot is not empty. It will
+     * not plant the crop if it fits any of the previously stated conditions.
+     * @param choice The choice to plot the crop at.
+     */
     private void handlePlant(String choice) {
         try {
             int index = Integer.parseInt(choice.substring(1));
@@ -99,7 +113,7 @@ public class FarmlandController extends CityFarmersController {
     /**
      * Check if the selected plot has crops growing on it.
      * @param index The index of the selected plot.
-     * @return Whether the selected plot has crops growing on it.
+     * @return Whether the selected plot is empty.
      */
     private boolean isSelectedPlotEmpty(int index) {
         Plot selectedPlot = plots.get(index - 1);
@@ -112,7 +126,7 @@ public class FarmlandController extends CityFarmersController {
     }
 
     /**
-     * Handle user input to get the name of the selected crop from the user
+     * Handle user input to get the name of the selected crop from the user's
      * inventory to plant, or handle navigation if "M" or "F" is entered.
      * @return The name of the crop to plant, or null if the choice is invalid.
      */
@@ -161,6 +175,12 @@ public class FarmlandController extends CityFarmersController {
         }
     }
 
+    /**
+     * A method to handle clearing of plot. It will check for out of range
+     * choice and if the selected plot is empty. It will not clear the plot if
+     * it fits any of the previously stated conditions.
+     * @param choice The choice of plot to clear.
+     */
     private void handleClear(String choice) {
         try {
             int index = Integer.parseInt(choice.substring(1));
@@ -198,6 +218,10 @@ public class FarmlandController extends CityFarmersController {
         }
     }
 
+    /**
+     * A method to ask user for comfirmation of clearing of healthy crop.
+     * @param index The index of the plot to clear.
+     */
     private void confirmClearHealthy(int index) {
         getView().showConfirmClearPrompt();
 
@@ -210,6 +234,9 @@ public class FarmlandController extends CityFarmersController {
         }
     }
 
+    /**
+     * A method to handle harvesting of crop in the plot.
+     */
     private void handleHarvest() {
         farmerActionDAO.harvest(me.getUsername());
 

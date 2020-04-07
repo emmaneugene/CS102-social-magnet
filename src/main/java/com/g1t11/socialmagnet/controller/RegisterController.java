@@ -6,9 +6,16 @@ import com.g1t11.socialmagnet.util.TextUtils;
 import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.RegisterPageView;
 
+/**
+ * This is the controller for Register page.
+ */
 public class RegisterController extends Controller {
     private CredentialsRestDAO credDAO = new CredentialsRestDAO();
 
+    /**
+     * Creates a Register page controller.
+     * @param nav The app's navigator.
+     */
     public RegisterController(Navigator nav) {
         super(nav);
         setView(new RegisterPageView());
@@ -52,6 +59,14 @@ public class RegisterController extends Controller {
                 Color.GREEN));
     }
 
+    /**
+     * This is a method to validate the input username. It will check the 
+     * username for empty, too long, not an alphanumeric and existing username. 
+     * It will then return false if the input username fits any of the
+     * conditions previously stated. Else it will return true.
+     * @param username The input username.
+     * @return Whether if the username is valid.
+     */
     private boolean validateUsername(String username) {
         if (username.length() == 0) {
             rejectRegistration("Username cannot be empty.");
@@ -78,6 +93,14 @@ public class RegisterController extends Controller {
         return true;
     }
 
+    /**
+     * This is a method to validate the input fullname. It will check the 
+     * fullname for empty or too long. It will return false if the input 
+     * fullname fits any of the conditions previously stated. Else it will 
+     * return true.
+     * @param fullname The input fullname.
+     * @return Whether if the fullname is valid.
+     */
     private boolean validateFullname(String fullname) {
         if (fullname.length() == 0) {
             rejectRegistration("Your name cannot be empty.");
@@ -92,6 +115,14 @@ public class RegisterController extends Controller {
         return true;
     }
 
+    /**
+     * This is a method to validate the input password. It will check the 
+     * password for empty or too short. It will return false if the input 
+     * fullname fits any of the conditions previously stated. Else it will
+     * return true.
+     * @param password The input password.
+     * @return Whether if the password is valid.
+     */
     private boolean validatePassword(String password) {
         if (password.length() == 0) {
             rejectRegistration("Password cannot be empty.");
@@ -106,6 +137,14 @@ public class RegisterController extends Controller {
         return true;
     }
 
+    /**
+     * This is a method to validate the 2nd input password for the check. It 
+     * will check if it matches with the previous password that the user input.
+     * It will return true if it matches. Else it returns false.
+     * @param password The input password before check.
+     * @param check The input password after check.
+     * @return Whetherif the 2nd password check is valid.
+     */
     private boolean validatePasswordCheck(String password, String check) {
         if (!password.equals(check)) {
             rejectRegistration("Passwords do not match.");
@@ -115,6 +154,11 @@ public class RegisterController extends Controller {
         return true;
     }
 
+    /**
+     * A method to reject registration when any of the validation fails. It will
+     * then pop to the previous navigation stack and set the status to display.
+     * @param message The status to display.
+     */
     private void rejectRegistration(String message) {
         nav.pop();
         nav.setCurrStatus(Painter.paint(message, Color.RED));

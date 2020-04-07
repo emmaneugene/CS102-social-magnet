@@ -20,8 +20,9 @@ public class ThreadLoadRestDAO extends RestDAO {
      * option to kill the thread. Threads posted on other friends walls are
      * included in one's news feed, but the user should not be able to kill
      * (delete or untag) the thread in this situation.
-     * @param id The thread id.
+     * @param threadId The thread id.
      * @param username The username of the user retrieving the thread.
+     * @return The thread.
      */
     public Thread getThread(int threadId, String username) {
         Response response = getJSONInvocationOfTarget(
