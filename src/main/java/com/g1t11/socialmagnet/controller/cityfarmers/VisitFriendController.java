@@ -10,9 +10,17 @@ import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.cityfarmers.VisitFriendPageView;
 
+/**
+ * This is a controller for visiting of friends in City Farmers.
+ */
 public class VisitFriendController extends CityFarmersController {
     private List<User> friends;
 
+    /**
+     * Creates a visit friend in City Farmers controller.
+     * @param nav The app's navigator.
+     * @param me The farmer.
+     */
     public VisitFriendController(Navigator nav, Farmer me) {
         super(nav, me);
         friends = userDAO.getFriends(me.getUsername());
@@ -39,6 +47,11 @@ public class VisitFriendController extends CityFarmersController {
         }
     }
 
+    /**
+     * A method that handles visiting of friends in City Farmer. It will check
+     * for index out of range.
+     * @param choice The choice of visiting specified friend.
+     */
     private void handleVisit(String choice) {
         try {
             int index = Integer.parseInt(choice);

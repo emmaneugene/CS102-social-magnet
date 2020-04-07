@@ -7,6 +7,9 @@ import java.util.Objects;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 
+/**
+ * This is the page view for Welcome page.
+ */
 public class WelcomePageView extends PageView {
     private String greeting = "";
 
@@ -18,10 +21,17 @@ public class WelcomePageView extends PageView {
 
     Integer fixedHourOfDay = null;
 
+    /**
+     * Creates Welcome Page view.
+     */
     public WelcomePageView() {
         super("Welcome");
     }
 
+    /**
+     * Creates Welcome Page view with the hour of the day.
+     * @param fixedHourOfDay The hour of the day.
+     */
     public WelcomePageView(int fixedHourOfDay) {
         this();
         this.fixedHourOfDay = fixedHourOfDay;
@@ -53,6 +63,12 @@ public class WelcomePageView extends PageView {
         greeting = newGreeting;
     }
 
+    /**
+     * Compares the specified object with this WelcomePageView for equality.
+     * It returns true if and only if specified object is a WelcomePageView and 
+     * both WelcomePageViews have the same greeting, action and fixed hour of
+     * day.
+     */
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof WelcomePageView)) return false;
@@ -62,6 +78,12 @@ public class WelcomePageView extends PageView {
             && Objects.equals(fixedHourOfDay, other.fixedHourOfDay);
     }
 
+    /**
+     * This method is used to check if it is moorning, afternoon or evening for
+     * the page view to use.
+     * @param hour The current hour integer.
+     * @return The string of the appropriate greeting.
+     */
     public String basedOnHour(int hour) {
         if (hour < 12) return "morning";
         if (hour < 19) return "afternoon";

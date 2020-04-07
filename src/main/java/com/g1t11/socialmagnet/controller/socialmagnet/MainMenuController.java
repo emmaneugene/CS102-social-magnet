@@ -7,7 +7,15 @@ import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.socialmagnet.MainMenuPageView;
 
+/**
+ * This is the controller for Main Menu.
+ */
 public class MainMenuController extends SocialMagnetController {
+    /**
+     * Creates a Main Menu controller.
+     * @param nav The app's controller.
+     * @param me The user.
+     */
     public MainMenuController(Navigator nav, User me) {
         super(nav, me);
         setView(new MainMenuPageView(me));

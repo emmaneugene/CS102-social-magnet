@@ -4,6 +4,9 @@ import com.g1t11.socialmagnet.model.farm.Plot;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 
+/**
+ * This is a render component for Plot.
+ */
 public class PlotComponent implements Component {
     private Plot plot;
 
@@ -11,12 +14,23 @@ public class PlotComponent implements Component {
 
     private int maxCropNameLength;
 
+    /**
+     * Creates a plot component with specific plot, index and amount of spaces
+     * for formatting.
+     * @param plot The plot.
+     * @param index The index of plot.
+     * @param maxCropNameLength The amount of spaces required to align the
+     * progress bar with other plot components.
+     */
     public PlotComponent(Plot plot, int index, int maxCropNameLength) {
         this.plot = plot;
         this.index = index;
         this.maxCropNameLength = maxCropNameLength;
     }
 
+    /**
+     * A method used to render out the component for Plot.
+     */
     @Override
     public void render() {
         System.out.printf(Painter.paint("%d. ", Color.YELLOW), index);
@@ -36,6 +50,9 @@ public class PlotComponent implements Component {
         System.out.println();
     }
 
+    /**
+     * A method to render out wilted plot.
+     */
     private void renderWilted() {
         System.out.print(Painter.paintf("[  [{wilted}]  ]", Color.RED));
     }
@@ -43,8 +60,13 @@ public class PlotComponent implements Component {
     private static final String progressBarTemplate
             = Painter.paintf("[[{%s}]%s]", Color.GREEN);
 
+    /**
+     * A method to render the progress bar of the plot.
+     */
     private void renderProgressBar() {
-        int fillCount = plot.getPercentProgress() / 10;
+        // Enforce some rules on the fill count to better manage timezone
+        // failures.
+        int fillCount = Math.max(plot.getPercentProgress() / 10, 0);
         StringBuilder filledBuilder = new StringBuilder();
         for (int i = 0; i < fillCount; i++) {
             filledBuilder.append("#");

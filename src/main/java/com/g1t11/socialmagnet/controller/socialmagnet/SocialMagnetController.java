@@ -17,6 +17,11 @@ public abstract class SocialMagnetController extends Controller {
 
     protected User me;
 
+    /**
+     * Creates a Social Magnet controller.
+     * @param nav The app's navigator.
+     * @param me The user.
+     */
     public SocialMagnetController(Navigator nav, User me) {
         super(nav);
         this.me = me;

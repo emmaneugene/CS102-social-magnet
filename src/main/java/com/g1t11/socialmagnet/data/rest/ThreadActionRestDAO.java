@@ -43,7 +43,7 @@ public class ThreadActionRestDAO extends RestDAO {
     /**
      * Remove a tag from a thread on the database.
      * @param threadId The ID of the thread to untag.
-     * @param usernames The username tag to remove.
+     * @param username The username tag to remove.
      */
     public void removeTag(int threadId, String username) {
         Response response = getTextInvocationOfTarget(

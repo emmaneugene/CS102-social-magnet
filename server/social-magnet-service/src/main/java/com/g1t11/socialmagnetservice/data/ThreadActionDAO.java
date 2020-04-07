@@ -61,7 +61,7 @@ public class ThreadActionDAO extends DAO {
     /**
      * Remove a tag from a thread on the database.
      * @param threadId The ID of the thread to untag.
-     * @param usernames The username tag to remove.
+     * @param username The username tag to remove.
      */
     public static void removeTag(int threadId, String username) {
         String queryString = "CALL remove_tag(?, ?)";

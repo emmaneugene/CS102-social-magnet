@@ -15,8 +15,9 @@ public class ThreadLoadDAO extends DAO {
     /**
      * Gets a thread from the perspective of user. This is needed to determine
      * whether the thread should be marked as a tagged thread.
-     * @param id The thread id.
+     * @param threadId The thread id.
      * @param username The user that is retrieving the thread.
+     * @return The thread.
      */
     public static Thread getThread(int threadId, String username) {
         String queryString = "CALL get_thread(?, ?)";

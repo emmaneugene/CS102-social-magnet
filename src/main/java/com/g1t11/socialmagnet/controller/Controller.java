@@ -3,6 +3,9 @@ package com.g1t11.socialmagnet.controller;
 import com.g1t11.socialmagnet.util.Input;
 import com.g1t11.socialmagnet.view.page.PageView;
 
+/**
+ * This abstract class acts as the base controller.
+ */
 public abstract class Controller {
     public Navigator nav;
 
@@ -10,6 +13,10 @@ public abstract class Controller {
 
     protected Input input = new Input();
 
+    /**
+     * Creates controller.
+     * @param nav The navigator.
+     */
     public Controller(Navigator nav) {
         this.nav = nav;
     }
@@ -18,13 +25,16 @@ public abstract class Controller {
         return view;
     }
 
+    /**
+     * Sets specified page view.
+     * @param view The page view to set.
+     */
     public void setView(PageView view) {
         this.view = view;
     }
 
     /**
      * The associated <code>View</code> is rendered before any input is handled.
-     * @see View
      */
     public void run() {
         updateView();
@@ -48,7 +58,14 @@ public abstract class Controller {
         view.appendStatus(text);
     }
 
+    /**
+     * Updates the page view. The base controller simply does nothing.
+     */
     public void updateView() {};
 
+    /**
+     * All controllers <strong>must</strong> handle input. Otherwise, the event
+     * loop will not pause in between controllers.
+     */
     public abstract void handleInput();
 }

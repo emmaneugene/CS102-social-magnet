@@ -8,6 +8,9 @@ import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 
+/**
+ * This is a page view for Friend's Wall page.
+ */
 public class FriendsWallPageView extends WallPageView {
     private User me;
 
@@ -15,6 +18,13 @@ public class FriendsWallPageView extends WallPageView {
 
     private List<Friend> friendFriends;
 
+    /**
+     * Creates a Friend's Wall page with specified friend's friend as well as
+     * the common friends with the user.
+     * @param me The user.
+     * @param friend Ther user's friend.
+     * @param friendFriends The list of common friends.
+     */
     public FriendsWallPageView(User me, Farmer friend,
             List<Friend> friendFriends) {
         super(friend, String.format("%s's Wall", friend.getUsername()));
@@ -39,7 +49,11 @@ public class FriendsWallPageView extends WallPageView {
         }
         System.out.println();
     }
-
+    
+    /**
+     * Append the status with the appropriate greeting based on full name of 
+     * user.
+     */
     private void appendGreeting() {
         appendStatus(String.format("Welcome, %s!\n", me.getFullname()));
     }
