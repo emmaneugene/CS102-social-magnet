@@ -46,8 +46,8 @@ public class TestFarmerLoadRestDAO {
             farmerLoadDAO.getFarmer("yankee");
             Assert.assertTrue(false);
         } catch (ServerException e) {
-            Assert.assertEquals(
-                    SQLErrorCode.USER_NOT_FOUND, e.getCode());
+            Assert.assertTrue(
+                    SQLErrorCode.USER_NOT_FOUND.value == e.getCode());
         }
     }
 
