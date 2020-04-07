@@ -1,7 +1,1 @@
-source scripts/env.sh;
-
-# export CLASSPATH="target/classes"
-# export CLASSPATH="$CLASSPATH:$HOME/.m2/repository/mysql/mysql-connector-java/8.0.19/mysql-connector-java-8.0.19.jar"
-
-# java -cp $CLASSPATH com.g1t11.socialmagnet.App;
 mvn exec:java -D exec.mainClass=com.g1t11.socialmagnet.App;

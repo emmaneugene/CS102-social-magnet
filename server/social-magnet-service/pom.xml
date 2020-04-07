@@ -9,7 +9,7 @@
   <name>social-magnet-service</name>
 
   <build>
-    <finalName>social-magnet-service</finalName>
+    <finalName>magnet</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

@@ -8,6 +8,8 @@ import com.mysql.cj.jdbc.Driver;
 
 public class Database {
     private static Database instance = null;
+    private String dbUser = null;
+    private String dbPass = null;
 
     public static Database shared() {
         if (instance == null) {
@@ -29,7 +31,6 @@ public class Database {
         // JDBC Driver must be instantiated before we can use DriverManager.
         try {
             new Driver();
-            establishConnection();
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
             System.err.println("SQLState: " + e.getSQLState());
@@ -37,19 +38,20 @@ public class Database {
         }
     }
 
+    public void setDbUser(String user) {
+        this.dbUser = user;
+    }
+
+    public void setDbPass(String pass) {
+        this.dbPass = pass;
+    }
+
     public void establishConnection() {
         try {
             // Get credentials from environment variables that were loaded
             // through .env file.
-            String dbName = System.getenv("DB_NAME");
-            dbName = "magnet";
-            String dbUrl  = "jdbc:mysql://localhost/" + dbName
-                    + "?serverTimezone=UTC";
-            String dbUser = System.getenv("DB_USER");
-            dbUser = "***REMOVED***";
-            String dbPass = System.getenv("DB_PASS");
-            dbPass = "***REMOVED***";
 
+            String dbUrl  = "jdbc:mysql://localhost/magnet?serverTimezone=UTC";
             conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
