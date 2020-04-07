@@ -3,12 +3,15 @@ package com.g1t11.socialmagnet.model.farm;
 import java.util.Date;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * Represent a plot.
  */
 public class Plot {
     private Crop crop;
 
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss", timezone="UTC")
     private Date timePlanted;
 
     /**
@@ -32,9 +35,7 @@ public class Plot {
     /**
      * Creates a empty plot.
      */
-    public Plot() {
-        this(null, null);
-    }
+    public Plot() {}
 
     /**
      * Gets the crop at plot.
@@ -45,19 +46,25 @@ public class Plot {
     }
 
     /**
-     * Gets the date when the crop is planted.
-     * @return The date the crop is planted.
+     * Sets crop.
+     * @param crop Crop.
      */
+    public void setCrop(Crop crop) {
+        this.crop = crop;
+    }
+
     public Date getTimePlanted() {
         return timePlanted;
     }
-
+ 
     /**
-     * A method to check if the plot is ready to harvest. It is only ready to
-     * harvest if and only if when crop at the plot has grown to maturity and 
-     * not wilted. 
-     * @return The boolean value of plot ready to be harvest.
+     * Sets the time of crop planted at plot.
+     * @param timePlanted The time of crop planted at plot.
      */
+    public void setTimePlanted(Date timePlanted) {
+        this.timePlanted = timePlanted;
+    }
+
     public boolean readyToHarvest() {
         Date now = new Date();
         int minutesElapsed = (int) (now.getTime() - timePlanted.getTime())

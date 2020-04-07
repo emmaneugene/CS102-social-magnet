@@ -1,7 +1,7 @@
 .vscode
-.env
 .settings
 .project
 .classpath
 target
-load-env.bat
+env.bat
+env.sh

@@ -3,15 +3,7 @@ package com.g1t11.socialmagnet.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.g1t11.socialmagnet.data.Database;
-
-/**
- * This is the navigator where it controls the current navigation state of the
- * application by going through the various controllers.
- */
 public class Navigator {
-    private Database db;
-
     /**
      * Stack of <code>Controller</code> instances that represent the current
      * application's navigation state.
@@ -21,22 +13,6 @@ public class Navigator {
      * @see Controller
      */
     private List<Controller> navigationStack = new ArrayList<>();
-
-    /**
-     * Creates a navigator with the specified database to connect to.
-     * @param db The database to connect to.
-     */
-    public Navigator(Database db) {
-        this.db = db;
-    }
-
-    /**
-     * Gets the database of the app.
-     * @return The database the app is using.
-     */
-    public Database database() {
-        return db;
-    }
 
     /**
      * Initiate the navigation stack.

@@ -8,10 +8,7 @@ import java.util.stream.Collectors;
 
 import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.controller.socialmagnet.MainMenuController;
-import com.g1t11.socialmagnet.data.CredentialsDAO;
-import com.g1t11.socialmagnet.data.FarmerActionDAO;
-import com.g1t11.socialmagnet.data.StoreDAO;
-import com.g1t11.socialmagnet.data.UserDAO;
+import com.g1t11.socialmagnet.data.rest.CredentialsRestDAO;
 import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.util.Painter;
@@ -23,10 +20,7 @@ import com.g1t11.socialmagnet.view.page.cityfarmers.SendGiftPageView;
  * This is a controller for Sending of gifts.
  */
 public class SendGiftController extends CityFarmersController {
-    CredentialsDAO credDAO = new CredentialsDAO(database());
-    FarmerActionDAO farmerActionDAO = new FarmerActionDAO(database());
-    StoreDAO storeDAO = new StoreDAO(database());
-    UserDAO userDAO = new UserDAO(database());
+    private CredentialsRestDAO credDAO = new CredentialsRestDAO();
 
     List<Crop> crops;
 

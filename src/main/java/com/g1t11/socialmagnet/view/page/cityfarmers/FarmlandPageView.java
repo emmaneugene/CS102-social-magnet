@@ -13,9 +13,9 @@ import com.g1t11.socialmagnet.view.component.InventoryComponent;
  * This is a page view for City Farmers' Farmland page.
  */
 public class FarmlandPageView extends CityFarmersPageView {
-    FarmlandComponent farmComp = new FarmlandComponent();
+    private FarmlandComponent farmComp = new FarmlandComponent();
 
-    InventoryComponent invComp;
+    private InventoryComponent invComp;
 
     /**
      * Creates a Farmland page view.

@@ -38,7 +38,7 @@ public class StoreComponent implements Component {
         System.out.printf("- %d gold \r\n", crop.getCost());
         System.out.printf("   Harvest in: %d mins \r\n",
                 crop.getMinutesToHarvest());
-        System.out.printf("   XP Gained: %d", crop.getPerUnitXP());
+        System.out.printf("   XP Gained: %d", crop.getPerUnitXp());
         System.out.println();
     }
 }

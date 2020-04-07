@@ -10,9 +10,11 @@ public class StealingRecord {
 
     private int quantity;
 
-    private int totalXPGained;
+    private int totalXpGained;
 
     private int totalGoldGained;
+
+    public StealingRecord() {}
 
     /**
      * Creates a stealing record with specified crop, quantity, total
@@ -23,10 +25,10 @@ public class StealingRecord {
      * @param totalGoldGained The total gold gained.
      */
     public StealingRecord(String cropName, int quantity,
-            int totalXPGained, int totalGoldGained) {
+            int totalXpGained, int totalGoldGained) {
         this.cropName = cropName;
         this.quantity = quantity;
-        this.totalXPGained = totalXPGained;
+        this.totalXpGained = totalXpGained;
         this.totalGoldGained = totalGoldGained;
     }
 
@@ -36,7 +38,7 @@ public class StealingRecord {
      * @param quantity The quantity of produced stolen.
      */
     public StealingRecord(Crop crop, int quantity) {
-        this(crop.getName(), quantity, quantity * crop.getPerUnitXP(),
+        this(crop.getName(), quantity, quantity * crop.getPerUnitXp(),
                  quantity * crop.getSalePrice());
     }
 
@@ -49,19 +51,39 @@ public class StealingRecord {
     }
 
     /**
-     * Gets the quanity of the stolen produce.
-     * @return The quanity of the stolen produce.
+     * Sets crop name of stealing record.
+     * @param cropName Crop name.
      */
+    public void setCropName(String cropName) {
+        this.cropName = cropName;
+    }
+
     public int getQuantity() {
         return quantity;
     }
 
     /**
-     * Gets the total experienced point gained.
-     * @return The total experienced point gained.
+     * Sets quantity of stealing record.
+     * @param quantity
      */
-    public int getTotalXPGained() {
-        return totalXPGained;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    /**
+     * Gets total experience points gained.
+     * @return The total experience points gained.
+     */
+    public int getTotalXpGained() {
+        return totalXpGained;
+    }
+
+    /**
+     * Sets total experience points gained.
+     * @param totalXpGained The total experience points gained.
+     */
+    public void setTotalXpGained(int totalXpGained) {
+        this.totalXpGained = totalXpGained;
     }
 
     /**
@@ -73,14 +95,18 @@ public class StealingRecord {
     }
 
     /**
-     * Returns the details of the stealing record as a string.
-     * @return The string of details of the stealing record. 
+     * Sets total gold gained.
+     * @param totalGoldGained Total gold gained.
      */
+    public void setTotalGoldGained(int totalGoldGained) {
+        this.totalGoldGained = totalGoldGained;
+    }
+
     @Override
     public String toString() {
         return String.format("%s for %d XP and %d gold",
                 TextUtils.countedWord(quantity, cropName, cropName + "s"),
-                totalXPGained,
+                totalXpGained,
                 totalGoldGained);
     }
 }

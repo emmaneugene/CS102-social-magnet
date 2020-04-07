@@ -24,7 +24,7 @@ public class Farmer extends User {
         }
     }
 
-    private int XP = 0;
+    private int xp = 0;
 
     /**
      *  By default, new farmers start with 50 gold
@@ -36,17 +36,22 @@ public class Farmer extends User {
     private List<Plot> farmland = new ArrayList<>();
 
     /**
+     * Creates empty farmer.
+     */
+    public Farmer() {}
+
+    /**
      * Create a farmer with specifed parameters.
      * @param username The username of farmer.
      * @param fullname The full name of farmer.
-     * @param XP The experience point farmer currently have.
+     * @param xp The experience point farmer currently have.
      * @param wealth The wealth of farmer.
      * @param wealthRank The rank of farmer based on wealth.
      */
-    public Farmer(String username, String fullname, int XP,
+    public Farmer(String username, String fullname, int xp,
             int wealth, int wealthRank) {
         super(username, fullname);
-        this.XP = XP;
+        this.xp = xp;
         this.wealth = wealth;
         this.wealthRankAmongFriends = wealthRank;
     }
@@ -61,25 +66,20 @@ public class Farmer extends User {
     }
 
     /**
-     * Create a empty farmer.
-     */
-    public Farmer() {}
-
-    /**
      * Gets the rank of farmer based on current farmer's experience point.
      * @return The rank of farmer.
      */
     public Rank getRank() {
-        if (XP < 1000) {
+        if (xp < 1000) {
             return Rank.NOVICE;
         }
-        if (XP < 2500) {
+        if (xp < 2500) {
             return Rank.APPRENTICE;
         }
-        if (XP < 5000) {
+        if (xp < 5000) {
             return Rank.JOURNEYMAN;
         }
-        if (XP < 12000) {
+        if (xp < 12000) {
             return Rank.GRANDMASTER;
         }
         return Rank.LEGENDARY;
@@ -108,16 +108,16 @@ public class Farmer extends User {
      * Gets the experience points of farmer.
      * @return The experience points of farmer.
      */
-    public int getXP() {
-        return XP;
+    public int getXp() {
+        return xp;
     }
 
     /**
-     * A method to add experience points to farmer.
-     * @param XPEarned The amount of experience points to add to farmer.
+     * Sets the experience points of farmer.
+     * @return The experience points of farmer.
      */
-    public void addXP(int XPEarned) {
-        XP += XPEarned;
+    public void setXp(int xp) {
+        this.xp = xp;
     }
 
     /**
@@ -129,19 +129,11 @@ public class Farmer extends User {
     }
 
     /**
-     * A method to add wealth to farmer.
-     * @param wealth The amount of wealth to add to farmer.
+     * Sets wealth of farmer.
+     * @param wealth Wealth.
      */
-    public void addWealth(int wealth) {
-        this.wealth += wealth;
-    }
-
-    /**
-     * A method to subtract wealth from farmer.
-     * @param wealth The amount of wealth to subtract from farmer.
-     */
-    public void subtractWealth(int wealth) {
-        this.wealth -= wealth;
+    public void setWealth(int wealth) {
+        this.wealth = wealth;
     }
 
     /**
@@ -169,17 +161,18 @@ public class Farmer extends User {
     }
 
     /**
-     * Compares the specified object with this farmer for equality.
-     * It returns true if and only if specified object is a farmer and 
-     * both farmer have the same experience point, wealth, wealth rank among
-     * friends and farmland.
+     * Sets farmland.
      */
+    public void setFarmland(List<Plot> farmland) {
+        this.farmland = farmland;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Farmer)) return false;
         Farmer other = (Farmer) o;
         return super.equals(other)
-                && Objects.equals(XP, other.XP)
+                && Objects.equals(xp, other.xp)
                 && Objects.equals(wealth, other.wealth)
                 && Objects.equals(wealthRankAmongFriends,
                         other.wealthRankAmongFriends)

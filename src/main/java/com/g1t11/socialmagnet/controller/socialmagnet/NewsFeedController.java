@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.g1t11.socialmagnet.controller.Navigator;
-import com.g1t11.socialmagnet.data.ThreadLoadDAO;
 import com.g1t11.socialmagnet.model.social.Thread;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
@@ -15,8 +14,6 @@ import com.g1t11.socialmagnet.view.page.socialmagnet.NewsFeedPageView;
  * This is a controller for News Feed.
  */
 public class NewsFeedController extends SocialMagnetController {
-    private ThreadLoadDAO threadLoadDAO = new ThreadLoadDAO(database());
-
     private List<Thread> threads = new ArrayList<>();
 
     /**

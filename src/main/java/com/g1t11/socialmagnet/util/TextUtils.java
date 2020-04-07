@@ -7,14 +7,15 @@ import java.util.List;
  * appropriate string accordingly to the counts of words/numbers/lists.
  */
 public class TextUtils {
-
     /**
-     * Build appropriate string according to the count of word.
-     * @param count The number of words.
-     * @param singular The string to use if its singular.
-     * @param plural The string to use if its plural.
-     * @return Generated appropriate string.
+     * This method is used to check if the input string is alphanumeric.
+     * @param input The input string used for validation.
+     * @return If input is alphanumeric, it will return true, else return false.
      */
+    public static boolean isAlphanumeric(String input) {
+        return input != null && input.matches("^[a-zA-Z0-9]+$");
+    }
+
     public static String countedWord(int count,
             String singular, String plural) {
         if (count == 1) {

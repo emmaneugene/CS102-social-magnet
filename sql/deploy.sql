@@ -61,7 +61,7 @@ CREATE TABLE comment (
 );
 
 CREATE TABLE liker (
-    username   VARCHAR(128) BINARY NOT NULL,
+    username   VARCHAR(255) BINARY NOT NULL,
     thread_id  INT                 NOT NULL,
     PRIMARY KEY (username, thread_id),
     FOREIGN KEY (username)  REFERENCES user (username),
@@ -69,7 +69,7 @@ CREATE TABLE liker (
 );
 
 CREATE TABLE disliker (
-    username   VARCHAR(128) BINARY NOT NULL,
+    username   VARCHAR(255) BINARY NOT NULL,
     thread_id  INT                 NOT NULL,
     PRIMARY KEY (username, thread_id),
     FOREIGN KEY (username)  REFERENCES user (username),
@@ -304,6 +304,11 @@ CREATE PROCEDURE get_thread_comments_latest_last(IN _thread_id INT, IN _limit IN
         ORDER BY commented_on DESC
         LIMIT _limit
     ) AS c
+    ORDER BY commented_on;
+
+CREATE PROCEDURE get_all_thread_comments_latest_last(IN _thread_id INT)
+    SELECT commenter, content FROM comment
+    WHERE thread_id = _thread_id
     ORDER BY commented_on;
 
 CREATE PROCEDURE get_likers(IN _thread_id INT)
@@ -791,7 +796,7 @@ BEGIN
             SELECT count(*) FROM inventory WHERE owner = _username AND crop_name = _crop_name
         );
         IF @crop_exist THEN
-            UPDATE inventory SET quantity = quantity + _amount WHERE owner = _username;
+            UPDATE inventory SET quantity = quantity + _amount WHERE owner = _username AND crop_name = _crop_name;
         ELSE
             INSERT INTO inventory (owner, crop_name, quantity) VALUES
             (_username, _crop_name, _amount);

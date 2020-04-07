@@ -10,7 +10,7 @@ import com.g1t11.socialmagnet.model.farm.Plot;
  * This is a render component for Farmland.
  */
 public class FarmlandComponent implements Component {
-    List<PlotComponent> plotComps = new ArrayList<>();
+    private List<PlotComponent> plotComps = new ArrayList<>();
 
     /**
      * Sets the list of plot components for rendering.

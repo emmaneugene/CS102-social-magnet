@@ -1,6 +1,5 @@
 package com.g1t11.socialmagnet.controller;
 
-import com.g1t11.socialmagnet.data.Database;
 import com.g1t11.socialmagnet.util.Input;
 import com.g1t11.socialmagnet.view.page.PageView;
 
@@ -22,15 +21,6 @@ public abstract class Controller {
         this.nav = nav;
     }
 
-
-    public final Database database() {
-        return nav.database();
-    }
-
-    /**
-     * Gets the page view.
-     * @return The page view.
-     */
     public PageView getView() {
         return view;
     }

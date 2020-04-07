@@ -12,7 +12,7 @@ import com.g1t11.socialmagnet.view.component.StoreComponent;
  * This is a page view for City Farmers' store page view.
  */
 public class StorePageView extends CityFarmersPageView {
-    List<StoreComponent> cropComps = new ArrayList<>();
+    private List<StoreComponent> cropComps = new ArrayList<>();
 
     /**
      * Creates a Store page view.

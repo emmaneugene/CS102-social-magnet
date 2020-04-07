@@ -27,10 +27,8 @@ public class Thread {
 
     private boolean tagged = false;
 
-    /**
-     * Creates a thread with specified id only.
-     * @param id The specified thread id.
-     */
+    public Thread() {}
+
     public Thread(int id) {
         this.id = id;
     }
@@ -79,9 +77,13 @@ public class Thread {
     }
 
     /**
-     * Gets username of the owner of thread.
-     * @return Username of the owner of thread.
+     * Sets id of thread.
+     * @param id Thread id.
      */
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getFromUsername() {
         return fromUsername;
     }

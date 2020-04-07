@@ -3,9 +3,8 @@ package com.g1t11.socialmagnet.controller.socialmagnet;
 import java.util.List;
 
 import com.g1t11.socialmagnet.controller.Navigator;
-import com.g1t11.socialmagnet.data.DatabaseException;
-import com.g1t11.socialmagnet.data.UserDAO;
-import com.g1t11.socialmagnet.data.DatabaseException.SQLErrorCode;
+import com.g1t11.socialmagnet.data.ServerException;
+import com.g1t11.socialmagnet.data.ServerException.ErrorCode;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
@@ -15,8 +14,6 @@ import com.g1t11.socialmagnet.view.page.socialmagnet.FriendsPageView;
  * This is the controller for Friends.
  */
 public class FriendsController extends SocialMagnetController {
-    private UserDAO userDAO = new UserDAO(database());
-
     private List<User> friends;
 
     private List<String> requestUsernames;
@@ -116,17 +113,17 @@ public class FriendsController extends SocialMagnetController {
                             requested),
                     Color.GREEN,
                     Color.BLUE));
-        } catch (DatabaseException e) {
-            SQLErrorCode code = e.getCode();
-            if (code.equals(SQLErrorCode.USER_NOT_FOUND)) {
+        } catch (ServerException e) {
+            int code = e.getCode();
+            if (code == ErrorCode.USER_NOT_FOUND.value) {
                 setStatus(Painter.paintf(
                         String.format("[{User [{%s}] not found.}]", requested),
                         Color.RED,
                         Color.BLUE));
-            } else if (code.equals(SQLErrorCode.REQUEST_EXISTING_FRIEND)) {
+            } else if (code == ErrorCode.REQUEST_EXISTING_FRIEND.value) {
                 setStatus(Painter.paint(
                         "Cannot request existing friend.", Color.RED));
-            } else if (code.equals(SQLErrorCode.REQUEST_SELF)) {
+            } else if (code == ErrorCode.REQUEST_SELF.value) {
                 setStatus(Painter.paint(
                         "Cannot request self.", Color.RED));
             }

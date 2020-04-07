@@ -9,8 +9,8 @@ import com.g1t11.socialmagnet.view.page.PageView;
  * the page views that is under City Farmers.
  */
 public abstract class CityFarmersPageView extends PageView {
-    Farmer me;
-    FarmerHeaderComponent headerComp = new FarmerHeaderComponent();
+    protected Farmer me;
+    protected FarmerHeaderComponent headerComp = new FarmerHeaderComponent();
 
     /**
      * Creates a City Farmers page view with specified title.

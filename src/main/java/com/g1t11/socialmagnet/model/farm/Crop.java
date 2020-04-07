@@ -12,7 +12,7 @@ public class Crop {
 
     private int minutesToHarvest;
 
-    private int perUnitXP;
+    private int perUnitXp;
 
     private Integer yield;
 
@@ -38,7 +38,7 @@ public class Crop {
         this.name = name;
         this.cost = cost;
         this.minutesToHarvest = minutesToHarvest;
-        this.perUnitXP = perUnitXP;
+        this.perUnitXp = perUnitXP;
         this.yield = yield;
         this.minYield = minYield;
         this.maxYield = maxYield;
@@ -46,18 +46,9 @@ public class Crop {
     }
 
     /**
-     * Creates an empty crop.
+     * Creates a empty crop
      */
-    public Crop() {
-        this.name = "empty crop";
-        this.cost = 0;
-        this.minutesToHarvest = 0;
-        this.perUnitXP = 0;
-        this.yield = 0;
-        this.minYield = 0;
-        this.maxYield = 0;
-        this.salePrice = 0;
-    }
+    public Crop() {}
 
     /**
      * Creates a crop with specifed parameters without actual yield.
@@ -84,27 +75,73 @@ public class Crop {
     }
 
     /**
-     * Gets the cost of crop.
-     * @return The cost of crop.
+     * Sets name.
+     * @param name Name.
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Gets cost.
+     * @return Cost.
      */
     public int getCost() {
         return cost;
     }
 
     /**
-     * Gets the time for the crop to grow to maturity in minutes.
-     * @return The time for the crop to grow to maturity in minutes.
+     * Sets cost.
+     * @param cost Cost.
+     */
+    public void setCost(int cost) {
+        this.cost = cost;
+    }
+
+    /**
+     * Gets minutes to harvest crop.
+     * @return Minutes for crop to harvest.
      */
     public int getMinutesToHarvest() {
         return minutesToHarvest;
     }
 
     /**
-     * Gets the experience points per unit of crop.
-     * @return The experience points per unit of crop.
+     * Sets minutes to harvest crop.
      */
-    public int getPerUnitXP() {
-        return perUnitXP;
+    public void setMinutesToHarvest(int minutesToHarvest) {
+        this.minutesToHarvest = minutesToHarvest;
+    }
+
+    /**
+     * Gets per unit experience points.
+     * @return Experience points per unit.
+     */
+    public int getPerUnitXp() {
+        return perUnitXp;
+    }
+
+    /**
+     * Sets per unit experience points.
+     */
+    public void setPerUnitXp(int perUnitXp) {
+        this.perUnitXp = perUnitXp;
+    }
+
+    /**
+     * Get yield.
+     * @return Yield.
+     */
+    public Integer getYield() {
+        return yield;
+    }
+
+    /**
+     * Set yield.
+     * @param yield Yield.
+     */
+    public void setYield(Integer yield) {
+        this.yield = yield;
     }
 
     /**
@@ -116,24 +153,27 @@ public class Crop {
     }
 
     /**
-     * Gets the maximum yield of crop. 
-     * @return The maximum yield of crop.
+     * Sets minimum yield.
+     * @param minYield Minimum yield.
+     */
+    public void setMinYield(int minYield) {
+        this.minYield = minYield;
+    }
+
+    /**
+     * Gets max yield.
+     * @return Max yield.
      */
     public int getMaxYield() {
         return maxYield;
     }
 
     /**
-     * Gets the random yield between the minimum and maximum yield.
-     * The formula to calculate the yield is Min Yield + random number in the
-     * range of 0 to (Max Yield - min Yield).
-     * @return The random yield between the minimum and maximum yield.
+     * Sets max yield.
+     * @param maxYield Max yield.
      */
-    public int getRandomYield() {
-        if (yield == null) {
-            yield = minYield + (int) Math.random() * (maxYield - minYield);
-        }
-        return yield;
+    public void setMaxYield(int maxYield) {
+        this.maxYield = maxYield;
     }
 
     /**
@@ -145,8 +185,13 @@ public class Crop {
     }
 
     /**
-     * Uses the hashcode of the name of crop as hashcode of crop.
+     * Sets sale price.
+     * @param salePrice Sale price.
      */
+    public void setSalePrice(int salePrice) {
+        this.salePrice = salePrice;
+    }
+
     @Override
     public int hashCode() {
         return name.hashCode();
@@ -165,7 +210,7 @@ public class Crop {
         return Objects.equals(name, other.name)
                 && Objects.equals(cost, other.cost)
                 && Objects.equals(minutesToHarvest, other.minutesToHarvest)
-                && Objects.equals(perUnitXP, other.perUnitXP)
+                && Objects.equals(perUnitXp, other.perUnitXp)
                 && Objects.equals(minYield, other.minYield)
                 && Objects.equals(maxYield, other.maxYield)
                 && Objects.equals(salePrice, other.salePrice);
