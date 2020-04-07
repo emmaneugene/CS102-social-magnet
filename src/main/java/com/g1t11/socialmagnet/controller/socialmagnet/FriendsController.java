@@ -96,16 +96,16 @@ public class FriendsController extends SocialMagnetController {
                     Color.GREEN,
                     Color.BLUE));
         } catch (DatabaseException e) {
-            SQLErrorCode code = e.getCode();
-            if (code.equals(SQLErrorCode.USER_NOT_FOUND)) {
+            int code = e.getCode();
+            if (code == SQLErrorCode.USER_NOT_FOUND.value) {
                 setStatus(Painter.paintf(
                         String.format("[{User [{%s}] not found.}]", requested),
                         Color.RED,
                         Color.BLUE));
-            } else if (code.equals(SQLErrorCode.REQUEST_EXISTING_FRIEND)) {
+            } else if (code == SQLErrorCode.REQUEST_EXISTING_FRIEND.value) {
                 setStatus(Painter.paint(
                         "Cannot request existing friend.", Color.RED));
-            } else if (code.equals(SQLErrorCode.REQUEST_SELF)) {
+            } else if (code == SQLErrorCode.REQUEST_SELF.value) {
                 setStatus(Painter.paint(
                         "Cannot request self.", Color.RED));
             }

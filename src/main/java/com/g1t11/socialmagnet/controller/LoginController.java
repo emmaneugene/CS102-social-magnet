@@ -1,14 +1,14 @@
 package com.g1t11.socialmagnet.controller;
 
 import com.g1t11.socialmagnet.controller.socialmagnet.MainMenuController;
-import com.g1t11.socialmagnet.data.CredentialsDAO;
+import com.g1t11.socialmagnet.data.rest.CredentialsRestDAO;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.LoginPageView;
 
 public class LoginController extends Controller {
-    private CredentialsDAO credDAO = new CredentialsDAO(database());
+    private CredentialsRestDAO credDAO = new CredentialsRestDAO();
 
     public LoginController(Navigator nav) {
         super(nav);

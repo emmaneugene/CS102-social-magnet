@@ -1,7 +1,9 @@
-package com.g1t11.socialmagnetservice.model.social;
+package com.g1t11.socialmagnet.model.social;
 
 public class Friend extends User {
-    private boolean mutual;
+    private boolean mutual = false;
+
+    public Friend() {}
 
     public Friend(String username, String fullname, boolean mutual) {
         super(username, fullname);

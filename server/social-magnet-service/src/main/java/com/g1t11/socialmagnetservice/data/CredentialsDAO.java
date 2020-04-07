@@ -5,20 +5,23 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.g1t11.socialmagnetservice.data.DatabaseException.SQLErrorCode;
+import com.g1t11.socialmagnetservice.model.social.User;
 
 /**
  * Handles user authentication and session management.
  */
 public class CredentialsDAO extends DAO {
     /**
-     * Check if the user credentials are valid.
+     * Get the logged-in user if login is successful. Otherwise, return null.
      *
      * @param username The inputted username.
      * @param password The inputted password.
-     * @return A boolean to indicate if the username and password is valid.
+     * @return A user model if the login is successful, else null.
      */
-    public static boolean login(String username, String password) {
+    public static User login(String username, String password) {
         ResultSet rs = null;
+        User user = null;
+
         String queryString = "CALL login(?, ?)";
 
         try ( PreparedStatement stmt = conn().prepareStatement(queryString); ) {
@@ -27,14 +30,15 @@ public class CredentialsDAO extends DAO {
 
             rs = stmt.executeQuery();
 
-            if (!rs.next()) return false;
-            return true;
+            if (!rs.next()) return null;
+            user = new User(rs.getString("username"), rs.getString("fullname"));
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
             throw new DatabaseException(e);
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
         }
+        return user;
     }
 
     /**

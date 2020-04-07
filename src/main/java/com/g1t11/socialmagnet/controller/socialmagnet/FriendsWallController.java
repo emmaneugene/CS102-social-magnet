@@ -3,6 +3,7 @@ package com.g1t11.socialmagnet.controller.socialmagnet;
 import java.util.List;
 
 import com.g1t11.socialmagnet.controller.Navigator;
+import com.g1t11.socialmagnet.model.social.Friend;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
@@ -12,7 +13,7 @@ public class FriendsWallController extends WallController {
     public FriendsWallController(Navigator nav, User me, User friend) {
         super(nav, me);
         farmerToDisplay = farmerLoadDAO.getFarmer(friend.getUsername());
-        List<User> friendsOfFriend = userDAO.getFriendsOfFriendWithCommon(
+        List<Friend> friendsOfFriend = userDAO.getFriendsOfFriendWithCommon(
                 me.getUsername(),
                 farmerToDisplay.getUsername());
         setView(new FriendsWallPageView(me, farmerToDisplay, friendsOfFriend));

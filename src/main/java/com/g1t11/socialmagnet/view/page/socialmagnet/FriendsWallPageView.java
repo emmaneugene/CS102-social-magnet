@@ -3,7 +3,7 @@ package com.g1t11.socialmagnet.view.page.socialmagnet;
 import java.util.List;
 
 import com.g1t11.socialmagnet.model.farm.Farmer;
-import com.g1t11.socialmagnet.model.social.CommonFriend;
+import com.g1t11.socialmagnet.model.social.Friend;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
@@ -11,10 +11,10 @@ import com.g1t11.socialmagnet.util.Painter.Color;
 public class FriendsWallPageView extends WallPageView {
     User me;
     Farmer friend;
-    List<User> friendFriends;
+    List<Friend> friendFriends;
 
     public FriendsWallPageView(User me, Farmer friend,
-            List<User> friendFriends) {
+            List<Friend> friendFriends) {
         super(friend, String.format("%s's Wall", friend.getUsername()));
         this.me = me;
         this.friend = friend;
@@ -28,11 +28,11 @@ public class FriendsWallPageView extends WallPageView {
         System.out.printf(Painter.paintf(
                 "[{%s}]'s friends\n", Color.BLUE), friend.getUsername());
         int index = 1;
-        for (User friend : friendFriends) {
+        for (Friend friend : friendFriends) {
             System.out.printf("%d. %s %s\n",
                 index++,
                 friend.getFullname(),
-                (friend instanceof CommonFriend ? "(Common Friend)" : "")
+                (friend.isMutual() ? "(Common Friend)" : "")
             );
         }
         System.out.println();

@@ -1,10 +1,10 @@
-package com.g1t11.socialmagnet.model.farm;
+package com.g1t11.socialmagnetservice.model.farm;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import com.g1t11.socialmagnet.model.social.User;
+import com.g1t11.socialmagnetservice.model.social.User;
 
 public class Farmer extends User {
     public enum Rank {
@@ -34,10 +34,10 @@ public class Farmer extends User {
 
     public Farmer() {}
 
-    public Farmer(String username, String fullname, int xp,
+    public Farmer(String username, String fullname, int XP,
             int wealth, int wealthRank) {
         super(username, fullname);
-        this.xp = xp;
+        this.xp = XP;
         this.wealth = wealth;
         this.wealthRankAmongFriends = wealthRank;
     }
@@ -46,36 +46,36 @@ public class Farmer extends User {
         super(username, fullname);
     }
 
-    public Rank getRank() {
-        if (xp < 1000) {
-            return Rank.NOVICE;
-        }
-        if (xp < 2500) {
-            return Rank.APPRENTICE;
-        }
-        if (xp < 5000) {
-            return Rank.JOURNEYMAN;
-        }
-        if (xp < 12000) {
-            return Rank.GRANDMASTER;
-        }
-        return Rank.LEGENDARY;
-    }
+    // public Rank getRank() {
+    //     if (xp < 1000) {
+    //         return Rank.NOVICE;
+    //     }
+    //     if (xp < 2500) {
+    //         return Rank.APPRENTICE;
+    //     }
+    //     if (xp < 5000) {
+    //         return Rank.JOURNEYMAN;
+    //     }
+    //     if (xp < 12000) {
+    //         return Rank.GRANDMASTER;
+    //     }
+    //     return Rank.LEGENDARY;
+    // }
 
-    public int getMaxPlotCount() {
-        switch (getRank()) {
-            case NOVICE:
-                return 5;
-            case APPRENTICE:
-                return 6;
-            case JOURNEYMAN:
-                return 7;
-            case GRANDMASTER:
-                return 8;
-            default:
-                return 9;
-        }
-    }
+    // public int getMaxPlotCount() {
+    //     switch (getRank()) {
+    //         case NOVICE:
+    //             return 5;
+    //         case APPRENTICE:
+    //             return 6;
+    //         case JOURNEYMAN:
+    //             return 7;
+    //         case GRANDMASTER:
+    //             return 8;
+    //         default:
+    //             return 9;
+    //     }
+    // }
 
     public int getXp() {
         return xp;

@@ -3,17 +3,13 @@ package com.g1t11.socialmagnetservice.rest;
 import java.util.List;
 
 import javax.annotation.security.PermitAll;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -24,12 +20,7 @@ import com.g1t11.socialmagnetservice.data.UserDAO;
 import com.g1t11.socialmagnetservice.data.DatabaseException.SQLErrorCode;
 
 @Path("/user")
-public class Users {
-    @Context
-    ServletContext servContext;
-    @Context
-    HttpServletRequest servRequest;
-
+public class UserRoutes {
     @PermitAll
     @GET
     @Path("{username}")
@@ -39,12 +30,12 @@ public class Users {
             User user = UserDAO.getUser(username);
 
             return Response.status(Response.Status.OK).entity(user)
-                    .type("application/json").build();
+                    .type(MediaType.APPLICATION_JSON).build();
         } catch (DatabaseException e) {
             if (e.getCode().equals(SQLErrorCode.USER_NOT_FOUND)) {
                 return Response.status(Response.Status.NOT_FOUND).build();
             } else {
-                return Response.status(Response.Status.BAD_GATEWAY)
+                return Response.status(Response.Status.BAD_REQUEST)
                         .entity(e.getMessage()).build();
             }
         }
@@ -58,7 +49,7 @@ public class Users {
             List<User> friends = UserDAO.getFriends(username);
 
             return Response.status(Response.Status.OK).entity(friends)
-                    .type("application/json").build();
+                    .type(MediaType.APPLICATION_JSON).build();
         } catch (DatabaseException e) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(e.getMessage()).build();
@@ -75,14 +66,14 @@ public class Users {
                     username, friendName);
 
             return Response.status(Response.Status.OK).entity(friends)
-                    .type("application/json").build();
+                    .type(MediaType.APPLICATION_JSON).build();
         } catch (DatabaseException e) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(e.getMessage()).build();
         }
     }
 
-    @DELETE
+    @PUT
     @Path("{username}/unfriend")
     @Consumes(MediaType.TEXT_PLAIN)
     public Response unfriend(@PathParam("username") String username, String body) {
@@ -93,7 +84,7 @@ public class Users {
             return Response.status(Response.Status.OK)
                     .entity(String.format("Unfriended %s!", friendName)).build();
         } catch (DatabaseException e) {
-            return Response.status(Response.Status.BAD_GATEWAY)
+            return Response.status(Response.Status.BAD_REQUEST)
                     .entity(e.getMessage()).build();
         }
     }
@@ -106,9 +97,9 @@ public class Users {
             List<String> requests = UserDAO.getRequestUsernames(username);
 
             return Response.status(Response.Status.OK).entity(requests)
-                    .type("application/json").build();
+                    .type(MediaType.APPLICATION_JSON).build();
         } catch (DatabaseException e) {
-            return Response.status(Response.Status.BAD_GATEWAY)
+            return Response.status(Response.Status.BAD_REQUEST)
                     .entity(e.getMessage()).build();
         }
     }
@@ -127,8 +118,8 @@ public class Users {
                             "Sent %s a friend request!", friendName))
                     .build();
         } catch (DatabaseException e) {
-            return Response.status(Response.Status.BAD_GATEWAY)
-                    .entity(e.getMessage()).build();
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(e.getCode().value).build();
         }
     }
 
@@ -146,7 +137,7 @@ public class Users {
                             "Accepted %s as a friend!", friendName))
                     .build();
         } catch (DatabaseException e) {
-            return Response.status(Response.Status.BAD_GATEWAY)
+            return Response.status(Response.Status.BAD_REQUEST)
                     .entity(e.getMessage()).build();
         }
     }
@@ -165,7 +156,7 @@ public class Users {
                             "Rejected %s as a friend!", friendName))
                     .build();
         } catch (DatabaseException e) {
-            return Response.status(Response.Status.BAD_GATEWAY)
+            return Response.status(Response.Status.BAD_REQUEST)
                     .entity(e.getMessage()).build();
         }
     }

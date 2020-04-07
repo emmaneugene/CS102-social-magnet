@@ -30,13 +30,17 @@ public class DatabaseException extends RuntimeException {
     }
     private static final long serialVersionUID = 1L;
 
-    private SQLErrorCode code = null;
+    private Integer code = null;
 
     public DatabaseException(String message) {
         super(message);
     }
 
     public DatabaseException(SQLErrorCode code) {
+        this.code = code.value;
+    }
+
+    public DatabaseException(Integer code) {
         this.code = code;
     }
 
@@ -44,7 +48,7 @@ public class DatabaseException extends RuntimeException {
         super(e);
     }
 
-    public SQLErrorCode getCode() {
+    public Integer getCode() {
         return code;
     }
 }

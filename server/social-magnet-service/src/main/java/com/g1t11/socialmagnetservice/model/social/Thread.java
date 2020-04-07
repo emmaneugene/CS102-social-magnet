@@ -1,11 +1,11 @@
-package com.g1t11.socialmagnet.model.social;
+package com.g1t11.socialmagnetservice.model.social;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import com.g1t11.socialmagnet.util.Painter;
-import com.g1t11.socialmagnet.util.Painter.Color;
+import com.g1t11.socialmagnetservice.util.Painter;
+import com.g1t11.socialmagnetservice.util.Painter.Color;
 
 public class Thread {
     private int id;
@@ -45,12 +45,12 @@ public class Thread {
         this(id, fromUsername, toUsername, content, commentCount, false);
     }
 
-    public int getId() {
-        return id;
-    }
-
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getFromUsername() {

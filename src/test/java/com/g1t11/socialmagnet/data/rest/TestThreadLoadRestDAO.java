@@ -1,7 +1,8 @@
-package com.g1t11.socialmagnet.data;
+package com.g1t11.socialmagnet.data.rest;
 
 import java.util.List;
 
+import com.g1t11.socialmagnet.data.DatabaseException;
 import com.g1t11.socialmagnet.data.DatabaseException.SQLErrorCode;
 import com.g1t11.socialmagnet.model.social.Comment;
 import com.g1t11.socialmagnet.model.social.Thread;
@@ -12,8 +13,8 @@ import com.g1t11.socialmagnet.util.Painter.Color;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TestThreadLoadDAO extends TestDAO {
-    private ThreadLoadDAO threadLoadDAO;
+public class TestThreadLoadRestDAO {
+    private ThreadLoadRestDAO threadLoadDAO;
 
     public static final User adam    = new User("adam", "Adam Levine");
     public static final User britney = new User("britney", "Britney Spears");
@@ -25,8 +26,8 @@ public class TestThreadLoadDAO extends TestDAO {
     public static final User howard  = new User("howard", "Howard Duck");
     public static final User icarus  = new User("icarus", "Icarus");
 
-    public TestThreadLoadDAO() {
-        threadLoadDAO = new ThreadLoadDAO(db);
+    public TestThreadLoadRestDAO() {
+        threadLoadDAO = new ThreadLoadRestDAO();
     }
 
     @Test
@@ -59,106 +60,9 @@ public class TestThreadLoadDAO extends TestDAO {
             threadLoadDAO.getThread(100, "adam");
             Assert.assertTrue(false);
         } catch (DatabaseException e) {
-            Assert.assertEquals(
-                    SQLErrorCode.THREAD_NOT_FOUND, e.getCode());
+            Assert.assertTrue(
+                    SQLErrorCode.THREAD_NOT_FOUND.value == e.getCode());
         }
-    }
-
-    @Test
-    public void testSetCommentsOnlyThree() {
-        List<Comment> expected = List.of(
-            new Comment("charlie", "Good job! You started programming."),
-            new Comment("elijah",  "Bye!"),
-            new Comment("charlie", "Goodbye!"));
-        Thread actual = new Thread(1);
-        threadLoadDAO.setCommentsLatestLast(actual, 3);
-
-        Assert.assertEquals(expected, actual.getComments());
-    }
-
-    @Test
-    public void testSetCommentsFewerThanThree() {
-        List<Comment> expected = List.of(
-            new Comment("charlie", "Same!!! Too many things to do!"));
-        Thread actual = new Thread(2);
-        threadLoadDAO.setCommentsLatestLast(actual, 3);
-
-        Assert.assertEquals(expected, actual.getComments());
-    }
-
-    @Test
-    public void testSetCommentsMoreThanThree() {
-        List<Comment> expected = List.of(
-            new Comment("britney", "How did you guys wake up so early??"),
-            new Comment("adam",    "Early bird gets the worm!"),
-            new Comment("elijah",  "Maybe you shouldn't stay out too late!"));
-        Thread actual = new Thread(7);
-        threadLoadDAO.setCommentsLatestLast(actual, 3);
-
-        Assert.assertEquals(expected, actual.getComments());
-    }
-
-    @Test
-    public void testSetCommentsZero() {
-        Thread actual = new Thread(3);
-        threadLoadDAO.setCommentsLatestLast(actual, 3);
-
-        Assert.assertEquals(0, actual.getComments().size());
-    }
-
-    @Test
-    public void testSetLikers() {
-        List<User> expected = List.of(
-            new User("adam", "Adam Levine"),
-            new User("britney", "Britney Spears"));
-
-        Thread actual = new Thread(3);
-        threadLoadDAO.setLikers(actual);
-
-        Assert.assertEquals(expected, actual.getLikers());
-    }
-
-    @Test
-    public void testSetLikersNone() {
-        Thread actual = new Thread(4);
-        threadLoadDAO.setLikers(actual);
-
-        Assert.assertEquals(0, actual.getLikers().size());
-    }
-
-    @Test
-    public void testSetDislikers() {
-        List<User> expected = List.of(
-            new User("adam", "Adam Levine"),
-            new User("britney", "Britney Spears"));
-
-        Thread actual = new Thread(4);
-        threadLoadDAO.setDislikers(actual);
-
-        Assert.assertEquals(expected, actual.getDislikers());
-    }
-
-    @Test
-    public void testSetDislikersNone() {
-        Thread actual = new Thread(2);
-        threadLoadDAO.setDislikers(actual);
-
-        Assert.assertEquals(0, actual.getDislikers().size());
-    }
-
-    @Test
-    public void testGetTaggedUsernames() {
-        List<String> expected = List.of("adam", "britney");
-
-        List<String> actual = threadLoadDAO.getTaggedUsernames(7);
-
-        Assert.assertEquals(expected, actual);
-    }
-
-    @Test
-    public void testGetTaggedUsernamesNone() {
-        List<String> actual = threadLoadDAO.getTaggedUsernames(8);
-        Assert.assertEquals(0, actual.size());
     }
 
     @Test

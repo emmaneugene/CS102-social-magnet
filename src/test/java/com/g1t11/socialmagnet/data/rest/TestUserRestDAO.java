@@ -1,7 +1,8 @@
-package com.g1t11.socialmagnet.data;
+package com.g1t11.socialmagnet.data.rest;
 
 import java.util.List;
 
+import com.g1t11.socialmagnet.data.DatabaseException;
 import com.g1t11.socialmagnet.data.DatabaseException.SQLErrorCode;
 import com.g1t11.socialmagnet.model.social.Friend;
 import com.g1t11.socialmagnet.model.social.User;
@@ -9,10 +10,10 @@ import com.g1t11.socialmagnet.model.social.User;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TestUserDAO extends TestDAO {
-    private UserDAO userDAO;
+public class TestUserRestDAO {
+    UserRestDAO userDAO;
 
-    public static final User adam    = new User("adam", "Adam Levine");
+    public static final User adam = new User("adam", "Adam Levine");
     public static final User britney = new User("britney", "Britney Spears");
     public static final User charlie = new User("charlie", "Charlie Puth");
     public static final User danny   = new User("danny", "Danny DeVito");
@@ -22,8 +23,8 @@ public class TestUserDAO extends TestDAO {
     public static final User howard  = new User("howard", "Howard Duck");
     public static final User icarus  = new User("icarus", "Icarus");
 
-    public TestUserDAO() {
-        userDAO = new UserDAO(db);
+    public TestUserRestDAO() {
+        userDAO = new UserRestDAO();
     }
 
     @Test
@@ -41,8 +42,8 @@ public class TestUserDAO extends TestDAO {
             userDAO.getUser("ADAM");
             Assert.assertTrue(false);
         } catch (DatabaseException e) {
-            Assert.assertEquals(
-                    SQLErrorCode.USER_NOT_FOUND, e.getCode());
+            Assert.assertTrue(
+                    SQLErrorCode.USER_NOT_FOUND.value == e.getCode());
         }
     }
 
@@ -72,18 +73,6 @@ public class TestUserDAO extends TestDAO {
         Assert.assertEquals(0, actual.size());
     }
 
-    @Test
-    public void testGetFriendsOfFriend() {
-        List<Friend> expected = List.of(
-            new Friend(elijah.getUsername(), elijah.getFullname(), false),
-            new Friend(frank.getUsername(), frank.getFullname(), true)
-        );
-
-        List<Friend> actual
-                = userDAO.getFriendsOfFriendWithCommon("charlie", "danny");
-
-        Assert.assertEquals(expected, actual);
-    }
 
     @Test
     public void testGetFriendsOfFriendNoCommon() {
@@ -113,8 +102,8 @@ public class TestUserDAO extends TestDAO {
             userDAO.makeRequest("howard", "howard");
             Assert.assertTrue(false);
         } catch (DatabaseException e) {
-            Assert.assertEquals(
-                    SQLErrorCode.REQUEST_SELF, e.getCode());
+            Assert.assertTrue(
+                    SQLErrorCode.REQUEST_SELF.value == e.getCode());
         }
     }
 
@@ -143,13 +132,6 @@ public class TestUserDAO extends TestDAO {
 
         Assert.assertEquals(0, actualHoward.size());
         Assert.assertEquals(0, actualIcarus.size());
-    }
-
-    // Assert that no error is thrown. Input validation will be done on the
-    // controller side.
-    @Test
-    public void testUnfriendNonFriend() {
-        userDAO.makeRequest("gary", "howard");
     }
 
     @Test
