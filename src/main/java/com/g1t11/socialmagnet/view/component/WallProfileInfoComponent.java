@@ -5,7 +5,7 @@ import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 
 public class WallProfileInfoComponent implements Component {
-    Farmer me;
+    private Farmer me;
 
     private static final String template = Painter.paintf(
         String.join(System.lineSeparator(),

@@ -6,7 +6,7 @@ import com.g1t11.socialmagnet.util.TextUtils;
 import com.g1t11.socialmagnet.util.Painter.Color;
 
 public class FriendFarmerHeaderComponent implements Component {
-    Farmer friend;
+    private Farmer friend;
 
     private static final String template = Painter.paintf(
         String.join(System.lineSeparator(),

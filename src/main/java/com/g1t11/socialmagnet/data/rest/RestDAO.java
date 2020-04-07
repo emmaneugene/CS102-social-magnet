@@ -24,12 +24,12 @@ public class RestDAO {
      * A REST client that handles requests to and responses from the web
      * service.
      */
-    JerseyClient client;
+    protected JerseyClient client;
 
     /**
      * A JSON-to-POJO parser, used to map JSON data directly onto models.
      */
-    ObjectMapper mapper;
+    protected ObjectMapper mapper;
 
     /**
      * Configures the REST client and JSON-to-POJO parser.

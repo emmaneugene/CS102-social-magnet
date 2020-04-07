@@ -5,9 +5,9 @@ import com.g1t11.socialmagnet.util.TextUtils;
 import com.g1t11.socialmagnet.util.Painter.Color;
 
 public class LikeBarComponent implements Component {
-    int likes;
+    private int likes;
 
-    int dislikes;
+    private int dislikes;
 
     public LikeBarComponent(int likes, int dislikes) {
         this.likes = likes;
