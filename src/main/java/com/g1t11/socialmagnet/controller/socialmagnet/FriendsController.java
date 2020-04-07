@@ -97,7 +97,14 @@ public class FriendsController extends SocialMagnetController {
                     Color.BLUE));
         } catch (ServerException e) {
             int code = e.getCode();
-            if (code == ErrorCode.USER_NOT_FOUND.value) {
+            if (code == ErrorCode.DUPLICATE_KEY.value) {
+                setStatus(Painter.paintf(
+                        String.format(
+                                "[{Already sent [{%s}] a friend request.}]",
+                                requested),
+                        Color.RED,
+                        Color.BLUE));
+            } else if (code == ErrorCode.USER_NOT_FOUND.value) {
                 setStatus(Painter.paintf(
                         String.format("[{User [{%s}] not found.}]", requested),
                         Color.RED,

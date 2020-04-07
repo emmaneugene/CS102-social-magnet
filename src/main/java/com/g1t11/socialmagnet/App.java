@@ -23,14 +23,12 @@ public class App {
             try {
                 nav.currController().run();
             } catch (ServerException e) {
-                handleDatabaseException(e);
+                handleServerException(e);
             }
         }
     }
 
-    private void handleDatabaseException(ServerException e) {
-        Throwable cause = e.getCause();
-        System.out.println(cause);
+    private void handleServerException(ServerException e) {
         nav.popToFirst();
         nav.setCurrStatus(Painter.paint(
                 "Failed to connect to server.", Color.RED));
