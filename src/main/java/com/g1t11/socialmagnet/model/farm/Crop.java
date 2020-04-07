@@ -23,6 +23,11 @@ public class Crop {
     private int salePrice;
 
     /**
+     * Creates an empty crop
+     */
+    public Crop() {}
+
+    /**
      * Creates a crop with specifed parameters including actual yield.
      * @param name The name of crop.
      * @param cost The cost of crop.
@@ -46,12 +51,7 @@ public class Crop {
     }
 
     /**
-     * Creates an empty crop
-     */
-    public Crop() {}
-
-    /**
-     * Creates a crop with specifed parameters without actual yield.
+     * Creates a crop with specifed parameters excluding actual yield.
      * @param name The name of crop.
      * @param cost The cost of crop.
      * @param minutesToHarvest The time for the crop to grow to maturity.

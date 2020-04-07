@@ -10,7 +10,7 @@ import com.g1t11.socialmagnet.view.component.Component;
  * This is a render component for inventory.
  */
 public class InventoryComponent implements Component {
-    List<String> invCropNames;
+    private List<String> invCropNames;
 
     /**
      * Create an inventory component with the specified list of crop names.

@@ -12,9 +12,11 @@ import com.g1t11.socialmagnet.util.Painter.Color;
  * This is a page view for Friend's Wall page.
  */
 public class FriendsWallPageView extends WallPageView {
-    User me;
-    Farmer friend;
-    List<Friend> friendFriends;
+    private User me;
+
+    private Farmer friend;
+
+    private List<Friend> friendFriends;
 
     /**
      * Creates a Friend's Wall page with specified friend's friend as well as

@@ -10,7 +10,7 @@ import com.g1t11.socialmagnet.util.Painter.Color;
  * This is a page view for City Farmers' Send Gift page.
  */
 public class SendGiftPageView extends CityFarmersPageView {
-    List<Crop> crops;
+    private List<Crop> crops;
 
     /**
      * Creates a Send Gift page view with the list of crops available to gift.

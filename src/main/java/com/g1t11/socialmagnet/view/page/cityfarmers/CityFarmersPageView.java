@@ -10,6 +10,7 @@ import com.g1t11.socialmagnet.view.page.PageView;
  */
 public abstract class CityFarmersPageView extends PageView {
     protected Farmer me;
+
     protected FarmerHeaderComponent headerComp = new FarmerHeaderComponent();
 
     /**

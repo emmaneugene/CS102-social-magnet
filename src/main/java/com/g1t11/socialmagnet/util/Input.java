@@ -9,8 +9,8 @@ import com.g1t11.socialmagnet.util.Painter.Color;
  * A wrapper around <code>Scanner</code>.
  */
 public class Input {
-    // private final Console secure_sc = null;
     private final Console secure_sc = System.console();
+
     private final Scanner sc = new Scanner(System.in);
 
     /**

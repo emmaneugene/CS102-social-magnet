@@ -10,7 +10,7 @@ import com.g1t11.socialmagnet.util.Painter.Color;
  * This is a page view for City Farmers' Inventory page.
  */
 public class InventoryPageView extends CityFarmersPageView {
-    Map<String, Integer> invCrops;
+    private Map<String, Integer> invCrops;
 
     /**
      * Creates a page view for Inventory page with the specified crops in

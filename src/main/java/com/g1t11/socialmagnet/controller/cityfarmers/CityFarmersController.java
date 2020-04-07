@@ -20,7 +20,7 @@ public abstract class CityFarmersController extends Controller {
     protected StoreRestDAO storeDAO = new StoreRestDAO();
 
     /** The current farmer being displayed in City Farmer */
-    Farmer me;
+    protected Farmer me;
 
     /**
      * Creates a City Farmers controller with specified farmer.

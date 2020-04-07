@@ -15,6 +15,11 @@ public class Plot {
     private Date timePlanted;
 
     /**
+     * Creates an empty plot.
+     */
+    public Plot() {}
+
+    /**
      * Creates a plot with both specified crop and time planted.
      * @param crop The crop planted.
      * @param timePlanted The time crop is planted.
@@ -33,11 +38,6 @@ public class Plot {
     }
 
     /**
-     * Creates an empty plot.
-     */
-    public Plot() {}
-
-    /**
      * Gets the crop at plot.
      * @return The crop at plot
      */
@@ -53,6 +53,10 @@ public class Plot {
         this.crop = crop;
     }
 
+    /**
+     * Gets the time the crop is planted at plot.
+     * @return The time the crop is planted at plot.
+     */
     public Date getTimePlanted() {
         return timePlanted;
     }
@@ -65,6 +69,11 @@ public class Plot {
         this.timePlanted = timePlanted;
     }
 
+    /**
+     * A method to check if the plot is ready to harvest. It is only ready to 
+     * harvest after it is grown to maturity.
+     * @return Whether if the plot ready to harvest.
+     */
     public boolean readyToHarvest() {
         Date now = new Date();
         int minutesElapsed = (int) (now.getTime() - timePlanted.getTime())

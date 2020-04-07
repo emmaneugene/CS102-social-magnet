@@ -13,9 +13,8 @@ import com.g1t11.socialmagnet.view.component.FriendFarmerHeaderComponent;
  * This is a page view for City Farmers' Stealing page.
  */
 public class StealingPageView extends CityFarmersPageView {
-    Farmer friend;
-
     private FriendFarmerHeaderComponent headerComp;
+
     private FarmlandComponent farmComp = new FarmlandComponent();
 
     /**
@@ -24,7 +23,7 @@ public class StealingPageView extends CityFarmersPageView {
      * @param friend The farmer that user is stealing from.
      */
     public StealingPageView(Farmer friend) {
-        this.friend = friend;
+        setFarmer(friend);
         headerComp = new FriendFarmerHeaderComponent(friend);
     }
 

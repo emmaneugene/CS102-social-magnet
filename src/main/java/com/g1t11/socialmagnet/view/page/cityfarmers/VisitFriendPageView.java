@@ -10,7 +10,7 @@ import com.g1t11.socialmagnet.util.Painter.Color;
  * This is a page view for City Farmers' Visit Friend page.
  */
 public class VisitFriendPageView extends CityFarmersPageView {
-    List<User> friends;
+    private List<User> friends;
 
     /**
      * Creates a Visit Friend page view with the specified list of friends that
