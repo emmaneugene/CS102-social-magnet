@@ -6,7 +6,9 @@ import com.g1t11.socialmagnet.util.Painter.Color;
 
 public class StoreComponent implements Component {
     private Crop crop;
+
     private int index;
+
     private int maxCropNameLength;
 
     public StoreComponent(Crop crop, int index, int maxCropNameLength) {

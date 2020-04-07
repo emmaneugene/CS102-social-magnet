@@ -15,7 +15,7 @@ public abstract class SocialMagnetController extends Controller {
     protected ThreadLoadRestDAO threadLoadDAO = new ThreadLoadRestDAO();
     protected ThreadActionRestDAO threadActionDAO = new ThreadActionRestDAO();
 
-    User me;
+    protected User me;
 
     public SocialMagnetController(Navigator nav, User me) {
         super(nav);

@@ -10,7 +10,9 @@ import com.g1t11.socialmagnet.util.Painter.Color;
 
 public class FriendsWallPageView extends WallPageView {
     private User me;
+
     private Farmer friend;
+
     private List<Friend> friendFriends;
 
     public FriendsWallPageView(User me, Farmer friend,

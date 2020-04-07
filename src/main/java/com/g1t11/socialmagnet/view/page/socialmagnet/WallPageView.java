@@ -13,6 +13,7 @@ import com.g1t11.socialmagnet.view.component.SimpleThreadComponent;
 
 public class WallPageView extends PageView {
     private WallProfileInfoComponent profileComp;
+
     private List<SimpleThreadComponent> threadComps = new ArrayList<>(5);
 
     public WallPageView(Farmer me) {

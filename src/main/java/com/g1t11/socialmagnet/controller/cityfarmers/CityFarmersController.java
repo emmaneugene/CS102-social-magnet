@@ -4,7 +4,6 @@ import com.g1t11.socialmagnet.controller.Controller;
 import com.g1t11.socialmagnet.controller.Navigator;
 import com.g1t11.socialmagnet.data.rest.FarmerActionRestDAO;
 import com.g1t11.socialmagnet.data.rest.FarmerLoadRestDAO;
-// import com.g1t11.socialmagnet.data.StoreDAO;
 import com.g1t11.socialmagnet.data.rest.StoreRestDAO;
 import com.g1t11.socialmagnet.data.rest.UserRestDAO;
 import com.g1t11.socialmagnet.model.farm.Farmer;
@@ -18,11 +17,10 @@ public abstract class CityFarmersController extends Controller {
     protected UserRestDAO userDAO = new UserRestDAO();
     protected FarmerLoadRestDAO farmerLoadDAO = new FarmerLoadRestDAO();
     protected FarmerActionRestDAO farmerActionDAO = new FarmerActionRestDAO();
-    // protected StoreDAO storeDAO = new StoreDAO(database());
     protected StoreRestDAO storeDAO = new StoreRestDAO();
 
     /** The current farmer being displayed in City Farmer */
-    Farmer me;
+    protected Farmer me;
 
     public CityFarmersController(Navigator nav, Farmer me) {
         super(nav);

@@ -19,6 +19,8 @@ public class Crop {
 
     private int salePrice;
 
+    public Crop() {}
+
     public Crop(String name, int cost, int minutesToHarvest, int perUnitXP,
             Integer yield, int minYield, int maxYield, int salePrice) {
         this.name = name;
@@ -30,8 +32,6 @@ public class Crop {
         this.maxYield = maxYield;
         this.salePrice = salePrice;
     }
-
-    public Crop() {}
 
     public Crop(String name, int cost, int minutesToHarvest, int perUnitXP,
             int minYield, int maxYield, int salePrice) {

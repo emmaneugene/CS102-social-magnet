@@ -11,6 +11,8 @@ public class Plot {
     @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss", timezone="UTC")
     private Date timePlanted;
 
+    public Plot() {}
+
     public Plot(Crop crop, Date timePlanted) {
         this.crop = crop;
         this.timePlanted = timePlanted;
@@ -19,8 +21,6 @@ public class Plot {
     public Plot(Crop crop) {
         this(crop, new Date());
     }
-
-    public Plot() {}
 
     public Crop getCrop() {
         return crop;

@@ -7,7 +7,7 @@ import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.component.Component;
 
 public class InventoryComponent implements Component {
-    List<String> invCropNames;
+    private List<String> invCropNames;
 
     public InventoryComponent(List<String> invCropNames) {
         this.invCropNames = invCropNames;
