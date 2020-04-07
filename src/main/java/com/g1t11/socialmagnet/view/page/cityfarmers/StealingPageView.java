@@ -10,13 +10,11 @@ import com.g1t11.socialmagnet.view.component.FarmlandComponent;
 import com.g1t11.socialmagnet.view.component.FriendFarmerHeaderComponent;
 
 public class StealingPageView extends CityFarmersPageView {
-    Farmer friend;
-
     private FriendFarmerHeaderComponent headerComp;
     private FarmlandComponent farmComp = new FarmlandComponent();
 
     public StealingPageView(Farmer friend) {
-        this.friend = friend;
+        setFarmer(friend);
         headerComp = new FriendFarmerHeaderComponent(friend);
     }
 

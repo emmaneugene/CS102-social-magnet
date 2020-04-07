@@ -7,7 +7,7 @@ import com.g1t11.socialmagnet.util.TextUtils;
 import com.g1t11.socialmagnet.util.Painter.Color;
 
 public class InventoryPageView extends CityFarmersPageView {
-    Map<String, Integer> invCrops;
+    private Map<String, Integer> invCrops;
 
     public InventoryPageView(Map<String, Integer> invCrops) {
         super("My Inventory");

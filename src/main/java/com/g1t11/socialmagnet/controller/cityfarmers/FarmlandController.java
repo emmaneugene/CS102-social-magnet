@@ -81,6 +81,9 @@ public class FarmlandController extends CityFarmersController {
             }
 
             String cropToPlantName = getCropToPlantName();
+            if (cropToPlantName == null) {
+                return;
+            }
             farmerActionDAO.plantCrop(me.getUsername(), index, cropToPlantName);
 
             setStatus(Painter.paint(

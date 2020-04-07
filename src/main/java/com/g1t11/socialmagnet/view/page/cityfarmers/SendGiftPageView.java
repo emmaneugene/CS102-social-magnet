@@ -7,7 +7,7 @@ import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 
 public class SendGiftPageView extends CityFarmersPageView {
-    List<Crop> crops;
+    private List<Crop> crops;
 
     public SendGiftPageView(List<Crop> crops) {
         super("Send a Gift");

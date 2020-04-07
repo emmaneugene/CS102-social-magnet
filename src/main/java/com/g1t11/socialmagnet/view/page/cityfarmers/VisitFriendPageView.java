@@ -7,7 +7,7 @@ import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 
 public class VisitFriendPageView extends CityFarmersPageView {
-    List<User> friends;
+    private List<User> friends;
 
     public VisitFriendPageView(List<User> friends) {
         super("Visit Friend");
