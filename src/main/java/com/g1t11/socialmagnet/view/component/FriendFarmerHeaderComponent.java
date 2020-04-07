@@ -9,7 +9,7 @@ import com.g1t11.socialmagnet.util.Painter.Color;
  * This is a render component for header of Friend's Farmer.
  */
 public class FriendFarmerHeaderComponent implements Component {
-    Farmer friend;
+    private Farmer friend;
 
     private static final String template = Painter.paintf(
         String.join(System.lineSeparator(),

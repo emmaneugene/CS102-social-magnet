@@ -8,9 +8,9 @@ import com.g1t11.socialmagnet.util.Painter.Color;
  * This is a render component for the Like/Dislike bar.
  */
 public class LikeBarComponent implements Component {
-    int likes;
+    private int likes;
 
-    int dislikes;
+    private int dislikes;
 
     /**
      * Creates a Like/Dislike bar component with specified amount of likes and 

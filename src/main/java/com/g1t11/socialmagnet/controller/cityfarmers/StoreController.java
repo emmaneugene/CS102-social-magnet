@@ -16,7 +16,7 @@ import com.g1t11.socialmagnet.view.page.cityfarmers.StorePageView;
  * This is a controller for Store.
  */
 public class StoreController extends CityFarmersController {
-    List<Crop> storeItem = new ArrayList<>();
+    private List<Crop> storeItem = new ArrayList<>();
 
     /**
      * Creates a Store controller.

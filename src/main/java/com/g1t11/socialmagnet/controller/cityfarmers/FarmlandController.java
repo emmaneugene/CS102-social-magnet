@@ -19,8 +19,8 @@ import com.g1t11.socialmagnet.view.page.cityfarmers.FarmlandPageView;
 public class FarmlandController extends CityFarmersController {
     private static final int WILTED_CLEAR_COST = 5;
 
-    List<Plot> plots = new ArrayList<>();
-    Map<String, Integer> invCrops = new LinkedHashMap<>();
+    private List<Plot> plots = new ArrayList<>();
+    private Map<String, Integer> invCrops = new LinkedHashMap<>();
 
     /**
      * Creates a Farmland controller.

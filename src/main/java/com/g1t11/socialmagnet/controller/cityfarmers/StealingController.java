@@ -17,7 +17,7 @@ import com.g1t11.socialmagnet.view.page.cityfarmers.StealingPageView;
  * This is a controller for the Stealing portion of visiting a friend's farm.
  */
 public class StealingController extends CityFarmersController {
-    Farmer toStealFrom;
+    private Farmer toStealFrom;
 
     /**
      * Creates a Stealing controller.

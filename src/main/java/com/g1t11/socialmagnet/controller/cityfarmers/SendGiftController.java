@@ -22,7 +22,7 @@ import com.g1t11.socialmagnet.view.page.cityfarmers.SendGiftPageView;
 public class SendGiftController extends CityFarmersController {
     private CredentialsRestDAO credDAO = new CredentialsRestDAO();
 
-    List<Crop> crops;
+    private List<Crop> crops;
 
     /**
      * Creates a sending of gifts controller.

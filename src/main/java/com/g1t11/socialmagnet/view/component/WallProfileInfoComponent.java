@@ -8,7 +8,7 @@ import com.g1t11.socialmagnet.util.Painter.Color;
  * This is a render component for profile info in wall.
  */
 public class WallProfileInfoComponent implements Component {
-    Farmer me;
+    private Farmer me;
 
     private static final String template = Painter.paintf(
         String.join(System.lineSeparator(),

@@ -190,6 +190,8 @@ public class UserDAO extends DAO {
                         SQLErrorCode.REQUEST_SELF);
             } else if (e.getErrorCode() == 1452) {
                 throw new DatabaseException(SQLErrorCode.USER_NOT_FOUND);
+            } else if (e.getErrorCode() == SQLErrorCode.DUPLICATE_KEY.value) {
+                throw new DatabaseException(SQLErrorCode.DUPLICATE_KEY);
             }
             System.err.println("SQLException: " + e.getMessage());
             throw new DatabaseException(e);

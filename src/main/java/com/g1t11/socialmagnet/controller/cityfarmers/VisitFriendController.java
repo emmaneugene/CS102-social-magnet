@@ -14,7 +14,7 @@ import com.g1t11.socialmagnet.view.page.cityfarmers.VisitFriendPageView;
  * This is a controller for visiting of friends in City Farmers.
  */
 public class VisitFriendController extends CityFarmersController {
-    List<User> friends;
+    private List<User> friends;
 
     /**
      * Creates a visit friend in City Farmers controller.
