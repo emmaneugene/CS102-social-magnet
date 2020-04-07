@@ -48,9 +48,6 @@ public class Database {
 
     public void establishConnection() {
         try {
-            // Get credentials from environment variables that were loaded
-            // through .env file.
-
             String dbUrl  = "jdbc:mysql://localhost/magnet?serverTimezone=UTC";
             conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
         } catch (SQLException e) {
