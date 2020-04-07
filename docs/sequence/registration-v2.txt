@@ -1,0 +1,130 @@
+title User:Register
+
+participant User
+participant ":Input" as Input
+participant ":InputValidator" as Validator
+
+participant ":WelcomeController" as WC
+participant ":RegisterController" as RC
+
+participant ":Navigation" as Nav
+participant ":Session" as Session
+participant ":Connection" as Connection
+
+Input-->User: Prompt Option Input
+activate Input
+
+activate User
+User->Input: Input option "1"
+deactivateafter User
+
+Input->WC:
+deactivateafter Input
+
+activate WC
+WC-->RC: <<create>>\nRegisterController(navigation)
+
+WC->Nav:push(navigation)
+activate Nav
+Nav->RC:run()
+deactivateafter Nav
+
+activate RC
+deactivateafter WC
+
+RC->Input: nextLine()
+activate Input
+Input-->User: Prompt Username Input
+activate User
+User->Input: Input username
+deactivateafter User
+
+alt false
+Input->Validator: isAlphaNumeric()
+activate Validator
+Validator->Nav: pop()
+activate Nav
+deactivateafter Nav
+
+Validator->WC: view
+activate WC
+activate WC
+WC->WC:setStatus("Must be alphanumeric")
+deactivateafter WC
+deactivateafter Validator
+WC->User: Display error message
+deactivateafter WC
+
+else true
+Input->Validator: isAlphaNumeric()
+deactivateafter Input
+activate Validator
+Validator->RC:
+deactivateafter Validator
+
+RC->Input: <<create>>\nPromptInput("Enter your full name")
+activate Input
+Input-->User: Prompt Username Input
+activate User
+User->Input: Input username
+deactivateafter User
+Input->RC:
+deactivateafter Input
+
+RC->Input: <<create>>\nPromptInput("Enter your password")
+activate Input
+Input-->User: Prompt Password Input
+activate User
+User->Input: Input password
+deactivateafter User
+Input->RC:
+deactivateafter Input
+
+RC->Input: <<create>>\nPromptInput("Confirm your password")
+activate Input
+Input-->User: Prompt Password Repeat Input
+activate User
+User->Input: Input password repeat
+deactivateafter User
+Input->RC:
+deactivateafter Input
+
+activate RC
+RC->RC:checkPassword()
+deactivateafter RC
+
+RC->Nav:session()
+activate Nav
+Nav->Session:register()
+
+activate Session
+Session->Session:addUser(username, fullname, pwd)
+Session->Connection:preparedStatement(query)
+Session-->Nav:
+deactivateafter Session
+
+Nav-->RC:isSuccessful
+deactivateafter Nav
+
+alt [isSuccessful]
+
+activate RC
+activate RC
+RC->RC:setStatus("Registered successfully exists")
+deactivateafter RC
+RC-->User: Display error message
+deactivateafter RC
+
+else else
+
+activate RC
+activate RC
+RC->RC:setStatus("Username already exists")
+deactivateafter RC
+RC-->User: Display error message
+deactivateafter RC
+
+end
+end 
+
+

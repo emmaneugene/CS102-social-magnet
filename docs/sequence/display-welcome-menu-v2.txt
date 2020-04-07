@@ -1,0 +1,54 @@
+title User:Display Welcome Menu
+
+participant User
+participant ":App" as App
+participant ":Navigator" as Nav
+participant ":WelcomeController" as WC
+participant ":WelcomeView" as WV
+participant ":Input" as Input
+
+
+App->Nav:<<create>>\nNavigator()
+activate Nav
+Nav-->App:navigator
+deactivateafter Nav
+
+App-->WC:<<create>\nWelcomeController(navigator)
+activate WC
+WC->WV:<<create>>\nWelcomeView()
+
+deactivateafter WC
+activate WV
+deactivateafter WV
+
+App->Nav:setFirstController(welcomeController)
+activate Nav
+deactivateafter Nav
+
+App->Nav:currController()
+activate Nav
+Nav-->App:welcomeController
+deactivateafter Nav
+
+deactivateafter Nav
+
+App->Nav:run()
+activate Nav
+
+Nav->WV:display()
+activate WV
+
+activate WV
+WV->WV:updateGreeting()
+deactivateafter WV
+
+WV-->User:display menu items
+deactivateafter WV
+
+activate Nav
+Nav->Nav:handleInput()
+Nav->Input:nextLine()
+deactivateafter Nav
+
+Nav-->User:prompt input option
+deactivateafter Nav
