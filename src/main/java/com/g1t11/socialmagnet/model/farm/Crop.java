@@ -9,7 +9,7 @@ public class Crop {
 
     private int minutesToHarvest;
 
-    private int perUnitXP;
+    private int perUnitXp;
 
     private Integer yield;
 
@@ -24,7 +24,7 @@ public class Crop {
         this.name = name;
         this.cost = cost;
         this.minutesToHarvest = minutesToHarvest;
-        this.perUnitXP = perUnitXP;
+        this.perUnitXp = perUnitXP;
         this.yield = yield;
         this.minYield = minYield;
         this.maxYield = maxYield;
@@ -63,12 +63,12 @@ public class Crop {
         this.minutesToHarvest = minutesToHarvest;
     }
 
-    public int getPerUnitXP() {
-        return perUnitXP;
+    public int getPerUnitXp() {
+        return perUnitXp;
     }
 
-    public void setPerUnitXP(int perUnitXP) {
-        this.perUnitXP = perUnitXP;
+    public void setPerUnitXp(int perUnitXp) {
+        this.perUnitXp = perUnitXp;
     }
 
     public Integer getYield() {
@@ -115,7 +115,7 @@ public class Crop {
         return Objects.equals(name, other.name)
                 && Objects.equals(cost, other.cost)
                 && Objects.equals(minutesToHarvest, other.minutesToHarvest)
-                && Objects.equals(perUnitXP, other.perUnitXP)
+                && Objects.equals(perUnitXp, other.perUnitXp)
                 && Objects.equals(minYield, other.minYield)
                 && Objects.equals(maxYield, other.maxYield)
                 && Objects.equals(salePrice, other.salePrice);
