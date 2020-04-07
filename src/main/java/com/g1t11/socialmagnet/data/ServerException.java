@@ -7,7 +7,7 @@ package com.g1t11.socialmagnet.data;
  * This allows us to bubble SQLExceptions up our call stack without polluting
  * the codebase with <code>throws</code>.
  */
-public class DatabaseException extends RuntimeException {
+public class ServerException extends RuntimeException {
     public enum SQLErrorCode {
         NO_CONNECTION(0),
         DUPLICATE_KEY(1062),
@@ -32,19 +32,19 @@ public class DatabaseException extends RuntimeException {
 
     private Integer code = null;
 
-    public DatabaseException(String message) {
+    public ServerException(String message) {
         super(message);
     }
 
-    public DatabaseException(SQLErrorCode code) {
+    public ServerException(SQLErrorCode code) {
         this.code = code.value;
     }
 
-    public DatabaseException(Integer code) {
+    public ServerException(Integer code) {
         this.code = code;
     }
 
-    public DatabaseException(Throwable e) {
+    public ServerException(Throwable e) {
         super(e);
     }
 

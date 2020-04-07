@@ -6,7 +6,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.g1t11.socialmagnet.data.DatabaseException;
+import com.g1t11.socialmagnet.data.ServerException;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,7 +24,7 @@ public class ThreadActionRestDAO extends RestDAO {
                 "thread", fromUser, "new").post(reqBody);
 
         if (response.getStatus() != Status.OK.getStatusCode()) {
-            throw new DatabaseException(response.readEntity(String.class));
+            throw new ServerException(response.readEntity(String.class));
         }
 
         int id = response.readEntity(Integer.class);
@@ -36,7 +36,7 @@ public class ThreadActionRestDAO extends RestDAO {
                 "thread", username,
                 String.valueOf(threadId), "untag").delete();
         if (response.getStatus() != Response.Status.OK.getStatusCode()) {
-            throw new DatabaseException(response.readEntity(String.class));
+            throw new ServerException(response.readEntity(String.class));
         }
     }
 
@@ -45,7 +45,7 @@ public class ThreadActionRestDAO extends RestDAO {
                 "thread", username,
                 String.valueOf(threadId), "delete").delete();
         if (response.getStatus() != Response.Status.OK.getStatusCode()) {
-            throw new DatabaseException(response.readEntity(String.class));
+            throw new ServerException(response.readEntity(String.class));
         }
     }
 
@@ -54,7 +54,7 @@ public class ThreadActionRestDAO extends RestDAO {
                 "thread", username, String.valueOf(threadId), "reply").post(
                         Entity.text(content));
         if (response.getStatus() != Response.Status.OK.getStatusCode()) {
-            throw new DatabaseException(response.readEntity(String.class));
+            throw new ServerException(response.readEntity(String.class));
         }
     }
 
@@ -63,7 +63,7 @@ public class ThreadActionRestDAO extends RestDAO {
                 "thread", username,
                 String.valueOf(threadId), "like").put(Entity.text(""));
         if (response.getStatus() != Response.Status.OK.getStatusCode()) {
-            throw new DatabaseException(response.readEntity(String.class));
+            throw new ServerException(response.readEntity(String.class));
         }
     }
 
@@ -72,7 +72,7 @@ public class ThreadActionRestDAO extends RestDAO {
                 "thread", username,
                 String.valueOf(threadId), "dislike").put(Entity.text(""));
         if (response.getStatus() != Response.Status.OK.getStatusCode()) {
-            throw new DatabaseException(response.readEntity(String.class));
+            throw new ServerException(response.readEntity(String.class));
         }
     }
 }

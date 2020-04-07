@@ -7,7 +7,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.g1t11.socialmagnet.data.DatabaseException;
+import com.g1t11.socialmagnet.data.ServerException;
 import com.g1t11.socialmagnet.model.farm.StealingRecord;
 
 import org.json.JSONArray;
@@ -22,7 +22,7 @@ public class FarmerActionRestDAO extends RestDAO {
         Response response = getTextInvocationOfTarget(
             "farm", username, "plant").post(reqBody);
         if (response.getStatus() != Status.OK.getStatusCode()) {
-            throw new DatabaseException(response.readEntity(String.class));
+            throw new ServerException(response.readEntity(String.class));
         }
     }
 
@@ -33,7 +33,7 @@ public class FarmerActionRestDAO extends RestDAO {
         Response response = getTextInvocationOfTarget(
             "farm", username, "clear").post(reqBody);
         if (response.getStatus() != Status.OK.getStatusCode()) {
-            throw new DatabaseException(response.readEntity(String.class));
+            throw new ServerException(response.readEntity(String.class));
         }
     }
 
@@ -41,7 +41,7 @@ public class FarmerActionRestDAO extends RestDAO {
         Response response = getTextInvocationOfTarget(
             "farm", username, "harvest").post(Entity.text(""));
         if (response.getStatus() != Status.OK.getStatusCode()) {
-            throw new DatabaseException(response.readEntity(String.class));
+            throw new ServerException(response.readEntity(String.class));
         }
     }
 
@@ -49,7 +49,7 @@ public class FarmerActionRestDAO extends RestDAO {
         Response response = getJSONInvocationOfTarget(
             "farm", stealerName, "steal", victimName).post(Entity.text(""));
         if (response.getStatus() != Status.OK.getStatusCode()) {
-            throw new DatabaseException(response.readEntity(String.class));
+            throw new ServerException(response.readEntity(String.class));
         }
 
         List<StealingRecord> stolenCrops = null;
@@ -58,7 +58,7 @@ public class FarmerActionRestDAO extends RestDAO {
             stolenCrops = List.of(mapper.readValue(
                     stolenJson, StealingRecord[].class));
         } catch (IOException e) {
-            throw new DatabaseException("JSON parsing failure.");
+            throw new ServerException("JSON parsing failure.");
         }
         return stolenCrops;
     }
@@ -72,7 +72,7 @@ public class FarmerActionRestDAO extends RestDAO {
         Response response = getTextInvocationOfTarget(
             "farm", sender, "send").post(reqBody);
         if (response.getStatus() != Status.OK.getStatusCode()) {
-            throw new DatabaseException(response.readEntity(String.class));
+            throw new ServerException(response.readEntity(String.class));
         }
     }
 
@@ -80,7 +80,7 @@ public class FarmerActionRestDAO extends RestDAO {
         Response response = getTextInvocationOfTarget(
             "farm", username, "accept_gifts").post(Entity.text(""));
         if (response.getStatus() != Status.OK.getStatusCode()) {
-            throw new DatabaseException(response.readEntity(String.class));
+            throw new ServerException(response.readEntity(String.class));
         }
     }
 }

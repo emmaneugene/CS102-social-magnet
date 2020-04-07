@@ -3,8 +3,8 @@ package com.g1t11.socialmagnet.data.rest;
 import java.io.IOException;
 import java.util.List;
 
-import com.g1t11.socialmagnet.data.DatabaseException;
-import com.g1t11.socialmagnet.data.DatabaseException.SQLErrorCode;
+import com.g1t11.socialmagnet.data.ServerException;
+import com.g1t11.socialmagnet.data.ServerException.SQLErrorCode;
 import com.g1t11.socialmagnet.model.social.Friend;
 import com.g1t11.socialmagnet.model.social.User;
 import javax.ws.rs.core.Response.Status;
@@ -18,7 +18,7 @@ public class UserRestDAO extends RestDAO {
         Response response = getJSONInvocationOfTarget("user", username).get();
 
         if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
-            throw new DatabaseException(SQLErrorCode.USER_NOT_FOUND);
+            throw new ServerException(SQLErrorCode.USER_NOT_FOUND);
         }
 
         User user = null;
@@ -26,7 +26,7 @@ public class UserRestDAO extends RestDAO {
             String userJson = response.readEntity(String.class);
             user = mapper.readValue(userJson, User.class);
         } catch (IOException e) {
-            throw new DatabaseException("JSON parsing failure.");
+            throw new ServerException("JSON parsing failure.");
         }
 
         return user;
@@ -37,7 +37,7 @@ public class UserRestDAO extends RestDAO {
                 "user", username, "friends").get();
 
         if (response.getStatus() != Status.OK.getStatusCode()) {
-            throw new DatabaseException(response.readEntity(String.class));
+            throw new ServerException(response.readEntity(String.class));
         }
 
         List<User> friends = null;
@@ -45,7 +45,7 @@ public class UserRestDAO extends RestDAO {
             String friendsJson = response.readEntity(String.class);
             friends = List.of(mapper.readValue(friendsJson, User[].class));
         } catch (IOException e) {
-            throw new DatabaseException("JSON parsing failure.");
+            throw new ServerException("JSON parsing failure.");
         }
 
         return friends;
@@ -56,7 +56,7 @@ public class UserRestDAO extends RestDAO {
         Response response = getJSONInvocationOfTarget(
                 "user", username, "mutual", friendName).get();
         if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
-            throw new DatabaseException(response.readEntity(String.class));
+            throw new ServerException(response.readEntity(String.class));
         }
 
         List<Friend> friends = null;
@@ -64,7 +64,7 @@ public class UserRestDAO extends RestDAO {
             String friendsJson = response.readEntity(String.class);
             friends = List.of(mapper.readValue(friendsJson, Friend[].class));
         } catch (IOException e) {
-            throw new DatabaseException("JSON parsing failure.");
+            throw new ServerException("JSON parsing failure.");
         }
 
         return friends;
@@ -75,7 +75,7 @@ public class UserRestDAO extends RestDAO {
                 "user", username, "unfriend")
                 .put(Entity.entity(toUnfriend, MediaType.TEXT_PLAIN));
         if (response.getStatus() != Status.OK.getStatusCode()) {
-            throw new DatabaseException(response.readEntity(String.class));
+            throw new ServerException(response.readEntity(String.class));
         }
     }
 
@@ -83,7 +83,7 @@ public class UserRestDAO extends RestDAO {
         Response response = getJSONInvocationOfTarget(
                 "user", username, "requests").get();
         if (response.getStatus() != Status.OK.getStatusCode()) {
-            throw new DatabaseException("Could not get requests.");
+            throw new ServerException("Could not get requests.");
         }
 
         List<String> requestNames = null;
@@ -92,7 +92,7 @@ public class UserRestDAO extends RestDAO {
             requestNames = List.of(
                     mapper.readValue(requestsJson, String[].class));
         } catch (IOException e) {
-            throw new DatabaseException("JSON parsing failure.");
+            throw new ServerException("JSON parsing failure.");
         }
 
         return requestNames;
@@ -104,7 +104,7 @@ public class UserRestDAO extends RestDAO {
                 .post(Entity.entity(recipient, MediaType.TEXT_PLAIN));
         if (response.getStatus() == Status.BAD_REQUEST.getStatusCode()) {
             Integer code = response.readEntity(Integer.class);
-            throw new DatabaseException(code);
+            throw new ServerException(code);
         }
     }
 
@@ -113,7 +113,7 @@ public class UserRestDAO extends RestDAO {
                 "user", recipient, "accept")
                 .put(Entity.entity(sender, MediaType.TEXT_PLAIN));
         if (response.getStatus() != Status.OK.getStatusCode()) {
-            throw new DatabaseException("Could not accept request.");
+            throw new ServerException("Could not accept request.");
         }
     }
 
@@ -122,7 +122,7 @@ public class UserRestDAO extends RestDAO {
                 "user", recipient, "reject")
                 .put(Entity.entity(sender, MediaType.TEXT_PLAIN));
         if (response.getStatus() != Status.OK.getStatusCode()) {
-            throw new DatabaseException("Could not reject request.");
+            throw new ServerException("Could not reject request.");
         }
     }
 }

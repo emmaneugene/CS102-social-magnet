@@ -3,8 +3,8 @@ package com.g1t11.socialmagnet.controller.socialmagnet;
 import java.util.List;
 
 import com.g1t11.socialmagnet.controller.Navigator;
-import com.g1t11.socialmagnet.data.DatabaseException;
-import com.g1t11.socialmagnet.data.DatabaseException.SQLErrorCode;
+import com.g1t11.socialmagnet.data.ServerException;
+import com.g1t11.socialmagnet.data.ServerException.SQLErrorCode;
 import com.g1t11.socialmagnet.model.social.User;
 import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
@@ -95,7 +95,7 @@ public class FriendsController extends SocialMagnetController {
                             requested),
                     Color.GREEN,
                     Color.BLUE));
-        } catch (DatabaseException e) {
+        } catch (ServerException e) {
             int code = e.getCode();
             if (code == SQLErrorCode.USER_NOT_FOUND.value) {
                 setStatus(Painter.paintf(

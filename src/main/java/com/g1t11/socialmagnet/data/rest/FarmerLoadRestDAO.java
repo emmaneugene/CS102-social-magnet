@@ -9,8 +9,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.g1t11.socialmagnet.data.DatabaseException;
-import com.g1t11.socialmagnet.data.DatabaseException.SQLErrorCode;
+import com.g1t11.socialmagnet.data.ServerException;
+import com.g1t11.socialmagnet.data.ServerException.SQLErrorCode;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.farm.Plot;
 
@@ -19,7 +19,7 @@ public class FarmerLoadRestDAO extends RestDAO {
         Response response = getJSONInvocationOfTarget(
                 "farm", username).get();
         if (response.getStatus() != Status.OK.getStatusCode()) {
-            throw new DatabaseException(SQLErrorCode.USER_NOT_FOUND);
+            throw new ServerException(SQLErrorCode.USER_NOT_FOUND);
         }
 
         Farmer farmer = null;
@@ -27,7 +27,7 @@ public class FarmerLoadRestDAO extends RestDAO {
             String farmerJson = response.readEntity(String.class);
             farmer = mapper.readValue(farmerJson, Farmer.class);
         } catch (IOException e) {
-            throw new DatabaseException("JSON parsing failure.");
+            throw new ServerException("JSON parsing failure.");
         }
         return farmer;
     }
@@ -36,7 +36,7 @@ public class FarmerLoadRestDAO extends RestDAO {
         Response response = getJSONInvocationOfTarget(
                 "farm", username, "inventory").get();
         if (response.getStatus() != Status.OK.getStatusCode())  {
-            throw new DatabaseException(response.readEntity(String.class));
+            throw new ServerException(response.readEntity(String.class));
         }
 
         Map<String, Integer> inv = null;
@@ -45,7 +45,7 @@ public class FarmerLoadRestDAO extends RestDAO {
             inv = mapper.readValue(invJson,
                     new TypeReference<Map<String, Integer>>() {});
         } catch (IOException e) {
-            throw new DatabaseException("JSON parsing failure.");
+            throw new ServerException("JSON parsing failure.");
         }
 
         return inv;
@@ -57,7 +57,7 @@ public class FarmerLoadRestDAO extends RestDAO {
                 .request(MediaType.APPLICATION_JSON)
                 .get();
         if (response.getStatus() != Status.OK.getStatusCode()) {
-            throw new DatabaseException(response.readEntity(String.class));
+            throw new ServerException(response.readEntity(String.class));
         }
 
         List<Plot> plots = null;
@@ -66,7 +66,7 @@ public class FarmerLoadRestDAO extends RestDAO {
             plots = List.of(mapper.readValue(plotsJson, Plot[].class));
         } catch (IOException e) {
             System.out.println(e.getMessage());
-            throw new DatabaseException("JSON parsing failure.");
+            throw new ServerException("JSON parsing failure.");
         }
 
         return plots;
@@ -76,13 +76,13 @@ public class FarmerLoadRestDAO extends RestDAO {
         Response response = getInvocationOfTarget(
                 "farm", username, "gift_count_today").get();
         if (response.getStatus() != Status.OK.getStatusCode()) {
-            throw new DatabaseException(response.readEntity(String.class));
+            throw new ServerException(response.readEntity(String.class));
         }
         try {
             String countStr = response.readEntity(String.class);
             return Integer.parseInt(countStr);
         } catch (NumberFormatException e) {
-            throw new DatabaseException("Integer parsing failure.");
+            throw new ServerException("Integer parsing failure.");
         }
     }
 
@@ -95,7 +95,7 @@ public class FarmerLoadRestDAO extends RestDAO {
                 .request(MediaType.APPLICATION_JSON)
                 .get();
         if (response.getStatus() != Status.OK.getStatusCode()) {
-            throw new DatabaseException(response.readEntity(String.class));
+            throw new ServerException(response.readEntity(String.class));
         }
 
         Map<String, Boolean> sentMap = null;
@@ -104,7 +104,7 @@ public class FarmerLoadRestDAO extends RestDAO {
             sentMap = mapper.readValue(sentMapJson,
                     new TypeReference<Map<String, Boolean>>() {});
         } catch (IOException e) {
-            throw new DatabaseException("JSON parsing failure.");
+            throw new ServerException("JSON parsing failure.");
         }
 
         return sentMap;
