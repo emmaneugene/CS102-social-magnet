@@ -11,7 +11,7 @@ import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.cityfarmers.VisitFriendPageView;
 
 public class VisitFriendController extends CityFarmersController {
-    List<User> friends;
+    private List<User> friends;
 
     public VisitFriendController(Navigator nav, Farmer me) {
         super(nav, me);

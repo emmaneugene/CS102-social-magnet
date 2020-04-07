@@ -13,7 +13,7 @@ import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.cityfarmers.StorePageView;
 
 public class StoreController extends CityFarmersController {
-    List<Crop> storeItem = new ArrayList<>();
+    private List<Crop> storeItem = new ArrayList<>();
 
     public StoreController(Navigator nav, Farmer me) {
         super(nav, me);

@@ -14,7 +14,7 @@ import com.g1t11.socialmagnet.util.TextUtils;
 import com.g1t11.socialmagnet.view.page.cityfarmers.StealingPageView;
 
 public class StealingController extends CityFarmersController {
-    Farmer toStealFrom;
+    private Farmer toStealFrom;
 
     public StealingController(Navigator nav, Farmer me, User friend) {
         super(nav, me);
