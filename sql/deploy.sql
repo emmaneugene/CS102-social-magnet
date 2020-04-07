@@ -796,7 +796,7 @@ BEGIN
             SELECT count(*) FROM inventory WHERE owner = _username AND crop_name = _crop_name
         );
         IF @crop_exist THEN
-            UPDATE inventory SET quantity = quantity + _amount WHERE owner = _username;
+            UPDATE inventory SET quantity = quantity + _amount WHERE owner = _username AND crop_name = _crop_name;
         ELSE
             INSERT INTO inventory (owner, crop_name, quantity) VALUES
             (_username, _crop_name, _amount);

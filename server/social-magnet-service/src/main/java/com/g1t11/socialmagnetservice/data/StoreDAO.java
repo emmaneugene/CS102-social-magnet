@@ -1,4 +1,4 @@
-package com.g1t11.socialmagnet.data;
+package com.g1t11.socialmagnetservice.data;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -6,18 +6,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.g1t11.socialmagnet.model.farm.Crop;
+import com.g1t11.socialmagnetservice.model.farm.Crop;
 
 public class StoreDAO extends DAO {
-    public StoreDAO(Database db) {
-        super(db);
-    }
-
     /**
      * Get all currently available crops on the database.
      * @return A list of all available crops.
      */
-    public List<Crop> getStoreItems() {
+    public static List<Crop> getStoreItems() {
         ResultSet rs = null;
 
         List<Crop> storeItems = new ArrayList<>();
@@ -56,7 +52,7 @@ public class StoreDAO extends DAO {
      * @param amount The number of bags of seeds to purchase.
      * @return True if the purchase was successful, or false if it was not.
      */
-    public boolean purchaseCrop(String buyerName, String cropName, int amount) {
+    public static boolean purchaseCrop(String buyerName, String cropName, int amount) {
         ResultSet rs = null;
 
         boolean isSuccessful = false;

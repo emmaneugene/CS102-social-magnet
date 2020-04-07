@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.g1t11.socialmagnet.data.DatabaseException;
+import com.g1t11.socialmagnet.data.ServerException;
 import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.farm.Plot;
@@ -90,7 +90,7 @@ public class TestFarmerActionRestDAO {
 
         try {
             farmerActionDAO.plantCrop("adam", 1, "Papaya");
-        } catch (DatabaseException e) {}
+        } catch (ServerException e) {}
 
         List<Plot> after = farmerLoadDAO.getPlots("adam", 6);
 
@@ -103,7 +103,7 @@ public class TestFarmerActionRestDAO {
 
         try {
             farmerActionDAO.plantCrop("adam", 5, "Sunflower");
-        } catch (DatabaseException e) {}
+        } catch (ServerException e) {}
 
         List<Plot> after = farmerLoadDAO.getPlots("adam", 6);
 
@@ -116,7 +116,7 @@ public class TestFarmerActionRestDAO {
 
         try {
             farmerActionDAO.plantCrop("adam", 9, "Papaya");
-        } catch (DatabaseException e) {}
+        } catch (ServerException e) {}
 
         List<Plot> after = farmerLoadDAO.getPlots("adam", 6);
 

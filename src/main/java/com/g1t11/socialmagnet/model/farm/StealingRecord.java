@@ -22,7 +22,7 @@ public class StealingRecord {
     }
 
     public StealingRecord(Crop crop, int quantity) {
-        this(crop.getName(), quantity, quantity * crop.getPerUnitXP(),
+        this(crop.getName(), quantity, quantity * crop.getPerUnitXp(),
                  quantity * crop.getSalePrice());
     }
 

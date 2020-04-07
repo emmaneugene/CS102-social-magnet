@@ -3,11 +3,7 @@ package com.g1t11.socialmagnet.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.g1t11.socialmagnet.data.Database;
-
 public class Navigator {
-    private Database db;
-
     /**
      * Stack of <code>Controller</code> instances that represent the current
      * application's navigation state.
@@ -17,14 +13,6 @@ public class Navigator {
      * @see Controller
      */
     private List<Controller> navigationStack = new ArrayList<>();
-
-    public Navigator(Database db) {
-        this.db = db;
-    }
-
-    public Database database() {
-        return db;
-    }
 
     /**
      * Initiate the navigation stack.

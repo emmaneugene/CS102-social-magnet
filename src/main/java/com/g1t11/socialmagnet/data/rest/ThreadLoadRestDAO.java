@@ -6,8 +6,8 @@ import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.g1t11.socialmagnet.data.DatabaseException;
-import com.g1t11.socialmagnet.data.DatabaseException.SQLErrorCode;
+import com.g1t11.socialmagnet.data.ServerException;
+import com.g1t11.socialmagnet.data.ServerException.SQLErrorCode;
 import com.g1t11.socialmagnet.model.social.Thread;
 
 public class ThreadLoadRestDAO extends RestDAO {
@@ -16,7 +16,7 @@ public class ThreadLoadRestDAO extends RestDAO {
                 "thread", username, String.valueOf(threadId)).get();
 
         if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
-            throw new DatabaseException(SQLErrorCode.THREAD_NOT_FOUND);
+            throw new ServerException(SQLErrorCode.THREAD_NOT_FOUND);
         }
 
         Thread thread = null;
@@ -24,7 +24,7 @@ public class ThreadLoadRestDAO extends RestDAO {
             String threadJson = response.readEntity(String.class);
             thread = mapper.readValue(threadJson, Thread.class);
         } catch (IOException e) {
-            throw new DatabaseException("JSON parsing failure.");
+            throw new ServerException("JSON parsing failure.");
         }
 
         return thread;
@@ -35,14 +35,14 @@ public class ThreadLoadRestDAO extends RestDAO {
             "thread", username, "newsfeed", String.valueOf(limit)).get();
 
         if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
-            throw new DatabaseException(response.readEntity(String.class));
+            throw new ServerException(response.readEntity(String.class));
         }
         List<Thread> threads;
         try {
             String newsFeedJson = response.readEntity(String.class);
             threads = List.of(mapper.readValue(newsFeedJson, Thread[].class));
         } catch (IOException e) {
-            throw new DatabaseException("JSON parsing failure.");
+            throw new ServerException("JSON parsing failure.");
         }
 
         return threads;
@@ -53,14 +53,14 @@ public class ThreadLoadRestDAO extends RestDAO {
             "thread", username, "wall", String.valueOf(limit)).get();
 
         if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
-            throw new DatabaseException(response.readEntity(String.class));
+            throw new ServerException(response.readEntity(String.class));
         }
         List<Thread> threads;
         try {
             String newsFeedJson = response.readEntity(String.class);
             threads = List.of(mapper.readValue(newsFeedJson, Thread[].class));
         } catch (IOException e) {
-            throw new DatabaseException("JSON parsing failure.");
+            throw new ServerException("JSON parsing failure.");
         }
 
         return threads;

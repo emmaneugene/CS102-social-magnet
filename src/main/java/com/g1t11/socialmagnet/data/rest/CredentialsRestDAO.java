@@ -7,8 +7,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.g1t11.socialmagnet.data.DatabaseException;
-import com.g1t11.socialmagnet.data.DatabaseException.SQLErrorCode;
+import com.g1t11.socialmagnet.data.ServerException;
+import com.g1t11.socialmagnet.data.ServerException.SQLErrorCode;
 import com.g1t11.socialmagnet.model.social.User;
 
 import org.json.JSONObject;
@@ -25,7 +25,7 @@ public class CredentialsRestDAO extends RestDAO {
         if (response.getStatus() == Status.BAD_REQUEST.getStatusCode()) {
             return null;
         } else if (response.getStatus() != Status.OK.getStatusCode()) {
-            throw new DatabaseException(response.readEntity(String.class));
+            throw new ServerException(response.readEntity(String.class));
         }
 
         User user = null;
@@ -33,7 +33,7 @@ public class CredentialsRestDAO extends RestDAO {
             String userJson = response.readEntity(String.class);
             user = mapper.readValue(userJson, User.class);
         } catch (IOException e) {
-            throw new DatabaseException("JSON parsing failure.");
+            throw new ServerException("JSON parsing failure.");
         }
 
         return user;
@@ -48,9 +48,9 @@ public class CredentialsRestDAO extends RestDAO {
             Entity.entity(obj.toString(), MediaType.APPLICATION_JSON));
 
         if (response.getStatus() == Status.CONFLICT.getStatusCode()) {
-            throw new DatabaseException(SQLErrorCode.REGISTER_EXISTING_USER);
+            throw new ServerException(SQLErrorCode.REGISTER_EXISTING_USER);
         } else if (response.getStatus() != Status.OK.getStatusCode()) {
-            throw new DatabaseException(response.readEntity(String.class));
+            throw new ServerException(response.readEntity(String.class));
         }
     }
 

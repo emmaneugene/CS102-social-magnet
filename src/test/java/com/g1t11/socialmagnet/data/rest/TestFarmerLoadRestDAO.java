@@ -5,8 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.g1t11.socialmagnet.data.DatabaseException;
-import com.g1t11.socialmagnet.data.DatabaseException.SQLErrorCode;
+import com.g1t11.socialmagnet.data.ServerException;
+import com.g1t11.socialmagnet.data.ServerException.SQLErrorCode;
 import com.g1t11.socialmagnet.model.farm.Crop;
 import com.g1t11.socialmagnet.model.farm.Farmer;
 import com.g1t11.socialmagnet.model.farm.Plot;
@@ -45,9 +45,9 @@ public class TestFarmerLoadRestDAO {
         try {
             farmerLoadDAO.getFarmer("yankee");
             Assert.assertTrue(false);
-        } catch (DatabaseException e) {
-            Assert.assertEquals(
-                    SQLErrorCode.USER_NOT_FOUND, e.getCode());
+        } catch (ServerException e) {
+            Assert.assertTrue(
+                    SQLErrorCode.USER_NOT_FOUND.value == e.getCode());
         }
     }
 
