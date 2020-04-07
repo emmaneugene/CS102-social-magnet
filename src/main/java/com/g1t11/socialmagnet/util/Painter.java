@@ -1,7 +1,7 @@
 package com.g1t11.socialmagnet.util;
 
 /**
- * This class consists exclusively of static methods that paint strings. 
+ * This class consists exclusively of static methods that paint strings.
  */
 
 public class Painter {
@@ -94,11 +94,15 @@ public class Painter {
     private static String getMinifiedColorCodes(Color[] stack, int length) {
         boolean colored = false;
         boolean bolded = false;
+        // The resulting ANSI sequence to generate the specified format.
         String result = "";
+        // Go from the top of the stack to the bottom.
         for (int i = length - 1; i >= 0; i--) {
+            // If not yet bolded, add a bold ANSI sequence to the result.
             if (!bolded && stack[i] == Color.BOLD) {
                 result += Color.BOLD.code;
                 bolded = true;
+            // If not yet colored, add the color ANSI sequence to the result.
             } else if (!colored) {
                 result += stack[i].code;
                 colored = true;
