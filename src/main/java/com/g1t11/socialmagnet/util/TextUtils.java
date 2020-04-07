@@ -16,6 +16,13 @@ public class TextUtils {
         return input != null && input.matches("^[a-zA-Z0-9]+$");
     }
 
+    /**
+     * Formats a word according to a quantity.
+     * @param count The quantity to format against.
+     * @param singular The singular form of the word.
+     * @param plural The plural form of the word.
+     * @return A string in the format of "0 foos", "1 bar", "2 bazzes".
+     */
     public static String countedWord(int count,
             String singular, String plural) {
         if (count == 1) {
@@ -44,10 +51,15 @@ public class TextUtils {
     }
 
     /**
-     * Build approriate string according to array of items.
-     * @param <T> Input of generatic type.
+     * Generate a pretty representation of an array with comma delimiters, the
+     * Oxford comma, and the use of "and" before the last item.
+     * <p>
+     * For example, <code>{"adam", "sally"}</code> will produce <code>"adam and
+     * sally"</code>, while <code>{"adam", "sally", "john"}</code> will produce
+     * <code>"adam, sally, and john"</code>.
+     * @param <T> The type of the items in the array.
      * @param items The input array of items.
-     * @return Generated appropriate string.
+     * @return A pretty representation of the array.
      */
     public static <T> String prettyList(T[] items) {
         if (items == null) return null;
@@ -70,10 +82,16 @@ public class TextUtils {
     }
 
     /**
-     * Build approriate string according to list of items.
-     * @param <T> Input of List.
+     * Generate a pretty representation of a list with comma delimiters, the
+     * Oxford comma, and the use of "and" before the last item.
+     * <p>
+     * For example, <code>{"adam", "sally"}</code> will produce <code>"adam and
+     * sally"</code>, while <code>{"adam", "sally", "john"}</code> will produce
+     * <code>"adam, sally, and john"</code>.
+     * @param <T> The type of the items in the list.
      * @param items The input list of items.
-     * @return Generated appropriate string.
+     * @return A pretty representation of the list.
+     * @see #prettyList(Object[])
      */
     public static <T> String prettyList(List<? extends T> items) {
         return prettyList(items.toArray());

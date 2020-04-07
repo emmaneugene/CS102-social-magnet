@@ -33,7 +33,7 @@ public class Plot {
     }
 
     /**
-     * Creates a empty plot.
+     * Creates an empty plot.
      */
     public Plot() {}
 
@@ -56,7 +56,7 @@ public class Plot {
     public Date getTimePlanted() {
         return timePlanted;
     }
- 
+
     /**
      * Sets the time of crop planted at plot.
      * @param timePlanted The time of crop planted at plot.
@@ -92,7 +92,7 @@ public class Plot {
     }
 
     /**
-     * A method to get the percentage of the progress of the crop getting 
+     * A method to get the percentage of the progress of the crop getting
      * matured.
      * @return The integer of the percentage of crop getting matured.
      */
@@ -105,7 +105,7 @@ public class Plot {
 
     /**
      * Compares the specified object with this plot for equality.
-     * It returns true if and only if specified object is a plot and 
+     * It returns true if and only if specified object is a plot and
      * both plot have the same crop.
      */
     @Override

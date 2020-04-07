@@ -11,7 +11,7 @@ public class Comment {
     private String content;
 
     /**
-     * Creates a empty comment.
+     * Creates an empty comment.
      */
     public Comment() {}
 
@@ -59,7 +59,7 @@ public class Comment {
 
     /**
      * Compares the specified object with this comment for equality.
-     * It returns true if and only if specified object is a comment and 
+     * It returns true if and only if specified object is a comment and
      * both comment have the same username and same content of the comment.
      */
     @Override

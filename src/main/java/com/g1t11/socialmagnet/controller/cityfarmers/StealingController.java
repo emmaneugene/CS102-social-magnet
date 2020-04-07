@@ -14,7 +14,7 @@ import com.g1t11.socialmagnet.util.TextUtils;
 import com.g1t11.socialmagnet.view.page.cityfarmers.StealingPageView;
 
 /**
- * This is a controller for Stealing.
+ * This is a controller for the Stealing portion of visiting a friend's farm.
  */
 public class StealingController extends CityFarmersController {
     Farmer toStealFrom;
@@ -67,7 +67,7 @@ public class StealingController extends CityFarmersController {
     }
 
     /**
-     * A method to handle stealing. It will check if there is any plots 
+     * A method to handle stealing. It will check if there is any plots
      * available to steal from.
      */
     private void handleSteal() {

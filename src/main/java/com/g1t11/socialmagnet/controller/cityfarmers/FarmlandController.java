@@ -14,7 +14,7 @@ import com.g1t11.socialmagnet.util.Painter.Color;
 import com.g1t11.socialmagnet.view.page.cityfarmers.FarmlandPageView;
 
 /**
- * This is a controller for Farmland.
+ * This is a controller for My Farmland.
  */
 public class FarmlandController extends CityFarmersController {
     private static final int WILTED_CLEAR_COST = 5;
@@ -76,8 +76,8 @@ public class FarmlandController extends CityFarmersController {
     }
 
     /**
-     * A method to handle planting of crops at specific plot. It will check 
-     * for out of range choice and if the specific plot is not empty. It will 
+     * A method to handle planting of crops at specific plot. It will check
+     * for out of range choice and if the specific plot is not empty. It will
      * not plant the crop if it fits any of the previously stated conditions.
      * @param choice The choice to plot the crop at.
      */
@@ -173,8 +173,8 @@ public class FarmlandController extends CityFarmersController {
     }
 
     /**
-     * A method to handle clearing of plot. It will check for out of range 
-     * choice and if the selected plot is empty. It will not clear the plot if 
+     * A method to handle clearing of plot. It will check for out of range
+     * choice and if the selected plot is empty. It will not clear the plot if
      * it fits any of the previously stated conditions.
      * @param choice The choice of plot to clear.
      */

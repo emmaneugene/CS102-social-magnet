@@ -3,7 +3,9 @@ package com.g1t11.socialmagnet.model.farm;
 import com.g1t11.socialmagnet.util.TextUtils;
 
 /**
- * Represent a stealing record.
+ * Represent a stealing record. Used to keep track of how many crops were
+ * stolen, how much xp was gained, and how much gold was gained when stealing
+ * from a friend's farm.
  */
 public class StealingRecord {
     private String cropName;
@@ -14,6 +16,9 @@ public class StealingRecord {
 
     private int totalGoldGained;
 
+    /**
+     * Creates an empty stealing record.
+     */
     public StealingRecord() {}
 
     /**

@@ -46,7 +46,7 @@ public class Crop {
     }
 
     /**
-     * Creates a empty crop
+     * Creates an empty crop
      */
     public Crop() {}
 

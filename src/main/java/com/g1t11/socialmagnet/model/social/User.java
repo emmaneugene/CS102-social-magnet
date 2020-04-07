@@ -11,7 +11,7 @@ public class User {
     private String fullname = null;
 
     /**
-     * Creates a empty user.
+     * Creates an empty user.
      */
     public User() {}
 
@@ -58,8 +58,8 @@ public class User {
     }
 
     /**
-     * Compares the specified object with this user for equality. It returns 
-     * true if and only if specified object is a user where both users have 
+     * Compares the specified object with this user for equality. It returns
+     * true if and only if specified object is a user where both users have
      * the same username and fullname.
      */
     @Override

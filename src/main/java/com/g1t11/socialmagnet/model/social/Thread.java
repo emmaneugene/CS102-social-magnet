@@ -27,15 +27,21 @@ public class Thread {
 
     private boolean tagged = false;
 
+    /**
+     * Creates an empty thread.
+     */
     public Thread() {}
 
+    /**
+     * Creates a thread with a given ID.
+     */
     public Thread(int id) {
         this.id = id;
     }
 
     /**
      * Creates a thread with specified parameters of id, from username,
-     * to username, content of the thread, count of comments and if it 
+     * to username, content of the thread, count of comments and if it
      * is tagged.
      * @param id Input id of thread.
      * @param fromUsername Username of owner of thread.
@@ -67,7 +73,7 @@ public class Thread {
             String content, int commentCount) {
         this(id, fromUsername, toUsername, content, commentCount, false);
     }
- 
+
     /**
      * Gets id of thread.
      * @return Id of the thread.
@@ -209,7 +215,7 @@ public class Thread {
     }
 
     /**
-     * A method that add '@' infront to the tagged user in the content of 
+     * A method that add '@' infront to the tagged user in the content of
      * thread.
      * @param taggedUsernames The list of tagged usernames.
      */
@@ -221,8 +227,8 @@ public class Thread {
     }
 
     /**
-     * Compares the specified object with this thread for equality. It returns 
-     * true if and only if specified object is a thread where both thread have 
+     * Compares the specified object with this thread for equality. It returns
+     * true if and only if specified object is a thread where both thread have
      * the same owner of thread, receiver of thread, content, likers, dislikers,
      * comments, comment counts and tagged users.
      */

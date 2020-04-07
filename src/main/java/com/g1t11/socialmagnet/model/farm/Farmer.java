@@ -36,7 +36,7 @@ public class Farmer extends User {
     private List<Plot> farmland = new ArrayList<>();
 
     /**
-     * Creates empty farmer.
+     * Creates an empty farmer.
      */
     public Farmer() {}
 
@@ -137,7 +137,7 @@ public class Farmer extends User {
     }
 
     /**
-     * Gets wealth rank among friends. 
+     * Gets wealth rank among friends.
      * @return The wealth rank of farmer among it's friends.
      */
     public int getWealthRankAmongFriends() {

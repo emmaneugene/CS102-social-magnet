@@ -58,7 +58,14 @@ public abstract class Controller {
         view.appendStatus(text);
     }
 
+    /**
+     * Updates the page view. The base controller simply does nothing.
+     */
     public void updateView() {};
 
+    /**
+     * All controllers <strong>must</strong> handle input. Otherwise, the event
+     * loop will not pause in between controllers.
+     */
     public abstract void handleInput();
 }

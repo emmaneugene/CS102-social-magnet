@@ -36,9 +36,13 @@ public class FarmlandComponent implements Component {
     }
 
     /**
-     * A method to calulate the amount of spaces required for formatting.
+     * Find the maximum crop name length.
+     * <p>
+     * Used to calulate the amount of spaces required to align the
+     * {@link #plotComps} for formatting.
      * @param plots The list of plots.
      * @return The amount of spaces required for formatting.
+     * @see PlotComponent
      */
     private int getMaxCropNameLength(List<Plot> plots) {
         int maxLength = 0;

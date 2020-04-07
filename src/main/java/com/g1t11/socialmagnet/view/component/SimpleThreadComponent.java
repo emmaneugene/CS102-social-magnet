@@ -8,7 +8,9 @@ import com.g1t11.socialmagnet.util.Painter;
 import com.g1t11.socialmagnet.util.Painter.Color;
 
 /**
- * This is a render component for a Single thread.
+ * A render component for a thread in a list of threads.
+ * <p>
+ * Most notably used in the news feed and the wall page views.
  */
 public class SimpleThreadComponent implements Component {
     private final static int commentsToDisplay = 3;
