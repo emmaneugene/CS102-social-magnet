@@ -70,11 +70,14 @@ public class Plot {
     }
 
     /**
-     * A method to check if the plot is ready to harvest. It is only ready to 
+     * A method to check if the plot is ready to harvest. It is only ready to
      * harvest after it is grown to maturity.
      * @return Whether if the plot ready to harvest.
      */
     public boolean readyToHarvest() {
+        if (timePlanted == null || crop == null) {
+            return false;
+        }
         Date now = new Date();
         int minutesElapsed = (int) (now.getTime() - timePlanted.getTime())
                            / (1000 * 60);
@@ -91,6 +94,9 @@ public class Plot {
      * @return The boolean value of crop in the plot is wilted.
      */
     public boolean isWilted() {
+        if (timePlanted == null || crop == null) {
+            return false;
+        }
         Date now = new Date();
         int minutesElapsed = (int) (now.getTime() - timePlanted.getTime())
                            / (1000 * 60);
@@ -106,6 +112,9 @@ public class Plot {
      * @return The integer of the percentage of crop getting matured.
      */
     public int getPercentProgress() {
+        if (timePlanted == null || crop == null) {
+            return 0;
+        }
         Date now = new Date();
         int minutesElapsed = (int) (now.getTime() - timePlanted.getTime())
                            / (1000 * 60);

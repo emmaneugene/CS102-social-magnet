@@ -239,7 +239,12 @@ public class FarmlandController extends CityFarmersController {
      */
     private void handleHarvest() {
         farmerActionDAO.harvest(me.getUsername());
-
-        setStatus(Painter.paint("Harvested crops!", Color.GREEN));
+        boolean harvested = plots.stream()
+                .anyMatch(plot -> plot.readyToHarvest());
+        if (harvested) {
+            setStatus(Painter.paint("Harvested crops!", Color.GREEN));
+        } else {
+            setStatus(Painter.paint("No crops to harvest.", Color.RED));
+        }
     }
 }
