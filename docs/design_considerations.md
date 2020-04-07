@@ -1,4 +1,6 @@
-# Design Considerations
+# Application Analysis and Design
+
+## Design Considerations
 
 In designing our application, we adopted some key principles:
 
@@ -9,7 +11,7 @@ In designing our application, we adopted some key principles:
 
 In addition to these key principles, a few miscellaneous design decisions are listed in the appendix.
 
-## Database-First Approach
+### Database-First Approach
 
 When considering how state was to be stored for the application, we chose to use a [single source of truth](https://en.wikipedia.org/wiki/Single_source_of_truth) approach. Due to the relatively simple data storage requirements, this practice afforded some benefits:
 
@@ -26,7 +28,7 @@ However, we do note that this approach does come with some limitations.
 * If the database is slow to respond (e.g. served over a web service), then our application becomes unnecessarily sluggish.
   * Our approach to solving this issue will be to create a data cache on the application between the DAO layer and the database layer. This cache will abstract all DAO calls and serve cached data whenever possible and queue any updates to data for the database.
 
-## Application Architecture
+### Application Architecture
 
 Due to the complexity of this project, we decided to break our application into four distinct components.
 
@@ -38,14 +40,14 @@ Due to the complexity of this project, we decided to break our application into 
 
 **Controllers** handle application state, access DAOs for models, inject those into views, and handle user input to decide the next state.
 
-### Views
+#### Views
 
 We decided to differentiate between two types of views:
 
 1. `PageView` is responsible for representing an entire page managed by a `Controller` which it has a one-to-one relationship with.
 2. `Component` is responsible for displaying a single `Model`, and therefore should be tied to its associated `Model`.
 
-> `PageView` is `Controller` centric, while `Component` is `Model` centric.
+> `PageView` is `Controller` centric, while `Component` is `Model` or data centric.
 
 `PageViews` can render models directly. However, when a model needs to be rendered repeatedly in a complicated format (e.g. threads on the News Feed), a `Component` should be used within the `PageView`.
 
@@ -83,7 +85,7 @@ public class WallPageView extends PageView {
 public abstract class CityFarmersPageView extends PageView { ...
 ```
 
-#### Static vs Dynamic Data Representation
+##### Static vs Dynamic Data Representation
 
 **Static data** refers to data that is not expected to change during the lifecycle of a `Controller` (e.g. the username of the logged-in user on the Main Menu).
 
@@ -104,7 +106,7 @@ public class WallPageView {
     public void setThreads(List<Thread> threads) {}
 ```
 
-### Models
+#### Models
 
 When designing our models, we initially represented all relationships.
 
@@ -125,7 +127,7 @@ However, this presented some issues.
 * Some one-to-many relationships are unnecessary.
   * Given a list of friends, we will not likely access everyone's walls. Therefore, a lot of data loaded goes unused and database bandwidth is wasted.
 
-#### Slim Models
+##### Slim Models
 
 Refering to our database-first approach, we decided to treat our models as **units of information that represent a single entity**, and load relationships from the database only when required.
 
@@ -142,7 +144,7 @@ public class WallController extends Controller {
     List<Thread> wallThreads;
 ```
 
-#### Relational Attributes
+##### Relational Attributes
 
 While we do not represent relationships on our models, we treat one-to-many relations between different tables as **multivariate attributes**. Therefore, some models will still contain multi-valued references.
 
@@ -153,13 +155,9 @@ public class Farmer extends User {
     List<Plot> farmland;
 ```
 
-### Database Access Objects
+#### Database Access Objects
 
-Database Access Objects (DAOs) abstract the backend systems of our application stack. In designing our DAOs, we decided to instantiate all DAOs with a reference to a custom **Database** object.
-
-#### Database Object
-
-DAOs call our web service, located under `server/`.
+Database Access Objects (DAOs) abstract the backend systems of our application stack. Our DAOs use a REST client to communicate with our web service, with source code located under `server/`.
 
 * Upon a failed or lost connection, we throw a custom `ServerException` runtime exception which is bubbled up to the `App` event loop.
 * `App` will gracefully handle the connection failure, and log the user out.
@@ -219,7 +217,7 @@ Essentially, the database handles all data logic, and the client application ser
 
 ##### Using a REST API
 
-Currently, all database logic has been further abstracted away behind a REST API, stored under `server/`. However, the usage of stored procedures made the transition to a server-side implementation of a database much easier.
+Currently, all database logic has been further abstracted away behind a REST API, with source code stored under `server/`. However, the usage of stored procedures made the transition to a server-side implementation of a database much easier.
 
 As the database was already handling most of the business logic, there was little restructuring of the application to be done. We simply moved all database access objects to the server, and created new API access objects, packaged under `com.g1t11.socialmagnet.data.rest`. Once feature parity was reached between the previous DAO implementations and the API access objects, usage of access objects could simply be substituted.
 
@@ -310,6 +308,46 @@ If data needs to be passed between controllers, it must be done so through their
 This is to ensure that only static data is passed in between controllers on the application.
 
 In accordance with the database-first approach, any data that is expected to update during a controller's lifecycle should do so on the database first. Then, any other controllers that rely on updated data should query the database first before presenting its view.
+
+## Diagrams
+
+### Class Diagrams
+
+##### Overview
+
+<img src="class-diagram/root.png" alt="root" style="zoom:67%;" />
+
+##### Data Access (REST API)
+
+![rest](class-diagram/rest.png)
+
+##### Controllers
+
+![controller](class-diagram/controller.png)
+
+![controller_socialmagnet](class-diagram/controller_socialmagnet.png)
+
+![controller_cityfarmers](class-diagram/controller_cityfarmers.png)
+
+##### Models
+
+![model](class-diagram/model.png)
+
+##### Views (Components)
+
+![component](class-diagram/component.png)
+
+##### Views (Page Views)
+
+![page](class-diagram/page.png)
+
+### Logical Diagram
+
+![logical-diagram](logical-diagram/logical-diagram.png)
+
+### Use Case Diagram
+
+<img src="use-case/use-case.png" alt="use case" style="zoom: 33%;" />
 
 ## Appendix
 
