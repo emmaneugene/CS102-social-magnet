@@ -15,9 +15,10 @@ public class RestDAO {
     /**
      * The location of the Social Magnet Web Service.
      * <p>
-     * This value is injected when the application starts.
+     * This value is injected when the application starts, or left at the
+     * default value.
      */
-    public static String BASE_URL;
+    public static String BASE_URL = "http://localhost:8080/magnet";
 
     /**
      * A REST client that handles requests to and responses from the web
