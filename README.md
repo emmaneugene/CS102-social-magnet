@@ -29,7 +29,7 @@ All members are automatically players of an integrated farming game called **Cit
 
 #### Loading database credentials
 
-Confidential database credentials should be stored in the `scripts/env.bat` or `scripts/env.sh` file. See [`env-sample.bat`][scripts/env-sample.bat] or [`env-sample.sh`][scripts/env-sample.sh].
+Confidential database credentials should be stored in the `scripts/env.bat` or `scripts/env.sh` file. See [`env-sample.bat`](scripts/env-sample.bat) or [`env-sample.sh`](scripts/env-sample.sh).
 
 #### Compilation
 
