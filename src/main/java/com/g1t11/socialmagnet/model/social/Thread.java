@@ -34,6 +34,7 @@ public class Thread {
 
     /**
      * Creates a thread with a given ID.
+     * @param id The thread id.
      */
     public Thread(int id) {
         this.id = id;

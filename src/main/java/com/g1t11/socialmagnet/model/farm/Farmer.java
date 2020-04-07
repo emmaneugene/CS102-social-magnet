@@ -114,7 +114,7 @@ public class Farmer extends User {
 
     /**
      * Sets the experience points of farmer.
-     * @return The experience points of farmer.
+     * @param xp The experience points of farmer.
      */
     public void setXp(int xp) {
         this.xp = xp;
@@ -162,6 +162,7 @@ public class Farmer extends User {
 
     /**
      * Sets farmland.
+     * @param farmland The list of plots for farmland.
      */
     public void setFarmland(List<Plot> farmland) {
         this.farmland = farmland;

@@ -26,7 +26,7 @@ public class StealingRecord {
      * experience point and gold gained.
      * @param cropName The name of the crop.
      * @param quantity The quantity of produced stolen.
-     * @param totalXPGained The total experience point gained.
+     * @param totalXpGained The total experience point gained.
      * @param totalGoldGained The total gold gained.
      */
     public StealingRecord(String cropName, int quantity,
@@ -68,8 +68,8 @@ public class StealingRecord {
     }
 
     /**
-     * Sets quantity of stealing record.
-     * @param quantity
+     * Sets quantity for stealing.
+     * @param quantity The quantity for stealing.
      */
     public void setQuantity(int quantity) {
         this.quantity = quantity;

@@ -108,6 +108,7 @@ public class Crop {
 
     /**
      * Sets minutes to harvest crop.
+     * @param minutesToHarvest The minutes to harvest.
      */
     public void setMinutesToHarvest(int minutesToHarvest) {
         this.minutesToHarvest = minutesToHarvest;
@@ -123,6 +124,7 @@ public class Crop {
 
     /**
      * Sets per unit experience points.
+     * @param perUnitXp The experience points per unit
      */
     public void setPerUnitXp(int perUnitXp) {
         this.perUnitXp = perUnitXp;

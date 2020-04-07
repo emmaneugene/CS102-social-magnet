@@ -42,7 +42,7 @@ public class FarmerLoadRestDAO extends RestDAO {
 
     /**
      * Get the inventory of a farmer.
-     * @param farmer The username of the farmer whose inventory to access.
+     * @param username The username of the farmer whose inventory to access.
      * @return A sorted map of the names of crops in an inventory with its
      * corresponding quantities.
      */
