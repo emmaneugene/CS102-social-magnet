@@ -351,6 +351,18 @@ nav.pop();
 
 <img src="use-case/use-case.png" alt="use case" style="zoom: 33%;" />
 
+### Sequence Diagram
+
+#### Launching the Application
+
+![welcome-sequence](sequence/welcome-sequence.png)
+
+#### Logging In
+
+![login-sequence](sequence/login-sequence.png)
+
+
+
 ## Appendix
 
 #### Database Credentials
