@@ -1,4 +1,4 @@
-cd -P -- "$(dirname -- "$0")";
+cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")";
 source env.sh;
 source reset-db.sh;
 

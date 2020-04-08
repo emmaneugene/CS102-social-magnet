@@ -1,3 +1,4 @@
+cd /D "%~dp0"
 call env.bat
 
 mysql -u"%DB_USER%" -p"%DB_PASS%" < ../sql/deploy.sql
