@@ -21,7 +21,7 @@ public class App {
     public void run() {
         while (true) {
             try {
-                nav.currController().run();
+                nav.runCurrController();
             } catch (ServerException e) {
                 handleServerException(e);
             }

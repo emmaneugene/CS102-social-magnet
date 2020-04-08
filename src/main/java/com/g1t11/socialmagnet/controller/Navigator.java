@@ -35,6 +35,13 @@ public class Navigator {
     }
 
     /**
+     * Runs the current controller.
+     */
+    public void runCurrController() {
+        currController().run();
+    }
+
+    /**
      * Sets the current status.
      * @param text The current status.
      */
@@ -55,7 +62,7 @@ public class Navigator {
     }
 
     /**
-     * Remove an specified amount of controller from the navigation stack and 
+     * Remove an specified amount of controller from the navigation stack and
      * prepare the application to navigate to the correct controller.
      * @param count The amount of controller to pop.
      */

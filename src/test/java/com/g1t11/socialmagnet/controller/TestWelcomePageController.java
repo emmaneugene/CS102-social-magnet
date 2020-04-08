@@ -29,7 +29,7 @@ public class TestWelcomePageController extends TestApp {
     @Test
     public void testGoToLogin() {
         systemInMock.provideLines("2");
-        app.nav.currController().run();
+        app.nav.runCurrController();
 
         Assert.assertTrue(app.nav.currController() instanceof LoginController);
     }
@@ -37,7 +37,7 @@ public class TestWelcomePageController extends TestApp {
     @Test
     public void testGoToLoginAndBack() {
         systemInMock.provideLines("2");
-        app.nav.currController().run();
+        app.nav.runCurrController();
 
         Assert.assertTrue(app.nav.currController() instanceof LoginController);
 
@@ -51,7 +51,7 @@ public class TestWelcomePageController extends TestApp {
     @Test
     public void testInvalidInput() {
         systemInMock.provideLines("pass");
-        app.nav.currController().run();
+        app.nav.runCurrController();
 
         Assert.assertTrue(
                 app.nav.currController() instanceof WelcomeController);
@@ -61,7 +61,7 @@ public class TestWelcomePageController extends TestApp {
     public void simulateExit() {
         exit.expectSystemExit();
         systemInMock.provideLines("3");
-        app.nav.currController().run();
+        app.nav.runCurrController();
 
         String expectedMessage = "Enter your choice > Goodbye!";
         String[] lines = systemOutRule.getLog().split(System.lineSeparator());
