@@ -45,7 +45,7 @@ Due to the complexity of this project, we decided to break our application into 
 We decided to differentiate between two types of views:
 
 1. `PageView` is responsible for representing an entire page managed by a `Controller` which it has a one-to-one relationship with.
-2. `Component` is responsible for displaying a single `Model`, and therefore should be tied to its associated `Model`.
+2. `Component` is responsible for displaying a single `Model` or some data, and therefore should be tied to its associated `Model`.
 
 > `PageView` is `Controller` centric, while `Component` is `Model` or data centric.
 
@@ -108,7 +108,7 @@ public class WallPageView {
 
 #### Models
 
-When designing our models, we initially represented all relationships.
+When designing our models, we initially captured all relationships.
 
 ```java
 public class User {
@@ -162,9 +162,9 @@ Database Access Objects (DAOs) abstract the backend systems of our application s
 * Upon a failed or lost connection, we throw a custom `ServerException` runtime exception which is bubbled up to the `App` event loop.
 * `App` will gracefully handle the connection failure, and log the user out.
 
-#### Decoupling the Database and Application
+##### Decoupling the Database and Application
 
-##### Using stored procedures before transitioning to web service
+###### Using stored procedures before transitioning to web service
 
 During initial development, the application connected to the database directly. Therefore, we had to make queries to the database.
 
@@ -215,13 +215,13 @@ This afforded us some benefits:
 
 Essentially, the database handles all data logic, and the client application serves a user-friendly view of the database state.
 
-##### Using a REST API
+###### Using a REST API
 
 Currently, all database logic has been further abstracted away behind a REST API, with source code stored under `server/`. However, the usage of stored procedures made the transition to a server-side implementation of a database much easier.
 
 As the database was already handling most of the business logic, there was little restructuring of the application to be done. We simply moved all database access objects to the server, and created new API access objects, packaged under `com.g1t11.socialmagnet.data.rest`. Once feature parity was reached between the previous DAO implementations and the API access objects, usage of access objects could simply be substituted.
 
-### Controllers
+#### Controllers
 
 Console applications go through a predictable event cycle:
 
@@ -241,7 +241,15 @@ public abstract class Controller {
 }
 ```
 
-### State Pattern with Navigation
+##### Passing data between Controllers
+
+If data needs to be passed between controllers, it must be done so through their constructors.
+
+This is to ensure that only static data is passed in between controllers on the application.
+
+In accordance with the database-first approach, any data that is expected to update during a controller's lifecycle should do so on the database first. Then, any other controllers that rely on updated data should query the database first before presenting its view.
+
+#### State Pattern with Navigation
 
 In addition to the four components, we designed a **Navigation object**.
 
@@ -249,7 +257,7 @@ The **Navigation** object is used to implement the [state pattern](https://en.wi
 
 The first controller on the base of the navigation stack represents our application's starting state, and the last controller on the top of the stack always represent the current state of our application.
 
-#### Benefits
+##### Benefits
 
 As such, we can control the execution of our application with just one event loop, and depend on the state of our navigation stack to control behaviour.
 
@@ -265,11 +273,11 @@ public class App {
 
 This behaviour allows us to inspect `Navigation` whenever we need to check the state of our application, instead of having to trace a navigation path from `Controller` to `Controller`.
 
-#### Limitations
+##### Limitations
 
 However, this approach does create some issues.
 
-##### Two-way binding of Navigation and Controller
+###### Two-way binding of Navigation and Controller
 
 All `Controllers` are initialised with a `Navigation` object, and `Navigation` pushes and pops `Controller` objects onto its stack.
 
@@ -301,13 +309,7 @@ nav.pop();
 // current controller: WelcomeController
 ```
 
-#### Passing data between Controllers
 
-If data needs to be passed between controllers, it must be done so through their constructors.
-
-This is to ensure that only static data is passed in between controllers on the application.
-
-In accordance with the database-first approach, any data that is expected to update during a controller's lifecycle should do so on the database first. Then, any other controllers that rely on updated data should query the database first before presenting its view.
 
 ## Diagrams
 
